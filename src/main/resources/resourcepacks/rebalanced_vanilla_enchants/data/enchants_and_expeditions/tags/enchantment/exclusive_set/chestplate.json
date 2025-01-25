@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:thorns",
+    {
+      "id": "progression_reborn:collection",
+      "required": false
+    }
+  ]
+}

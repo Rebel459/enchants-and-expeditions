@@ -1,0 +1,20 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:protection",
+    "minecraft:sharpness",
+    "minecraft:sweeping_edge",
+    "minecraft:efficiency",
+    "minecraft:unbreaking",
+    "minecraft:power",
+    "minecraft:lure",
+    "minecraft:loyalty",
+    "minecraft:quick_charge",
+    "minecraft:piercing",
+    "minecraft:density",
+    {
+      "id": "legacies_and_legends:chilled",
+      "required": false
+    }
+  ]
+}

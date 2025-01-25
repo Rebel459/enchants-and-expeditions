@@ -1,0 +1,21 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:fire_protection",
+    "minecraft:blast_protection",
+    "minecraft:projectile_protection",
+    "minecraft:aqua_affinity",
+    "minecraft:smite",
+    "minecraft:bane_of_arthropods",
+    "minecraft:knockback",
+    "minecraft:silk_touch",
+    "minecraft:punch",
+    "minecraft:breach",
+    "minecraft:multishot",
+    "minecraft:impaling",
+    {
+      "id": "progression_reborn:collection",
+      "required": false
+    }
+  ]
+}
