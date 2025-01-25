@@ -25,6 +25,12 @@ dependencies {
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	modImplementation("maven.modrinth:chiseled-enchanting:${project.chiseled_version}")
+
+	include modImplementation("maven.modrinth:frozenlib:${project.frozenlib_version}")
+
 }
 
 processResources {
