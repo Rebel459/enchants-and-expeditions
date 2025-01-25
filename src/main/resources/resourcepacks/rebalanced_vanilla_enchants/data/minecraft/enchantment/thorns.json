@@ -17,7 +17,7 @@
               "min_damage": 3.0
             },
             {
-              "type": "minecraft:damage_item",
+              "type": "minecraft:change_item_damage",
               "amount": 1.0
             }
           ]
@@ -37,7 +37,7 @@
       }
     ]
   },
-  "exclusive_set": "#enchants_and_expeditions:exclusive_set/chestplate",
+  "supported_items": "#minecraft:enchantable/chest_armor",
   "max_cost": {
     "base": 60,
     "per_level_above_first": 20
@@ -47,9 +47,10 @@
     "base": 10,
     "per_level_above_first": 20
   },
+  "primary_items": "#minecraft:enchantable/chest_armor",
   "slots": [
     "any"
   ],
-  "supported_items": "#minecraft:enchantable/chest_armor",
+  "supported_items": "#minecraft:enchantable/armor",
   "weight": 1
 }

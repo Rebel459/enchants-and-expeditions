@@ -80,6 +80,16 @@ public final class EaELootTables {
                 tableBuilder.withPool(pool);
             }
 
+            if (BuiltInLootTables.WOODLAND_MANSION.equals(id)) {
+                pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(5)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.CHANNELING),  ConstantValue.exactly(1.0F)));
+                tableBuilder.withPool(pool);
+            }
+
+            if (BuiltInLootTables.STRONGHOLD_LIBRARY.equals(id)) {
+                pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(10)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.INFINITY), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.MENDING), ConstantValue.exactly(1.0F)));
+                tableBuilder.withPool(pool);
+            }
+
             LootTableModifier.editTable(
                     BuiltInLootTables.FISHING_TREASURE, false,
                     (itemId, mutableLootTable) -> mutableLootTable.modifyPools(

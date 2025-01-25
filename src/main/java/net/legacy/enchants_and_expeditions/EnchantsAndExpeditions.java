@@ -25,11 +25,11 @@ public class EnchantsAndExpeditions implements ModInitializer {
 
 		EaELootTables.init();
 
-		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.rebalanced_vanilla_enchants) {
-			ResourceManagerHelper.registerBuiltinResourcePack(ResourceLocation.fromNamespaceAndPath("enchants_and_expeditions", "enchants_and_expeditions_legacies_and_legends_integration"), (ModContainer)modContainer.get(), Component.translatable("pack.enchants_and_expeditions.legacies_and_legends_integration"), ResourcePackActivationType.ALWAYS_ENABLED);
-		}
 		if (EaEConfig.rebalanced_vanilla_enchants) {
 			ResourceManagerHelper.registerBuiltinResourcePack(ResourceLocation.fromNamespaceAndPath("enchants_and_expeditions", "rebalanced_vanilla_enchants"), (ModContainer)modContainer.get(), Component.translatable("pack.enchants_and_expeditions.rebalanced_vanilla_enchants"), ResourcePackActivationType.ALWAYS_ENABLED);
+		}
+		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.rebalanced_vanilla_enchants) {
+			ResourceManagerHelper.registerBuiltinResourcePack(ResourceLocation.fromNamespaceAndPath("enchants_and_expeditions", "enchants_and_expeditions_legacies_and_legends_integration"), (ModContainer)modContainer.get(), Component.translatable("pack.enchants_and_expeditions.legacies_and_legends_integration"), ResourcePackActivationType.ALWAYS_ENABLED);
 		}
 
 	}
