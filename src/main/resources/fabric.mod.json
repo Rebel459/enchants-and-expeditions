@@ -1,0 +1,24 @@
+{
+	"schemaVersion": 1,
+	"id": "enchants_and_expeditions",
+	"version": "${version}",
+	"name": "Enchants and Expeditions",
+	"description": "A thoughtful rework to vanilla's enchanting and anvil systems.",
+	"authors": [
+		"Rebel459"
+	],
+	"license": "Legacy License",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.legacy.enchants_and_expeditions.EnchantsAndExpedtions"
+		]
+	},
+	"mixins": [
+		"enchants_and_expeditions.mixins.json"
+	],
+	"depends": {
+		"minecraft": "1.21.4",
+		"fabric-api": "*"
+	}
+}
