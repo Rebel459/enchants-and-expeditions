@@ -23,17 +23,30 @@
           ]
         },
         "enchanted": "victim",
-        "requirements": {
-          "chance": {
-            "type": "minecraft:enchantment_level",
-            "amount": {
-              "type": "minecraft:linear",
-              "base": 0.25,
-              "per_level_above_first": 0.25
-            }
+        "requirements": [
+          {
+            "chance": {
+              "type": "minecraft:enchantment_level",
+              "amount": {
+                "type": "minecraft:linear",
+                "base": 0.25,
+                "per_level_above_first": 0.25
+              }
+            },
+            "condition": "minecraft:random_chance"
           },
-          "condition": "minecraft:random_chance"
-        }
+          {
+            "condition": "minecraft:damage_source_properties",
+            "predicate": {
+              "tags": [
+                {
+                  "id": "minecraft:is_projectile",
+                  "expected": false
+                }
+              ]
+            }
+          }
+        ]
       }
     ]
   },
