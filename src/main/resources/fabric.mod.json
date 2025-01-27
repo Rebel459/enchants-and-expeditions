@@ -7,7 +7,12 @@
 	"authors": [
 		"Rebel459"
 	],
+	"contact": {
+		"homepage": "https://modrinth.com/user/Rebel459",
+		"sources": "https://github.com/Rebel459/enchants-and-expeditions"
+	},
 	"license": "Legacy License",
+	"icon": "assets/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
