@@ -7,12 +7,12 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:name_tag",
-          "weight":"3"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:saddle",
-          "weight":"3"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -33,7 +33,7 @@
             }
           ],
           "name": "minecraft:bow",
-          "weight":"3"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -54,7 +54,7 @@
             }
           ],
           "name": "minecraft:fishing_rod",
-          "weight":"3"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -75,7 +75,7 @@
             }
           ],
           "name": "legacies_and_legends:hook",
-          "weight":"3"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -87,12 +87,12 @@
             }
           ],
           "name": "minecraft:book",
-          "weight":"3"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:nautilus_shell",
-          "weight":"3"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -107,7 +107,7 @@
             }
           ],
           "name": "minecraft:book",
-          "weight":"3"
+          "weight": 3
         },
         {
           "type": "minecraft:loot_table",
@@ -143,7 +143,7 @@
             }
           ],
           "value": "legacies_and_legends:books/fishermans_tale",
-          "weight":"3"
+          "weight": 3
         },
         {
           "type": "minecraft:loot_table",
@@ -161,7 +161,7 @@
             }
           ],
           "value": "legacies_and_legends:books/forgotten_tale",
-          "weight":"3"
+          "weight": 3
         },
         {
           "type": "minecraft:loot_table",
@@ -215,7 +215,7 @@
             }
           ],
           "value": "legacies_and_legends:books/treasure_tale",
-          "weight":"3"
+          "weight": 3
         }
       ],
       "rolls": 1.0
