@@ -12,7 +12,7 @@ import net.fabricmc.loader.api.FabricLoader;
 
 public class EaEConfig {
 
-    public static boolean rebalanced_vanilla_enchants;
+    public static boolean loot_table_injects;
     public static boolean mod_integration_datapacks;
 
     public EaEConfig() {
@@ -34,7 +34,7 @@ public class EaEConfig {
 
             obj = (JsonObject)JsonParser.parseReader(new FileReader(configPath.toString()));
             JsonObject config = (JsonObject)obj.get("config");
-            rebalanced_vanilla_enchants = config.get("rebalanced_vanilla_enchants").getAsBoolean();
+            loot_table_injects = config.get("loot_table_injects").getAsBoolean();
             mod_integration_datapacks = config.get("mod_integration_datapacks").getAsBoolean();
         } catch (IOException var4) {
             System.err.println("An error occurred, delete the enchants and expeditions config file in your config/ folder and relaunch");
@@ -45,7 +45,7 @@ public class EaEConfig {
     private static JsonObject getJsonObject() {
         JsonObject jsonObjects = new JsonObject();
         JsonObject configObject = new JsonObject();
-        configObject.addProperty("rebalanced_vanilla_enchants", true);
+        configObject.addProperty("loot_table_injects", true);
         configObject.addProperty("mod_integration_datapacks", true);
         jsonObjects.add("config", configObject);
         return jsonObjects;

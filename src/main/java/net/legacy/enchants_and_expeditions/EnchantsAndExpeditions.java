@@ -24,17 +24,17 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		}
 
 		EaELootTables.init();
+        EaEEnchantmentEffects.register();
 
-		if (EaEConfig.rebalanced_vanilla_enchants) {
-			ResourceManagerHelper.registerBuiltinResourcePack(ResourceLocation.fromNamespaceAndPath("enchants_and_expeditions", "rebalanced_vanilla_enchants"), (ModContainer)modContainer.get(), Component.translatable("pack.enchants_and_expeditions.rebalanced_vanilla_enchants"), ResourcePackActivationType.ALWAYS_ENABLED);
-		}
-		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.rebalanced_vanilla_enchants) {
+		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.mod_integration_datapacks) {
 			ResourceManagerHelper.registerBuiltinResourcePack(ResourceLocation.fromNamespaceAndPath("enchants_and_expeditions", "enchants_and_expeditions_legacies_and_legends_integration"), (ModContainer)modContainer.get(), Component.translatable("pack.enchants_and_expeditions.legacies_and_legends_integration"), ResourcePackActivationType.ALWAYS_ENABLED);
 		}
 
 	}
 
 	public static ResourceLocation id(String path) {
-		return ResourceLocation.fromNamespaceAndPath("enchants_and_expeditions", path);
+		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
 	}
+
+	public static final String MOD_ID = "enchants_and_expeditions";
 }
