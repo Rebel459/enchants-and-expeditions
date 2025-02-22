@@ -11,7 +11,7 @@
           "type": "minecraft:all_of",
           "effects": [
             {
-              "type": "enchants_and_expeditions:freeze",
+              "type": "legacies_and_legends:freeze",
               "duration": {
                 "type": "minecraft:linear",
                 "base": 100.0,
