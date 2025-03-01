@@ -25,7 +25,15 @@ dependencies {
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+	modImplementation "maven.modrinth:legacies-and-legends:${project.lal_version}"
+
 	include modImplementation("maven.modrinth:frozenlib:${project.frozenlib_version}")
+
+	modImplementation("maven.modrinth:modmenu:$modmenu_version")
+
+	modImplementation("maven.modrinth:cloth-config:$cloth_config_version")
+
+	// Remember to included Chiseled Enchanting in your local run/mods folder
 
 }
 

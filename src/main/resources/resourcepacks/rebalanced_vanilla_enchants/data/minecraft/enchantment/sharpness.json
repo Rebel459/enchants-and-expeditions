@@ -4,16 +4,29 @@
     "translate": "enchantment.minecraft.sharpness"
   },
   "effects": {
-    "minecraft:damage": [
+    "minecraft:post_attack": [
       {
         "effect": {
-          "type": "minecraft:add",
-          "value": {
-            "type": "minecraft:linear",
-            "base": 1.0,
-            "per_level_above_first": 1.0
-          }
-        }
+          "type": "minecraft:all_of",
+          "effects": [
+            {
+              "type": "minecraft:damage_entity",
+              "damage_type": "minecraft:magic",
+              "min_damage": {
+                "type": "minecraft:linear",
+                "base": 1,
+                "per_level_above_first": 1
+              },
+              "max_damage": {
+                "type": "minecraft:linear",
+                "base": 1,
+                "per_level_above_first": 1
+              }
+            }
+          ]
+        },
+        "enchanted": "attacker",
+        "affected": "victim"
       }
     ]
   },

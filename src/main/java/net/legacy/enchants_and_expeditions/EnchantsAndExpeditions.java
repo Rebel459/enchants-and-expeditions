@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -14,21 +15,9 @@ import java.util.Optional;
 public class EnchantsAndExpeditions implements ModInitializer {
 	@Override
 	public void onInitialize() {
-		Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer("enchants_and_expeditions");
-
-		try {
-			EaEConfig.main();
-		} catch (IOException var3) {
-			IOException e = var3;
-			throw new RuntimeException(e);
-		}
 
 		EaELootTables.init();
-        EaEEnchantmentEffects.register();
-
-		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.mod_integration_datapacks) {
-			ResourceManagerHelper.registerBuiltinResourcePack(ResourceLocation.fromNamespaceAndPath("enchants_and_expeditions", "enchants_and_expeditions_legacies_and_legends_integration"), (ModContainer)modContainer.get(), Component.translatable("pack.enchants_and_expeditions.legacies_and_legends_integration"), ResourcePackActivationType.ALWAYS_ENABLED);
-		}
+        EaEConfig.initClient();
 
 	}
 

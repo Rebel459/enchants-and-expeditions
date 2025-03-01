@@ -1,22 +1,19 @@
 {
   "replace": true,
   "values": [
-    "#minecraft:non_treasure",
     "#minecraft:tradeable",
-    "minecraft:binding_curse",
-    "minecraft:vanishing_curse",
+    "#minecraft:in_enchanting_table",
+    "#minecraft:curse",
     "minecraft:frost_walker",
     "minecraft:mending",
     "minecraft:infinity",
     "minecraft:luck_of_the_sea",
     "minecraft:respiration",
-    "minecraft:fire_aspect",
     "minecraft:thorns",
     "minecraft:depth_strider",
     "minecraft:fortune",
     "minecraft:flame",
     "minecraft:riptide",
-    "minecraft:multishot",
     "minecraft:looting"
   ]
 }

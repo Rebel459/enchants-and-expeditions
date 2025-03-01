@@ -6,34 +6,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:name_tag",
-          "weight": 3
+          "name": "minecraft:name_tag"
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:saddle",
-          "weight": 3
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "damage": {
-                "type": "minecraft:uniform",
-                "max": 0.25,
-                "min": 0.0
-              },
-              "function": "minecraft:set_damage"
-            },
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 30.0,
-              "options": "#minecraft:on_random_loot"
-            }
-          ],
-          "name": "minecraft:bow",
-          "weight": 3
+          "name": "minecraft:saddle"
         },
         {
           "type": "minecraft:item",
@@ -53,8 +30,27 @@
               "options": "#minecraft:on_random_loot"
             }
           ],
-          "name": "minecraft:fishing_rod",
-          "weight": 3
+          "name": "minecraft:bow"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 0.25,
+                "min": 0.0
+              },
+              "function": "minecraft:set_damage"
+            },
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": 30.0,
+              "options": "#minecraft:on_random_loot"
+            }
+          ],
+          "name": "minecraft:fishing_rod"
         },
         {
           "type": "minecraft:item",
@@ -65,13 +61,25 @@
               "options": "#minecraft:on_random_loot"
             }
           ],
-          "name": "minecraft:book",
-          "weight": 3
+          "name": "minecraft:book"
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:nautilus_shell",
-          "weight": 3
+          "name": "minecraft:nautilus_shell"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "options": [
+                "minecraft:luck_of_the_sea",
+                "minecraft:frost_walker",
+                "minecraft:respiration"
+              ]
+            }
+          ],
+          "name": "minecraft:book"
         }
       ],
       "rolls": 1.0

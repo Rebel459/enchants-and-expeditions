@@ -1,0 +1,13 @@
+{
+  "values": [
+    "#enchants_and_expeditions:is_arcane",
+    "#enchants_and_expeditions:is_elemental",
+    "minecraft:outside_border",
+    "minecraft:starve",
+    "minecraft:cramming",
+    "minecraft:drown",
+    "minecraft:dry_out",
+    "minecraft:fall",
+    "minecraft:outside_border"
+  ]
+}

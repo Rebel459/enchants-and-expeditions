@@ -1,7 +1,7 @@
 {
   "replace": true,
   "values": [
-    "minecraft:protection",
+    "enchants_and_expeditions:physical_protection",
     "minecraft:sharpness",
     "minecraft:sweeping_edge",
     "minecraft:efficiency",
@@ -13,7 +13,19 @@
     "minecraft:piercing",
     "minecraft:density",
     {
-      "id": "legacies_and_legends:chilled",
+      "id": "legacies_and_legends:shatter",
+      "required": false
+    },
+    {
+      "id": "legacies_and_legends:striking",
+      "required": false
+    },
+    {
+      "id": "legacies_and_legends:rebound",
+      "required": false
+    },
+    {
+      "id": "remnants:dueling",
       "required": false
     }
   ]

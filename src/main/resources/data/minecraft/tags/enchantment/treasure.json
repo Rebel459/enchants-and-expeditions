@@ -1,31 +1,37 @@
 {
   "replace": true,
   "values": [
-    "minecraft:binding_curse",
-    "minecraft:vanishing_curse",
     "minecraft:swift_sneak",
     "minecraft:soul_speed",
-    "minecraft:frost_walker",
-    "minecraft:mending",
     "minecraft:wind_burst",
-    "minecraft:infinity",
-    "minecraft:luck_of_the_sea",
     "minecraft:channeling",
     "minecraft:feather_falling",
-    "minecraft:respiration",
-    "minecraft:fire_aspect",
-    "minecraft:thorns",
-    "minecraft:depth_strider",
-    "minecraft:fortune",
-    "minecraft:flame",
-    "minecraft:riptide",
-    "minecraft:looting",
     {
       "id": "legacies_and_legends:tangled",
       "required": false
     },
     {
+      "id": "legacies_and_legends:rejuvenate",
+      "required": false
+    },
+    {
+      "id": "legacies_and_legends:decay",
+      "required": false
+    },
+    {
+      "id": "legacies_and_legends:featherweight",
+      "required": false
+    },
+    {
+      "id": "legacies_and_legends:freeze",
+      "required": false
+    },
+    {
       "id": "progression_reborn:reforge",
+      "required": false
+    },
+    {
+      "id": "remnants:relentless",
       "required": false
     },
     {

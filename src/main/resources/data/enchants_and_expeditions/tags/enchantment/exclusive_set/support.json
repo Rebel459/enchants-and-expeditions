@@ -1,0 +1,15 @@
+{
+  "values": [
+    "minecraft:sweeping_edge",
+    "minecraft:knockback",
+    "minecraft:fire_aspect",
+    {
+      "id": "remnants:dueling",
+      "required": false
+    },
+    {
+      "id": "remnants:relentless",
+      "required": false
+    }
+  ]
+}

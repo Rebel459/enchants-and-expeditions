@@ -3,7 +3,7 @@
 	"id": "enchants_and_expeditions",
 	"version": "${version}",
 	"name": "Enchants and Expeditions",
-	"description": "A thoughtful rework to vanilla's enchanting and anvil systems.",
+	"description": "An expansive and thoughtful rework to the vanilla enchanting systems.",
 	"authors": [
 		"Rebel459"
 	],
@@ -17,6 +17,9 @@
 	"entrypoints": {
 		"main": [
 			"net.legacy.enchants_and_expeditions.EnchantsAndExpeditions"
+		],
+		"modmenu": [
+			"net.legacy.progression_reborn.config.PRModMenuIntegration"
 		]
 	},
 	"mixins": [
@@ -26,6 +29,8 @@
 		"minecraft": "1.21.4",
 		"fabric-api": "*",
 		"frozenlib": "*",
-		"chiseledenchanting": "*"
+		"cloth-config": "*",
+		"chiseledenchanting": "*",
+		"legacies-and-legends": "*"
 	}
 }

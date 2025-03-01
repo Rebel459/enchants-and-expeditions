@@ -1,7 +1,7 @@
 package net.legacy.enchants_and_expeditions;
 
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.frozenblock.lib.loot.LootTableModifier;
+import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -21,7 +21,7 @@ public final class EaELootTables {
             LootTableEvents.MODIFY.register((id, tableBuilder, source, registries) -> {
                 LootPool.Builder pool;
 
-                if (EaEConfig.loot_table_injects) {
+                if (EaEConfig.get.loot_table_injects) {
                     if (BuiltInLootTables.DESERT_PYRAMID.equals(id)) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LOOTING), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), UniformGenerator.between(1.0F, 3.0F)));
                         tableBuilder.withPool(pool);
@@ -82,22 +82,6 @@ public final class EaELootTables {
                         tableBuilder.withPool(pool);
                     }
 
-                    LootTableModifier.editTable(
-                            BuiltInLootTables.FISHING_TREASURE, false,
-                            (itemId, mutableLootTable) -> mutableLootTable.modifyPools(
-                                    (lootPool) -> lootPool
-                                            .add(Items.ENCHANTED_BOOK, 1, new SetEnchantmentsFunction.Builder().withEnchantment(
-                                                    registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LUCK_OF_THE_SEA),
-                                                    UniformGenerator.between(1F, 3F)
-                                            )).add(Items.ENCHANTED_BOOK, 1, new SetEnchantmentsFunction.Builder().withEnchantment(
-                                                    registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.RESPIRATION),
-                                                    UniformGenerator.between(1F, 3F)
-                                            )).add(Items.ENCHANTED_BOOK, 1, new SetEnchantmentsFunction.Builder().withEnchantment(
-                                                    registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FROST_WALKER),
-                                                    ConstantValue.exactly(1F)
-                                            ))
-                            )
-                    );
                 }
 
             });
