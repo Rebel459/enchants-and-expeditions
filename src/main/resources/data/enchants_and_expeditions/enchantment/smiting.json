@@ -18,7 +18,7 @@
           "condition": "minecraft:entity_properties",
           "entity": "this",
           "predicate": {
-            "type": "#minecraft:sensitive_to_smiting"
+            "type": "#enchants_and_expeditions:sensitive_to_smiting"
           }
         }
       }

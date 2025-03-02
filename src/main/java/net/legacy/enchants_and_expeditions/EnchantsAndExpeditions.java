@@ -15,9 +15,12 @@ import java.util.Optional;
 public class EnchantsAndExpeditions implements ModInitializer {
 	@Override
 	public void onInitialize() {
+		Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer("enchants_and_expeditions");
 
 		EaELootTables.init();
         EaEConfig.initClient();
+
+		ResourceManagerHelper.registerBuiltinResourcePack(ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "rebalanced_vanilla_enchants"), (ModContainer)modContainer.get(), Component.translatable("pack.enchants_and_expeditions.rebalanced_vanilla_enchants"), ResourcePackActivationType.ALWAYS_ENABLED);
 
 	}
 

@@ -19,7 +19,7 @@
 			"net.legacy.enchants_and_expeditions.EnchantsAndExpeditions"
 		],
 		"modmenu": [
-			"net.legacy.progression_reborn.config.PRModMenuIntegration"
+			"net.legacy.enchants_and_expeditions.config.EaEModMenuIntegration"
 		]
 	},
 	"mixins": [
@@ -31,6 +31,6 @@
 		"frozenlib": "*",
 		"cloth-config": "*",
 		"chiseledenchanting": "*",
-		"legacies-and-legends": "*"
+		"legacies_and_legends": "*"
 	}
 }

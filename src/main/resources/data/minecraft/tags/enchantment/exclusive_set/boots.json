@@ -1,8 +1,6 @@
 {
-  "replace": true,
+  "replace": false,
   "values": [
-    "minecraft:frost_walker",
-    "minecraft:depth_strider",
     "minecraft:soul_speed"
   ]
 }

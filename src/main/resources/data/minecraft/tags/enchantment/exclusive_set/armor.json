@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "enchants_and_expeditions:physical_protection",
+    "enchants_and_expeditions:elemental_protection",
+    "enchants_and_expeditions:arcane_protection"
+  ]
+}
