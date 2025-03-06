@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.effect.EaEEnchantmentEffects;
+import net.legacy.enchants_and_expeditions.enchantment.EaEEnchantmentEffects;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.registry.EaELootTables;
 import net.minecraft.network.chat.Component;

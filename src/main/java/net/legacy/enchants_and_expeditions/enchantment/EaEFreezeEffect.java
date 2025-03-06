@@ -1,4 +1,4 @@
-package net.legacy.enchants_and_expeditions.effect;
+package net.legacy.enchants_and_expeditions.enchantment;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
