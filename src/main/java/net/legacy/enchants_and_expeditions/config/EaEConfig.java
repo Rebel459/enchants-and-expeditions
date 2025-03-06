@@ -26,7 +26,7 @@ public class EaEConfig implements ConfigData {
     get = AutoConfig.getConfigHolder(EaEConfig.class).getConfig();
   }
 
-  @ConfigEntry.Category("config")
+  @ConfigEntry.Category("default")
   public boolean loot_table_injects = true;
 
 }

@@ -30,7 +30,9 @@
 		"fabric-api": "*",
 		"frozenlib": "*",
 		"cloth-config": "*",
-		"chiseledenchanting": "*",
+		"chiseledenchanting": "*"
+	},
+	"recommends": {
 		"legacies_and_legends": "*"
 	}
 }

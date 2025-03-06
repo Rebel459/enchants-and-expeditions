@@ -11,8 +11,9 @@ base {
 }
 
 repositories {
-	maven { url = "https://api.modrinth.com/maven"}
+	maven { url = "https://api.modrinth.com/maven" }
 	maven { url = 'https://maven.parchmentmc.org' }
+	maven { url = "https://maven.shedaniel.me/" }
 }
 
 dependencies {
@@ -31,7 +32,9 @@ dependencies {
 
 	modImplementation("maven.modrinth:cloth-config:$cloth_config_version")
 
-	// Remember to included Chiseled Enchanting, owo-lib and Legacies and Legends in your local run/mods folder
+	modApi ("me.shedaniel.cloth:basic-math:+")
+
+	// Remember to include Chiseled Enchanting in your local run/mods folder
 
 }
 
