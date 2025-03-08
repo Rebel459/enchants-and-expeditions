@@ -14,6 +14,9 @@
   "enchantment.enchants_and_expeditions.chilled": "Chilled",
   "enchantment.enchants_and_expeditions.chilled.desc": "Has a chance to freeze struck targets and deals increased damage to freeze-susceptible foes, such as arthropods.",
 
+  "enchantment.enchants_and_expeditions.fragility_curse": "Curse of Fragility",
+  "enchantment.enchants_and_expeditions.fragility_curse.desc": "Increases durability damage taken.",
+
   "text.autoconfig.enchants_and_expeditions.title": "Enchants and Expeditions",
   "text.autoconfig.enchants_and_expeditions.option.loot_table_injects": "Loot Table Injects"
 }

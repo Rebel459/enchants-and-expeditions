@@ -1,6 +1,7 @@
 {
   "replace": true,
   "values": [
+    "#minecraft:curse",
     "enchants_and_expeditions:elemental_protection",
     "enchants_and_expeditions:arcane_protection",
     "minecraft:aqua_affinity",

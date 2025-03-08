@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:unbreaking",
+    "enchants_and_expeditions:fragility_curse"
+  ]
+}

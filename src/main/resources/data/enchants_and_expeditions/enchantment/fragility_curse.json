@@ -1,0 +1,35 @@
+{
+  "anvil_cost": 8,
+  "description": {
+    "translate": "enchantment.enchants_and_expeditions.fragility_curse"
+  },
+  "effects": {
+    "minecraft:item_damage": [
+      {
+        "requirements": {
+          "condition": "minecraft:random_chance",
+          "chance": 0.5
+        },
+        "effect": {
+          "type": "minecraft:add",
+          "value": 1
+        }
+      }
+    ]
+  },
+  "exclusive_set": "#enchants_and_expeditions:exclusive_set/unbreaking",
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 0
+  },
+  "max_level": 1,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 0
+  },
+  "slots": [
+    "any"
+  ],
+  "supported_items": "#enchants_and_expeditions:enchantable/tool",
+  "weight": 1
+}
