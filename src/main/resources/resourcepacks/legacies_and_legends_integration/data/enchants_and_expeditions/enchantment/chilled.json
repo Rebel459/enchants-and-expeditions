@@ -97,7 +97,6 @@
     "mainhand"
   ],
   "exclusive_set": "#minecraft:exclusive_set/damage",
-  "primary_items": "#minecraft:enchantable/sword",
   "supported_items": "#minecraft:enchantable/sharp_weapon",
   "weight": 2
 }
