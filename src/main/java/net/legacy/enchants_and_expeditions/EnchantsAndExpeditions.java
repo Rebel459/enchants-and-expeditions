@@ -18,6 +18,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 
 	public static boolean isLegaciesAndLegendsLoaded = false;
 	public static boolean isProgressionRebornLoaded = false;
+	public static boolean isEnderscapeLoaded = false;
 
 	@Override
 	public void onInitialize() {
@@ -34,7 +35,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 				ResourcePackActivationType.ALWAYS_ENABLED
 		);
 
-		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends")) {
+		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.get.legacies_and_legends_integration) {
 			isLegaciesAndLegendsLoaded = true;
 			ResourceManagerHelper.registerBuiltinResourcePack(
 					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "legacies_and_legends_integration"), (ModContainer)modContainer.get(),
@@ -44,6 +45,14 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		}
 		if (FabricLoader.getInstance().isModLoaded("progression_reborn")) {
 			isProgressionRebornLoaded = true;
+		}
+		if (FabricLoader.getInstance().isModLoaded("enderscape") && EaEConfig.get.enderscape_integration) {
+			isEnderscapeLoaded = true;
+			ResourceManagerHelper.registerBuiltinResourcePack(
+					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "enderscape_integration"), (ModContainer)modContainer.get(),
+					Component.translatable("pack.enchants_and_expeditions.enderscape_integration"),
+					ResourcePackActivationType.ALWAYS_ENABLED
+			);
 		}
 
 	}

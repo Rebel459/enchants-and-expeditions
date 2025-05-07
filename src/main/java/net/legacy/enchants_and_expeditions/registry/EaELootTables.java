@@ -113,69 +113,70 @@ public final class EaELootTables {
 
                     // Legacies and Legends
 
-                    if (EaELootTables.DUNGEON_CHEST_ARID.equals(id)) {
-                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LOOTING), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.SMITING), UniformGenerator.between(1.0F, 3.0F)));
-                        tableBuilder.withPool(pool);
-                    }
-                    if (EaELootTables.DUNGEON_LIBRARY_ARID.equals(id)) {
-                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LOOTING), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.SMITING), UniformGenerator.between(1.0F, 3.0F)));
-                        tableBuilder.withPool(pool);
-                    }
-
-                    if (EaELootTables.DUNGEON_CHEST_DEEP.equals(id)) {
-                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ARCANE_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
-                        tableBuilder.withPool(pool);
-                    }
-                    if (EaELootTables.DUNGEON_LIBRARY_DEEP.equals(id)) {
-                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ARCANE_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
-                        tableBuilder.withPool(pool);
-                    }
-
-                    if (EaELootTables.DUNGEON_CHEST_FROZEN.equals(id)) {
-                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FROST_WALKER), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.CHILLED), UniformGenerator.between(1.0F, 3.0F)));
-                        tableBuilder.withPool(pool);
-                    }
-                    if (EaELootTables.DUNGEON_LIBRARY_FROZEN.equals(id)) {
-                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FROST_WALKER), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.CHILLED), UniformGenerator.between(1.0F, 3.0F)));
-                        tableBuilder.withPool(pool);
-                    }
-
-                    if (EaELootTables.DUNGEON_CHEST_SIMPLE.equals(id)) {
-                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.INFINITY), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), ConstantValue.exactly(1.0F)));
-                        tableBuilder.withPool(pool);
-                    }
-                    if (EaELootTables.DUNGEON_LIBRARY_SIMPLE.equals(id)) {
-                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.INFINITY), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), ConstantValue.exactly(1.0F)));
-                        tableBuilder.withPool(pool);
-                    }
-
-                    if (EaELootTables.DUNGEON_CHEST_VERDANT.equals(id)) {
-                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.THORNS), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.TANGLED), UniformGenerator.between(1.0F, 3.0F)));
-                        tableBuilder.withPool(pool);
-                    }
-                    if (EaELootTables.DUNGEON_LIBRARY_VERDANT.equals(id)) {
-                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.THORNS), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.TANGLED), UniformGenerator.between(1.0F, 3.0F)));
-                        tableBuilder.withPool(pool);
-                    }
-
-                    if (EnchantsAndExpeditions.isProgressionRebornLoaded) {
-                        if (EaELootTables.DUNGEON_CHEST_INFERNAL.equals(id)) {
-                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.REFORGE), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ELEMENTAL_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
+                    if (EaEConfig.get.legacies_and_legends_integration) {
+                        if (EaELootTables.DUNGEON_CHEST_ARID.equals(id)) {
+                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LOOTING), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.SMITING), UniformGenerator.between(1.0F, 3.0F)));
                             tableBuilder.withPool(pool);
                         }
-                        if (EaELootTables.DUNGEON_LIBRARY_INFERNAL.equals(id)) {
-                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.REFORGE), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ELEMENTAL_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
+                        if (EaELootTables.DUNGEON_LIBRARY_ARID.equals(id)) {
+                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LOOTING), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.SMITING), UniformGenerator.between(1.0F, 3.0F)));
                             tableBuilder.withPool(pool);
                         }
-                    }
-                    else {
-                        if (EaELootTables.DUNGEON_CHEST_INFERNAL.equals(id)) {
-                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(35)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ELEMENTAL_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
+
+                        if (EaELootTables.DUNGEON_CHEST_DEEP.equals(id)) {
+                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ARCANE_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
                             tableBuilder.withPool(pool);
                         }
-                        if (EaELootTables.DUNGEON_LIBRARY_INFERNAL.equals(id)) {
-                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(17)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ELEMENTAL_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
+                        if (EaELootTables.DUNGEON_LIBRARY_DEEP.equals(id)) {
+                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ARCANE_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
                             tableBuilder.withPool(pool);
+                        }
+
+                        if (EaELootTables.DUNGEON_CHEST_FROZEN.equals(id)) {
+                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FROST_WALKER), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.CHILLED), UniformGenerator.between(1.0F, 3.0F)));
+                            tableBuilder.withPool(pool);
+                        }
+                        if (EaELootTables.DUNGEON_LIBRARY_FROZEN.equals(id)) {
+                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FROST_WALKER), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.CHILLED), UniformGenerator.between(1.0F, 3.0F)));
+                            tableBuilder.withPool(pool);
+                        }
+
+                        if (EaELootTables.DUNGEON_CHEST_SIMPLE.equals(id)) {
+                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.INFINITY), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), ConstantValue.exactly(1.0F)));
+                            tableBuilder.withPool(pool);
+                        }
+                        if (EaELootTables.DUNGEON_LIBRARY_SIMPLE.equals(id)) {
+                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.INFINITY), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), ConstantValue.exactly(1.0F)));
+                            tableBuilder.withPool(pool);
+                        }
+
+                        if (EaELootTables.DUNGEON_CHEST_VERDANT.equals(id)) {
+                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.THORNS), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.TANGLED), UniformGenerator.between(1.0F, 3.0F)));
+                            tableBuilder.withPool(pool);
+                        }
+                        if (EaELootTables.DUNGEON_LIBRARY_VERDANT.equals(id)) {
+                            pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.THORNS), UniformGenerator.between(1.0F, 3.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.TANGLED), UniformGenerator.between(1.0F, 3.0F)));
+                            tableBuilder.withPool(pool);
+                        }
+
+                        if (EnchantsAndExpeditions.isProgressionRebornLoaded && EaEConfig.get.progression_reborn_integration) {
+                            if (EaELootTables.DUNGEON_CHEST_INFERNAL.equals(id)) {
+                                pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(34)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.REFORGE), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ELEMENTAL_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
+                                tableBuilder.withPool(pool);
+                            }
+                            if (EaELootTables.DUNGEON_LIBRARY_INFERNAL.equals(id)) {
+                                pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(16)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.REFORGE), ConstantValue.exactly(1.0F))).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ELEMENTAL_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
+                                tableBuilder.withPool(pool);
+                            }
+                        } else {
+                            if (EaELootTables.DUNGEON_CHEST_INFERNAL.equals(id)) {
+                                pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(35)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ELEMENTAL_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
+                                tableBuilder.withPool(pool);
+                            }
+                            if (EaELootTables.DUNGEON_LIBRARY_INFERNAL.equals(id)) {
+                                pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(EmptyLootItem.emptyItem().setWeight(17)).add(LootItem.lootTableItem(Items.ENCHANTED_BOOK).setWeight(1)).apply((new SetEnchantmentsFunction.Builder()).withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantments.ELEMENTAL_PROTECTION), UniformGenerator.between(1.0F, 3.0F)));
+                                tableBuilder.withPool(pool);
+                            }
                         }
                     }
 

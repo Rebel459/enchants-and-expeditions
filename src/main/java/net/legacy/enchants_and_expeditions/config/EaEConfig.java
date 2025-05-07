@@ -29,4 +29,13 @@ public class EaEConfig implements ConfigData {
   @ConfigEntry.Category("default")
   public boolean loot_table_injects = true;
 
+  @ConfigEntry.Category("default")
+  public boolean legacies_and_legends_integration = true;
+
+  @ConfigEntry.Category("default")
+  public boolean progression_reborn_integration = true;
+
+  @ConfigEntry.Category("default")
+  public boolean enderscape_integration = true;
+
 }
