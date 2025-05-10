@@ -20,5 +20,7 @@
 
   "text.autoconfig.enchants_and_expeditions.title": "Enchants and Expeditions",
   "text.autoconfig.enchants_and_expeditions.option.loot_table_injects": "Loot Table Injects",
+  "text.autoconfig.enchants_and_expeditions.option.legacies_and_legends_integration": "Legacies and Legends Integration",
+  "text.autoconfig.enchants_and_expeditions.option.progression_reborn_integration": "Progression Reborn Integration",
   "text.autoconfig.enchants_and_expeditions.option.enderscape_integration": "Enderscape Integration"
 }
