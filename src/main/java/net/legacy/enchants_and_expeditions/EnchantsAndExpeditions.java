@@ -8,6 +8,7 @@ import net.fabricmc.loader.api.ModContainer;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.enchantment.EaEEnchantmentEffects;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
+import net.legacy.enchants_and_expeditions.registry.EaEItemComponents;
 import net.legacy.enchants_and_expeditions.registry.EaELootTables;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +27,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 
 		EaELootTables.init();
 		EaEEnchantments.init();
+		EaEItemComponents.init();
 		EaEEnchantmentEffects.register();
 		EaEConfig.initClient();
 

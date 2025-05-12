@@ -46,25 +46,35 @@
           ]
         },
         "enchanted": "attacker",
-        "requirements": [
-          {
-            "chance": {
-              "type": "minecraft:enchantment_level",
-              "amount": {
-                "type": "minecraft:linear",
-                "base": 0.21,
-                "per_level_above_first": 0.06
+        "requirements": {
+          "condition": "minecraft:all_of",
+          "terms": [
+            {
+              "condition": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "type": "#enchants_and_expeditions:sensitive_to_chilled"
               }
             },
-            "condition": "minecraft:random_chance"
-          },
-          {
-            "condition": "minecraft:damage_source_properties",
-            "predicate": {
-              "is_direct": true
+            {
+              "chance": {
+                "type": "minecraft:enchantment_level",
+                "amount": {
+                  "type": "minecraft:linear",
+                  "base": 0.21,
+                  "per_level_above_first": 0.06
+                }
+              },
+              "condition": "minecraft:random_chance"
+            },
+            {
+              "condition": "minecraft:damage_source_properties",
+              "predicate": {
+                "is_direct": true
+              }
             }
-          }
-        ]
+          ]
+        }
       }
     ]
   },

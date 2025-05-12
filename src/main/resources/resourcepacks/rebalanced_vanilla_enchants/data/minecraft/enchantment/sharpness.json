@@ -4,29 +4,31 @@
     "translate": "enchantment.minecraft.sharpness"
   },
   "effects": {
-    "minecraft:post_attack": [
+    "minecraft:damage": [
       {
         "effect": {
-          "type": "minecraft:all_of",
-          "effects": [
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 1.0,
+            "per_level_above_first": 1.0
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:all_of",
+          "terms": [
             {
-              "type": "minecraft:damage_entity",
-              "damage_type": "minecraft:magic",
-              "min_damage": {
-                "type": "minecraft:linear",
-                "base": 1,
-                "per_level_above_first": 1
-              },
-              "max_damage": {
-                "type": "minecraft:linear",
-                "base": 1,
-                "per_level_above_first": 1
+              "condition": "minecraft:inverted",
+              "term": {
+                "condition": "minecraft:entity_properties",
+                "entity": "this",
+                "predicate": {
+                  "type": "minecraft:witch"
+                }
               }
             }
           ]
-        },
-        "enchanted": "attacker",
-        "affected": "victim"
+        }
       }
     ]
   },
