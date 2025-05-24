@@ -12,6 +12,7 @@ public class EaEItemTags {
     public static final TagKey<Item> CROSSBOW_REPAIR_MATERIALS = bind("crossbow_repair_materials");
     public static final TagKey<Item> TRIDENT_REPAIR_MATERIALS = bind("trident_repair_materials");
 
+    public static final TagKey<Item> FISHING_ROD_REPAIR_MATERIALS = bind("fishing_rod_repair_materials");
     public static final TagKey<Item> BRUSH_REPAIR_MATERIALS = bind("brush_repair_materials");
     public static final TagKey<Item> SHEARS_REPAIR_MATERIALS = bind("shears_repair_materials");
     public static final TagKey<Item> FLINT_AND_STEEL_REPAIR_MATERIALS = bind("flint_and_steel_repair_materials");

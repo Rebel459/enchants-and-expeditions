@@ -35,6 +35,10 @@ public class EaEItemComponents {
                 builder.set(DataComponents.ENCHANTABLE, new Enchantable(10));
             });
 
+            context.modify(Items.FISHING_ROD, builder -> {
+                HolderGetter<Item> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM);
+                builder.set(DataComponents.REPAIRABLE, new Repairable(holderGetter.getOrThrow(EaEItemTags.FISHING_ROD_REPAIR_MATERIALS)));
+            });
             context.modify(Items.BRUSH, builder -> {
                 HolderGetter<Item> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM);
                 builder.set(DataComponents.REPAIRABLE, new Repairable(holderGetter.getOrThrow(EaEItemTags.BRUSH_REPAIR_MATERIALS)));
