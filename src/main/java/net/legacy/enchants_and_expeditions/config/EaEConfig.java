@@ -36,6 +36,9 @@ public class EaEConfig implements ConfigData {
   public boolean progression_reborn_integration = true;
 
   @ConfigEntry.Category("default")
+  public boolean trailier_tales_integration = true;
+
+  @ConfigEntry.Category("default")
   public boolean enderscape_integration = true;
 
 }

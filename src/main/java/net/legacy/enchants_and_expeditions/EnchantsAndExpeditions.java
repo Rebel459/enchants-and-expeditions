@@ -19,6 +19,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 
 	public static boolean isLegaciesAndLegendsLoaded = false;
 	public static boolean isProgressionRebornLoaded = false;
+	public static boolean isTrailierTalesLoaded = false;
 	public static boolean isEnderscapeLoaded = false;
 
 	@Override
@@ -47,6 +48,14 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		}
 		if (FabricLoader.getInstance().isModLoaded("progression_reborn")) {
 			isProgressionRebornLoaded = true;
+		}
+		if (FabricLoader.getInstance().isModLoaded("trailiertales") && EaEConfig.get.trailier_tales_integration) {
+			isTrailierTalesLoaded = true;
+			ResourceManagerHelper.registerBuiltinResourcePack(
+					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "trailier_tales_integration"), (ModContainer)modContainer.get(),
+					Component.translatable("pack.enchants_and_expeditions.trailier_tales_integration"),
+					ResourcePackActivationType.ALWAYS_ENABLED
+			);
 		}
 		if (FabricLoader.getInstance().isModLoaded("enderscape") && EaEConfig.get.enderscape_integration) {
 			isEnderscapeLoaded = true;

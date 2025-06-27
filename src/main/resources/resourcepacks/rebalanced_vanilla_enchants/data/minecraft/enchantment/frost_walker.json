@@ -94,13 +94,13 @@
   },
   "exclusive_set": "#minecraft:exclusive_set/boots",
   "max_cost": {
-    "base": 30,
-    "per_level_above_first": 10
+    "base": 35,
+    "per_level_above_first": 0
   },
   "max_level": 1,
   "min_cost": {
-    "base": 12,
-    "per_level_above_first": 10
+    "base": 15,
+    "per_level_above_first": 0
   },
   "slots": [
     "feet"

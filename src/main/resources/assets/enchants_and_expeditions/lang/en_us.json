@@ -1,6 +1,7 @@
 {
   "pack.enchants_and_expeditions.rebalanced_vanilla_enchants": "Rebalanced Vanilla Enchants",
   "pack.enchants_and_expeditions.legacies_and_legends_integration": "Legacies and Legends Integration",
+  "pack.enchants_and_expeditions.trailier_tales_integration": "Trailier Tales Integration",
   "pack.enchants_and_expeditions.enderscape_integration": "Enderscape Integration",
 
   "enchantment.enchants_and_expeditions.arcane_protection": "Arcane Protection",
@@ -22,5 +23,6 @@
   "text.autoconfig.enchants_and_expeditions.option.loot_table_injects": "Loot Table Injects",
   "text.autoconfig.enchants_and_expeditions.option.legacies_and_legends_integration": "Legacies and Legends Integration",
   "text.autoconfig.enchants_and_expeditions.option.progression_reborn_integration": "Progression Reborn Integration",
+  "text.autoconfig.enchants_and_expeditions.option.trailier_tales_integration": "Trailier Tales Integration",
   "text.autoconfig.enchants_and_expeditions.option.enderscape_integration": "Enderscape Integration"
 }
