@@ -2,11 +2,15 @@ package net.legacy.enchants_and_expeditions.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,12 +20,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import javax.tools.Tool;
+
 @Mixin(AnvilMenu.class)
 public abstract class AnvilMenuMixin {
 
     @Shadow
     @Final
     private DataSlot cost;
+
+    @Shadow public abstract int getCost();
 
     @WrapOperation(method = "createResult", at = @At(
             value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;canEnchant(Lnet/minecraft/world/item/ItemStack;)Z"))
@@ -34,6 +42,18 @@ public abstract class AnvilMenuMixin {
                     target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V",
                     shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILSOFT)
     public void priceless(CallbackInfo ci) {
+        AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
+        ItemStack itemStack = anvilMenu.slots.get(0).getItem();
+        if (itemStack.is(EaEItemTags.NECKLACES) || itemStack.is(EaEItemTags.RINGS)) {
+            int enchantability = itemStack.get(DataComponents.ENCHANTABLE).value();
+            if (enchantability > 25) enchantability = 25;
+            int currentCost = getCost();
+            if (currentCost > 25) currentCost = 25;
+            int newCost = currentCost - enchantability;
+            if (newCost <= 0) newCost = 1;
+            cost.set(newCost);
+            return;
+        }
         cost.set(0);
     }
 
@@ -44,6 +64,7 @@ public abstract class AnvilMenuMixin {
 
     @Inject(method = "calculateIncreasedRepairCost", at = @At(value = "HEAD"), cancellable = true)
     private static void increaseLimit(int oldRepairCost, CallbackInfoReturnable<Integer> cir) {
+        if (oldRepairCost >= 1) cir.setReturnValue((int)Math.min((long)oldRepairCost * 2L + 1L, 2147483647L));
         cir.setReturnValue(0);
     }
 
