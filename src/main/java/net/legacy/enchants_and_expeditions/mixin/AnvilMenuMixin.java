@@ -29,8 +29,6 @@ public abstract class AnvilMenuMixin {
     @Final
     private DataSlot cost;
 
-    @Shadow public abstract int getCost();
-
     @WrapOperation(method = "createResult", at = @At(
             value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;canEnchant(Lnet/minecraft/world/item/ItemStack;)Z"))
     private boolean particleTint(Enchantment instance, ItemStack stack, Operation<Boolean> original) {
