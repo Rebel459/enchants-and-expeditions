@@ -27,6 +27,10 @@
       "required": false
     },
     {
+      "id": "legacies_and_legends:shadowstep",
+      "required": false
+    },
+    {
       "id": "progression_reborn:reforge",
       "required": false
     },
@@ -40,6 +44,22 @@
     },
     {
       "id": "trailiertales:rebrush",
+      "required": false
+    },
+    {
+      "id": "enderscape:lightspeed",
+      "required": false
+    },
+    {
+      "id": "enderscape:transdimensional",
+      "required": false
+    },
+    {
+      "id": "enderscape:bundling",
+      "required": false
+    },
+    {
+      "id": "enderscape:rebound",
       "required": false
     }
   ]
