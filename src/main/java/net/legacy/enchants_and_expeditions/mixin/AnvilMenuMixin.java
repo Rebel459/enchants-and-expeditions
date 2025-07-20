@@ -47,7 +47,7 @@ public abstract class AnvilMenuMixin {
         if ((itemStack.is(EaEItemTags.NECKLACES) || itemStack.is(EaEItemTags.RINGS)) && itemStack.getComponents().has(DataComponents.ENCHANTABLE)) {
             int enchantability = itemStack.get(DataComponents.ENCHANTABLE).value();
             if (enchantability > 25) enchantability = 25;
-            cost.set(25 - enchantability);
+            cost.set(26 - enchantability);
             return;
         }
         cost.set(0);
