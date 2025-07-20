@@ -55,11 +55,4 @@ public abstract class AnvilMenuMixin {
     protected void mayPickup(Player player, boolean hasStack, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(true);
     }
-
-    @Inject(method = "calculateIncreasedRepairCost", at = @At(value = "HEAD"), cancellable = true)
-    private static void increaseLimit(int oldRepairCost, CallbackInfoReturnable<Integer> cir) {
-        if (oldRepairCost >= 1) cir.setReturnValue((int)Math.min((long)oldRepairCost * 2L + 1L, 2147483647L));
-        cir.setReturnValue(0);
-    }
-
 }
