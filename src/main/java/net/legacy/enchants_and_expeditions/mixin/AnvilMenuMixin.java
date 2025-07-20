@@ -44,7 +44,7 @@ public abstract class AnvilMenuMixin {
     public void priceless(CallbackInfo ci) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack itemStack = anvilMenu.slots.getFirst().getItem();
-        if ((itemStack.is(EaEItemTags.NECKLACES) || itemStack.is(EaEItemTags.RINGS)) && itemStack.getComponents().has(DataComponents.ENCHANTABLE)) {
+        if ((itemStack.is(EaEItemTags.RINGS) || itemStack.is(EaEItemTags.NECKLACES)) && itemStack.getComponents().has(DataComponents.ENCHANTABLE)) {
             int enchantability = itemStack.get(DataComponents.ENCHANTABLE).value();
             if (enchantability > 25) enchantability = 25;
             cost.set(26 - enchantability);
