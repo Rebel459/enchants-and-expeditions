@@ -20,17 +20,11 @@ public class EaEItemTags {
     public static final TagKey<Item> CARROT_ON_A_STICK_REPAIR_MATERIALS = register("carrot_on_a_stick_repair_materials");
     public static final TagKey<Item> WARPED_FUNGUS_A_STICK_REPAIR_MATERIALS = register("warped_fungus_repair_materials");
 
-    public static final TagKey<Item> RINGS = registerLegaciesAndLegends("rings");
-    public static final TagKey<Item> NECKLACES = registerLegaciesAndLegends("necklaces");
+    public static final TagKey<Item> VARIABLE_REPAIR_COST = register("variable_repair_cost");
 
     @NotNull
     private static TagKey<Item> register(@NotNull String path) {
         return TagKey.create(Registries.ITEM, EnchantsAndExpeditions.id(path));
-    }
-
-    @NotNull
-    private static TagKey<Item> registerLegaciesAndLegends(@NotNull String path) {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("legacies_and_legends", path));
     }
 
 }

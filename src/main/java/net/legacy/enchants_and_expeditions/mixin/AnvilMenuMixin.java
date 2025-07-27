@@ -35,16 +35,26 @@ public abstract class AnvilMenuMixin {
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V",
                     shift = At.Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILSOFT)
-    public void priceless(CallbackInfo ci) {
+    public void modifyPrice(CallbackInfo ci) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack itemStack = anvilMenu.slots.getFirst().getItem();
-        if ((itemStack.is(EaEItemTags.RINGS) || itemStack.is(EaEItemTags.NECKLACES)) && itemStack.getComponents().has(DataComponents.ENCHANTABLE)) {
-            int enchantability = itemStack.get(DataComponents.ENCHANTABLE).value();
-            if (enchantability > 25) enchantability = 25;
-            cost.set(26 - enchantability);
-            return;
+        ItemStack repairItem = anvilMenu.slots.get(1).getItem();
+        if (!itemStack.is(EaEItemTags.VARIABLE_REPAIR_COST)) cost.set(0);
+        else if (itemStack.getComponents().has(DataComponents.ENCHANTABLE)) {
+            int repairMultiplier = repairItem.getCount();
+            double percentageDamaged = (double) itemStack.getDamageValue() / itemStack.getMaxDamage();
+            if (percentageDamaged > 0.75 && repairMultiplier > 4) repairMultiplier = 4;
+            else if (percentageDamaged > 0.5 && percentageDamaged <= 0.75 && repairMultiplier > 3) repairMultiplier = 3;
+            else if (percentageDamaged > 0.25 && percentageDamaged <= 0.5 && repairMultiplier > 2) repairMultiplier = 2;
+            else if (percentageDamaged <= 0.25 && repairMultiplier > 1) repairMultiplier = 1;
+
+            int repairCost = itemStack.get(DataComponents.ENCHANTABLE).value();
+            if (repairCost > 25) repairCost = 25;
+            repairCost = (26 - repairCost) / 4;
+            if (repairCost < 1) repairCost = 1;
+
+            cost.set(repairCost * repairMultiplier);
         }
-        cost.set(0);
     }
 
     @Inject(method = "mayPickup", at = @At(value = "HEAD"), cancellable = true)

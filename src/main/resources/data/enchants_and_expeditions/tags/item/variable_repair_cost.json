@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#legacies_and_legends:rings",
+      "required": false
+    },
+    {
+      "id": "#legacies_and_legends:necklaces",
+      "required": false
+    }
+  ]
+}

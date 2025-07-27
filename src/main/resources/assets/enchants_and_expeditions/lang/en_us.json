@@ -5,19 +5,19 @@
   "pack.enchants_and_expeditions.enderscape_integration": "Enderscape Integration",
 
   "enchantment.enchants_and_expeditions.arcane_protection": "Arcane Protection",
-  "enchantment.enchants_and_expeditions.arcane_protection.desc": "Protects from magical and blast damage sources.",
+  "enchantment.enchants_and_expeditions.arcane_protection.desc": "Protects from magical and blast damage sources",
   "enchantment.enchants_and_expeditions.elemental_protection": "Elemental Protection",
-  "enchantment.enchants_and_expeditions.elemental_protection.desc": "Protects from fire, freeze and natural damage sources.",
+  "enchantment.enchants_and_expeditions.elemental_protection.desc": "Protects from fire, freeze and natural damage sources",
   "enchantment.enchants_and_expeditions.physical_protection": "Physical Protection",
-  "enchantment.enchants_and_expeditions.physical_protection.desc": "Protects from projectile and melee direct damage sources.",
+  "enchantment.enchants_and_expeditions.physical_protection.desc": "Protects from projectile and melee direct damage sources",
 
   "enchantment.enchants_and_expeditions.smiting": "Smiting",
-  "enchantment.enchants_and_expeditions.smiting.desc": "Lights struck targets on fire and deals increased damage to fire-susceptible foes, such as the undead.",
+  "enchantment.enchants_and_expeditions.smiting.desc": "Lights struck targets on fire and deals increased damage to fire-susceptible foes, such as the undead",
   "enchantment.enchants_and_expeditions.chilled": "Chilled",
-  "enchantment.enchants_and_expeditions.chilled.desc": "Has a chance to freeze struck targets and deals increased damage to freeze-susceptible foes, such as arthropods.",
+  "enchantment.enchants_and_expeditions.chilled.desc": "Has a chance to freeze struck targets and deals increased damage to freeze-susceptible foes, such as arthropods",
 
   "enchantment.enchants_and_expeditions.fragility_curse": "Curse of Fragility",
-  "enchantment.enchants_and_expeditions.fragility_curse.desc": "Increases durability damage taken.",
+  "enchantment.enchants_and_expeditions.fragility_curse.desc": "The cursed item has a chance to take increased durability damage when used",
 
   "text.autoconfig.enchants_and_expeditions.title": "Enchants and Expeditions",
   "text.autoconfig.enchants_and_expeditions.option.loot_table_injects": "Loot Table Injects",
