@@ -22,13 +22,13 @@
 			"net.legacy.enchants_and_expeditions.config.EaEModMenuIntegration"
 		]
 	},
+	"accessWidener": "enchants_and_expeditions.accesswidener",
 	"mixins": [
 		"enchants_and_expeditions.mixins.json"
 	],
 	"depends": {
 		"minecraft": "1.21.5",
 		"fabric-api": "*",
-		"frozenlib": "*",
 		"cloth-config": "*",
 		"chiseledenchanting": "*"
 	},

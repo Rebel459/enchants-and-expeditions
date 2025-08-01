@@ -30,6 +30,9 @@ public class EaEConfig implements ConfigData {
   public boolean loot_table_injects = true;
 
   @ConfigEntry.Category("default")
+  public boolean enchant_function_fallback = true;
+
+  @ConfigEntry.Category("default")
   public boolean legacies_and_legends_integration = true;
 
   @ConfigEntry.Category("default")

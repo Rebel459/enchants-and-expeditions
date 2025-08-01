@@ -1,0 +1,6 @@
+accessWidener v2 named
+
+accessible field net/minecraft/world/level/storage/loot/functions/EnchantWithLevelsFunction levels Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/functions/EnchantWithLevelsFunction options Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/EnchantRandomlyFunction options Ljava/util/Optional;
+accessible method net/minecraft/world/level/storage/loot/functions/EnchantRandomlyFunction enchantItem (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/Holder;Lnet/minecraft/util/RandomSource;)Lnet/minecraft/world/item/ItemStack;

@@ -3,7 +3,9 @@
 	"package": "net.legacy.enchants_and_expeditions.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"AnvilMenuMixin"
+		"AnvilMenuMixin",
+		"EnchantRandomlyFunctionMixin",
+		"EnchantWithLevelsFunctionMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
