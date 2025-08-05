@@ -3,6 +3,7 @@
   "package": "net.legacy.enchants_and_expeditions.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "entity.PlayerMixin",
     "function.EnchantRandomlyFunctionMixin",
     "function.EnchantWithLevelsFunctionMixin",
     "inventory.AnvilMenuMixin",

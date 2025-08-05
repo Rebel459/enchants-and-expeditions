@@ -1,23 +1,12 @@
 package net.legacy.enchants_and_expeditions.mixin.entity;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AnvilMenu;
-import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin {
@@ -60,10 +49,26 @@ public abstract class PlayerMixin {
 
         // 91+
 
-        else if (this.experienceLevel <= 95)
+        else if (this.experienceLevel == 91)
             cir.setReturnValue(200);
-        else if (this.experienceLevel <= 100)
-            cir.setReturnValue(1000);
+        else if (this.experienceLevel == 92)
+            cir.setReturnValue(250);
+        else if (this.experienceLevel == 93)
+            cir.setReturnValue(300);
+        else if (this.experienceLevel == 94)
+            cir.setReturnValue(350);
+        else if (this.experienceLevel == 95)
+            cir.setReturnValue(400);
+        else if (this.experienceLevel == 96)
+            cir.setReturnValue(500);
+        else if (this.experienceLevel == 97)
+            cir.setReturnValue(600);
+        else if (this.experienceLevel == 98)
+            cir.setReturnValue(800);
+        else if (this.experienceLevel == 99)
+            cir.setReturnValue(1100);
+        else if (this.experienceLevel == 100)
+            cir.setReturnValue(1500);
         else
             cir.setReturnValue(5000);
     }
