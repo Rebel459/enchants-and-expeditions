@@ -1,4 +1,4 @@
-package net.legacy.enchants_and_expeditions.mixin;
+package net.legacy.enchants_and_expeditions.mixin.inventory;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
