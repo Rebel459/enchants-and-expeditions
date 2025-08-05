@@ -8,7 +8,6 @@ import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
@@ -50,8 +49,8 @@ public class EnchantmentMenuMixin {
     }
 
     @Unique
-    public BlockPos add(Vec3i vec3i, BlockPos blockPos) {
-        return this.add(vec3i.getX(), vec3i.getY(), vec3i.getZ(), blockPos);
+    public BlockPos add(BlockPos blockPos) {
+        return this.add(blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockPos);
     }
 
     @Inject(method = "method_17411", at = @At(value = "HEAD"))
@@ -60,7 +59,7 @@ public class EnchantmentMenuMixin {
         this.bookAmount = 0;
         for (BlockPos blockPos : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
 
-            if (!(level.getBlockEntity(add(blockPos, blockPos)) instanceof ChiseledBookShelfBlockEntity bookshelf)) {
+            if (!(level.getBlockEntity(add(blockPos)) instanceof ChiseledBookShelfBlockEntity bookshelf)) {
                 continue;
             }
             for (int i = 0; i < bookshelf.getContainerSize(); i++) {
@@ -81,7 +80,7 @@ public class EnchantmentMenuMixin {
     @WrapOperation(method = "method_17411", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/EnchantingTableBlock;isValidBookShelf(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;)Z"))
     private boolean chiseledBookshelfProvidesPower(Level level, BlockPos enchantingTablePos, BlockPos bookshelfPos, Operation<Boolean> original) {
         if (!original.call(level, enchantingTablePos, bookshelfPos)) return false;
-        if (!(level.getBlockEntity(add(bookshelfPos, bookshelfPos)) instanceof ChiseledBookShelfBlockEntity bookshelf)) return true;
+        if (!(level.getBlockEntity(add(bookshelfPos)) instanceof ChiseledBookShelfBlockEntity bookshelf)) return true;
 
         int bookCount = 0;
         for (int i = 0; i < bookshelf.getContainerSize(); ++i) {
