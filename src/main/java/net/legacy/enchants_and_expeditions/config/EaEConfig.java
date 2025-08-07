@@ -46,6 +46,9 @@ public class EaEConfig implements ConfigData {
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean allow_book_enchanting = false;
+    @ConfigEntry.Category("config")
+    @ConfigEntry.Gui.Tooltip
+    public int enchantment_limit = 3;
   }
 
   public static class ChiseledConfig {
