@@ -34,8 +34,6 @@
   "text.autoconfig.enchants_and_expeditions.option.chiseled_bookshelves.tenth_book_chance.@Tooltip": "The added chance of getting the chiseled bookshelf book enchantment at the tenth copy of a book",
   "text.autoconfig.enchants_and_expeditions.option.chiseled_bookshelves.books_for_enchanting_power": "Books for Enchanting Power",
   "text.autoconfig.enchants_and_expeditions.option.chiseled_bookshelves.books_for_enchanting_power.@Tooltip": "The amount of books which must be placed in a chiseled bookshelf to count towards boosting the enchanting table power",
-  "text.autoconfig.enchants_and_expeditions.option.chiseled_bookshelves.replace_enchantment_chance": "Replace Enchantment Chance",
-  "text.autoconfig.enchants_and_expeditions.option.chiseled_bookshelves.replace_enchantment_chance.@Tooltip": "The chance of an enchantment from a chiseled bookshelf replacing one from the table, rather than adding to the output enchantments",
   "text.autoconfig.enchants_and_expeditions.option.misc": "Miscellaneous",
   "text.autoconfig.enchants_and_expeditions.option.misc.enchant_function_fallback": "Enchant Function Fallback",
   "text.autoconfig.enchants_and_expeditions.option.misc.enchant_function_fallback.@Tooltip": "Whether loot tables which do not specify an enchantment pool should default to #on_random_loot. It is recommended to keep this enabled",

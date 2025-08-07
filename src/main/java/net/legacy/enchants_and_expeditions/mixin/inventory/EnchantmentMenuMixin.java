@@ -8,7 +8,10 @@ import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,6 +28,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -37,6 +41,10 @@ public class EnchantmentMenuMixin {
     @Final
     private RandomSource random;
 
+    @Shadow @Final private Container enchantSlots;
+    @Shadow @Final public int[] costs;
+    @Shadow @Final public int[] enchantClue;
+    @Shadow @Final public int[] levelClue;
     @Unique
     private final List<EnchantmentInstance> possibleEnchantments = new ArrayList<>();
 
@@ -49,8 +57,8 @@ public class EnchantmentMenuMixin {
     }
 
     @Unique
-    public BlockPos add(BlockPos blockPos) {
-        return this.add(blockPos.getX(), blockPos.getY(), blockPos.getZ(), blockPos);
+    public BlockPos add(BlockPos offset, BlockPos tablePos) {
+        return new BlockPos(tablePos.getX() + offset.getX(), tablePos.getY() + offset.getY(), tablePos.getZ() + offset.getZ());
     }
 
     @Inject(method = "method_17411", at = @At(value = "HEAD"))
@@ -59,7 +67,7 @@ public class EnchantmentMenuMixin {
         this.bookAmount = 0;
         for (BlockPos blockPos : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
 
-            if (!(level.getBlockEntity(add(blockPos)) instanceof ChiseledBookShelfBlockEntity bookshelf)) {
+            if (!(level.getBlockEntity(add(blockPos, tablePos)) instanceof ChiseledBookShelfBlockEntity bookshelf)) {
                 continue;
             }
             for (int i = 0; i < bookshelf.getContainerSize(); i++) {
@@ -80,7 +88,7 @@ public class EnchantmentMenuMixin {
     @WrapOperation(method = "method_17411", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/EnchantingTableBlock;isValidBookShelf(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;)Z"))
     private boolean chiseledBookshelfProvidesPower(Level level, BlockPos enchantingTablePos, BlockPos bookshelfPos, Operation<Boolean> original) {
         if (!original.call(level, enchantingTablePos, bookshelfPos)) return false;
-        if (!(level.getBlockEntity(add(bookshelfPos)) instanceof ChiseledBookShelfBlockEntity bookshelf)) return true;
+        if (!(level.getBlockEntity(add(bookshelfPos, enchantingTablePos)) instanceof ChiseledBookShelfBlockEntity bookshelf)) return true;
 
         int bookCount = 0;
         for (int i = 0; i < bookshelf.getContainerSize(); ++i) {
@@ -91,8 +99,8 @@ public class EnchantmentMenuMixin {
     }
 
     @ModifyReturnValue(method = "getEnchantmentList", at = @At("RETURN"))
-    private List<EnchantmentInstance> chiseledenchanting$addEnchantments(List<EnchantmentInstance> list, @Local(ordinal = 0, argsOnly = true) ItemStack stack, @Local(ordinal = 1, argsOnly = true) int level) {
-        List<EnchantmentInstance> possibleEnchantments = this.possibleEnchantments.stream().filter(e -> !list.contains(e) && (e.enchantment().value().isSupportedItem(stack) || (stack.is(Items.BOOK) && EaEConfig.get.enchanting.allow_book_enchanting)) && EnchantmentHelper.isEnchantmentCompatible((Collection<Holder<Enchantment>>) EnchantmentHelper.getEnchantmentsForCrafting(stack), e.enchantment)).toList();
+    private List<EnchantmentInstance> addEnchantments(List<EnchantmentInstance> list, @Local(ordinal = 0, argsOnly = true) ItemStack stack, @Local(ordinal = 1, argsOnly = true) int level) {
+        List<EnchantmentInstance> possibleEnchantments = this.possibleEnchantments.stream().filter(e -> !list.contains(e) && (e.enchantment().value().isSupportedItem(stack) || (stack.is(Items.BOOK) && EaEConfig.get.enchanting.allow_book_enchanting)) && EnchantmentHelper.isEnchantmentCompatible(EnchantmentHelper.getEnchantmentsForCrafting(stack).keySet(), e.enchantment)).toList();
         if (possibleEnchantments.isEmpty()) {
             return list;
         }
@@ -100,11 +108,11 @@ public class EnchantmentMenuMixin {
         for (int i = 0; i < this.bookAmount; i++) {
             if (this.random.nextFloat() >= getProbability(i)) continue;
             Map<Holder<Enchantment>, EnchantmentInstance> maxLevelEnchantments = possibleEnchantments.stream()
-                        .collect(Collectors.toMap(
-                                e -> e.enchantment,
-                                Function.identity(),
-                                (entry1, entry2) -> entry1.level > entry2.level ? entry1 : entry2
-                        ));
+                    .collect(Collectors.toMap(
+                            e -> e.enchantment,
+                            Function.identity(),
+                            (entry1, entry2) -> entry1.level > entry2.level ? entry1 : entry2
+                    ));
 
             List<EnchantmentInstance> entries = EnchantmentHelper.getAvailableEnchantmentResults(level / (int) Math.pow(2, list.size() - 1), stack, possibleEnchantments.stream().map(e -> e.enchantment));
             if (entries.isEmpty()) return list;
@@ -116,14 +124,8 @@ public class EnchantmentMenuMixin {
                 return new EnchantmentInstance(e.enchantment, e.enchantment.value().getMinLevel());
             }).collect(Collectors.toCollection(ArrayList::new));
             if (stack.is(Items.BOOK)) {
-                if (!list.isEmpty()) list.remove(this.random.nextInt(list.size())); // this is separate, so you can get a book with only the desired enchantment even with substituteEnchantmentChance being equal to 0
+                if (!list.isEmpty()) list.remove(this.random.nextInt(list.size()));
                 if (entries.size() > 1) entries.remove(this.random.nextInt(entries.size()));
-            }
-            if (this.random.nextFloat() < EaEConfig.get.chiseled_bookshelves.replace_enchantment_chance) {
-                for (int j = 0; j < entries.size(); j++) {
-                    if (list.isEmpty()) break;
-                    list.remove(this.random.nextInt(list.size()));
-                }
             }
             list.addAll(entries);
             break;
@@ -131,8 +133,26 @@ public class EnchantmentMenuMixin {
         return list;
     }
 
+    @Inject(method = "slotsChanged", at = @At("HEAD"), cancellable = true)
+    private void addEnchantments(Container container, CallbackInfo ci) {
+        if (EaEConfig.get.enchanting.allow_book_enchanting) return;
+        if (container == this.enchantSlots) {
+            ItemStack itemStack = container.getItem(0);
+            if (itemStack.is(Items.BOOK)) {
+                for(int i = 0; i < 3; ++i) {
+                    this.costs[i] = 0;
+                    this.enchantClue[i] = -1;
+                    this.levelClue[i] = -1;
+                }
+                ci.cancel();
+            }
+        }
+    }
+
     @Unique
     private float getProbability(int index) {
-        return EaEConfig.get.chiseled_bookshelves.enchantment_chance_formula.getFormula(EaEConfig.get.chiseled_bookshelves.first_book_chance, EaEConfig.get.chiseled_bookshelves.tenth_book_chance, index);
+        if (index > 6) index = 6;
+        index = index - 1;
+        return EaEConfig.get.chiseled_bookshelves.first_book_chance + EaEConfig.get.chiseled_bookshelves.tenth_book_chance * index;
     }
 }

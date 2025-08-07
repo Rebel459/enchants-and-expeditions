@@ -64,10 +64,6 @@ public class EaEConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(max=6L)
     public float books_for_enchanting_power = 6F;
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.BoundedDiscrete(max=1L)
-    public float replace_enchantment_chance = 1F;
   }
 
   public static class MiscConfig {
@@ -98,7 +94,7 @@ public class EaEConfig implements ConfigData {
     EXPONENTIAL((zero, ten, i) -> zero * (float) Math.pow(ten / zero, i / 10.0f)),
     QUADRATIC((zero, ten, i) -> zero + (ten - zero) * (float) Math.pow(i / 10.0f, 2));
 
-    private Function3<Float, Float, Integer, Float> function;
+    private final Function3<Float, Float, Integer, Float> function;
 
     FormulaType(Function3<Float, Float, Integer, Float> function) {
       this.function = function;
