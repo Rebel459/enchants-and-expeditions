@@ -5,24 +5,17 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.mixin.item.EnchantmentHelperMixin;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.IdMap;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EnchantingTableBlock;
 import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
@@ -33,9 +26,11 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -50,10 +45,6 @@ public abstract class EnchantmentMenuMixin {
     @Shadow @Final public int[] costs;
     @Shadow @Final public int[] enchantClue;
     @Shadow @Final public int[] levelClue;
-    @Shadow @Final private ContainerLevelAccess access;
-    @Shadow @Final private DataSlot enchantmentSeed;
-
-    @Shadow protected abstract List<EnchantmentInstance> getEnchantmentList(RegistryAccess registryAccess, ItemStack stack, int slot, int cost);
 
     @Unique
     private final List<EnchantmentInstance> possibleEnchantments = new ArrayList<>();
@@ -73,6 +64,7 @@ public abstract class EnchantmentMenuMixin {
 
     @Inject(method = "method_17411", at = @At(value = "HEAD"))
     private void getEnchantments(ItemStack itemStack, Level level, BlockPos tablePos, CallbackInfo ci) {
+
         this.possibleEnchantments.clear();
         this.bookAmount = 0;
         for (BlockPos blockPos : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
@@ -88,7 +80,7 @@ public abstract class EnchantmentMenuMixin {
                             .stream()
                             .map(entry -> new EnchantmentInstance(entry.getKey(), entry.getIntValue()))
                             .collect(Collectors.toSet());
-                    possibleEnchantments.removeIf(entry -> entry.enchantment.is(EaEEnchantmentTags.NOT_OBTAINABLE_FROM_CHISELED_BOOKSHELF));
+                    possibleEnchantments.removeIf(entry -> entry.enchantment.is(EaEEnchantmentTags.NOT_OBTAINABLE_FROM_CHISELED_BOOKSHELF) || entry.enchantment == itemStack.getEnchantments().keySet());
                     this.possibleEnchantments.addAll(possibleEnchantments);
                 }
             }
@@ -139,25 +131,40 @@ public abstract class EnchantmentMenuMixin {
                 if (entries.size() > 1) entries.remove(this.random.nextInt(entries.size()));
             }
 
-            while (entries.size() > EaEConfig.get.enchanting.enchantment_limit)
-                entries.remove(this.random.nextInt(entries.size()));
-
             list.addAll(entries);
             break;
+        }
+        if (stack.isEnchanted()) {
+            list.addAll(possibleEnchantments);
         }
         return list;
     }
 
     @Inject(method = "slotsChanged", at = @At("HEAD"), cancellable = true)
     private void addEnchantments(Container container, CallbackInfo ci) {
-        if (EaEConfig.get.enchanting.allow_book_enchanting) return;
         if (container == this.enchantSlots) {
             ItemStack itemStack = container.getItem(0);
-            if (itemStack.is(Items.BOOK)) {
+            if (itemStack.is(Items.BOOK) && !EaEConfig.get.enchanting.allow_book_enchanting) {
                 for (int i = 0; i < 3; ++i) {
                     this.costs[i] = 0;
                     this.enchantClue[i] = -1;
                     this.levelClue[i] = -1;
+                }
+                ci.cancel();
+            }
+            if (itemStack.isEnchanted()) {
+                this.costs[0] = 0;
+                this.enchantClue[0] = -1;
+                this.levelClue[0] = -1;
+                this.costs[1] = 0;
+                this.enchantClue[1] = -1;
+                this.levelClue[1] = -1;
+                if (itemStack.getEnchantments().size() < EaEConfig.get.enchanting.enchantment_limit && EaEConfig.get.enchanting.allow_repeat_enchanting)
+                    this.costs[2] = 30 + itemStack.getEnchantments().size() * 6;
+                else {
+                    this.costs[2] = 0;
+                    this.enchantClue[2] = -1;
+                    this.levelClue[2] = -1;
                 }
                 ci.cancel();
             }

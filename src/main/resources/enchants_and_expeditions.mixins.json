@@ -8,7 +8,8 @@
     "function.EnchantWithLevelsFunctionMixin",
     "inventory.AnvilMenuMixin",
     "inventory.EnchantmentMenuMixin",
-    "item.EnchantmentHelperMixin"
+    "item.EnchantmentHelperMixin",
+    "item.ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1

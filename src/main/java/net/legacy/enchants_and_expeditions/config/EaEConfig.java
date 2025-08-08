@@ -1,6 +1,5 @@
 package net.legacy.enchants_and_expeditions.config;
 
-import com.mojang.datafixers.util.Function3;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -42,8 +41,11 @@ public class EaEConfig implements ConfigData {
     public boolean experience_rebalance = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.BoundedDiscrete(min = -1L, max = 10L)
+    @ConfigEntry.BoundedDiscrete(max=10L)
     public int enchantment_limit = 3;
+    @ConfigEntry.Category("config")
+    @ConfigEntry.Gui.Tooltip
+    public boolean allow_repeat_enchanting = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean allow_book_enchanting = false;
