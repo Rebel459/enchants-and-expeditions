@@ -15,6 +15,12 @@ import net.minecraft.world.item.enchantment.Repairable;
 public class EaEItemComponents {
     public static void init(){
         DefaultItemComponentEvents.MODIFY.register(context -> {
+            context.modify(Items.ENCHANTED_BOOK, builder -> {
+                HolderGetter<Item> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM);
+                builder.set(DataComponents.MAX_DAMAGE, 4);
+                builder.set(DataComponents.REPAIRABLE, new Repairable(holderGetter.getOrThrow(EaEItemTags.BOOK_REPAIR_MATERIALS)));
+            });
+
             context.modify(Items.BOW, builder -> {
                 HolderGetter<Item> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM);
                 builder.set(DataComponents.REPAIRABLE, new Repairable(holderGetter.getOrThrow(EaEItemTags.BOW_REPAIR_MATERIALS)));

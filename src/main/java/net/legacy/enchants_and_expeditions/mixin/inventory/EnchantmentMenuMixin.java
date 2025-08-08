@@ -102,7 +102,7 @@ public abstract class EnchantmentMenuMixin {
 
     @ModifyReturnValue(method = "getEnchantmentList", at = @At("RETURN"))
     private List<EnchantmentInstance> addEnchantments(List<EnchantmentInstance> list, @Local(ordinal = 0, argsOnly = true) ItemStack stack, @Local(ordinal = 1, argsOnly = true) int level) {
-        List<EnchantmentInstance> possibleEnchantments = this.possibleEnchantments.stream().filter(e -> !list.contains(e) && (e.enchantment().value().isSupportedItem(stack) || (stack.is(Items.BOOK) && EaEConfig.get.enchanting.allow_book_enchanting)) && EnchantmentHelper.isEnchantmentCompatible(EnchantmentHelper.getEnchantmentsForCrafting(stack).keySet(), e.enchantment)).toList();
+        List<EnchantmentInstance> possibleEnchantments = this.possibleEnchantments.stream().filter(e -> !list.contains(e) && (e.enchantment().value().isSupportedItem(stack) || (stack.is(Items.BOOK) && EaEConfig.get.enchanting.enchantable_books)) && EnchantmentHelper.isEnchantmentCompatible(EnchantmentHelper.getEnchantmentsForCrafting(stack).keySet(), e.enchantment)).toList();
         if (possibleEnchantments.isEmpty()) {
             return list;
         }
@@ -134,9 +134,6 @@ public abstract class EnchantmentMenuMixin {
             list.addAll(entries);
             break;
         }
-        if (stack.isEnchanted()) {
-            list.addAll(possibleEnchantments);
-        }
         return list;
     }
 
@@ -144,27 +141,11 @@ public abstract class EnchantmentMenuMixin {
     private void addEnchantments(Container container, CallbackInfo ci) {
         if (container == this.enchantSlots) {
             ItemStack itemStack = container.getItem(0);
-            if (itemStack.is(Items.BOOK) && !EaEConfig.get.enchanting.allow_book_enchanting) {
+            if (itemStack.is(Items.BOOK) && !EaEConfig.get.enchanting.enchantable_books) {
                 for (int i = 0; i < 3; ++i) {
                     this.costs[i] = 0;
                     this.enchantClue[i] = -1;
                     this.levelClue[i] = -1;
-                }
-                ci.cancel();
-            }
-            if (itemStack.isEnchanted()) {
-                this.costs[0] = 0;
-                this.enchantClue[0] = -1;
-                this.levelClue[0] = -1;
-                this.costs[1] = 0;
-                this.enchantClue[1] = -1;
-                this.levelClue[1] = -1;
-                if (itemStack.getEnchantments().size() < EaEConfig.get.enchanting.enchantment_limit && EaEConfig.get.enchanting.allow_repeat_enchanting)
-                    this.costs[2] = 30 + itemStack.getEnchantments().size() * 6;
-                else {
-                    this.costs[2] = 0;
-                    this.enchantClue[2] = -1;
-                    this.levelClue[2] = -1;
                 }
                 ci.cancel();
             }

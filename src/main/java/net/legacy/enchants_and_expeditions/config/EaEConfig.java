@@ -45,10 +45,14 @@ public class EaEConfig implements ConfigData {
     public int enchantment_limit = 3;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    public boolean allow_repeat_enchanting = true;
+    public boolean anvil_book_enchanting = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    public boolean allow_book_enchanting = false;
+    @ConfigEntry.BoundedDiscrete(max=1L)
+    public double anvil_break_chance = 0.12F;
+    @ConfigEntry.Category("config")
+    @ConfigEntry.Gui.Tooltip
+    public boolean enchantable_books = false;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(max=1L)

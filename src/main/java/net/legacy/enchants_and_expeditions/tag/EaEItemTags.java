@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class EaEItemTags {
 
+    public static final TagKey<Item> BOOK_REPAIR_MATERIALS = register("book_repair_materials");
+
     public static final TagKey<Item> BOW_REPAIR_MATERIALS = register("bow_repair_materials");
     public static final TagKey<Item> CROSSBOW_REPAIR_MATERIALS = register("crossbow_repair_materials");
     public static final TagKey<Item> TRIDENT_REPAIR_MATERIALS = register("trident_repair_materials");
