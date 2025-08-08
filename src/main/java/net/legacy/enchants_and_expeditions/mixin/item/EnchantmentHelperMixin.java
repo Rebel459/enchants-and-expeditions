@@ -19,6 +19,7 @@ public class EnchantmentHelperMixin {
 
     @Inject(method = "setEnchantments", at = @At("HEAD"), cancellable = true)
     private static void limitEnchantments(ItemStack stack, ItemEnchantments enchantments, CallbackInfo ci) {
+        if (EaEConfig.get.enchanting.enchantment_limit == -1) return;
         if (enchantments.size() > EaEConfig.get.enchanting.enchantment_limit) {
             Map<Enchantment, Integer> limitedEnchantments = new java.util.LinkedHashMap<>();
             int count = 0;

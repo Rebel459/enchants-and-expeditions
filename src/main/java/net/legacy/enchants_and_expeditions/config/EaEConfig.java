@@ -31,9 +31,6 @@ public class EaEConfig implements ConfigData {
   public EnchantingConfig enchanting = new EnchantingConfig();
 
   @ConfigEntry.Gui.CollapsibleObject
-  public ChiseledConfig chiseled_bookshelves = new ChiseledConfig();
-
-  @ConfigEntry.Gui.CollapsibleObject
   public MiscConfig misc = new MiscConfig();
 
   @ConfigEntry.Gui.CollapsibleObject
@@ -45,24 +42,19 @@ public class EaEConfig implements ConfigData {
     public boolean experience_rebalance = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.BoundedDiscrete(min = -1L, max = 10L)
+    public int enchantment_limit = 3;
+    @ConfigEntry.Category("config")
+    @ConfigEntry.Gui.Tooltip
     public boolean allow_book_enchanting = false;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    public int enchantment_limit = 3;
-  }
-
-  public static class ChiseledConfig {
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
-    public FormulaType enchantment_chance_formula = FormulaType.EXPONENTIAL;
+    @ConfigEntry.BoundedDiscrete(max=1L)
+    public double first_book_chance = 0.5;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(max=1L)
-    public float first_book_chance = 0.4F;
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.BoundedDiscrete(max=1L)
-    public float tenth_book_chance = 0.01F;
+    public double subsequent_book_chance = 0.1;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(max=6L)
@@ -90,21 +82,5 @@ public class EaEConfig implements ConfigData {
 
     @ConfigEntry.Category("config")
     public boolean enderscape_integration = true;
-  }
-
-  public enum FormulaType {
-    LINEAR((zero, ten, i) -> zero + (ten - zero) * (i / 10.0f)),
-    EXPONENTIAL((zero, ten, i) -> zero * (float) Math.pow(ten / zero, i / 10.0f)),
-    QUADRATIC((zero, ten, i) -> zero + (ten - zero) * (float) Math.pow(i / 10.0f, 2));
-
-    private final Function3<Float, Float, Integer, Float> function;
-
-    FormulaType(Function3<Float, Float, Integer, Float> function) {
-      this.function = function;
-    }
-
-    public float getFormula(float zero, float ten, int index) {
-      return Math.min(this.function.apply(zero, ten, index), 1.0f);
-    }
   }
 }
