@@ -38,7 +38,7 @@ public abstract class AnvilMenuMixin {
     private boolean createResult(Enchantment instance, ItemStack stack, Operation<Boolean> original) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack additionItem = anvilMenu.slots.get(1).getItem();
-        if (additionItem.is(Items.ENCHANTED_BOOK) && stack.getEnchantments().size() < EaEConfig.get.enchanting.enchantment_limit && EaEConfig.get.enchanting.anvil_book_enchanting && !stack.isEnchanted()) return original.call(instance, stack);
+        if (additionItem.is(Items.ENCHANTED_BOOK) && EaEConfig.get.enchanting.anvil_book_enchanting && !stack.isEnchanted()) return original.call(instance, stack);
         return false;
     }
 
@@ -54,8 +54,8 @@ public abstract class AnvilMenuMixin {
         int bookCost = 0;
         if (itemStack.getComponents().has(DataComponents.ENCHANTABLE))
             bookCost = itemStack.get(DataComponents.ENCHANTABLE).value();
-        if (bookCost > 25) bookCost = 25;
-        bookCost = (26 - bookCost) + itemStack.getEnchantments().size() + additionItem.getEnchantments().size();
+        bookCost = (26 - bookCost) + additionItem.getEnchantments().size() * additionItem.getEnchantments().size();
+        if (bookCost < 1) bookCost = 1;
 
         if (additionItem.is(Items.ENCHANTED_BOOK) && EaEConfig.get.enchanting.anvil_book_enchanting) cost.set(bookCost);
         else if (!itemStack.is(EaEItemTags.VARIABLE_REPAIR_COST)) cost.set(0);

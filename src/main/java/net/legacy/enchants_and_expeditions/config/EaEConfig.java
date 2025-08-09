@@ -30,7 +30,7 @@ public class EaEConfig implements ConfigData {
   public EnchantingConfig enchanting = new EnchantingConfig();
 
   @ConfigEntry.Gui.CollapsibleObject
-  public MiscConfig misc = new MiscConfig();
+  public LootConfig loot = new LootConfig();
 
   @ConfigEntry.Gui.CollapsibleObject
   public IntegrationConfig integrations = new IntegrationConfig();
@@ -39,10 +39,6 @@ public class EaEConfig implements ConfigData {
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean experience_rebalance = true;
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.BoundedDiscrete(max=10L)
-    public int enchantment_limit = 3;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean anvil_book_enchanting = true;
@@ -67,7 +63,11 @@ public class EaEConfig implements ConfigData {
     public float books_for_enchanting_power = 6F;
   }
 
-  public static class MiscConfig {
+  public static class LootConfig {
+    @ConfigEntry.Category("config")
+    @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.BoundedDiscrete(max=10L)
+    public int world_enchantment_limit = 3;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean enchant_function_fallback = true;

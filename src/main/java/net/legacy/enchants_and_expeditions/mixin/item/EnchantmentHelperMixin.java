@@ -24,35 +24,9 @@ import java.util.stream.Stream;
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
 
-    @Inject(method = "setEnchantments", at = @At("HEAD"), cancellable = true)
-    private static void limitEnchantments(ItemStack stack, ItemEnchantments enchantments, CallbackInfo ci) {
-        if (EaEConfig.get.enchanting.enchantment_limit == -1) return;
-        if (enchantments.size() > EaEConfig.get.enchanting.enchantment_limit) {
-            Map<Enchantment, Integer> limitedEnchantments = new java.util.LinkedHashMap<>();
-            int count = 0;
-            for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
-                if (count < EaEConfig.get.enchanting.enchantment_limit) {
-                    limitedEnchantments.put(entry.getKey().value(), entry.getValue());
-                    count++;
-                } else {
-                    break;
-                }
-            }
-            EnchantmentHelper.setEnchantments(stack, (ItemEnchantments) limitedEnchantments);
-            ci.cancel();
-        }
-    }
-
-    @Inject(method = "selectEnchantment", at = @At("RETURN"), cancellable = true)
-    private static void limitEnchantments(RandomSource random, ItemStack stack, int level, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
-        if (EaEConfig.get.enchanting.enchantment_limit != 0) {
-            var selectedEnchantments = cir.getReturnValue();
-            if (selectedEnchantments.size() > EaEConfig.get.enchanting.enchantment_limit) {
-                var shuffled = new ArrayList<>(selectedEnchantments);
-                Collections.shuffle(shuffled);
-                var selected = shuffled.stream().limit(EaEConfig.get.enchanting.enchantment_limit);
-                cir.setReturnValue(selected.toList());
-            }
-        }
+    @Inject(method = "enchantItem(Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/item/ItemStack;ILjava/util/stream/Stream;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"), cancellable = true)
+    private static void limitEnchantments(RandomSource random, ItemStack stack, int level, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<ItemStack> cir) {
+        if (EaEConfig.get.loot.world_enchantment_limit == -1) return;
+        possibleEnchantments.limit(EaEConfig.get.loot.world_enchantment_limit);
     }
 }

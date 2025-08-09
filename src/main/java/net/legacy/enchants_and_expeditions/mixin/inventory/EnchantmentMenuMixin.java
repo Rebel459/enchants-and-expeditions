@@ -64,7 +64,6 @@ public abstract class EnchantmentMenuMixin {
 
     @Inject(method = "method_17411", at = @At(value = "HEAD"))
     private void getEnchantments(ItemStack itemStack, Level level, BlockPos tablePos, CallbackInfo ci) {
-
         this.possibleEnchantments.clear();
         this.bookAmount = 0;
         for (BlockPos blockPos : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
@@ -104,6 +103,7 @@ public abstract class EnchantmentMenuMixin {
     private List<EnchantmentInstance> addEnchantments(List<EnchantmentInstance> list, @Local(ordinal = 0, argsOnly = true) ItemStack stack, @Local(ordinal = 1, argsOnly = true) int level) {
         List<EnchantmentInstance> possibleEnchantments = this.possibleEnchantments.stream().filter(e -> !list.contains(e) && (e.enchantment().value().isSupportedItem(stack) || (stack.is(Items.BOOK) && EaEConfig.get.enchanting.enchantable_books)) && EnchantmentHelper.isEnchantmentCompatible(EnchantmentHelper.getEnchantmentsForCrafting(stack).keySet(), e.enchantment)).toList();
         if (possibleEnchantments.isEmpty()) {
+
             return list;
         }
 
@@ -134,6 +134,7 @@ public abstract class EnchantmentMenuMixin {
             list.addAll(entries);
             break;
         }
+
         return list;
     }
 
