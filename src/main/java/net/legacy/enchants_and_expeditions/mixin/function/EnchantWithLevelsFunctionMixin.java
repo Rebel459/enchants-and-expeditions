@@ -20,9 +20,9 @@ import java.util.Optional;
 public class EnchantWithLevelsFunctionMixin {
 
     @Inject(method = "run", at = @At(value = "HEAD"), cancellable = true)
-    protected void enchantFallback(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir) {
+    protected void EaE$enchantFallback(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir) {
         EnchantWithLevelsFunction function = EnchantWithLevelsFunction.class.cast(this);
-        if (function.options.isPresent() || !EaEConfig.get.misc.enchant_function_fallback) return;
+        if (function.options.isPresent() || !EaEConfig.get.loot.enchant_function_fallback) return;
 
         RandomSource randomSource = context.getRandom();
         RegistryAccess registryAccess = context.getLevel().registryAccess();

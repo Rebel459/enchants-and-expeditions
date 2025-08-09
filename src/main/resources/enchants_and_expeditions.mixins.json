@@ -3,17 +3,16 @@
   "package": "net.legacy.enchants_and_expeditions.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "block.ChiseledBookShelfBlockMixin",
     "entity.PlayerMixin",
     "function.EnchantRandomlyFunctionMixin",
     "function.EnchantWithLevelsFunctionMixin",
     "inventory.AnvilMenuMixin",
     "inventory.EnchantmentMenuMixin",
-    "item.EnchantmentHelperMixin"
+    "item.EnchantmentHelperMixin",
+    "recipe.ShapedRecipeMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "client.EnchantmentScreenMixin"
-  ]
+  }
 }

@@ -20,9 +20,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Objects;
 
@@ -33,12 +33,25 @@ public abstract class AnvilMenuMixin {
     @Final
     private DataSlot cost;
 
+    @Redirect(
+            method = "createResult",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
+                    ordinal = 0
+            )
+    )
+    private boolean EaE$modifyEnchantedBookCheck(ItemStack itemStack, net.minecraft.world.item.Item item) {
+        return itemStack.is(Items.ENCHANTED_BOOK) || itemStack.is(EaEItems.IMBUED_ENCHANTED_BOOK);
+    }
+
     @WrapOperation(method = "createResult", at = @At(
             value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;canEnchant(Lnet/minecraft/world/item/ItemStack;)Z"))
-    private boolean createResult(Enchantment instance, ItemStack stack, Operation<Boolean> original) {
+    private boolean EaE$createResult(Enchantment instance, ItemStack stack, Operation<Boolean> original) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
+        ItemStack itemStack = anvilMenu.slots.getFirst().getItem();
         ItemStack additionItem = anvilMenu.slots.get(1).getItem();
-        if (additionItem.is(Items.ENCHANTED_BOOK) && EaEConfig.get.enchanting.anvil_book_enchanting && !stack.isEnchanted()) return original.call(instance, stack);
+        if ((additionItem.is(Items.ENCHANTED_BOOK) || additionItem.is(EaEItems.IMBUED_ENCHANTED_BOOK)) && !itemStack.is(Items.ENCHANTED_BOOK) || !itemStack.is(EaEItems.IMBUED_ENCHANTED_BOOK) && EaEConfig.get.enchanting.anvil_book_enchanting && !stack.isEnchanted()) return original.call(instance, stack);
         return false;
     }
 
@@ -46,18 +59,21 @@ public abstract class AnvilMenuMixin {
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V",
                     shift = At.Shift.BEFORE))
-    public void modifyPrice(CallbackInfo ci) {
+    public void EaE$modifyPrice(CallbackInfo ci) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack itemStack = anvilMenu.slots.getFirst().getItem();
         ItemStack additionItem = anvilMenu.slots.get(1).getItem();
 
-        int bookCost = 0;
-        if (itemStack.getComponents().has(DataComponents.ENCHANTABLE))
-            bookCost = itemStack.get(DataComponents.ENCHANTABLE).value();
-        bookCost = (26 - bookCost) + additionItem.getEnchantments().size() * additionItem.getEnchantments().size();
-        if (bookCost < 1) bookCost = 1;
-
-        if (additionItem.is(Items.ENCHANTED_BOOK) && EaEConfig.get.enchanting.anvil_book_enchanting) cost.set(bookCost);
+        if ((additionItem.is(Items.ENCHANTED_BOOK) || additionItem.is(EaEItems.IMBUED_ENCHANTED_BOOK)) && EaEConfig.get.enchanting.anvil_book_enchanting) {
+            int bookCost = 0;
+            int multiplier = 6;
+            if (additionItem.is(EaEItems.IMBUED_ENCHANTED_BOOK)) multiplier = multiplier / 2;
+            if (itemStack.getComponents().has(DataComponents.ENCHANTABLE))
+                bookCost = itemStack.get(DataComponents.ENCHANTABLE).value();
+            bookCost = (26 - bookCost) + additionItem.getEnchantments().size() * multiplier;
+            if (bookCost < 1) bookCost = 1;
+            cost.set(bookCost);
+        }
         else if (!itemStack.is(EaEItemTags.VARIABLE_REPAIR_COST)) cost.set(0);
         else if (itemStack.getComponents().has(DataComponents.ENCHANTABLE)) {
             int repairMultiplier = additionItem.getCount();
@@ -77,7 +93,7 @@ public abstract class AnvilMenuMixin {
     }
 
     @Inject(method = "onTake", at = @At(value = "HEAD"), cancellable = true)
-    protected void retrieveBook(Player player, ItemStack stack, CallbackInfo ci) {
+    protected void EaE$onTake(Player player, ItemStack stack, CallbackInfo ci) {
         if (!EaEConfig.get.enchanting.anvil_book_enchanting && EaEConfig.get.enchanting.anvil_break_chance == 0.12) return;
 
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
@@ -141,12 +157,12 @@ public abstract class AnvilMenuMixin {
     }
 
     @Inject(method = "mayPickup", at = @At(value = "HEAD"), cancellable = true)
-    protected void mayPickup(Player player, boolean hasStack, CallbackInfoReturnable<Boolean> cir) {
+    protected void EaE$mayPickup(Player player, boolean hasStack, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(true);
     }
 
     @Inject(method = "calculateIncreasedRepairCost", at = @At(value = "HEAD"), cancellable = true)
-    private static void increaseLimit(int oldRepairCost, CallbackInfoReturnable<Integer> cir) {
+    private static void EaE$increaseLimit(int oldRepairCost, CallbackInfoReturnable<Integer> cir) {
         cir.setReturnValue(0);
     }
 }

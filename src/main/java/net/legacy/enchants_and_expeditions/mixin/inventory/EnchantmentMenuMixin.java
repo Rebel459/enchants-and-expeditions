@@ -63,7 +63,7 @@ public abstract class EnchantmentMenuMixin {
     }
 
     @Inject(method = "method_17411", at = @At(value = "HEAD"))
-    private void getEnchantments(ItemStack itemStack, Level level, BlockPos tablePos, CallbackInfo ci) {
+    private void EaE$getEnchantments(ItemStack itemStack, Level level, BlockPos tablePos, CallbackInfo ci) {
         this.possibleEnchantments.clear();
         this.bookAmount = 0;
         for (BlockPos blockPos : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
@@ -72,7 +72,7 @@ public abstract class EnchantmentMenuMixin {
                 continue;
             }
             for (int i = 0; i < bookshelf.getContainerSize(); i++) {
-                if (bookshelf.getItem(i).is(Items.ENCHANTED_BOOK)) {
+                if (bookshelf.getItem(i).is(Items.ENCHANTED_BOOK) || bookshelf.getItem(i).is(EaEItems.IMBUED_ENCHANTED_BOOK)) {
                     ++this.bookAmount;
                     Set<EnchantmentInstance> possibleEnchantments = EnchantmentHelper.getEnchantmentsForCrafting(bookshelf.getItem(i))
                             .entrySet()
@@ -87,7 +87,7 @@ public abstract class EnchantmentMenuMixin {
     }
 
     @WrapOperation(method = "method_17411", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/EnchantingTableBlock;isValidBookShelf(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;)Z"))
-    private boolean chiseledBookshelfPower(Level level, BlockPos enchantingTablePos, BlockPos bookshelfPos, Operation<Boolean> original) {
+    private boolean EaE$chiseledBookshelfPower(Level level, BlockPos enchantingTablePos, BlockPos bookshelfPos, Operation<Boolean> original) {
         if (!original.call(level, enchantingTablePos, bookshelfPos)) return false;
         if (!(level.getBlockEntity(add(bookshelfPos, enchantingTablePos)) instanceof ChiseledBookShelfBlockEntity bookshelf)) return true;
 
@@ -100,7 +100,7 @@ public abstract class EnchantmentMenuMixin {
     }
 
     @ModifyReturnValue(method = "getEnchantmentList", at = @At("RETURN"))
-    private List<EnchantmentInstance> addEnchantments(List<EnchantmentInstance> list, @Local(ordinal = 0, argsOnly = true) ItemStack stack, @Local(ordinal = 1, argsOnly = true) int level) {
+    private List<EnchantmentInstance> EaE$addEnchantments(List<EnchantmentInstance> list, @Local(ordinal = 0, argsOnly = true) ItemStack stack, @Local(ordinal = 1, argsOnly = true) int level) {
         List<EnchantmentInstance> possibleEnchantments = this.possibleEnchantments.stream().filter(e -> !list.contains(e) && (e.enchantment().value().isSupportedItem(stack) || (stack.is(Items.BOOK) && EaEConfig.get.enchanting.enchantable_books)) && EnchantmentHelper.isEnchantmentCompatible(EnchantmentHelper.getEnchantmentsForCrafting(stack).keySet(), e.enchantment)).toList();
         if (possibleEnchantments.isEmpty()) {
 
@@ -139,10 +139,10 @@ public abstract class EnchantmentMenuMixin {
     }
 
     @Inject(method = "slotsChanged", at = @At("HEAD"), cancellable = true)
-    private void addEnchantments(Container container, CallbackInfo ci) {
+    private void EaE$bookCheck(Container container, CallbackInfo ci) {
         if (container == this.enchantSlots) {
             ItemStack itemStack = container.getItem(0);
-            if (itemStack.is(Items.BOOK) && !EaEConfig.get.enchanting.enchantable_books) {
+            if ((itemStack.is(Items.BOOK)) && !EaEConfig.get.enchanting.enchantable_books) {
                 for (int i = 0; i < 3; ++i) {
                     this.costs[i] = 0;
                     this.enchantClue[i] = -1;

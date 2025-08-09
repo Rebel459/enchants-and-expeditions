@@ -14,7 +14,7 @@ public abstract class PlayerMixin {
     @Shadow public int experienceLevel;
 
     @Inject(method = "getXpNeededForNextLevel", at = @At(value = "HEAD"), cancellable = true)
-    protected void experienceRebalance(CallbackInfoReturnable<Integer> cir) {
+    protected void EaE$experienceRebalance(CallbackInfoReturnable<Integer> cir) {
         if (!EaEConfig.get.enchanting.experience_rebalance) return;
 
         // 0-30
