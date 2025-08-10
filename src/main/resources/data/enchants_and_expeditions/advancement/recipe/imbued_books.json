@@ -1,0 +1,20 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:amethyst_shard"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "enchants_and_expeditions:imbued_book",
+      "enchants_and_expeditions:imbued_enchanted_book"
+    ]
+  }
+}

@@ -30,6 +30,9 @@ public class EaEConfig implements ConfigData {
   public EnchantingConfig enchanting = new EnchantingConfig();
 
   @ConfigEntry.Gui.CollapsibleObject
+  public ItemConfig items = new ItemConfig();
+
+  @ConfigEntry.Gui.CollapsibleObject
   public LootConfig loot = new LootConfig();
 
   @ConfigEntry.Gui.CollapsibleObject
@@ -41,9 +44,6 @@ public class EaEConfig implements ConfigData {
     public boolean experience_rebalance = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    public boolean imbued_books = true;
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
     public boolean anvil_book_enchanting = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
@@ -51,7 +51,7 @@ public class EaEConfig implements ConfigData {
     public double anvil_break_chance = 0.12;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    public boolean enchantable_books = false;
+    public boolean enchantable_books = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(max=1L)
@@ -64,6 +64,15 @@ public class EaEConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(max=6L)
     public float books_for_enchanting_power = 6F;
+  }
+
+  public static class ItemConfig {
+    @ConfigEntry.Category("config")
+    @ConfigEntry.Gui.Tooltip
+    public boolean imbued_books = true;
+    @ConfigEntry.Category("config")
+    @ConfigEntry.Gui.Tooltip
+    public boolean craftable_experience_bottles = true;
   }
 
   public static class LootConfig {

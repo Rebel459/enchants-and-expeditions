@@ -38,14 +38,6 @@ public class EnchantsAndExpeditions implements ModInitializer {
 				ResourcePackActivationType.ALWAYS_ENABLED
 		);
 
-		if (EaEConfig.get.enchanting.imbued_books) {
-			ResourceManagerHelper.registerBuiltinResourcePack(
-					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "imbued_books"), modContainer.get(),
-					Component.translatable("pack.enchants_and_expeditions.imbued_books"),
-					ResourcePackActivationType.ALWAYS_ENABLED
-			);
-		}
-
 		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.get.integrations.legacies_and_legends_integration) {
 			isLegaciesAndLegendsLoaded = true;
 			ResourceManagerHelper.registerBuiltinResourcePack(

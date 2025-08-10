@@ -17,7 +17,6 @@
   "enchantment.enchants_and_expeditions.fragility_curse.desc": "The cursed item has a chance to take increased durability damage when used",
 
   "pack.enchants_and_expeditions.rebalanced_vanilla_enchants": "Rebalanced Vanilla Enchants",
-  "pack.enchants_and_expeditions.imbued_books": "Imbued Books",
   "pack.enchants_and_expeditions.legacies_and_legends_integration": "Legacies and Legends Integration",
   "pack.enchants_and_expeditions.trailier_tales_integration": "Trailier Tales Integration",
   "pack.enchants_and_expeditions.enderscape_integration": "Enderscape Integration",
@@ -27,8 +26,6 @@
   "text.autoconfig.enchants_and_expeditions.option.enchanting": "Enchanting",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.experience_rebalance": "Experience Rebalance",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.experience_rebalance.@Tooltip": "Whether the rebalanced experience-per-level formula should be used, which includes more reasonable experience requirements beyond level 30",
-  "text.autoconfig.enchants_and_expeditions.option.enchanting.imbued_books": "Imbued Books",
-  "text.autoconfig.enchants_and_expeditions.option.enchanting.imbued_books.@Tooltip": "Whether you should be able to imbue books with amethyst shards to make them more powerful",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.anvil_book_enchanting": "Anvil Book Enchanting",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.anvil_book_enchanting.@Tooltip": "Whether books should be able to enchant un-enchanted items at the anvil",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.anvil_break_chance": "Anvil Break Chance",
@@ -41,6 +38,12 @@
   "text.autoconfig.enchants_and_expeditions.option.enchanting.subsequent_book_chance.@Tooltip": "The added chance of an enchantment from a chiseled bookshelf appearing in the enchanting table for each additional copy of a book. Caps out at a total of 6 of the same book",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.books_for_enchanting_power": "Books for Enchanting Power",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.books_for_enchanting_power.@Tooltip": "The amount of books which must be placed in a chiseled bookshelf to count towards boosting the enchanting table power",
+
+  "text.autoconfig.enchants_and_expeditions.option.items": "Items",
+  "text.autoconfig.enchants_and_expeditions.option.items.imbued_books": "Imbued Books",
+  "text.autoconfig.enchants_and_expeditions.option.items.imbued_books.@Tooltip": "Whether you should be able to imbue books with amethyst shards to make them more powerful",
+  "text.autoconfig.enchants_and_expeditions.option.items.craftable_experience_bottles": "Craftable Experience Bottles",
+  "text.autoconfig.enchants_and_expeditions.option.items.craftable_experience_bottles.@Tooltip": "Whether experience bottles should be craftable with lapis lazuli. Enabling this will also make water bottles stackable to 64",
 
   "text.autoconfig.enchants_and_expeditions.option.loot": "Loot Changes",
   "text.autoconfig.enchants_and_expeditions.option.loot.world_enchantment_limit": "World Enchantment Limit",

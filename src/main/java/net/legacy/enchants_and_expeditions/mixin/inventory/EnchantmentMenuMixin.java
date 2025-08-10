@@ -162,7 +162,7 @@ public abstract class EnchantmentMenuMixin {
     private void EaE$bookCheck(Container container, CallbackInfo ci) {
         if (container == this.enchantSlots) {
             ItemStack itemStack = container.getItem(0);
-            if (((itemStack.is(Items.BOOK)) && !EaEConfig.get.enchanting.enchantable_books) || itemStack.is(Items.ENCHANTED_BOOK)) {
+            if ((itemStack.is(Items.BOOK) && !EaEConfig.get.enchanting.enchantable_books) || itemStack.is(Items.ENCHANTED_BOOK)) {
                 for (int i = 0; i < 3; ++i) {
                     this.costs[i] = 0;
                     this.enchantClue[i] = -1;
