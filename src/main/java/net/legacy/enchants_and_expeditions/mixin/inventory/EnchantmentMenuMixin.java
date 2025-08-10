@@ -200,6 +200,7 @@ public abstract class EnchantmentMenuMixin {
                             itemStack3 = itemStack.transmuteCopy(Items.ENCHANTED_BOOK);
                             if (storedComponents.getComponents().has(DataComponents.ENCHANTABLE) && storedComponents.getComponents().get(DataComponents.ENCHANTABLE).value() == 15) {
                                 itemStack3.applyComponents(storedComponents.getComponents());
+                                itemStack3.set(DataComponents.MAX_STACK_SIZE, 1);
                                 itemStack3.set(DataComponents.RARITY, Rarity.RARE);
                                 itemStack3.set(DataComponents.MAX_DAMAGE, 8);
                             }
