@@ -33,25 +33,13 @@ public abstract class AnvilMenuMixin {
     @Final
     private DataSlot cost;
 
-    @Redirect(
-            method = "createResult",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z",
-                    ordinal = 0
-            )
-    )
-    private boolean EaE$modifyEnchantedBookCheck(ItemStack itemStack, net.minecraft.world.item.Item item) {
-        return itemStack.is(Items.ENCHANTED_BOOK) || itemStack.is(EaEItems.IMBUED_ENCHANTED_BOOK);
-    }
-
     @WrapOperation(method = "createResult", at = @At(
             value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;canEnchant(Lnet/minecraft/world/item/ItemStack;)Z"))
     private boolean EaE$createResult(Enchantment instance, ItemStack stack, Operation<Boolean> original) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack itemStack = anvilMenu.slots.getFirst().getItem();
         ItemStack additionItem = anvilMenu.slots.get(1).getItem();
-        if ((additionItem.is(Items.ENCHANTED_BOOK) || additionItem.is(EaEItems.IMBUED_ENCHANTED_BOOK)) && !itemStack.is(Items.ENCHANTED_BOOK) || !itemStack.is(EaEItems.IMBUED_ENCHANTED_BOOK) && EaEConfig.get.enchanting.anvil_book_enchanting && !stack.isEnchanted()) return original.call(instance, stack);
+        if (additionItem.is(Items.ENCHANTED_BOOK) && !itemStack.is(Items.ENCHANTED_BOOK) && EaEConfig.get.enchanting.anvil_book_enchanting && !stack.isEnchanted()) return original.call(instance, stack);
         return false;
     }
 
@@ -64,10 +52,10 @@ public abstract class AnvilMenuMixin {
         ItemStack itemStack = anvilMenu.slots.getFirst().getItem();
         ItemStack additionItem = anvilMenu.slots.get(1).getItem();
 
-        if ((additionItem.is(Items.ENCHANTED_BOOK) || additionItem.is(EaEItems.IMBUED_ENCHANTED_BOOK)) && EaEConfig.get.enchanting.anvil_book_enchanting) {
+        if ((additionItem.is(Items.ENCHANTED_BOOK)) && EaEConfig.get.enchanting.anvil_book_enchanting) {
             int bookCost = 0;
             int multiplier = 6;
-            if (additionItem.is(EaEItems.IMBUED_ENCHANTED_BOOK)) multiplier = multiplier / 2;
+            if (additionItem.getComponents().has(DataComponents.ENCHANTABLE) && additionItem.getComponents().get(DataComponents.ENCHANTABLE).value() == 15) multiplier = multiplier / 2;
             if (itemStack.getComponents().has(DataComponents.ENCHANTABLE))
                 bookCost = itemStack.get(DataComponents.ENCHANTABLE).value();
             bookCost = (26 - bookCost) + additionItem.getEnchantments().size() * multiplier;

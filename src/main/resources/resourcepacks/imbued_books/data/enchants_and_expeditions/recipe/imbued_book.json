@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "minecraft:amethyst_shard",
+    "B": "minecraft:book"
+  },
+  "pattern": [
+    "###",
+    "#B#",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:book",
+    "components": {
+      "minecraft:enchantable": {
+        "value": 15
+      },
+      "minecraft:item_model": "enchants_and_expeditions:imbued_book",
+      "minecraft:item_name": {
+        "translate": "item.enchants_and_expeditions.imbued_book"
+      },
+      "minecraft:rarity": "uncommon"
+    }
+  }
+}

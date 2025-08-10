@@ -1,8 +1,5 @@
 {
-  "pack.enchants_and_expeditions.rebalanced_vanilla_enchants": "Rebalanced Vanilla Enchants",
-  "pack.enchants_and_expeditions.legacies_and_legends_integration": "Legacies and Legends Integration",
-  "pack.enchants_and_expeditions.trailier_tales_integration": "Trailier Tales Integration",
-  "pack.enchants_and_expeditions.enderscape_integration": "Enderscape Integration",
+  "item.enchants_and_expeditions.imbued_book": "Imbued Book",
 
   "enchantment.enchants_and_expeditions.arcane_protection": "Arcane Protection",
   "enchantment.enchants_and_expeditions.arcane_protection.desc": "Protects from magical and blast damage sources",
@@ -19,11 +16,19 @@
   "enchantment.enchants_and_expeditions.fragility_curse": "Curse of Fragility",
   "enchantment.enchants_and_expeditions.fragility_curse.desc": "The cursed item has a chance to take increased durability damage when used",
 
+  "pack.enchants_and_expeditions.rebalanced_vanilla_enchants": "Rebalanced Vanilla Enchants",
+  "pack.enchants_and_expeditions.imbued_books": "Imbued Books",
+  "pack.enchants_and_expeditions.legacies_and_legends_integration": "Legacies and Legends Integration",
+  "pack.enchants_and_expeditions.trailier_tales_integration": "Trailier Tales Integration",
+  "pack.enchants_and_expeditions.enderscape_integration": "Enderscape Integration",
+
   "text.autoconfig.enchants_and_expeditions.title": "Enchants and Expeditions",
 
   "text.autoconfig.enchants_and_expeditions.option.enchanting": "Enchanting",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.experience_rebalance": "Experience Rebalance",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.experience_rebalance.@Tooltip": "Whether the rebalanced experience-per-level formula should be used, which includes more reasonable experience requirements beyond level 30",
+  "text.autoconfig.enchants_and_expeditions.option.enchanting.imbued_books": "Imbued Books",
+  "text.autoconfig.enchants_and_expeditions.option.enchanting.imbued_books.@Tooltip": "Whether you should be able to imbue books with amethyst shards to make them more powerful",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.anvil_book_enchanting": "Anvil Book Enchanting",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.anvil_book_enchanting.@Tooltip": "Whether books should be able to enchant un-enchanted items at the anvil",
   "text.autoconfig.enchants_and_expeditions.option.enchanting.anvil_break_chance": "Anvil Break Chance",

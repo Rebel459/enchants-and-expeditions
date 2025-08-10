@@ -33,15 +33,23 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		EaEConfig.initClient();
 
 		ResourceManagerHelper.registerBuiltinResourcePack(
-				ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "rebalanced_vanilla_enchants"), (ModContainer)modContainer.get(),
+				ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "rebalanced_vanilla_enchants"), modContainer.get(),
 				Component.translatable("pack.enchants_and_expeditions.rebalanced_vanilla_enchants"),
 				ResourcePackActivationType.ALWAYS_ENABLED
 		);
 
+		if (EaEConfig.get.enchanting.imbued_books) {
+			ResourceManagerHelper.registerBuiltinResourcePack(
+					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "imbued_books"), modContainer.get(),
+					Component.translatable("pack.enchants_and_expeditions.imbued_books"),
+					ResourcePackActivationType.ALWAYS_ENABLED
+			);
+		}
+
 		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.get.integrations.legacies_and_legends_integration) {
 			isLegaciesAndLegendsLoaded = true;
 			ResourceManagerHelper.registerBuiltinResourcePack(
-					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "legacies_and_legends_integration"), (ModContainer)modContainer.get(),
+					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "legacies_and_legends_integration"), modContainer.get(),
 					Component.translatable("pack.enchants_and_expeditions.legacies_and_legends_integration"),
 					ResourcePackActivationType.ALWAYS_ENABLED
 			);
@@ -52,7 +60,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		if (FabricLoader.getInstance().isModLoaded("trailiertales") && EaEConfig.get.integrations.trailier_tales_integration) {
 			isTrailierTalesLoaded = true;
 			ResourceManagerHelper.registerBuiltinResourcePack(
-					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "trailier_tales_integration"), (ModContainer)modContainer.get(),
+					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "trailier_tales_integration"), modContainer.get(),
 					Component.translatable("pack.enchants_and_expeditions.trailier_tales_integration"),
 					ResourcePackActivationType.ALWAYS_ENABLED
 			);
@@ -60,7 +68,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		if (FabricLoader.getInstance().isModLoaded("enderscape") && EaEConfig.get.integrations.enderscape_integration) {
 			isEnderscapeLoaded = true;
 			ResourceManagerHelper.registerBuiltinResourcePack(
-					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "enderscape_integration"), (ModContainer)modContainer.get(),
+					ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, "enderscape_integration"), modContainer.get(),
 					Component.translatable("pack.enchants_and_expeditions.enderscape_integration"),
 					ResourcePackActivationType.ALWAYS_ENABLED
 			);

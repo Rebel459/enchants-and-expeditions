@@ -41,11 +41,14 @@ public class EaEConfig implements ConfigData {
     public boolean experience_rebalance = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
+    public boolean imbued_books = true;
+    @ConfigEntry.Category("config")
+    @ConfigEntry.Gui.Tooltip
     public boolean anvil_book_enchanting = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(max=1L)
-    public double anvil_break_chance = 0.12F;
+    public double anvil_break_chance = 0.12;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean enchantable_books = false;
