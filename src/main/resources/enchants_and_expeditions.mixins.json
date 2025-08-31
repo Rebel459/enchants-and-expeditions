@@ -10,6 +10,7 @@
     "inventory.EnchantmentMenuMixin",
     "inventory.GrindstoneMenuMixin",
     "item.EnchantmentHelperMixin",
+    "item.EnchantmentMixin",
     "item.ItemStackMixin",
     "recipe.ShapedRecipeMixin"
   ],

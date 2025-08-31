@@ -89,17 +89,24 @@ public abstract class EnchantmentMenuMixin {
                 .is(BlockTags.ENCHANTMENT_POWER_TRANSMITTER);
     }
 
-    @Inject(method = "slotsChanged", at = @At(value = "HEAD"))
+    @Inject(method = "slotsChanged", at = @At(value = "TAIL")/*, cancellable = true*/)
     private void EaE$slotsChanged(Container container, CallbackInfo ci) {
+        EnchantmentMenu enchantmentMenu = EnchantmentMenu.class.cast(this);
         if (container == this.enchantSlots) {
             ItemStack itemStack = container.getItem(0);
             if (!itemStack.isEmpty() && itemStack.isEnchantable()) {
                 this.access.execute((level, blockPos) -> {
+/*                    IdMap<Holder<Enchantment>> idMap = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).asHolderIdMap();
+                    int ix = 0;*/
+
                     this.mana = 0;
                     this.maxMana = false;
                     this.frost = 0;
                     this.scorch = 0;
                     for (BlockPos blockPos2 : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+/*                        if (EnchantingTableBlock.isValidBookShelf(level, blockPos, blockPos2)) {
+                            ix++;
+                        }*/
                         if (providesMana(level, blockPos, blockPos2)) {
                             this.mana++;
                         }
@@ -110,13 +117,52 @@ public abstract class EnchantmentMenuMixin {
                             this.frost++;
                         }
                     }
+/*                    if (ix >= 20) {
+                        ix = 20;
+                    }*/
                     if (this.mana >= 20) {
                         this.mana = 20;
                         this.maxMana = true;
                     }
+
+                    /*this.random.setSeed((long)this.enchantmentSeed.get());
+
+                    for (int j = 0; j < 3; j++) {
+                        this.costs[j] = EnchantmentHelper.getEnchantmentCost(this.random, j, ix, itemStack);
+                        this.enchantClue[j] = -1;
+                        this.levelClue[j] = -1;
+                        int costs = ix * 2 / (3 - j);
+                        if (costs < 30) {
+                            costs = costs + random.nextInt(3);
+                        }
+                        if (costs > 30) {
+                            costs = 30;
+                        }
+                        this.costs[j] = costs;
+                    }
+
+                    for (int jx = 0; jx < 3; jx++) {
+                        if (this.costs[jx] > 0) {
+                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx]);
+                            if (list != null && !list.isEmpty()) {
+                                EnchantmentInstance enchantmentInstance = (EnchantmentInstance)list.get(this.random.nextInt(list.size()));
+                                this.enchantClue[jx] = idMap.getId(enchantmentInstance.enchantment());
+                                this.levelClue[jx] = enchantmentInstance.level();
+                            }
+                        }
+                    }
+
+                    enchantmentMenu.broadcastChanges();*/
                 });
-            }
+            } /*else {
+                for (int i = 0; i < 3; i++) {
+                    this.costs[i] = 0;
+                    this.enchantClue[i] = -1;
+                    this.levelClue[i] = -1;
+                }
+            }*/
         }
+        //ci.cancel();
     }
 
     @Inject(method = "getEnchantmentList", at = @At(value = "HEAD"), cancellable = true)
@@ -125,10 +171,8 @@ public abstract class EnchantmentMenuMixin {
         if (!stack.getComponents().has(DataComponents.ENCHANTABLE)) {
             cir.setReturnValue(List.of());
         } else {
-            int value = stack.getComponents().get(DataComponents.ENCHANTABLE).value();
-            int multiplier = 1 + value / 10;
 
-            List<EnchantmentInstance> list = EaE$selectEnchantment(this.random, stack, this.mana * multiplier, this.frost * multiplier, this.scorch * multiplier, registryAccess);
+            List<EnchantmentInstance> list = EaE$selectEnchantment(this.random, stack, cost, registryAccess);
 
             if (stack.is(Items.BOOK) && list.size() > 1) {
                 list.remove(this.random.nextInt(list.size()));
@@ -139,12 +183,25 @@ public abstract class EnchantmentMenuMixin {
     }
 
     @Unique
-    private List<EnchantmentInstance> EaE$selectEnchantment(RandomSource random, ItemStack stack, int mana, int frost, int scorch, RegistryAccess registryAccess) {
+    private List<EnchantmentInstance> EaE$selectEnchantment(RandomSource random, ItemStack stack, int cost, RegistryAccess registryAccess) {
         List<EnchantmentInstance> list = Lists.newArrayList();
         Enchantable enchantable = stack.get(DataComponents.ENCHANTABLE);
         if (enchantable == null) {
             return list;
         }
+
+        // Modifiers TODO: WIP
+        int value = enchantable.value();
+        int multiplier = 1 + value / 10;
+
+        int divider = (30 - cost) / 7;
+        if (divider < 1) {
+            divider = 1;
+        }
+
+        int mana = this.mana * multiplier / divider;
+        int frost = this.frost * multiplier / divider;
+        int scorch = this.scorch * multiplier / divider;
 
         // Enchantment tags
         Stream<Holder<Enchantment>> manaEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
@@ -192,10 +249,10 @@ public abstract class EnchantmentMenuMixin {
             return list;
         }
 
-        // Add a random enchantment
+        // Add initial enchantment
         WeightedRandom.getRandomItem(random, list2, EnchantmentInstance::weight).ifPresent(list::add);
 
-        // Add enchantments
+        // Add additional enchantments // TODO: WIP
         while (random.nextInt(50) <= mana || random.nextInt(50) <= frost || random.nextInt(50) <= scorch ||
                 random.nextInt(50) <= flow || random.nextInt(50) <= elementus || random.nextInt(50) <= might ||
                 random.nextInt(50) <= archaia) {
@@ -229,4 +286,7 @@ public abstract class EnchantmentMenuMixin {
 
         return list;
     }
+
+    // TODO: Make a temporary list which stores all valid enchantments, and use it with a random in order to remove entries from each relative to the enchanting stat scores, in order to be left with the desired amount of enchantments
+    // TODO: This should also allow you to revert to the vanilla bookshelf power & cost behaviour to fix various distribution issues (including other TODOs)
 }
