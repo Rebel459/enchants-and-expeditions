@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:frost_walker",
+    "enchants_and_expeditions:chilled",
+    {
+      "id": "legacies_and_legends:shatter",
+      "required": false
+    }
+  ]
+}

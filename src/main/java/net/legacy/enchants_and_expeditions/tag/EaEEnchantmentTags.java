@@ -9,7 +9,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class EaEEnchantmentTags {
 
-    public static final TagKey<Enchantment> NOT_OBTAINABLE_FROM_CHISELED_BOOKSHELF = register("not_available_from_chiseled_bookshelf");
+    public static final TagKey<Enchantment> IN_ENCHANTING_TABLE = register("in_enchanting_table");
+
+    public static final TagKey<Enchantment> SCORCH = register("enchanting_table/scorch");
+    public static final TagKey<Enchantment> FROST = register("enchanting_table/frost");
+    public static final TagKey<Enchantment> MANA = register("enchanting_table/mana");
+
+    public static final TagKey<Enchantment> FLOW = register("enchanting_table/flow"); // Frost + Mana
+    public static final TagKey<Enchantment> ELEMENTUS = register("enchanting_table/elementus"); // Frost + Scorch
+    public static final TagKey<Enchantment> MIGHT = register("enchanting_table/might"); // Scorch + Mana
+
+    public static final TagKey<Enchantment> ARCHAIA = register("enchanting_table/archaia"); // Mana + Frost + Scorch
 
     @NotNull
     private static TagKey<Enchantment> register(@NotNull String path) {

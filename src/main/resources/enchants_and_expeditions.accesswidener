@@ -12,3 +12,5 @@ accessible field net/minecraft/world/inventory/AnvilMenu repairItemCountCost I
 accessible field net/minecraft/world/inventory/ItemCombinerMenu inputSlots Lnet/minecraft/world/Container;
 accessible field net/minecraft/world/inventory/AnvilMenu onlyRenaming Z
 accessible field net/minecraft/world/inventory/ItemCombinerMenu access Lnet/minecraft/world/inventory/ContainerLevelAccess;
+
+accessible field net/minecraft/client/gui/screens/advancements/AdvancementWidget TITLE_BOX_SPRITE Lnet/minecraft/resources/ResourceLocation;

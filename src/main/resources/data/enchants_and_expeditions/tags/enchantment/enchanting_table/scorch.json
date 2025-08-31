@@ -1,0 +1,7 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:flame",
+    "enchants_and_expeditions:smiting"
+  ]
+}
