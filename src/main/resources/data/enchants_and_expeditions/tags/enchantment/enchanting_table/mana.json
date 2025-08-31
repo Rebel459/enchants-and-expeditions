@@ -1,22 +1,15 @@
 {
-  "replace": true,
   "values": [
     "minecraft:sharpness",
     "minecraft:sweeping_edge",
     "minecraft:efficiency",
     "minecraft:unbreaking",
     "minecraft:power",
-    "minecraft:loyalty",
-    "minecraft:quick_charge",
     "minecraft:silk_touch",
     "minecraft:density",
     "enchants_and_expeditions:physical_protection",
     {
       "id": "legacies_and_legends:rebound",
-      "required": false
-    },
-    {
-      "id": "remnants:dueling",
       "required": false
     }
   ]

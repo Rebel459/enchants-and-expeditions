@@ -1,0 +1,14 @@
+{
+  "values": [
+    "minecraft:piercing",
+    "minecraft:knockback",
+    "minecraft:punch",
+    "minecraft:breach",
+    "minecraft:multishot",
+    "minecraft:riptide",
+    {
+      "id": "legacies_and_legends:striking",
+      "required": false
+    }
+  ]
+}

@@ -146,7 +146,7 @@ public abstract class EnchantmentMenuMixin {
             return list;
         }
 
-        // Get enchantment streams
+        // Enchantment tags
         Stream<Holder<Enchantment>> manaEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EaEEnchantmentTags.MANA).map(HolderSet.Named::stream).orElse(Stream.empty());
         Stream<Holder<Enchantment>> frostEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
@@ -156,19 +156,28 @@ public abstract class EnchantmentMenuMixin {
         Stream<Holder<Enchantment>> flowEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EaEEnchantmentTags.FLOW).map(HolderSet.Named::stream).orElse(Stream.empty());
         Stream<Holder<Enchantment>> elementusEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.ELEMENTUS).map(HolderSet.Named::stream).orElse(Stream.empty());
+                .get(EaEEnchantmentTags.CHAOS).map(HolderSet.Named::stream).orElse(Stream.empty());
         Stream<Holder<Enchantment>> mightEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.MIGHT).map(HolderSet.Named::stream).orElse(Stream.empty());
+                .get(EaEEnchantmentTags.GREED).map(HolderSet.Named::stream).orElse(Stream.empty());
         Stream<Holder<Enchantment>> archaiaEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.ARCHAIA).map(HolderSet.Named::stream).orElse(Stream.empty());
+                .get(EaEEnchantmentTags.MIGHT).map(HolderSet.Named::stream).orElse(Stream.empty());
 
-        // Calculate enchantment levels
+        // Sub-stats
         int flow = (mana + frost) / 2;
         int elementus = (frost + scorch) / 2;
         int might = (scorch + mana) / 2;
         int archaia = (mana + frost + scorch) / 3;
 
-        // Collect available enchantments
+        // Variability TODO: WIP
+        mana = mana * (1 + random.nextInt(enchantable.value()) / 10);
+        frost = frost * (1 + random.nextInt(enchantable.value()) / 10);
+        scorch = scorch * (1 + random.nextInt(enchantable.value()) / 10);
+        flow = flow * (1 + random.nextInt(enchantable.value()) / 10);
+        elementus = elementus * (1 + random.nextInt(enchantable.value()) / 10);
+        might = might * (1 + random.nextInt(enchantable.value()) / 10);
+        archaia = archaia * (1 + random.nextInt(enchantable.value()) / 10);
+
+        // Add enchants to list
         List<EnchantmentInstance> list2 = Lists.newArrayList();
         list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(mana, stack, manaEnchantments));
         list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(frost, stack, frostEnchantments));
@@ -178,15 +187,15 @@ public abstract class EnchantmentMenuMixin {
         list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(might, stack, mightEnchantments));
         list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(archaia, stack, archaiaEnchantments));
 
-        // Check if list2 is empty
+        // Check if new list is empty
         if (list2.isEmpty()) {
-            return list; // Return empty list if no enchantments are available
+            return list;
         }
 
         // Add a random enchantment
         WeightedRandom.getRandomItem(random, list2, EnchantmentInstance::weight).ifPresent(list::add);
 
-        // Add additional enchantments based on conditions
+        // Add enchantments
         while (random.nextInt(50) <= mana || random.nextInt(50) <= frost || random.nextInt(50) <= scorch ||
                 random.nextInt(50) <= flow || random.nextInt(50) <= elementus || random.nextInt(50) <= might ||
                 random.nextInt(50) <= archaia) {
@@ -208,11 +217,12 @@ public abstract class EnchantmentMenuMixin {
             archaia /= 2;
         }
 
+        // Add blessings TODO: WIP
         if (this.maxMana) {
             list.add(new EnchantmentInstance(registryAccess.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.MENDING), 1));
         }
 
-        // Limit the list size to 3
+        // Limit the list size to 3 TODO: Configurable limit
         while (list.size() > 3) {
             list.remove(random.nextInt(list.size()));
         }

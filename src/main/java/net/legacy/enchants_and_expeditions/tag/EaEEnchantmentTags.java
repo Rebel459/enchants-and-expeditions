@@ -16,10 +16,10 @@ public class EaEEnchantmentTags {
     public static final TagKey<Enchantment> MANA = register("enchanting_table/mana");
 
     public static final TagKey<Enchantment> FLOW = register("enchanting_table/flow"); // Frost + Mana
-    public static final TagKey<Enchantment> ELEMENTUS = register("enchanting_table/elementus"); // Frost + Scorch
-    public static final TagKey<Enchantment> MIGHT = register("enchanting_table/might"); // Scorch + Mana
+    public static final TagKey<Enchantment> CHAOS = register("enchanting_table/chaos"); // Frost + Scorch
+    public static final TagKey<Enchantment> GREED = register("enchanting_table/greed"); // Scorch + Mana
 
-    public static final TagKey<Enchantment> ARCHAIA = register("enchanting_table/archaia"); // Mana + Frost + Scorch
+    public static final TagKey<Enchantment> MIGHT = register("enchanting_table/might"); // Mana + Frost + Scorch
 
     @NotNull
     private static TagKey<Enchantment> register(@NotNull String path) {

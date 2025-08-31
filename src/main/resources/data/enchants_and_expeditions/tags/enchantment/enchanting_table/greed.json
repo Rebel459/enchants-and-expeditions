@@ -1,0 +1,15 @@
+{
+  "values": [
+    "minecraft:luck_of_the_sea",
+    "minecraft:fortune",
+    "minecraft:looting",
+    {
+      "id": "legacies_and_legends:extraction",
+      "required": false
+    },
+    {
+      "id": "progression_reborn:collection",
+      "required": false
+    }
+  ]
+}

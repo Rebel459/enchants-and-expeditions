@@ -1,0 +1,14 @@
+{
+  "values": [
+    "minecraft:lure",
+    "minecraft:loyalty",
+    "minecraft:quick_charge",
+    "minecraft:aqua_affinity",
+    "minecraft:respiration",
+    "minecraft:depth_strider",
+    {
+      "id": "remnants:dueling",
+      "required": false
+    }
+  ]
+}
