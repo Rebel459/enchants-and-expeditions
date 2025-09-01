@@ -18,6 +18,7 @@ public class EaEItemComponents {
             context.modify(Items.ENCHANTED_BOOK, builder -> {
                 HolderGetter<Item> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM);
                 builder.set(DataComponents.MAX_DAMAGE, 4);
+                builder.set(DataComponents.ENCHANTABLE, new Enchantable(1));
                 builder.set(DataComponents.REPAIRABLE, new Repairable(holderGetter.getOrThrow(EaEItemTags.BOOK_REPAIR_MATERIALS)));
             });
 

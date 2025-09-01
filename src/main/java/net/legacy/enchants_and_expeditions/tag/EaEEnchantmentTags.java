@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class EaEEnchantmentTags {
 
-    public static final TagKey<Enchantment> BLESSING = register("blessing"); // Frost + Scorch
+    public static final TagKey<Enchantment> BLESSING = register("blessing");
 
     public static final TagKey<Enchantment> SCORCH = register("enchanting_table/scorch");
     public static final TagKey<Enchantment> FROST = register("enchanting_table/frost");

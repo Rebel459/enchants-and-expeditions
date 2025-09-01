@@ -3,6 +3,7 @@ package net.legacy.enchants_and_expeditions.mixin.inventory;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
+import net.legacy.enchants_and_expeditions.helper.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvents;
@@ -12,7 +13,6 @@ import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.AnvilBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
@@ -20,7 +20,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -34,13 +33,24 @@ public abstract class AnvilMenuMixin {
     private DataSlot cost;
 
     @WrapOperation(method = "createResult", at = @At(
-            value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;canEnchant(Lnet/minecraft/world/item/ItemStack;)Z"))
-    private boolean EaE$createResult(Enchantment instance, ItemStack stack, Operation<Boolean> original) {
+            value = "INVOKE", target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V"))
+    private void EaE$bookLimit(AnvilMenu instance, Operation<Void> original) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
-        ItemStack itemStack = anvilMenu.slots.getFirst().getItem();
-        ItemStack additionItem = anvilMenu.slots.get(1).getItem();
-        if (additionItem.is(Items.ENCHANTED_BOOK) && !itemStack.is(Items.ENCHANTED_BOOK) && EaEConfig.get.enchanting.anvil_book_enchanting && !stack.isEnchanted()) return original.call(instance, stack);
-        return false;
+        var inputStack = anvilMenu.inputSlots.getItem(0);
+        var outputStack = anvilMenu.resultSlots.getItem(0);
+
+        if (EaEConfig.get.enchanting.enchantment_limit != 0) {
+            int inputScore = EnchantingHelper.enchantmentScore(inputStack);
+            int outputScore = EnchantingHelper.enchantmentScore(outputStack);
+
+            if (outputScore > EaEConfig.get.enchanting.enchantment_limit || EnchantingHelper.getBlessings(outputStack) > 1 || EnchantingHelper.getCurses(outputStack) > 1) {
+                anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
+                this.cost.set(0);
+                return;
+            }
+        }
+
+        original.call(instance);
     }
 
     @Inject(method = "createResult",
@@ -49,29 +59,28 @@ public abstract class AnvilMenuMixin {
                     shift = At.Shift.BEFORE))
     public void EaE$modifyPrice(CallbackInfo ci) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
-        ItemStack itemStack = anvilMenu.slots.getFirst().getItem();
-        ItemStack additionItem = anvilMenu.slots.get(1).getItem();
+        ItemStack inputStack = anvilMenu.slots.getFirst().getItem();
+        ItemStack additionStack = anvilMenu.slots.get(1).getItem();
 
-        if ((additionItem.is(Items.ENCHANTED_BOOK)) && EaEConfig.get.enchanting.anvil_book_enchanting) {
+        if ((additionStack.is(Items.ENCHANTED_BOOK)) && EaEConfig.get.enchanting.anvil_book_enchanting) {
             int bookCost = 0;
             int multiplier = 6;
-            if (additionItem.getComponents().has(DataComponents.ENCHANTABLE) && additionItem.getComponents().get(DataComponents.ENCHANTABLE).value() == 15) multiplier = multiplier / 2;
-            if (itemStack.getComponents().has(DataComponents.ENCHANTABLE))
-                bookCost = itemStack.get(DataComponents.ENCHANTABLE).value();
-            bookCost = (26 - bookCost) + additionItem.getEnchantments().size() * multiplier;
+            if (inputStack.getComponents().has(DataComponents.ENCHANTABLE))
+                bookCost = inputStack.get(DataComponents.ENCHANTABLE).value();
+            bookCost = (26 - bookCost) + additionStack.getEnchantments().size() * multiplier;
             if (bookCost < 1) bookCost = 1;
             cost.set(bookCost);
         }
-        else if (!itemStack.is(EaEItemTags.VARIABLE_REPAIR_COST)) cost.set(0);
-        else if (itemStack.getComponents().has(DataComponents.ENCHANTABLE)) {
-            int repairMultiplier = additionItem.getCount();
-            double percentageDamaged = (double) itemStack.getDamageValue() / itemStack.getMaxDamage();
+        else if (!inputStack.is(EaEItemTags.VARIABLE_REPAIR_COST)) cost.set(0);
+        else if (inputStack.getComponents().has(DataComponents.ENCHANTABLE)) {
+            int repairMultiplier = additionStack.getCount();
+            double percentageDamaged = (double) inputStack.getDamageValue() / inputStack.getMaxDamage();
             if (percentageDamaged > 0.75 && repairMultiplier > 4) repairMultiplier = 4;
             else if (percentageDamaged > 0.5 && percentageDamaged <= 0.75 && repairMultiplier > 3) repairMultiplier = 3;
             else if (percentageDamaged > 0.25 && percentageDamaged <= 0.5 && repairMultiplier > 2) repairMultiplier = 2;
             else if (percentageDamaged <= 0.25 && repairMultiplier > 1) repairMultiplier = 1;
 
-            int repairCost = Objects.requireNonNull(itemStack.get(DataComponents.ENCHANTABLE)).value();
+            int repairCost = Objects.requireNonNull(inputStack.get(DataComponents.ENCHANTABLE)).value();
             if (repairCost > 25) repairCost = 25;
             repairCost = (26 - repairCost) / 4;
             if (repairCost < 1) repairCost = 1;

@@ -41,6 +41,10 @@ public class EaEConfig implements ConfigData {
   public static class EnchantingConfig {
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
+    @ConfigEntry.BoundedDiscrete(max=10L)
+    public int enchantment_limit = 3;
+    @ConfigEntry.Category("config")
+    @ConfigEntry.Gui.Tooltip
     public boolean experience_rebalance = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
@@ -49,37 +53,15 @@ public class EaEConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(max=1L)
     public double anvil_break_chance = 0.12;
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
-    public boolean enchantable_books = true;
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.BoundedDiscrete(max=1L)
-    public double first_book_chance = 0.5;
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.BoundedDiscrete(max=1L)
-    public double subsequent_book_chance = 0.1;
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.BoundedDiscrete(max=6L)
-    public float books_for_enchanting_power = 6F;
   }
 
   public static class ItemConfig {
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
-    public boolean imbued_books = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean craftable_experience_bottles = true;
   }
 
   public static class LootConfig {
-    @ConfigEntry.Category("config")
-    @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.BoundedDiscrete(max=10L)
-    public int world_enchantment_limit = 3;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean enchant_function_fallback = true;

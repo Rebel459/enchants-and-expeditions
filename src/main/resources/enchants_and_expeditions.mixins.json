@@ -8,7 +8,6 @@
     "function.EnchantWithLevelsFunctionMixin",
     "inventory.AnvilMenuMixin",
     "inventory.EnchantmentMenuMixin",
-    "inventory.GrindstoneMenuMixin",
     "item.EnchantmentHelperMixin",
     "item.EnchantmentMixin",
     "item.ItemStackMixin",

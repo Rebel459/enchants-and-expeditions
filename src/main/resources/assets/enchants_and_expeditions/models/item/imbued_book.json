@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "enchants_and_expeditions:item/imbued_book"
-  }
-}
