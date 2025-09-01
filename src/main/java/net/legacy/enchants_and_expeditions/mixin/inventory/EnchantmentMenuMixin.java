@@ -221,18 +221,18 @@ public abstract class EnchantmentMenuMixin {
 
         // Sub-stats
         int flow = (mana + frost) / 2;
-        int elementus = (frost + scorch) / 2;
-        int might = (scorch + mana) / 2;
-        int archaia = (mana + frost + scorch) / 3;
+        int chaos = (frost + scorch) / 2;
+        int greed = (scorch + mana) / 2;
+        int might = (mana + frost + scorch) / 3;
 
         // Variability TODO: WIP
         mana = mana * (1 + random.nextInt(enchantable.value()) / 10);
         frost = frost * (1 + random.nextInt(enchantable.value()) / 10);
         scorch = scorch * (1 + random.nextInt(enchantable.value()) / 10);
         flow = flow * (1 + random.nextInt(enchantable.value()) / 10);
-        elementus = elementus * (1 + random.nextInt(enchantable.value()) / 10);
+        chaos = chaos * (1 + random.nextInt(enchantable.value()) / 10);
+        greed = greed * (1 + random.nextInt(enchantable.value()) / 10);
         might = might * (1 + random.nextInt(enchantable.value()) / 10);
-        archaia = archaia * (1 + random.nextInt(enchantable.value()) / 10);
 
         // Add enchants to list
         List<EnchantmentInstance> list2 = Lists.newArrayList();
@@ -240,9 +240,9 @@ public abstract class EnchantmentMenuMixin {
         list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(frost, stack, frostEnchantments));
         list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(scorch, stack, scorchEnchantments));
         list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(flow, stack, flowEnchantments));
-        list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(elementus, stack, elementusEnchantments));
-        list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(might, stack, mightEnchantments));
-        list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(archaia, stack, archaiaEnchantments));
+        list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(chaos, stack, elementusEnchantments));
+        list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(greed, stack, mightEnchantments));
+        list2.addAll(EnchantmentHelper.getAvailableEnchantmentResults(might, stack, archaiaEnchantments));
 
         // Check if new list is empty
         if (list2.isEmpty()) {
@@ -254,8 +254,8 @@ public abstract class EnchantmentMenuMixin {
 
         // Add additional enchantments // TODO: WIP
         while (random.nextInt(50) <= mana || random.nextInt(50) <= frost || random.nextInt(50) <= scorch ||
-                random.nextInt(50) <= flow || random.nextInt(50) <= elementus || random.nextInt(50) <= might ||
-                random.nextInt(50) <= archaia) {
+                random.nextInt(50) <= flow || random.nextInt(50) <= chaos || random.nextInt(50) <= greed ||
+                random.nextInt(50) <= might) {
             if (!list.isEmpty()) {
                 EnchantmentHelper.filterCompatibleEnchantments(list2, Util.lastOf(list));
             }
@@ -269,9 +269,9 @@ public abstract class EnchantmentMenuMixin {
             frost /= 2;
             scorch /= 2;
             flow /= 2;
-            elementus /= 2;
+            chaos /= 2;
+            greed /= 2;
             might /= 2;
-            archaia /= 2;
         }
 
         // Add blessings TODO: WIP
