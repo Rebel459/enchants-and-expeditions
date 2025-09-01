@@ -7,6 +7,7 @@ import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 
 public class EaEItemTags {
+    public static final TagKey<Item> ENCHANTING_POWER_PROVIDER = register("enchanting_power_provider");
 
     public static final TagKey<Item> BOOK_REPAIR_MATERIALS = register("book_repair_materials");
 

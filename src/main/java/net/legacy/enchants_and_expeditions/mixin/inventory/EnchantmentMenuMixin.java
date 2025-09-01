@@ -4,8 +4,6 @@ import com.google.common.collect.Lists;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.helper.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
-import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
-import net.legacy.enchants_and_expeditions.tag.EaEBlockTags;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.Util;
 import net.minecraft.core.*;
@@ -13,7 +11,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EnchantmentTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
@@ -22,7 +19,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -38,8 +34,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Mixin(EnchantmentMenu.class)
@@ -391,17 +385,17 @@ public abstract class EnchantmentMenuMixin {
                 EnchantmentHelper.filterCompatibleEnchantments(curseList, Util.lastOf(list));
                 EnchantmentHelper.filterCompatibleEnchantments(blessingList, Util.lastOf(list));
             }
-            
+
             // Curses & Blessings
             int curseWeight = 10 - stability;
-            if (curseWeight < 0 || list.contains(EnchantmentTags.CURSE)) {
+            if (curseWeight < 0) {
                 curseWeight = 0;
             }
             int blessingWeight = divinity;
             if (divinity >= 1) {
                 blessingWeight += 2;
             }
-            if (blessingWeight < 0 || list.contains(EaEEnchantmentTags.BLESSING)) {
+            if (blessingWeight < 0) {
                 blessingWeight = 0;
             }
 

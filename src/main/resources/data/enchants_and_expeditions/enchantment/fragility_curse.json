@@ -17,7 +17,7 @@
       }
     ]
   },
-  "exclusive_set": "#enchants_and_expeditions:exclusive_set/unbreaking",
+  "exclusive_set": "#minecraft:curse",
   "max_cost": {
     "base": 50,
     "per_level_above_first": 0
