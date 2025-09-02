@@ -229,7 +229,6 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     for (BlockPos blockPos2 : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
                         if (EnchantingTableBlock.isValidBookShelf(level, blockPos, blockPos2)) {
                             ix++;
-                            this.mana++;
                         }
                         if (this.totalBookshelves < 15) {
                             if (enchantingBlockCheck(level, blockPos, blockPos2, Blocks.BOOKSHELF)) {
