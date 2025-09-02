@@ -94,6 +94,12 @@ public abstract class ItemStackMixin {
 
     @Unique
     private MutableComponent attributeTooltip(String attribute, String amount) {
+        if (attribute == "divinity") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_divinity").withColor(ChatFormatting.GOLD.getColor()));
+        }
+        if (attribute == "stability") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases_stability").withColor(ChatFormatting.RED.getColor()));
+        }
         if (attribute == "mana") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.mana").withColor(ChatFormatting.DARK_BLUE.getColor()).append(": " + amount));
         }
@@ -101,10 +107,7 @@ public abstract class ItemStackMixin {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.frost").withColor(ChatFormatting.DARK_AQUA.getColor()).append(": " + amount));
         }
         if (attribute == "scorch") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.scorch").withColor(ChatFormatting.RED.getColor()).append(": " + amount));
-        }
-        if (attribute == "divinity") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_divinity").withColor(ChatFormatting.GOLD.getColor()));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.scorch").withColor(ChatFormatting.DARK_RED.getColor()).append(": " + amount));
         }
         else return Component.literal("");
     }

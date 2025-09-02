@@ -1,6 +1,7 @@
 package net.legacy.enchants_and_expeditions;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -11,6 +12,7 @@ import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.registry.EaEItemComponents;
 import net.legacy.enchants_and_expeditions.registry.EaELootTables;
+import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -25,6 +27,8 @@ public class EnchantsAndExpeditions implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		PayloadTypeRegistry.playS2C().register(EnchantingAttributes.Attributes.ID, EnchantingAttributes.Attributes.CODEC);
+
 		Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer("enchants_and_expeditions");
 
 		EaEBlocks.init();

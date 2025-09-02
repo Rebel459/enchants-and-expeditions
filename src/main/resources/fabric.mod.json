@@ -18,6 +18,9 @@
 		"main": [
 			"net.legacy.enchants_and_expeditions.EnchantsAndExpeditions"
 		],
+		"client": [
+			"net.legacy.enchants_and_expeditions.EnchantsAndExpeditionsClient"
+		],
 		"modmenu": [
 			"net.legacy.enchants_and_expeditions.config.EaEModMenuIntegration"
 		]

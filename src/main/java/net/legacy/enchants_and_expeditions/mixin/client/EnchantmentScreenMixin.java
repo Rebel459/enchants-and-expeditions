@@ -1,7 +1,8 @@
 package net.legacy.enchants_and_expeditions.mixin.client;
 
-import net.legacy.enchants_and_expeditions.mixin.inventory.EnchantmentMenuMixin;
-import net.legacy.enchants_and_expeditions.util.EnchantingAttributes;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.legacy.enchants_and_expeditions.EnchantsAndExpeditionsClient;
+import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EnchantmentScreen;
@@ -19,20 +20,17 @@ public abstract class EnchantmentScreenMixin {
         EnchantmentScreen screen = EnchantmentScreen.class.cast(this);
         EnchantmentMenu menu = screen.getMenu();
 
-        EnchantingAttributes attributes = ((EnchantingAttributes) menu);
-        EnchantingAttributes.Attributes getAttribute = attributes.calculateAttributes();
+        EnchantingAttributes.Attributes enchantingAttributes = EnchantsAndExpeditionsClient.getClientEnchantingAttributes();
 
-        attributes.calculateAttributes();
-
-        int mana = getAttribute.mana();
-        int frost = getAttribute.frost();
-        int scorch = getAttribute.scorch();
-        int flow = getAttribute.flow();
-        int chaos = getAttribute.chaos();
-        int greed = getAttribute.greed();
-        int might = getAttribute.might();
-        int stability = getAttribute.stability();
-        int divinity = getAttribute.divinity();
+        int mana = enchantingAttributes.mana();
+        int frost = enchantingAttributes.frost();
+        int scorch = enchantingAttributes.scorch();
+        int flow = enchantingAttributes.flow();
+        int chaos = enchantingAttributes.chaos();
+        int greed = enchantingAttributes.greed();
+        int might = enchantingAttributes.might();
+        int stability = enchantingAttributes.stability();
+        int divinity = enchantingAttributes.divinity();
 
         int yOffset = 10;
         guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.mana").append(": " + mana), 10, yOffset, ChatFormatting.DARK_BLUE.getColor());

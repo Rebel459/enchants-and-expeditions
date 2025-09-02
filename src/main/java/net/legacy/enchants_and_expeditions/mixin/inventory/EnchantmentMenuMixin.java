@@ -5,7 +5,7 @@ import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
-import net.legacy.enchants_and_expeditions.util.EnchantingAttributes;
+import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.minecraft.Util;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
