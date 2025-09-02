@@ -1,8 +1,9 @@
 {
   "desc.enchants_and_expeditions.when_placed": "When Placed",
-  "desc.enchants_and_expeditions.hold_shift": "Hold SHIFT for more...",
   "desc.enchants_and_expeditions.increases_divinity": "Increases Divinity",
+  "desc.enchants_and_expeditions.increases_stability": "Increases Stability",
   "desc.enchants_and_expeditions.decreases_stability": "Decreases Stability",
+  "desc.enchants_and_expeditions.increases_power": "Reduces experience costs",
   "desc.enchants_and_expeditions.mana": "Mana",
   "desc.enchants_and_expeditions.frost": "Frost",
   "desc.enchants_and_expeditions.scorch": "Scorch",
@@ -12,6 +13,10 @@
   "desc.enchants_and_expeditions.might": "Might",
   "desc.enchants_and_expeditions.stability": "Stability",
   "desc.enchants_and_expeditions.divinity": "Divinity",
+  "desc.enchants_and_expeditions.increases_flow": "Increases Flow",
+  "desc.enchants_and_expeditions.increases_chaos": "Increases Chaos",
+  "desc.enchants_and_expeditions.increases_greed": "Increases Greed",
+  "desc.enchants_and_expeditions.increases_might": "Increases Might",
 
   "enchantment.enchants_and_expeditions.arcane_protection": "Arcane Protection",
   "enchantment.enchants_and_expeditions.arcane_protection.desc": "Protects from magical and blast damage sources",

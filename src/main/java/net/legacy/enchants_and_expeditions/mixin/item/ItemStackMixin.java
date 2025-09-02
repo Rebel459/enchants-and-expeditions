@@ -1,6 +1,7 @@
 package net.legacy.enchants_and_expeditions.mixin.item;
 
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
+import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
 import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.ChatFormatting;
@@ -74,11 +75,161 @@ public abstract class ItemStackMixin {
                 chaos = "0.25";
                 greed = "0.25";
                 might = "0.25";
-                stability = "0.25";
                 consumer.accept(placedTooltip());
                 consumer.accept(attributeTooltip("mana", mana));
                 consumer.accept(attributeTooltip("frost", frost));
                 consumer.accept(attributeTooltip("scorch", scorch));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.ARCANE_BOOKSHELF.asItem())) {
+                mana = "1.0";
+                flow = "0.5";
+                greed = "0.5";
+                might = "0.25";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("mana", mana));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.GLACIAL_BOOKSHELF.asItem())) {
+                frost = "1.0";
+                flow = "0.5";
+                chaos = "0.5";
+                might = "0.25";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("frost", frost));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.INFERNAL_BOOKSHELF.asItem())) {
+                scorch = "1.0";
+                chaos = "0.5";
+                greed = "0.5";
+                might = "0.25";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("scorch", scorch));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.MANA_ALTAR.asItem())) {
+                mana = "3.0";
+                flow = "-1.0";
+                chaos = "-1.0";
+                greed = "-1.0";
+                stability = "-1.0";
+                divinity = "1.0";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("increases_divinity", divinity));
+                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("mana", mana));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.FROST_ALTAR.asItem())) {
+                frost = "3.0";
+                scorch = "-5.0";
+                stability = "-1.0";
+                divinity = "1.0";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("increases_divinity", divinity));
+                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("frost", frost));
+                consumer.accept(attributeTooltip("scorch", scorch));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.SCORCH_ALTAR.asItem())) {
+                scorch = "3.0";
+                frost = "-5.0";
+                stability = "-1.0";
+                divinity = "1.0";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("increases_divinity", divinity));
+                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("scorch", scorch));
+                consumer.accept(attributeTooltip("frost", frost));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.FLOW_ALTAR.asItem())) {
+                flow = "5.0";
+                stability = "-3.0";
+                divinity = "1.0";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("increases_divinity", divinity));
+                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_flow", flow));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.CHAOS_ALTAR.asItem())) {
+                chaos = "5.0";
+                stability = "-3.0";
+                divinity = "1.0";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("increases_divinity", divinity));
+                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_chaos", chaos));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.GREED_ALTAR.asItem())) {
+                greed = "5.0";
+                stability = "-3.0";
+                divinity = "1.0";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("increases_divinity", divinity));
+                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_greed", greed));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.MIGHT_ALTAR.asItem())) {
+                might = "5.0";
+                stability = "-3.0";
+                divinity = "1.0";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("increases_divinity", divinity));
+                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_might", might));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.STABILITY_ALTAR.asItem())) {
+                stability = "1.0";
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("increases_stability", stability));
+                if (Screen.hasShiftDown()) {
+                    consumer.accept(Component.literal(""));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                }
+            }
+            else if (this.is(EaEBlocks.POWER_ALTAR.asItem())) {
+                consumer.accept(placedTooltip());
+                consumer.accept(attributeTooltip("increases_power", String.valueOf(3)));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
@@ -94,20 +245,38 @@ public abstract class ItemStackMixin {
 
     @Unique
     private MutableComponent attributeTooltip(String attribute, String amount) {
-        if (attribute == "divinity") {
+        if (attribute == "increases_divinity") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_divinity").withColor(ChatFormatting.GOLD.getColor()));
         }
-        if (attribute == "stability") {
+        else if (attribute == "increases_stability") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_stability").withColor(ChatFormatting.RED.getColor()));
+        }
+        else if (attribute == "decreases_stability") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases_stability").withColor(ChatFormatting.RED.getColor()));
         }
-        if (attribute == "mana") {
+        else if (attribute == "increases_power") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_power").withColor(ChatFormatting.GREEN.getColor()));
+        }
+        else if (attribute == "mana") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.mana").withColor(ChatFormatting.DARK_BLUE.getColor()).append(": " + amount));
         }
-        if (attribute == "frost") {
+        else if (attribute == "frost") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.frost").withColor(ChatFormatting.DARK_AQUA.getColor()).append(": " + amount));
         }
-        if (attribute == "scorch") {
+        else if (attribute == "scorch") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.scorch").withColor(ChatFormatting.DARK_RED.getColor()).append(": " + amount));
+        }
+        else if (attribute == "increases_flow") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_flow").withColor(ChatFormatting.AQUA.getColor()));
+        }
+        else if (attribute == "increases_chaos") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_chaos").withColor(ChatFormatting.DARK_GRAY.getColor()));
+        }
+        else if (attribute == "increases_greed") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_greed").withColor(ChatFormatting.YELLOW.getColor()));
+        }
+        else if (attribute == "increases_might") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_might").withColor(ChatFormatting.DARK_GREEN.getColor()));
         }
         else return Component.literal("");
     }
@@ -121,7 +290,7 @@ public abstract class ItemStackMixin {
                 .append(Component.literal(flow + ", ").withStyle(ChatFormatting.AQUA))
                 .append(Component.literal(chaos + ", ").withStyle(ChatFormatting.DARK_GRAY))
                 .append(Component.literal(greed + ", ").withStyle(ChatFormatting.YELLOW))
-                .append(Component.literal(might + ", ").withStyle(ChatFormatting.GREEN))
+                .append(Component.literal(might + ", ").withStyle(ChatFormatting.DARK_GREEN))
                 .append(Component.literal(stability + ", ").withStyle(ChatFormatting.RED))
                 .append(Component.literal(divinity).withStyle(ChatFormatting.GOLD));
     }
