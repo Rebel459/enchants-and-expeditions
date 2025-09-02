@@ -9,6 +9,8 @@
     "enchants_and_expeditions:flow_altar",
     "enchants_and_expeditions:chaos_altar",
     "enchants_and_expeditions:greed_altar",
-    "enchants_and_expeditions:might_altar"
+    "enchants_and_expeditions:might_altar",
+    "enchants_and_expeditions:stability_altar",
+    "enchants_and_expeditions:power_altar"
   ]
 }

@@ -1,9 +1,9 @@
 {
   "values": [
+    "#enchants_and_expeditions:enchanting_table",
     "minecraft:sharpness",
     "minecraft:sweeping_edge",
     "minecraft:efficiency",
-    "minecraft:unbreaking",
     "minecraft:power",
     "minecraft:silk_touch",
     "minecraft:density",

@@ -101,6 +101,22 @@ public class EaEBlocks {
                     .strength(3.0F).sound(SoundType.STONE)
                     .ignitedByLava()
     );
+    public static final Block STABILITY_ALTAR = register("stability_altar",
+            Block::new,
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .strength(3.0F).sound(SoundType.STONE)
+                    .ignitedByLava()
+    );
+    public static final Block POWER_ALTAR = register("power_altar",
+            Block::new,
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .strength(3.0F).sound(SoundType.STONE)
+                    .ignitedByLava()
+    );
 
     public static void init() {
     }
