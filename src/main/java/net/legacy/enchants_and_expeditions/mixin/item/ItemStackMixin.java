@@ -114,12 +114,12 @@ public abstract class ItemStackMixin {
         return Component.literal(" ")
                 .append(Component.literal(mana + ", ").withStyle(ChatFormatting.DARK_BLUE))
                 .append(Component.literal(frost + ", ").withStyle(ChatFormatting.DARK_AQUA))
-                .append(Component.literal(scorch + ", ").withStyle(ChatFormatting.RED))
+                .append(Component.literal(scorch + ", ").withStyle(ChatFormatting.DARK_RED))
                 .append(Component.literal(flow + ", ").withStyle(ChatFormatting.AQUA))
-                .append(Component.literal(chaos + ", ").withStyle(ChatFormatting.DARK_GRAY))
+                .append(Component.literal(chaos + ", ").withStyle(ChatFormatting.GRAY))
                 .append(Component.literal(greed + ", ").withStyle(ChatFormatting.YELLOW))
-                .append(Component.literal(might + ", ").withStyle(ChatFormatting.DARK_RED))
-                .append(Component.literal(stability + ", ").withStyle(ChatFormatting.GRAY))
+                .append(Component.literal(might + ", ").withStyle(ChatFormatting.GREEN))
+                .append(Component.literal(stability + ", ").withStyle(ChatFormatting.RED))
                 .append(Component.literal(divinity).withStyle(ChatFormatting.GOLD));
     }
 }
