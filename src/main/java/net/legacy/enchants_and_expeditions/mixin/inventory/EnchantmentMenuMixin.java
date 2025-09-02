@@ -123,7 +123,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         stability -= this.mightAltars * 3;
         divinity += this.mightAltars;
 
-        return new Attributes(this.mana, frost, scorch, flow, chaos, greed, might, stability, divinity);
+        return new Attributes(mana, frost, scorch, flow, chaos, greed, might, stability, divinity);
     }
 
     @Shadow @Final private RandomSource random;
