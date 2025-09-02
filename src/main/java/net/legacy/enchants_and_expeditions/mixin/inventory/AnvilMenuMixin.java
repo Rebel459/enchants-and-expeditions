@@ -3,7 +3,7 @@ package net.legacy.enchants_and_expeditions.mixin.inventory;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.helper.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvents;

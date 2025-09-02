@@ -1,7 +1,7 @@
 package net.legacy.enchants_and_expeditions.mixin.item;
 
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.helper.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;

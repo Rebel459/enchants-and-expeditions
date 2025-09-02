@@ -1,20 +1,27 @@
 package net.legacy.enchants_and_expeditions.mixin.inventory;
 
 import com.google.common.collect.Lists;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.helper.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.util.EnchantingAttributes;
+import net.legacy.enchants_and_expeditions.util.EnchantingAttributesAccessor;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.Util;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.protocol.game.ClientboundContainerSetDataPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.EnchantmentMenu;
@@ -37,7 +44,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Mixin(EnchantmentMenu.class)
-public abstract class EnchantmentMenuMixin {
+public abstract class EnchantmentMenuMixin implements EnchantingAttributesAccessor {
 
     @Shadow @Final private RandomSource random;
 
@@ -52,6 +59,9 @@ public abstract class EnchantmentMenuMixin {
     @Shadow protected abstract List<EnchantmentInstance> getEnchantmentList(RegistryAccess registryAccess, ItemStack stack, int slot, int cost);
 
     @Shadow public abstract void slotsChanged(Container container);
+
+    @Unique
+    private Player player;
 
     @Unique
     private int totalBookshelves = 0;
@@ -80,6 +90,12 @@ public abstract class EnchantmentMenuMixin {
     private int greedAltars = 0;
     @Unique
     private int mightAltars = 0;
+
+    // Inject into constructor to capture the player
+    @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/inventory/ContainerLevelAccess;)V", at = @At("TAIL"))
+    private void onInit(int syncId, Inventory playerInventory, ContainerLevelAccess access, CallbackInfo ci) {
+        this.player = playerInventory.player;
+    }
 
     @Unique
     private static boolean enchantingBlockCheck(Level level, BlockPos enchantingTablePos, BlockPos bookshelfPos, Block block) {
@@ -219,6 +235,9 @@ public abstract class EnchantmentMenuMixin {
     }
 
     @Unique
+    private final EnchantingAttributes enchantingAttributes = new EnchantingAttributes();
+
+    @Unique
     private List<EnchantmentInstance> EaE$selectEnchantment(RandomSource random, ItemStack stack, int slot, int enchantingPower, RegistryAccess registryAccess) {
         List<EnchantmentInstance> list = Lists.newArrayList();
         Enchantable enchantable = stack.get(DataComponents.ENCHANTABLE);
@@ -304,6 +323,17 @@ public abstract class EnchantmentMenuMixin {
         might += this.mightAltars * 5;
         stability -= this.mightAltars * 3;
         divinity += this.mightAltars;
+
+        // Update values
+        enchantingAttributes.setMana(mana);
+        enchantingAttributes.setFrost(frost);
+        enchantingAttributes.setScorch(scorch);
+        enchantingAttributes.setFlow(flow);
+        enchantingAttributes.setChaos(chaos);
+        enchantingAttributes.setGreed(greed);
+        enchantingAttributes.setMight(might);
+        enchantingAttributes.setStability(stability);
+        enchantingAttributes.setDivinity(divinity);
 
         // Enchantment tags
         List<Holder<Enchantment>> manaEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
@@ -461,5 +491,9 @@ public abstract class EnchantmentMenuMixin {
         }
 
         return list;
+    }
+
+    public EnchantingAttributes getEnchantingAttributes() {
+        return enchantingAttributes;
     }
 }

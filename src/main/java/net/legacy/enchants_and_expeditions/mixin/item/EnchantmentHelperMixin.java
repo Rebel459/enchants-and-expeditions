@@ -1,8 +1,7 @@
 package net.legacy.enchants_and_expeditions.mixin.item;
 
-import com.google.common.collect.Lists;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.helper.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
@@ -17,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static net.minecraft.world.item.enchantment.EnchantmentHelper.selectEnchantment;

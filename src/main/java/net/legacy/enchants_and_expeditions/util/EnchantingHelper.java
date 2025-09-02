@@ -1,10 +1,8 @@
-package net.legacy.enchants_and_expeditions.helper;
+package net.legacy.enchants_and_expeditions.util;
 
-import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.EnchantmentTags;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -12,7 +10,6 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import java.util.List;
 
 public class EnchantingHelper {
-
     public static int enchantmentScore(ItemStack stack) {
         return stack.getEnchantments().size() - getBlessings(stack) - getCurses(stack);
     }
