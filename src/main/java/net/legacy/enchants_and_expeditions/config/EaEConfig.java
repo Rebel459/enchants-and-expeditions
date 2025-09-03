@@ -27,10 +27,10 @@ public class EaEConfig implements ConfigData {
   }
 
   @ConfigEntry.Gui.CollapsibleObject
-  public EnchantingConfig enchanting = new EnchantingConfig();
+  public GeneralConfig general = new GeneralConfig();
 
   @ConfigEntry.Gui.CollapsibleObject
-  public ItemConfig items = new ItemConfig();
+  public EnchantmentConfig enchantments = new EnchantmentConfig();
 
   @ConfigEntry.Gui.CollapsibleObject
   public LootConfig loot = new LootConfig();
@@ -38,27 +38,39 @@ public class EaEConfig implements ConfigData {
   @ConfigEntry.Gui.CollapsibleObject
   public IntegrationConfig integrations = new IntegrationConfig();
 
-  public static class EnchantingConfig {
+  public static class GeneralConfig {
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(max=10L)
     public int enchantment_limit = 3;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    public boolean experience_rebalance = true;
+    public boolean table_multi_enchanting = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    public boolean anvil_book_enchanting = true;
+    public boolean experience_rebalance = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(max=1L)
     public double anvil_break_chance = 0.12;
-  }
-
-  public static class ItemConfig {
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean craftable_experience_bottles = true;
+  }
+
+  public static class EnchantmentConfig {
+    @ConfigEntry.Category("config")
+    public boolean mending_blessing = true;
+    @ConfigEntry.Category("config")
+    public boolean infinity_blessing = true;
+    @ConfigEntry.Category("config")
+    public boolean channeling_blessing = true;
+    @ConfigEntry.Category("config")
+    public boolean bloodlust = true;
+    @ConfigEntry.Category("config")
+    public boolean extraction = true;
+    @ConfigEntry.Category("config")
+    public boolean fragility_curse = true;
   }
 
   public static class LootConfig {

@@ -3,7 +3,7 @@ package net.legacy.enchants_and_expeditions.mixin.inventory;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvents;
@@ -39,11 +39,11 @@ public abstract class AnvilMenuMixin {
         var inputStack = anvilMenu.inputSlots.getItem(0);
         var outputStack = anvilMenu.resultSlots.getItem(0);
 
-        if (EaEConfig.get.enchanting.enchantment_limit != 0) {
+        if (EaEConfig.get.general.enchantment_limit != 0) {
             int inputScore = EnchantingHelper.enchantmentScore(inputStack);
             int outputScore = EnchantingHelper.enchantmentScore(outputStack);
 
-            if (outputScore > EaEConfig.get.enchanting.enchantment_limit || EnchantingHelper.getBlessings(outputStack) > 1 || EnchantingHelper.getCurses(outputStack) > 1) {
+            if (outputScore > EaEConfig.get.general.enchantment_limit || EnchantingHelper.getBlessings(outputStack) > 1 || EnchantingHelper.getCurses(outputStack) > 1) {
                 anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
                 this.cost.set(0);
                 return;
@@ -62,7 +62,7 @@ public abstract class AnvilMenuMixin {
         ItemStack inputStack = anvilMenu.slots.getFirst().getItem();
         ItemStack additionStack = anvilMenu.slots.get(1).getItem();
 
-        if ((additionStack.is(Items.ENCHANTED_BOOK)) && EaEConfig.get.enchanting.anvil_book_enchanting) {
+        if (additionStack.is(Items.ENCHANTED_BOOK)) {
             int bookCost = 0;
             int multiplier = 6;
             if (inputStack.getComponents().has(DataComponents.ENCHANTABLE))
@@ -91,7 +91,7 @@ public abstract class AnvilMenuMixin {
 
     @Inject(method = "onTake", at = @At(value = "HEAD"), cancellable = true)
     protected void EaE$onTake(Player player, ItemStack stack, CallbackInfo ci) {
-        if (!EaEConfig.get.enchanting.anvil_book_enchanting && EaEConfig.get.enchanting.anvil_break_chance == 0.12) return;
+        if (EaEConfig.get.general.anvil_break_chance == 0.12) return;
 
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack additionItem = anvilMenu.slots.get(1).getItem();
@@ -106,7 +106,7 @@ public abstract class AnvilMenuMixin {
                 itemStack.shrink(anvilMenu.repairItemCountCost);
                 anvilMenu.inputSlots.setItem(1, itemStack);
             } else {
-                if (additionItem.is(Items.ENCHANTED_BOOK)) {
+                if (additionItem.is(Items.ENCHANTED_BOOK) && !stack.is(Items.ENCHANTED_BOOK)) {
                     additionItem.setDamageValue(additionItem.getDamageValue() + 1);
                     if (additionItem.getDamageValue() < additionItem.getMaxDamage())
                         anvilMenu.inputSlots.setItem(1, additionItem);
@@ -119,7 +119,7 @@ public abstract class AnvilMenuMixin {
                     anvilMenu.inputSlots.setItem(1, ItemStack.EMPTY);
             }
         } else if (!anvilMenu.onlyRenaming) {
-            if (additionItem.is(Items.ENCHANTED_BOOK)) {
+            if (additionItem.is(Items.ENCHANTED_BOOK) && !stack.is(Items.ENCHANTED_BOOK)) {
                 additionItem.setDamageValue(additionItem.getDamageValue() + 1);
                 if (additionItem.getDamageValue() < additionItem.getMaxDamage())
                     anvilMenu.inputSlots.setItem(1, additionItem);
@@ -136,7 +136,7 @@ public abstract class AnvilMenuMixin {
         anvilMenu.inputSlots.setItem(0, ItemStack.EMPTY);
         anvilMenu.access.execute((level, blockPos) -> {
             BlockState blockState = level.getBlockState(blockPos);
-            if (!player.hasInfiniteMaterials() && blockState.is(BlockTags.ANVIL) && player.getRandom().nextFloat() < EaEConfig.get.enchanting.anvil_break_chance) {
+            if (!player.hasInfiniteMaterials() && blockState.is(BlockTags.ANVIL) && player.getRandom().nextFloat() < EaEConfig.get.general.anvil_break_chance) {
                 BlockState blockState2 = AnvilBlock.damage(blockState);
                 if (blockState2 == null) {
                     level.removeBlock(blockPos, false);

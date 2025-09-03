@@ -2,9 +2,11 @@ package net.legacy.enchants_and_expeditions.mixin.inventory;
 
 import com.google.common.collect.Lists;
 import com.mojang.logging.LogUtils;
+import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
+import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.minecraft.Util;
@@ -52,6 +54,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Shadow @Final public int[] enchantClue;
     @Shadow @Final public int[] levelClue;
     @Shadow protected abstract List<EnchantmentInstance> getEnchantmentList(RegistryAccess registryAccess, ItemStack stack, int slot, int cost);
+
     @Unique private Player player;
     @Unique private int totalBookshelves = 0;
     @Unique private int bookshelves = 0;
@@ -102,7 +105,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         BlockState gapState = level.getBlockState(gapPos);
         boolean isMatch = targetState.is(block);
         boolean isTransmitter = gapState.is(BlockTags.ENCHANTMENT_POWER_TRANSMITTER);
-        LogUtils.getLogger().info(
+        if (EnchantsAndExpeditions.debug) LogUtils.getLogger().info(
                 "[EaE] check targetPos={} targetBlock={} expectMatch={} actualMatch={} gapPos={} gapBlock={} transmitterMatch={}",
                 targetPos, EaE$blockId(targetState), block.getDescriptionId(), isMatch, gapPos, EaE$blockId(gapState), isTransmitter
         );
@@ -134,6 +137,8 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     this.chaosAltars = 0;
                     this.greedAltars = 0;
                     this.mightAltars = 0;
+                    this.stabilityAltars = 0;
+                    this.powerAltars = 0;
 
                     for (BlockPos off : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
                         if (EnchantingTableBlock.isValidBookShelf(level, blockPos, off)) {
@@ -225,7 +230,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
                     for (int jx = 0; jx < 3; jx++) {
                         if (this.costs[jx] > 0) {
-                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx]);
+                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx] + this.powerAltars * 3);
                             if (list != null && !list.isEmpty()) {
                                 EnchantmentInstance inst = list.get(this.random.nextInt(list.size()));
                                 this.enchantClue[jx] = idMap.getId(inst.enchantment());
@@ -421,14 +426,14 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 firstEnchant = true;
             } else if (list.isEmpty()) {
                 enchantingPower *= 2;
-            } else if (!(slot + 1 > list.size() && EaEConfig.get.enchanting.enchantment_limit >= 3)) {
+            } else if (!(slot + 1 > list.size() && EaEConfig.get.general.enchantment_limit >= 3)) {
                 enchantingPower /= 2;
             }
 
             attempts += 1;
         }
 
-        while (list.size() + EnchantingHelper.enchantmentScore(stack) > EaEConfig.get.enchanting.enchantment_limit && EaEConfig.get.enchanting.enchantment_limit >= 1) {
+        while (list.size() + EnchantingHelper.enchantmentScore(stack) > EaEConfig.get.general.enchantment_limit && EaEConfig.get.general.enchantment_limit >= 1) {
             list.remove(random.nextInt(list.size()));
         }
 
@@ -439,7 +444,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     public Attributes calculateAttributes() {
         Attributes result = this.access.evaluate((level, tablePos) -> {
             int tBooks = 0, nBooks = 0, aBooks = 0, gBooks = 0, iBooks = 0;
-            int tAltars = 0, aMana = 0, aFrost = 0, aScorch = 0, aFlow = 0, aChaos = 0, aGreed = 0, aMight = 0, aStability = 0;
+            int tAltars = 0, aMana = 0, aFrost = 0, aScorch = 0, aFlow = 0, aChaos = 0, aGreed = 0, aMight = 0, aStability = 0, aPower = 0;
 
             // Count bookshelves and altars
             for (BlockPos off : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
@@ -458,6 +463,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.GREED_ALTAR)) { aGreed++; tAltars++; }
                     if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.MIGHT_ALTAR)) { aMight++; tAltars++; }
                     if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.STABILITY_ALTAR)) { aStability++; tAltars++; }
+                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.POWER_ALTAR)) { aPower++; tAltars++; }
                 }
             }
 
@@ -537,6 +543,8 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             this.chaosAltars = aChaos;
             this.greedAltars = aGreed;
             this.mightAltars = aMight;
+            this.stabilityAltars = aStability;
+            this.powerAltars = aPower;
 
             this.mana = locMana;
             this.frost = locFrost;

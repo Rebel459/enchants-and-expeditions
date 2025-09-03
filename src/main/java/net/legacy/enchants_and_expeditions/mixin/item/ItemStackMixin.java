@@ -1,8 +1,9 @@
 package net.legacy.enchants_and_expeditions.mixin.item;
 
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
+import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
-import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -10,9 +11,17 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.block.Blocks;
@@ -39,14 +48,14 @@ public abstract class ItemStackMixin {
     @Inject(method = "isEnchantable", at = @At("TAIL"), cancellable = true)
     private void canEnchant(CallbackInfoReturnable<Boolean> cir) {
         ItemStack stack = ItemStack.class.cast(this);
-        if (!cir.getReturnValue() && stack.isEnchanted() && (EnchantingHelper.enchantmentScore(stack) < EaEConfig.get.enchanting.enchantment_limit)) {
+        if (!cir.getReturnValue() && stack.isEnchanted() && (EnchantingHelper.enchantmentScore(stack) < EaEConfig.get.general.enchantment_limit)) {
             cir.setReturnValue(true);
         }
     }
 
     @Inject(method = "getMaxStackSize", at = @At("HEAD"), cancellable = true)
     private void modifyWaterBottleStackSize(CallbackInfoReturnable<Integer> cir) {
-        if (!EaEConfig.get.items.craftable_experience_bottles) return;
+        if (!EaEConfig.get.general.craftable_experience_bottles) return;
         if (this.is(Items.POTION) || this.is(Items.SPLASH_POTION) || this.is(Items.LINGERING_POTION)) {
             if (!this.getComponents().has(DataComponents.POTION_CONTENTS)) return;
             if (this.getComponents().get(DataComponents.POTION_CONTENTS).is(Potions.WATER)) {

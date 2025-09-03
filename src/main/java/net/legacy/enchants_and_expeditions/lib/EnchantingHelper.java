@@ -1,15 +1,15 @@
-package net.legacy.enchants_and_expeditions.util;
+package net.legacy.enchants_and_expeditions.lib;
 
+import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.legacy.enchants_and_expeditions.config.EaEConfig;
+import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EnchantmentTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.*;
 import org.apache.commons.lang3.BooleanUtils;
@@ -22,6 +22,8 @@ public class EnchantingHelper {
     }
 
     public static List<EnchantmentInstance> evaluateEnchantments(ItemStack stack, List<EnchantmentInstance> list) {
+        List<EnchantmentInstance> removeList = Lists.newArrayList();
+
         if (getBlessings(stack) >= 1) {
             list.removeIf(enchantmentInstance -> {
                 return enchantmentInstance.enchantment.is(EaEEnchantmentTags.BLESSING);
@@ -41,7 +43,34 @@ public class EnchantingHelper {
             }
             return false;
         });
+
+        list.removeIf(enchantmentInstance -> {
+            return configureEnchantments(enchantmentInstance.enchantment);
+        });
+
         return list;
+    }
+
+    public static boolean configureEnchantments(Holder<Enchantment> enchantment) {
+        if (!EaEConfig.get.enchantments.mending_blessing && enchantment.is(Enchantments.MENDING)) {
+            return true;
+        }
+        else if (!EaEConfig.get.enchantments.infinity_blessing && enchantment.is(Enchantments.INFINITY)) {
+            return true;
+        }
+        else if (!EaEConfig.get.enchantments.channeling_blessing && enchantment.is(Enchantments.CHANNELING)) {
+            return true;
+        }
+        else if (!EaEConfig.get.enchantments.extraction && enchantment.is(EaEEnchantments.EXTRACTION)) {
+            return true;
+        }
+        else if (!EaEConfig.get.enchantments.bloodlust && enchantment.is(EaEEnchantments.BLOODLUST)) {
+            return true;
+        }
+        else if (!EaEConfig.get.enchantments.fragility_curse && enchantment.is(EaEEnchantments.FRAGILITY_CURSE)) {
+            return true;
+        }
+        return false;
     }
 
     public static int getBlessings(ItemStack stack) {

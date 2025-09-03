@@ -8,9 +8,11 @@
     "function.EnchantWithLevelsFunctionMixin",
     "inventory.AnvilMenuMixin",
     "inventory.EnchantmentMenuMixin",
+    "inventory.GrindstoneMenuMixin",
     "item.EnchantmentHelperMixin",
     "item.EnchantmentMixin",
     "item.ItemStackMixin",
+    "item.LivingEntityMixin",
     "recipe.ShapedRecipeMixin"
   ],
   "injectors": {

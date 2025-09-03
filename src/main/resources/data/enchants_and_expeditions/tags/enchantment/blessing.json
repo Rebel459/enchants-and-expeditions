@@ -1,7 +1,7 @@
 {
   "values": [
-    "enchants_and_expeditions:mending_blessing",
-    "enchants_and_expeditions:infinity_blessing",
-    "enchants_and_expeditions:channeling_blessing"
+    "minecraft:mending",
+    "minecraft:infinity",
+    "minecraft:channeling"
   ]
 }
