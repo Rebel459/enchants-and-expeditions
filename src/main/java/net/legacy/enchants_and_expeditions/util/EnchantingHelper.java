@@ -1,11 +1,18 @@
 package net.legacy.enchants_and_expeditions.util;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.item.enchantment.*;
+import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.List;
 
@@ -50,6 +57,27 @@ public class EnchantingHelper {
             }
         }
         return blessingCount;
+    }
+
+    public static boolean hasEnchantment(ItemStack stack, ResourceKey<Enchantment> enchantment) {
+        return BooleanUtils.toBoolean(getEnchantmentLevel(stack, enchantment));
+    }
+
+    public static int getEnchantmentLevel(ItemStack stack, ResourceKey<Enchantment> enchantment) {
+        if (hasEnchantment(stack, enchantment)) return EnchantmentHelper.getItemEnchantmentLevel(getEnchantment(stack, enchantment), stack);
+        else return 0;
+    }
+
+    public static Holder<Enchantment> getEnchantment(ItemStack stack, ResourceKey<Enchantment> enchantment) {
+        ItemEnchantments itemEnchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+
+        for (Object2IntMap.Entry<Holder<Enchantment>> entry : itemEnchantments.entrySet()) {
+            Holder<Enchantment> holder = entry.getKey();
+            if (holder.is(enchantment)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public static int getCurses(ItemStack stack) {

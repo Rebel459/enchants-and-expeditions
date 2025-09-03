@@ -520,7 +520,8 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             locStability -= aMight * 3;
             locDivinity += aMight;
 
-            locStability += aStability;
+            locStability += aStability * 3;
+            locDivinity -= aStability / 2;
 
             this.totalBookshelves = tBooks;
             this.bookshelves = nBooks;

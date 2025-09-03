@@ -128,8 +128,9 @@ public abstract class ItemStackMixin {
                 stability = "-1.0";
                 divinity = "1.0";
                 consumer.accept(placedTooltip());
-                consumer.accept(attributeTooltip("increases_divinity", divinity));
-                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
+                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("mana", mana));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
@@ -142,8 +143,9 @@ public abstract class ItemStackMixin {
                 stability = "-1.0";
                 divinity = "1.0";
                 consumer.accept(placedTooltip());
-                consumer.accept(attributeTooltip("increases_divinity", divinity));
-                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
+                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("frost", frost));
                 consumer.accept(attributeTooltip("scorch", scorch));
                 if (Screen.hasShiftDown()) {
@@ -157,8 +159,9 @@ public abstract class ItemStackMixin {
                 stability = "-1.0";
                 divinity = "1.0";
                 consumer.accept(placedTooltip());
-                consumer.accept(attributeTooltip("increases_divinity", divinity));
-                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
+                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("scorch", scorch));
                 consumer.accept(attributeTooltip("frost", frost));
                 if (Screen.hasShiftDown()) {
@@ -171,8 +174,9 @@ public abstract class ItemStackMixin {
                 stability = "-3.0";
                 divinity = "1.0";
                 consumer.accept(placedTooltip());
-                consumer.accept(attributeTooltip("increases_divinity", divinity));
-                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
+                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_flow", flow));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
@@ -184,8 +188,9 @@ public abstract class ItemStackMixin {
                 stability = "-3.0";
                 divinity = "1.0";
                 consumer.accept(placedTooltip());
-                consumer.accept(attributeTooltip("increases_divinity", divinity));
-                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
+                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_chaos", chaos));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
@@ -197,8 +202,9 @@ public abstract class ItemStackMixin {
                 stability = "-3.0";
                 divinity = "1.0";
                 consumer.accept(placedTooltip());
-                consumer.accept(attributeTooltip("increases_divinity", divinity));
-                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
+                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_greed", greed));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
@@ -210,8 +216,9 @@ public abstract class ItemStackMixin {
                 stability = "-3.0";
                 divinity = "1.0";
                 consumer.accept(placedTooltip());
-                consumer.accept(attributeTooltip("increases_divinity", divinity));
-                consumer.accept(attributeTooltip("decreases_stability", stability));
+                consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
+                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_might", might));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
@@ -219,9 +226,11 @@ public abstract class ItemStackMixin {
                 }
             }
             else if (this.is(EaEBlocks.STABILITY_ALTAR.asItem())) {
-                stability = "1.0";
+                stability = "3.0";
+                divinity = "0.5";
                 consumer.accept(placedTooltip());
-                consumer.accept(attributeTooltip("increases_stability", stability));
+                consumer.accept(attributeTooltip("decreases_blessing_chance", divinity));
+                consumer.accept(attributeTooltip("decreases_curse_chance", stability));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
@@ -229,7 +238,7 @@ public abstract class ItemStackMixin {
             }
             else if (this.is(EaEBlocks.POWER_ALTAR.asItem())) {
                 consumer.accept(placedTooltip());
-                consumer.accept(attributeTooltip("increases_power", String.valueOf(3)));
+                consumer.accept(attributeTooltip("decreases_experience_requirements", String.valueOf(3)));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
@@ -245,17 +254,23 @@ public abstract class ItemStackMixin {
 
     @Unique
     private MutableComponent attributeTooltip(String attribute, String amount) {
-        if (attribute == "increases_divinity") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_divinity").withColor(ChatFormatting.GOLD.getColor()));
+        if (attribute == "increases_blessing_chance") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.blessing").withStyle(ChatFormatting.GOLD)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
         }
-        else if (attribute == "increases_stability") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_stability").withColor(ChatFormatting.RED.getColor()));
+        if (attribute == "decreases_blessing_chance") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.blessing").withStyle(ChatFormatting.GOLD)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
         }
-        else if (attribute == "decreases_stability") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases_stability").withColor(ChatFormatting.RED.getColor()));
+        else if (attribute == "increases_curse_chance") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.curse").withStyle(ChatFormatting.RED)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
         }
-        else if (attribute == "increases_power") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_power").withColor(ChatFormatting.GREEN.getColor()));
+        else if (attribute == "decreases_curse_chance") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.curse").withStyle(ChatFormatting.RED)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
+        }
+        else if (attribute == "increases_experience_requirements") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.power").withStyle(ChatFormatting.GREEN)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.requirements").withStyle(ChatFormatting.BLUE));
+        }
+        else if (attribute == "decreases_experience_requirements") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.power").withStyle(ChatFormatting.GREEN)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.requirements").withStyle(ChatFormatting.BLUE));
         }
         else if (attribute == "mana") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.mana").withColor(ChatFormatting.DARK_BLUE.getColor()).append(": " + amount));
@@ -267,16 +282,16 @@ public abstract class ItemStackMixin {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.scorch").withColor(ChatFormatting.DARK_RED.getColor()).append(": " + amount));
         }
         else if (attribute == "increases_flow") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_flow").withColor(ChatFormatting.AQUA.getColor()));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.flow").withStyle(ChatFormatting.AQUA)).append(" ");
         }
         else if (attribute == "increases_chaos") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_chaos").withColor(ChatFormatting.DARK_GRAY.getColor()));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chaos").withStyle(ChatFormatting.DARK_GRAY)).append(" ");
         }
         else if (attribute == "increases_greed") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_greed").withColor(ChatFormatting.YELLOW.getColor()));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.greed").withStyle(ChatFormatting.YELLOW)).append(" ");
         }
         else if (attribute == "increases_might") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases_might").withColor(ChatFormatting.DARK_GREEN.getColor()));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.might").withStyle(ChatFormatting.DARK_GREEN)).append(" ");
         }
         else return Component.literal("");
     }
