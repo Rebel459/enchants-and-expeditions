@@ -60,12 +60,11 @@ public class EnchantingHelper {
     }
 
     public static boolean hasEnchantment(ItemStack stack, ResourceKey<Enchantment> enchantment) {
-        return BooleanUtils.toBoolean(getEnchantmentLevel(stack, enchantment));
+        return BooleanUtils.toBoolean(getLevel(stack, enchantment));
     }
 
-    public static int getEnchantmentLevel(ItemStack stack, ResourceKey<Enchantment> enchantment) {
-        if (hasEnchantment(stack, enchantment)) return EnchantmentHelper.getItemEnchantmentLevel(getEnchantment(stack, enchantment), stack);
-        else return 0;
+    public static int getLevel(ItemStack stack, ResourceKey<Enchantment> enchantment) {
+        return EnchantmentHelper.getItemEnchantmentLevel(getEnchantment(stack, enchantment), stack);
     }
 
     public static Holder<Enchantment> getEnchantment(ItemStack stack, ResourceKey<Enchantment> enchantment) {

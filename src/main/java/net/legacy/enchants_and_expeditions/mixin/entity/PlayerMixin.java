@@ -114,7 +114,7 @@ public abstract class PlayerMixin {
         ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
         if (EnchantingHelper.hasEnchantment(stack, Enchantments.SHARPNESS)) {
-            int amount = EnchantingHelper.getEnchantmentLevel(stack, Enchantments.SHARPNESS);
+            int amount = EnchantingHelper.getLevel(stack, Enchantments.SHARPNESS);
             player.setHealth(player.getHealth() + amount);
             if (player.getHealth() > player.getMaxHealth())
                 player.setHealth(player.getMaxHealth());
