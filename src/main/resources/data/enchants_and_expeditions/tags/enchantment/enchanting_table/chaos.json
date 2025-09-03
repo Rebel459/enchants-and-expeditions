@@ -2,6 +2,7 @@
   "values": [
     "#enchants_and_expeditions:enchanting_table",
     "minecraft:thorns",
-    "enchants_and_expeditions:elemental_protection"
+    "enchants_and_expeditions:elemental_protection",
+    "enchants_and_expeditions:entropy"
   ]
 }

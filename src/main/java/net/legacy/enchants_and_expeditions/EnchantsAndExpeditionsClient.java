@@ -20,7 +20,7 @@ public final class EnchantsAndExpeditionsClient implements ClientModInitializer 
                 EnchantingAttributes.Attributes.ID,
                 (payload, context) -> context.client().execute(() -> {
                     clientEnchantingAttributes = payload;
-                    LOGGER.info("[EaE] S2C Attributes received on client thread: {}", payload);
+                    if (EnchantsAndExpeditions.debug) LOGGER.info("[EaE] S2C Attributes received on client thread: {}", payload);
                 })
         );
     }
