@@ -1,0 +1,222 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "enchants_and_expeditions:altar",
+          "conditions": [
+            {
+              "condition": "minecraft:match_tool",
+              "predicate": {
+                "items": "#minecraft:pickaxes"
+              }
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "enchants_and_expeditions:altar",
+              "properties": {
+                "tome": "mana"
+              }
+            }
+          ],
+          "name": "enchants_and_expeditions:tome_of_mana"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "enchants_and_expeditions:altar",
+              "properties": {
+                "tome": "frost"
+              }
+            }
+          ],
+          "name": "enchants_and_expeditions:tome_of_frost"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "enchants_and_expeditions:altar",
+              "properties": {
+                "tome": "scorch"
+              }
+            }
+          ],
+          "name": "enchants_and_expeditions:tome_of_scorch"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "enchants_and_expeditions:altar",
+              "properties": {
+                "tome": "flow"
+              }
+            }
+          ],
+          "name": "enchants_and_expeditions:tome_of_flow"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "enchants_and_expeditions:altar",
+              "properties": {
+                "tome": "chaos"
+              }
+            }
+          ],
+          "name": "enchants_and_expeditions:tome_of_chaos"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "enchants_and_expeditions:altar",
+              "properties": {
+                "tome": "greed"
+              }
+            }
+          ],
+          "name": "enchants_and_expeditions:tome_of_greed"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "enchants_and_expeditions:altar",
+              "properties": {
+                "tome": "might"
+              }
+            }
+          ],
+          "name": "enchants_and_expeditions:tome_of_might"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "enchants_and_expeditions:altar",
+              "properties": {
+                "tome": "stability"
+              }
+            }
+          ],
+          "name": "enchants_and_expeditions:tome_of_stability"
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "enchants_and_expeditions:altar",
+              "properties": {
+                "tome": "power"
+              }
+            }
+          ],
+          "name": "enchants_and_expeditions:tome_of_power"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "enchants_and_expeditions:blocks/altar"
+}

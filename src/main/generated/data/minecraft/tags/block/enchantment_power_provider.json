@@ -1,9 +1,8 @@
 {
   "values": [
-    "minecraft:bookshelf",
+    "enchants_and_expeditions:altar",
     "enchants_and_expeditions:arcane_bookshelf",
     "enchants_and_expeditions:glacial_bookshelf",
-    "enchants_and_expeditions:infernal_bookshelf",
-    "#enchants_and_expeditions:tome"
+    "enchants_and_expeditions:infernal_bookshelf"
   ]
 }

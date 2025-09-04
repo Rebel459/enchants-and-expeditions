@@ -1,0 +1,19 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#enchants_and_expeditions:advancement/provides_altar_recipe"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "enchants_and_expeditions:altar"
+    ]
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "variants": {
+    "facing=east,tome=empty": {
+      "model": "enchants_and_expeditions:block/altar",
+      "y": 90
+    },
+    "facing=north,tome=empty": {
+      "model": "enchants_and_expeditions:block/altar"
+    },
+    "facing=south,tome=empty": {
+      "model": "enchants_and_expeditions:block/altar",
+      "y": 180
+    },
+    "facing=west,tome=empty": {
+      "model": "enchants_and_expeditions:block/altar",
+      "y": 270
+    },
+    "facing=east,tome=mana": {
+      "model": "enchants_and_expeditions:block/altar_tome_mana",
+      "y": 90
+    },
+    "facing=north,tome=mana": {
+      "model": "enchants_and_expeditions:block/altar_tome_mana"
+    },
+    "facing=south,tome=mana": {
+      "model": "enchants_and_expeditions:block/altar_tome_mana",
+      "y": 180
+    },
+    "facing=west,tome=mana": {
+      "model": "enchants_and_expeditions:block/altar_tome_mana",
+      "y": 270
+    },
+    "facing=east,tome=frost": {
+      "model": "enchants_and_expeditions:block/altar_tome_frost",
+      "y": 90
+    },
+    "facing=north,tome=frost": {
+      "model": "enchants_and_expeditions:block/altar_tome_frost"
+    },
+    "facing=south,tome=frost": {
+      "model": "enchants_and_expeditions:block/altar_tome_frost",
+      "y": 180
+    },
+    "facing=west,tome=frost": {
+      "model": "enchants_and_expeditions:block/altar_tome_frost",
+      "y": 270
+    },
+    "facing=east,tome=scorch": {
+      "model": "enchants_and_expeditions:block/altar_tome_scorch",
+      "y": 90
+    },
+    "facing=north,tome=scorch": {
+      "model": "enchants_and_expeditions:block/altar_tome_scorch"
+    },
+    "facing=south,tome=scorch": {
+      "model": "enchants_and_expeditions:block/altar_tome_scorch",
+      "y": 180
+    },
+    "facing=west,tome=scorch": {
+      "model": "enchants_and_expeditions:block/altar_tome_scorch",
+      "y": 270
+    },
+    "facing=east,tome=flow": {
+      "model": "enchants_and_expeditions:block/altar_tome_flow",
+      "y": 90
+    },
+    "facing=north,tome=flow": {
+      "model": "enchants_and_expeditions:block/altar_tome_flow"
+    },
+    "facing=south,tome=flow": {
+      "model": "enchants_and_expeditions:block/altar_tome_flow",
+      "y": 180
+    },
+    "facing=west,tome=flow": {
+      "model": "enchants_and_expeditions:block/altar_tome_flow",
+      "y": 270
+    },
+    "facing=east,tome=chaos": {
+      "model": "enchants_and_expeditions:block/altar_tome_chaos",
+      "y": 90
+    },
+    "facing=north,tome=chaos": {
+      "model": "enchants_and_expeditions:block/altar_tome_chaos"
+    },
+    "facing=south,tome=chaos": {
+      "model": "enchants_and_expeditions:block/altar_tome_chaos",
+      "y": 180
+    },
+    "facing=west,tome=chaos": {
+      "model": "enchants_and_expeditions:block/altar_tome_chaos",
+      "y": 270
+    },
+    "facing=east,tome=greed": {
+      "model": "enchants_and_expeditions:block/altar_tome_greed",
+      "y": 90
+    },
+    "facing=north,tome=greed": {
+      "model": "enchants_and_expeditions:block/altar_tome_greed"
+    },
+    "facing=south,tome=greed": {
+      "model": "enchants_and_expeditions:block/altar_tome_greed",
+      "y": 180
+    },
+    "facing=west,tome=greed": {
+      "model": "enchants_and_expeditions:block/altar_tome_greed",
+      "y": 270
+    },
+    "facing=east,tome=might": {
+      "model": "enchants_and_expeditions:block/altar_tome_might",
+      "y": 90
+    },
+    "facing=north,tome=might": {
+      "model": "enchants_and_expeditions:block/altar_tome_might"
+    },
+    "facing=south,tome=might": {
+      "model": "enchants_and_expeditions:block/altar_tome_might",
+      "y": 180
+    },
+    "facing=west,tome=might": {
+      "model": "enchants_and_expeditions:block/altar_tome_might",
+      "y": 270
+    },
+    "facing=east,tome=stability": {
+      "model": "enchants_and_expeditions:block/altar_tome_stability",
+      "y": 90
+    },
+    "facing=north,tome=stability": {
+      "model": "enchants_and_expeditions:block/altar_tome_stability"
+    },
+    "facing=south,tome=stability": {
+      "model": "enchants_and_expeditions:block/altar_tome_stability",
+      "y": 180
+    },
+    "facing=west,tome=stability": {
+      "model": "enchants_and_expeditions:block/altar_tome_stability",
+      "y": 270
+    },
+    "facing=east,tome=power": {
+      "model": "enchants_and_expeditions:block/altar_tome_power",
+      "y": 90
+    },
+    "facing=north,tome=power": {
+      "model": "enchants_and_expeditions:block/altar_tome_power"
+    },
+    "facing=south,tome=power": {
+      "model": "enchants_and_expeditions:block/altar_tome_power",
+      "y": 180
+    },
+    "facing=west,tome=power": {
+      "model": "enchants_and_expeditions:block/altar_tome_power",
+      "y": 270
+    }
+  }
+}

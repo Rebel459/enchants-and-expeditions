@@ -1,0 +1,7 @@
+{
+	"parent": "enchants_and_expeditions:block/altar_tome",
+	"textures": {
+		"2": "enchants_and_expeditions:block/altar_tome_scorch",
+		"particle": "enchants_and_expeditions:block/altar_tome_scorch"
+	}
+}

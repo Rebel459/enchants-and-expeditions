@@ -1,0 +1,21 @@
+{
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:bookshelf"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "enchants_and_expeditions:arcane_bookshelf",
+      "enchants_and_expeditions:glacial_bookshelf",
+      "enchants_and_expeditions:infernal_bookshelf"
+    ]
+  }
+}

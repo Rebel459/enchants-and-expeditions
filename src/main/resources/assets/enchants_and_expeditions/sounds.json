@@ -1,0 +1,28 @@
+{
+  "item.tome.place": {
+    "sounds": [
+      {
+        "name": "enchants_and_expeditions:item/tome/place1",
+        "volume": 1.0
+      },
+      {
+        "name": "enchants_and_expeditions:item/tome/place2",
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.item.tome.place"
+  },
+  "item.tome.pickup": {
+    "sounds": [
+      {
+        "name": "enchants_and_expeditions:item/tome/pickup1",
+        "volume": 1.0
+      },
+      {
+        "name": "enchants_and_expeditions:item/tome/pickup2",
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.item.tome.pickup"
+  }
+}

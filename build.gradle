@@ -67,3 +67,22 @@ jar {
 loom {
 	accessWidenerPath = file("src/main/resources/enchants_and_expeditions.accesswidener")
 }
+// Datagen
+
+fabricApi {
+	configureDataGeneration()
+}
+
+loom {
+	mods {
+		"enchants_and_expeditions" {
+			sourceSet sourceSets.main
+		}
+	}
+
+	runs {
+		datagen {
+			inherit client
+		}
+	}
+}

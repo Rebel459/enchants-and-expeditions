@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
@@ -49,7 +50,9 @@ public class EaEBlocks {
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(3.0F).sound(SoundType.STONE)
+                    .strength(3.0F).sound(SoundType.POLISHED_DEEPSLATE)
+                    .noOcclusion()
+                    .isViewBlocking(Blocks::never)
     );
 
     public static void init() {

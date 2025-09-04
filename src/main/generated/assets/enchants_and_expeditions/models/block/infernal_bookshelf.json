@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "enchants_and_expeditions:block/infernal_bookshelf"
+  }
+}
