@@ -3,6 +3,8 @@ package net.legacy.enchants_and_expeditions.mixin.inventory;
 import com.google.common.collect.Lists;
 import com.mojang.logging.LogUtils;
 import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
+import net.legacy.enchants_and_expeditions.block.AltarBlock;
+import net.legacy.enchants_and_expeditions.block.AltarBlockType;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
@@ -27,9 +29,8 @@ import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EnchantingTableBlock;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -112,6 +113,11 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         return isMatch && isTransmitter;
     }
 
+    @Unique
+    private static BlockPos getAltarPos(BlockPos enchantingTablePos, BlockPos altarPos) {
+        return enchantingTablePos.offset(altarPos);
+    }
+
     @Inject(method = "slotsChanged", at = @At(value = "HEAD"), cancellable = true)
     private void EaE$slotsChanged(Container container, CallbackInfo ci) {
         EnchantmentMenu enchantmentMenu = EnchantmentMenu.class.cast(this);
@@ -165,40 +171,40 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                                 this.totalBookshelves++;
                             }
                         }
-                        if (this.totalAltars < 3) {
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.MANA_ALTAR)) {
+                        if (this.totalAltars < 3 && enchantingBlockCheck(level, blockPos, off, EaEBlocks.ALTAR) && level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) != AltarBlockType.EMPTY) {
+                            if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.MANA_TOME) {
                                 this.manaAltars++;
                                 this.totalAltars++;
                             }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.FROST_ALTAR)) {
+                            if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.FROST_TOME) {
                                 this.frostAltars++;
                                 this.totalAltars++;
                             }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.SCORCH_ALTAR)) {
+                            if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.SCORCH_TOME) {
                                 this.scorchAltars++;
                                 this.totalAltars++;
                             }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.FLOW_ALTAR)) {
+                            if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.FLOW_TOME) {
                                 this.flowAltars++;
                                 this.totalAltars++;
                             }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.CHAOS_ALTAR)) {
+                            if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.CHAOS_TOME) {
                                 this.chaosAltars++;
                                 this.totalAltars++;
                             }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.GREED_ALTAR)) {
+                            if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.GREED_TOME) {
                                 this.greedAltars++;
                                 this.totalAltars++;
                             }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.MIGHT_ALTAR)) {
+                            if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.MIGHT_TOME) {
                                 this.mightAltars++;
                                 this.totalAltars++;
                             }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.STABILITY_ALTAR)) {
+                            if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.STABILITY_TOME) {
                                 this.stabilityAltars++;
                                 this.totalAltars++;
                             }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.POWER_ALTAR)) {
+                            if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.POWER_TOME) {
                                 this.powerAltars++;
                                 this.totalAltars++;
                             }
@@ -454,16 +460,16 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.GLACIAL_BOOKSHELF)) { gBooks++; tBooks++; }
                     if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.INFERNAL_BOOKSHELF)) { iBooks++; tBooks++; }
                 }
-                if (tAltars < 3) {
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.MANA_ALTAR)) { aMana++; tAltars++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.FROST_ALTAR)) { aFrost++; tAltars++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.SCORCH_ALTAR)) { aScorch++; tAltars++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.FLOW_ALTAR)) { aFlow++; tAltars++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.CHAOS_ALTAR)) { aChaos++; tAltars++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.GREED_ALTAR)) { aGreed++; tAltars++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.MIGHT_ALTAR)) { aMight++; tAltars++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.STABILITY_ALTAR)) { aStability++; tAltars++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.POWER_ALTAR)) { aPower++; tAltars++; }
+                if (tAltars < 3 && enchantingBlockCheck(level, tablePos, off, EaEBlocks.ALTAR) && level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) != AltarBlockType.EMPTY) {
+                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.MANA_TOME) { aMana++; tAltars++; }
+                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.FROST_TOME) { aFrost++; tAltars++; }
+                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.SCORCH_TOME) { aScorch++; tAltars++; }
+                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.FLOW_TOME) { aFlow++; tAltars++; }
+                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.CHAOS_TOME) { aChaos++; tAltars++; }
+                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.GREED_TOME) { aGreed++; tAltars++; }
+                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.MIGHT_TOME) { aMight++; tAltars++; }
+                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.STABILITY_TOME) { aStability++; tAltars++; }
+                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.POWER_TOME) { aPower++; tAltars++; }
                 }
             }
 

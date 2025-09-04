@@ -1,4 +1,4 @@
-package net.legacy.enchants_and_expeditions.mixin.item;
+package net.legacy.enchants_and_expeditions.mixin.entity;
 
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
@@ -33,7 +33,7 @@ public abstract class LivingEntityMixin {
             ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
             if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.ENTROPY)) {
                 int entropy = EnchantingHelper.getLevel(attackerStack, EaEEnchantments.ENTROPY);
-                value += new Random().nextInt(-1, 1 + entropy);
+                value += new Random().nextInt(-1, 3 + entropy);
             }
         }
         return value;

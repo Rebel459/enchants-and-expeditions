@@ -1,6 +1,7 @@
 package net.legacy.enchants_and_expeditions.registry;
 
 import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
+import net.legacy.enchants_and_expeditions.block.AltarBlock;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -43,77 +44,12 @@ public class EaEBlocks {
                     .ignitedByLava()
     );
 
-    public static final Block MANA_ALTAR = register("mana_altar",
-            Block::new,
+    public static final AltarBlock ALTAR = register("altar",
+            AltarBlock::new,
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.WOOD)
                     .instrument(NoteBlockInstrument.BASEDRUM)
                     .strength(3.0F).sound(SoundType.STONE)
-                    .ignitedByLava()
-    );
-    public static final Block FROST_ALTAR = register("frost_altar",
-            Block::new,
-            BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
-                    .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(3.0F).sound(SoundType.STONE)
-                    .ignitedByLava()
-    );
-    public static final Block SCORCH_ALTAR = register("scorch_altar",
-            Block::new,
-            BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
-                    .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(3.0F).sound(SoundType.STONE)
-                    .ignitedByLava()
-    );
-    public static final Block FLOW_ALTAR = register("flow_altar",
-            Block::new,
-            BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
-                    .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(3.0F).sound(SoundType.STONE)
-                    .ignitedByLava()
-    );
-    public static final Block CHAOS_ALTAR = register("chaos_altar",
-            Block::new,
-            BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
-                    .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(3.0F).sound(SoundType.STONE)
-                    .ignitedByLava()
-    );
-    public static final Block GREED_ALTAR = register("greed_altar",
-            Block::new,
-            BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
-                    .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(3.0F).sound(SoundType.STONE)
-                    .ignitedByLava()
-    );
-    public static final Block MIGHT_ALTAR = register("might_altar",
-            Block::new,
-            BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
-                    .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(3.0F).sound(SoundType.STONE)
-                    .ignitedByLava()
-    );
-    public static final Block STABILITY_ALTAR = register("stability_altar",
-            Block::new,
-            BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
-                    .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(3.0F).sound(SoundType.STONE)
-                    .ignitedByLava()
-    );
-    public static final Block POWER_ALTAR = register("power_altar",
-            Block::new,
-            BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
-                    .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(3.0F).sound(SoundType.STONE)
-                    .ignitedByLava()
     );
 
     public static void init() {
