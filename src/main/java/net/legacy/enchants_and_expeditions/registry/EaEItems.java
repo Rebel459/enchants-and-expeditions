@@ -12,6 +12,13 @@ import java.util.function.Function;
 
 public final class EaEItems {
 
+    // Items
+    public static final Item ICE_SHARD = register("ice_shard",
+            Item::new,
+            new Item.Properties()
+                    .stacksTo(64)
+    );
+
     // Tomes
     public static final Item TOME_OF_MANA = register("tome_of_mana",
             Item::new,

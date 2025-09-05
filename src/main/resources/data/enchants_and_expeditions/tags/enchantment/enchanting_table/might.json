@@ -7,6 +7,7 @@
     "minecraft:breach",
     "minecraft:multishot",
     "minecraft:riptide",
+    "enchants_and_expeditions:arcane_protection",
     "enchants_and_expeditions:bloodlust",
     {
       "id": "legacies_and_legends:striking",

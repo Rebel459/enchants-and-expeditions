@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": "minecraft:fire_charge",
+    "B": "minecraft:bookshelf",
+    "#": "minecraft:blackstone"
+  },
+  "pattern": [
+    "I",
+    "B",
+    "#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchants_and_expeditions:infernal_bookshelf"
+  }
+}

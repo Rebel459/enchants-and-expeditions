@@ -12,6 +12,8 @@ import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.enchantment.EaEEnchantmentEffects;
 import net.legacy.enchants_and_expeditions.registry.*;
 import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
+import net.legacy.enchants_and_expeditions.sound.EaEBlockSounds;
+import net.legacy.enchants_and_expeditions.sound.EaESounds;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -71,6 +73,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		EaEItems.init();
 		EaECreativeInventorySorting.init();
 		EaESounds.init();
+		EaEBlockSounds.init();
 		EaELootTables.init();
 		EaEEnchantments.init();
 		EaEItemComponents.init();

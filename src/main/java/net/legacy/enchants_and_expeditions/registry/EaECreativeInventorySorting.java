@@ -9,6 +9,8 @@ import net.minecraft.world.level.block.Blocks;
 public class EaECreativeInventorySorting {
 
 	public static void init() {
+		addAfterInIngredients(Items.HEART_OF_THE_SEA, EaEItems.ICE_SHARD);
+
 		addAfterInIngredients(Items.OMINOUS_TRIAL_KEY, EaEItems.TOME_OF_MANA);
 		addAfterInIngredients(EaEItems.TOME_OF_MANA, EaEItems.TOME_OF_FROST);
 		addAfterInIngredients(EaEItems.TOME_OF_FROST, EaEItems.TOME_OF_SCORCH);

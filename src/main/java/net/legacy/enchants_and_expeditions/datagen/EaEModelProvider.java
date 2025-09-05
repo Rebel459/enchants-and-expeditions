@@ -16,14 +16,11 @@ public final class EaEModelProvider extends FabricModelProvider {
 	}
 
 	@Override
-	public void generateBlockStateModels(@NotNull BlockModelGenerators generator) {
-		generator.createTrivialCube(EaEBlocks.ARCANE_BOOKSHELF);
-		generator.createTrivialCube(EaEBlocks.GLACIAL_BOOKSHELF);
-		generator.createTrivialCube(EaEBlocks.INFERNAL_BOOKSHELF);
-	}
+	public void generateBlockStateModels(@NotNull BlockModelGenerators generator) {}
 
 	@Override
 	public void generateItemModels(@NotNull ItemModelGenerators generator) {
+		generator.generateFlatItem(EaEItems.ICE_SHARD, ModelTemplates.FLAT_ITEM);
 		generator.generateFlatItem(EaEItems.TOME_OF_MANA, ModelTemplates.FLAT_ITEM);
 		generator.generateFlatItem(EaEItems.TOME_OF_FROST, ModelTemplates.FLAT_ITEM);
 		generator.generateFlatItem(EaEItems.TOME_OF_SCORCH, ModelTemplates.FLAT_ITEM);

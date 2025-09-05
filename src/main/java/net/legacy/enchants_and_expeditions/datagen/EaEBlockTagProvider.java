@@ -17,6 +17,9 @@ public final class EaEBlockTagProvider extends FabricTagProvider.BlockTagProvide
     @Override
     protected void addTags(@NotNull HolderLookup.Provider arg) {
         this.getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(EaEBlocks.ARCANE_BOOKSHELF)
+                .add(EaEBlocks.GLACIAL_BOOKSHELF)
+                .add(EaEBlocks.INFERNAL_BOOKSHELF)
                 .add(EaEBlocks.ALTAR);
 
         this.getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE)

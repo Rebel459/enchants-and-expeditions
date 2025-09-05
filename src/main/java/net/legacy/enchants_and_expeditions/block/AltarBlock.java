@@ -2,7 +2,7 @@ package net.legacy.enchants_and_expeditions.block;
 
 import com.mojang.serialization.MapCodec;
 import net.legacy.enchants_and_expeditions.registry.EaEItems;
-import net.legacy.enchants_and_expeditions.registry.EaESounds;
+import net.legacy.enchants_and_expeditions.sound.EaESounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -20,11 +21,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class AltarBlock extends Block {
 	public static final MapCodec<AltarBlock> CODEC = simpleCodec(AltarBlock::new);
 	public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final EnumProperty<AltarBlockType> TOME = EnumProperty.create("tome", AltarBlockType.class);
+	private static final VoxelShape SHAPE = Block.column(16.0, 0.0, 13.0);
 	@Override
 	public MapCodec<? extends AltarBlock> codec() {
 		return CODEC;
@@ -96,6 +100,7 @@ public class AltarBlock extends Block {
 
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+		if (stack.isEmpty()) return InteractionResult.TRY_WITH_EMPTY_HAND;
 		if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_MANA)) {
 			stack.copyAndClear();
 			level.setBlock(pos, state.setValue(TOME, AltarBlockType.MANA_TOME), UPDATE_ALL);
@@ -150,7 +155,7 @@ public class AltarBlock extends Block {
 			level.playSound(player, pos, EaESounds.TOME_PLACE, SoundSource.BLOCKS);
 			return InteractionResult.SUCCESS;
 		}
-		return InteractionResult.TRY_WITH_EMPTY_HAND;
+		return InteractionResult.PASS;
 	}
 
 	@Override
@@ -171,5 +176,10 @@ public class AltarBlock extends Block {
 	@Override
 	protected BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
+	}
+
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return SHAPE;
 	}
 }

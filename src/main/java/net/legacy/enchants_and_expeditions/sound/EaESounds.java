@@ -1,4 +1,4 @@
-package net.legacy.enchants_and_expeditions.registry;
+package net.legacy.enchants_and_expeditions.sound;
 
 import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.minecraft.core.Holder;
@@ -9,8 +9,8 @@ import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class EaESounds {
-	public static final SoundEvent TOME_PLACE = register("item.tome.place");
 
+	public static final SoundEvent TOME_PLACE = register("item.tome.place");
 	public static final SoundEvent TOME_PICKUP = register("item.tome.pickup");
 
 	@NotNull

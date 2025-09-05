@@ -2,6 +2,7 @@ package net.legacy.enchants_and_expeditions.registry;
 
 import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.legacy.enchants_and_expeditions.block.AltarBlock;
+import net.legacy.enchants_and_expeditions.sound.EaEBlockSounds;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -23,34 +24,36 @@ public class EaEBlocks {
     public static final Block ARCANE_BOOKSHELF = register("arcane_bookshelf",
             Block::new,
             BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
+                    .mapColor(MapColor.TERRACOTTA_WHITE)
                     .instrument(NoteBlockInstrument.BASS)
-                    .strength(1.5F).sound(SoundType.WOOD)
-                    .ignitedByLava()
+                    .strength(1.5F)
+                    .sound(EaEBlockSounds.ARCANE_BOOKSHELF)
     );
     public static final Block GLACIAL_BOOKSHELF = register("glacial_bookshelf",
             Block::new,
             BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
+                    .mapColor(MapColor.ICE)
                     .instrument(NoteBlockInstrument.BASS)
-                    .strength(1.5F).sound(SoundType.WOOD)
+                    .strength(1.5F)
+                    .sound(EaEBlockSounds.GLACIAL_BOOKSHELF)
+                    .friction(0.98F)
                     .ignitedByLava()
     );
     public static final Block INFERNAL_BOOKSHELF = register("infernal_bookshelf",
             Block::new,
             BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
+                    .mapColor(MapColor.COLOR_BLACK)
                     .instrument(NoteBlockInstrument.BASS)
-                    .strength(1.5F).sound(SoundType.WOOD)
-                    .ignitedByLava()
+                    .strength(1.5F)
+                    .sound(EaEBlockSounds.INFERNAL_BOOKSHELF)
     );
 
     public static final AltarBlock ALTAR = register("altar",
             AltarBlock::new,
             BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.WOOD)
-                    .instrument(NoteBlockInstrument.BASEDRUM)
-                    .strength(3.0F).sound(SoundType.POLISHED_DEEPSLATE)
+                    .mapColor(MapColor.DEEPSLATE)
+                    .strength(3.0F)
+                    .sound(EaEBlockSounds.ALTAR)
                     .noOcclusion()
                     .isViewBlocking(Blocks::never)
     );

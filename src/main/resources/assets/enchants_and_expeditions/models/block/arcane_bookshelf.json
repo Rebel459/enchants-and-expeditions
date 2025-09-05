@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minecraft:block/calcite",
+    "side": "enchants_and_expeditions:block/arcane_bookshelf"
+  }
+}

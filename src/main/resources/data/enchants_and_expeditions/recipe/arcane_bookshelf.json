@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": "minecraft:lapis_lazuli",
+    "B": "minecraft:bookshelf",
+    "#": "minecraft:calcite"
+  },
+  "pattern": [
+    "I",
+    "B",
+    "#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "enchants_and_expeditions:arcane_bookshelf"
+  }
+}
