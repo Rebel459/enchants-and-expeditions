@@ -26,13 +26,5 @@ public final class EaEBlockSounds {
             SoundType.WOOD.getFallSound()
     );
 
-    public static final SoundType ALTAR = new SoundType(1F, 1F,
-            SoundType.AMETHYST.getBreakSound(),
-            SoundType.DEEPSLATE_TILES.getStepSound(),
-            SoundType.DEEPSLATE_TILES.getPlaceSound(),
-            SoundType.DEEPSLATE_TILES.getHitSound(),
-            SoundType.DEEPSLATE_TILES.getFallSound()
-    );
-
     public static void init() {}
 }

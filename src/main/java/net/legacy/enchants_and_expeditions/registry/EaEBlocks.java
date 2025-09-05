@@ -53,7 +53,7 @@ public class EaEBlocks {
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.DEEPSLATE)
                     .strength(3.0F)
-                    .sound(EaEBlockSounds.ALTAR)
+                    .sound(SoundType.DEEPSLATE_TILES)
                     .noOcclusion()
                     .isViewBlocking(Blocks::never)
     );
