@@ -13,3 +13,6 @@ accessible field net/minecraft/world/inventory/ItemCombinerMenu inputSlots Lnet/
 accessible field net/minecraft/world/inventory/AnvilMenu onlyRenaming Z
 accessible field net/minecraft/world/inventory/ItemCombinerMenu access Lnet/minecraft/world/inventory/ContainerLevelAccess;
 accessible field net/minecraft/client/gui/screens/Screen minecraft Lnet/minecraft/client/Minecraft;
+accessible field net/minecraft/world/entity/player/Inventory items Lnet/minecraft/core/NonNullList;
+accessible field net/minecraft/world/entity/player/Inventory equipment Lnet/minecraft/world/entity/EntityEquipment;
+accessible field net/minecraft/world/entity/EntityEquipment items Ljava/util/EnumMap;

@@ -8,10 +8,12 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Random;
@@ -19,6 +21,8 @@ import java.util.Random;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
 
+    @Shadow protected float lastHurt;
+    @Shadow private int lastHurtByMobTimestamp;
     @Unique
     DamageSource damageSource;
 
@@ -37,5 +41,10 @@ public abstract class LivingEntityMixin {
             }
         }
         return value;
+    }
+
+    @Inject(method = "dropAllDeathLoot", at = @At(value = "HEAD"))
+    private void getDamageSource(ServerLevel level, DamageSource damageSource, CallbackInfo ci) {
+        this.damageSource = damageSource;
     }
 }

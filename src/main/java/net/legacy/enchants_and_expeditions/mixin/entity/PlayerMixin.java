@@ -93,18 +93,4 @@ public abstract class PlayerMixin {
             }
         }
     }
-
-    @Inject(method = "killedEntity", at = @At(value = "HEAD"))
-    private void bloodlust(ServerLevel level, LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
-        Player player = Player.class.cast(this);
-        ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-
-        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BLOODLUST)) {
-            int amount = EnchantingHelper.getLevel(stack, EaEEnchantments.BLOODLUST);
-            player.setHealth(player.getHealth() + amount);
-            if (player.getHealth() > player.getMaxHealth())
-                player.setHealth(player.getMaxHealth());
-            level.playSound(player, player.blockPosition(), SoundEvents.THORNS_HIT, SoundSource.PLAYERS, 1F, 1F);
-        }
-    }
 }

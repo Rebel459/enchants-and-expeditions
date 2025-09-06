@@ -17,11 +17,14 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> SMITING = key("smiting");
 
 	// Blessing
+	public static final ResourceKey<Enchantment> BOUNDING_BLESSING = key("bounding_blessing");
 
 	// Normal
 	public static final ResourceKey<Enchantment> EXTRACTION = key("extraction");
 	public static final ResourceKey<Enchantment> BLOODLUST = key("bloodlust");
 	public static final ResourceKey<Enchantment> ENTROPY = key("entropy");
+	public static final ResourceKey<Enchantment> EQUESTRIAN = key("equestrian");
+	public static final ResourceKey<Enchantment> RECOVERY = key("recovery");
 
 	// Curse
 	public static final ResourceKey<Enchantment> FRAGILITY_CURSE = key("fragility_curse");

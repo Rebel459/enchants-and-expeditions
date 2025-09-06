@@ -1,18 +1,9 @@
 {
   "anvil_cost": 4,
   "description": {
-    "translate": "enchantment.minecraft.mending"
+    "translate": "enchantment.enchants_and_expeditions.bounding_blessing"
   },
-  "effects": {
-    "minecraft:repair_with_xp": [
-      {
-        "effect": {
-          "type": "minecraft:multiply",
-          "factor": 2.0
-        }
-      }
-    ]
-  },
+  "effects": {},
   "exclusive_set": "#enchants_and_expeditions:blessing",
   "max_cost": {
     "base": 90,

@@ -3,7 +3,13 @@
   "package": "net.legacy.enchants_and_expeditions.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "entity.AbstractHorseMixin",
+    "entity.EntityEquipmentMixin",
+    "entity.InventoryMixin",
+    "entity.LivingEntityMixin",
+    "entity.PlayerListMixin",
     "entity.PlayerMixin",
+    "entity.RandomStandGoalMixin",
     "function.EnchantRandomlyFunctionMixin",
     "function.EnchantWithLevelsFunctionMixin",
     "inventory.AnvilMenuMixin",
@@ -12,7 +18,6 @@
     "item.EnchantmentHelperMixin",
     "item.EnchantmentMixin",
     "item.ItemStackMixin",
-    "entity.LivingEntityMixin",
     "recipe.ShapedRecipeMixin"
   ],
   "injectors": {

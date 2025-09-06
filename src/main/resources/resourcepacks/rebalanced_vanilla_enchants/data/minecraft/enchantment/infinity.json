@@ -21,13 +21,13 @@
   },
   "exclusive_set": "#enchants_and_expeditions:blessing",
   "max_cost": {
-    "base": 50,
-    "per_level_above_first": 0
+    "base": 90,
+    "per_level_above_first": 30
   },
   "max_level": 1,
   "min_cost": {
-    "base": 20,
-    "per_level_above_first": 0
+    "base": 30,
+    "per_level_above_first": 30
   },
   "slots": [
     "mainhand"
