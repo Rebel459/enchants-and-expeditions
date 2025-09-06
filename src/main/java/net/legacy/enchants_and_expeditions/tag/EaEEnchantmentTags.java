@@ -2,6 +2,7 @@ package net.legacy.enchants_and_expeditions.tag;
 
 import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class EaEEnchantmentTags {
 
     public static final TagKey<Enchantment> BLESSING = register("blessing");
+    public static final TagKey<Enchantment> DISABLED_ENCHANTMENTS = register("disabled_enchantments");
 
     public static final TagKey<Enchantment> ENCHANTING_TABLE = register("enchanting_table");
 

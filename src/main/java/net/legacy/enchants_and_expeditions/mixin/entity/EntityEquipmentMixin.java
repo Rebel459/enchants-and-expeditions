@@ -30,7 +30,7 @@ public abstract class EntityEquipmentMixin {
                     target = "Lnet/minecraft/world/entity/LivingEntity;drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;"
             )
     )
-    private ItemEntity EaE$keepBoundedEquipment(LivingEntity instance, ItemStack stack, boolean randomizeMotion, boolean includeThrower, Operation<ItemEntity> original) {
+    private ItemEntity EaE$keepBoundEquipment(LivingEntity instance, ItemStack stack, boolean randomizeMotion, boolean includeThrower, Operation<ItemEntity> original) {
         if (!EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING)) {
             instance.drop(stack, true, false);
         }
@@ -45,7 +45,7 @@ public abstract class EntityEquipmentMixin {
                     opcode = Opcodes.INVOKEINTERFACE
             )
     )
-    private void EaE$keepBoundedEquipmentFromClearing(EnumMap instance, BiFunction biFunction, Operation<Void> original) {
+    private void EaE$keepBoundEquipmentFromClearing(EnumMap instance, BiFunction biFunction, Operation<Void> original) {
         this.items.replaceAll((equipmentSlot, itemStack) -> EnchantingHelper.hasEnchantment(itemStack, EaEEnchantments.BOUNDING_BLESSING) ? itemStack : ItemStack.EMPTY);
     }
 }

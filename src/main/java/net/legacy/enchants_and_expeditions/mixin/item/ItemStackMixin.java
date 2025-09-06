@@ -9,6 +9,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.TagKey;
@@ -19,7 +20,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Blocks;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -40,8 +43,13 @@ public abstract class ItemStackMixin {
 
     @Shadow public abstract Item getItem();
 
+    @Shadow @Final private PatchedDataComponentMap components;
+
+    @Shadow public abstract ItemEnchantments getEnchantments();
+
     @Inject(method = "isEnchantable", at = @At("TAIL"), cancellable = true)
     private void canEnchant(CallbackInfoReturnable<Boolean> cir) {
+        if (!EaEConfig.get.general.repeat_table_enchanting) return;
         ItemStack stack = ItemStack.class.cast(this);
         if (!cir.getReturnValue() && stack.isEnchanted() && (EnchantingHelper.enchantmentScore(stack) < EaEConfig.get.general.enchantment_limit)) {
             cir.setReturnValue(true);
@@ -59,7 +67,7 @@ public abstract class ItemStackMixin {
         }
     }
 
-    @Inject(method = "addDetailsToTooltip", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "addDetailsToTooltip", at = @At("HEAD"))
     private void addDescription(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Player player, TooltipFlag tooltipFlag, Consumer<Component> consumer, CallbackInfo ci) {
         if (this.is(EaEItemTags.ENCHANTING_POWER_PROVIDER)) {
             consumer.accept(Component.literal("")); // Line break

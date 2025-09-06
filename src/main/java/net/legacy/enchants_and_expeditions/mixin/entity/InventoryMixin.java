@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class InventoryMixin {
 
     @WrapOperation(method = "dropAll", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"))
-    public boolean EaE$keepBoundedItems(ItemStack stack, Operation<Boolean> original){
+    public boolean EaE$keepBoundItems(ItemStack stack, Operation<Boolean> original){
         if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING)) {
             return true;
         }

@@ -52,25 +52,7 @@ public class EnchantingHelper {
     }
 
     public static boolean configureEnchantments(Holder<Enchantment> enchantment) {
-        if (!EaEConfig.get.enchantments.mending_blessing && enchantment.is(Enchantments.MENDING)) {
-            return true;
-        }
-        else if (!EaEConfig.get.enchantments.infinity_blessing && enchantment.is(Enchantments.INFINITY)) {
-            return true;
-        }
-        else if (!EaEConfig.get.enchantments.channeling_blessing && enchantment.is(Enchantments.CHANNELING)) {
-            return true;
-        }
-        else if (!EaEConfig.get.enchantments.extraction && enchantment.is(EaEEnchantments.EXTRACTION)) {
-            return true;
-        }
-        else if (!EaEConfig.get.enchantments.bloodlust && enchantment.is(EaEEnchantments.BLOODLUST)) {
-            return true;
-        }
-        else if (!EaEConfig.get.enchantments.fragility_curse && enchantment.is(EaEEnchantments.FRAGILITY_CURSE)) {
-            return true;
-        }
-        return false;
+        return enchantment.is(EaEEnchantmentTags.DISABLED_ENCHANTMENTS);
     }
 
     public static int getBlessings(ItemStack stack) {

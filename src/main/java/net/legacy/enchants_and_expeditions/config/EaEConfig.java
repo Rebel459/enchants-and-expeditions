@@ -30,10 +30,7 @@ public class EaEConfig implements ConfigData {
   public GeneralConfig general = new GeneralConfig();
 
   @ConfigEntry.Gui.CollapsibleObject
-  public EnchantmentConfig enchantments = new EnchantmentConfig();
-
-  @ConfigEntry.Gui.CollapsibleObject
-  public LootConfig loot = new LootConfig();
+  public MiscConfig misc = new MiscConfig();
 
   @ConfigEntry.Gui.CollapsibleObject
   public IntegrationConfig integrations = new IntegrationConfig();
@@ -45,7 +42,7 @@ public class EaEConfig implements ConfigData {
     public int enchantment_limit = 3;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    public boolean table_multi_enchanting = true;
+    public boolean repeat_table_enchanting = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean experience_rebalance = true;
@@ -58,22 +55,7 @@ public class EaEConfig implements ConfigData {
     public boolean craftable_experience_bottles = true;
   }
 
-  public static class EnchantmentConfig {
-    @ConfigEntry.Category("config")
-    public boolean mending_blessing = true;
-    @ConfigEntry.Category("config")
-    public boolean infinity_blessing = true;
-    @ConfigEntry.Category("config")
-    public boolean channeling_blessing = true;
-    @ConfigEntry.Category("config")
-    public boolean bloodlust = true;
-    @ConfigEntry.Category("config")
-    public boolean extraction = true;
-    @ConfigEntry.Category("config")
-    public boolean fragility_curse = true;
-  }
-
-  public static class LootConfig {
+  public static class MiscConfig {
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean enchant_function_fallback = true;

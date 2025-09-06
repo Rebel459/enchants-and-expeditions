@@ -21,12 +21,15 @@ import java.util.Map;
 @Mixin(PlayerList.class)
 public abstract class PlayerListMixin {
 
+    @Unique
     private NonNullList<ItemStack> savedItems;
+    @Unique
     private Map<EquipmentSlot, ItemStack> savedEquipment;
+    @Unique
     private boolean isPlayerAlive;
 
     @Inject(method = "respawn", at = @At("HEAD"))
-    private void EaE$saveBoundedItems(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
+    private void EaE$saveBoundItems(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
         isPlayerAlive = alive;
         Inventory inventory = player.getInventory();
         // Save main inventory
@@ -49,7 +52,7 @@ public abstract class PlayerListMixin {
     }
 
     @Inject(method = "respawn", at = @At("RETURN"))
-    private void EaE$restoreBoundedItems(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
+    private void EaE$restoreBoundItems(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
         ServerPlayer newPlayer = cir.getReturnValue();
         Inventory newInventory = newPlayer.getInventory();
         // Restore main inventory

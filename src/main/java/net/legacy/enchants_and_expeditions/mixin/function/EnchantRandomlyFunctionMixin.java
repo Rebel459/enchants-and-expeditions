@@ -23,7 +23,7 @@ public class EnchantRandomlyFunctionMixin {
     @Inject(method = "run", at = @At(value = "TAIL"), cancellable = true)
     protected void EaE$enchantFallback(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir) {
         EnchantRandomlyFunction function = EnchantRandomlyFunction.class.cast(this);
-        if (function.options.isPresent() || !EaEConfig.get.loot.enchant_function_fallback) return;
+        if (function.options.isPresent() || !EaEConfig.get.misc.enchant_function_fallback) return;
 
         RandomSource randomSource = context.getRandom();
         Optional<HolderSet.Named<Enchantment>> enchantmentSet = Optional.of(context.getLevel().holderLookup(Registries.ENCHANTMENT).getOrThrow(EnchantmentTags.ON_RANDOM_LOOT));

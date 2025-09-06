@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class EaEItemTags {
     public static final TagKey<Item> ENCHANTING_POWER_PROVIDER = register("enchanting_power_provider");
+    public static final TagKey<Item> UNBOUNDABLE = register("unboundable");
 
     public static final TagKey<Item> BOOK_REPAIR_MATERIALS = register("book_repair_materials");
 
