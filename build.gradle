@@ -32,7 +32,7 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
-	// Remember to include Chiseled Enchanting in your local run/mods folder
+	include modImplementation("maven.modrinth:item-tooltips:${project.tooltips_version}")
 
 }
 
