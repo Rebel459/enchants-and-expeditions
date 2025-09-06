@@ -66,6 +66,9 @@ public class EaEConfig implements ConfigData {
 
   public static class IntegrationConfig {
     @ConfigEntry.Category("config")
+    public boolean item_tooltips_overrides = true;
+
+    @ConfigEntry.Category("config")
     public boolean legacies_and_legends_integration = true;
 
     @ConfigEntry.Category("config")

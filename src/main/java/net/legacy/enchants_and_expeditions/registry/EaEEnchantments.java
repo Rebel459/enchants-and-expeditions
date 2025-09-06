@@ -18,6 +18,11 @@ public class EaEEnchantments {
 
 	// Blessing
 	public static final ResourceKey<Enchantment> BOUNDING_BLESSING = key("bounding_blessing");
+	public static final ResourceKey<Enchantment> INFERNO_BLESSING = key("inferno_blessing");
+	public static final ResourceKey<Enchantment> FROST_BLESSING = key("frost_blessing");
+	public static final ResourceKey<Enchantment> VENGEANCE_BLESSING = key("vengeance_blessing");
+	public static final ResourceKey<Enchantment> TEMPERING_BLESSING = key("tempering_blessing");
+	public static final ResourceKey<Enchantment> FLUIDITY_BLESSING = key("icebound");
 
 	// Normal
 	public static final ResourceKey<Enchantment> EXTRACTION = key("extraction");
@@ -25,9 +30,20 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> ENTROPY = key("entropy");
 	public static final ResourceKey<Enchantment> EQUESTRIAN = key("equestrian");
 	public static final ResourceKey<Enchantment> RECOVERY = key("recovery");
+	public static final ResourceKey<Enchantment> ICEBOUND = key("icebound");
+	public static final ResourceKey<Enchantment> BLAZING = key("blazing");
+	public static final ResourceKey<Enchantment> FROSTBITE = key("frostbite");
+	public static final ResourceKey<Enchantment> QUICKSTEP = key("quickstep");
+	public static final ResourceKey<Enchantment> GALLOPING = key("galloping");
+	public static final ResourceKey<Enchantment> LEAPING = key("leaping");
+	public static final ResourceKey<Enchantment> FEROCITY = key("ferocity");
+	public static final ResourceKey<Enchantment> VELOCITY = key("velocity");
+	public static final ResourceKey<Enchantment> CLEAVING = key("cleaving");
+	public static final ResourceKey<Enchantment> PARRY = key("parry");
 
 	// Curse
 	public static final ResourceKey<Enchantment> FRAGILITY_CURSE = key("fragility_curse");
+	public static final ResourceKey<Enchantment> IMPOTENCE_CURSE = key("impotence_curse");
 
 	// Integration
 	public static final ResourceKey<Enchantment> TANGLED = keyLegaciesAndLegends("tangled");

@@ -3,6 +3,7 @@
   "package": "net.legacy.enchants_and_expeditions.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "block.BaseFireBlockMixin",
     "entity.AbstractHorseMixin",
     "entity.EntityEquipmentMixin",
     "entity.InventoryMixin",

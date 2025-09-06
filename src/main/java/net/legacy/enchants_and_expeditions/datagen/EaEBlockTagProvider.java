@@ -32,5 +32,8 @@ public final class EaEBlockTagProvider extends FabricTagProvider.BlockTagProvide
                 .add(EaEBlocks.ARCANE_BOOKSHELF)
                 .add(EaEBlocks.GLACIAL_BOOKSHELF)
                 .add(EaEBlocks.INFERNAL_BOOKSHELF);
+
+        this.getOrCreateTagBuilder(BlockTags.ICE)
+                .add(EaEBlocks.GLACIAL_BOOKSHELF);
     }
 }

@@ -86,6 +86,14 @@ public class EnchantsAndExpeditions implements ModInitializer {
 				Component.translatable("pack.enchants_and_expeditions.rebalanced_vanilla_enchants"),
 				ResourcePackActivationType.ALWAYS_ENABLED
 		);
+		if (EaEConfig.get.integrations.item_tooltips_overrides) {
+			ResourceManagerHelper.registerBuiltinResourcePack(
+					ResourceLocation.fromNamespaceAndPath(MOD_ID, "item_tooltips_overrides"),
+					modContainer.get(),
+					Component.translatable("pack.enchants_and_expeditions.item_tooltips_overrides"),
+					ResourcePackActivationType.ALWAYS_ENABLED
+			);
+		}
 
 		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.get.integrations.legacies_and_legends_integration) {
 			isLegaciesAndLegendsLoaded = true;
