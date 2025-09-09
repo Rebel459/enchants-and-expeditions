@@ -42,13 +42,11 @@ public abstract class PlayerListMixin {
         }
         // Save equipment (armor and offhand)
         savedEquipment = new HashMap<>();
-        if (inventory.equipment != null) {
-            inventory.equipment.items.forEach((slot, itemStack) -> {
-                if (shouldReserve(itemStack)) {
-                    savedEquipment.put(slot, itemStack.copy());
-                }
-            });
-        }
+        inventory.equipment.items.forEach((slot, itemStack) -> {
+            if (shouldReserve(itemStack)) {
+                savedEquipment.put(slot, itemStack.copy());
+            }
+        });
     }
 
     @Inject(method = "respawn", at = @At("RETURN"))
@@ -60,9 +58,7 @@ public abstract class PlayerListMixin {
             newInventory.items.set(i, savedItems.get(i).copy());
         }
         // Restore equipment (armor and offhand)
-        if (newInventory.equipment != null) {
-            savedEquipment.forEach((slot, itemStack) -> newInventory.equipment.set(slot, itemStack.copy()));
-        }
+        savedEquipment.forEach((slot, itemStack) -> newInventory.equipment.set(slot, itemStack.copy()));
         // Clear saved data
         savedItems = null;
         savedEquipment = null;

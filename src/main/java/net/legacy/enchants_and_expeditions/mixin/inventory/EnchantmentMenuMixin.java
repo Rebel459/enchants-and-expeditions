@@ -380,6 +380,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 EnchantmentHelper.filterCompatibleEnchantments(curseList, Util.lastOf(list));
             }
 
+            // Divinity enchantment pools
             int manaBlessingWeight = Math.max(0, this.manaAltars * 3);
             int frostBlessingWeight = Math.max(0, this.frostAltars * 3);
             int scorchBlessingWeight = Math.max(0, this.scorchAltars * 3);
@@ -387,6 +388,15 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             int chaosBlessingWeight = Math.max(0, this.chaosAltars * 3);
             int greedBlessingWeight = Math.max(0, this.greedAltars * 3);
             int mightBlessingWeight = Math.max(0, this.mightAltars * 3);
+
+            // Stability Tome Divinity reduction
+            if (random.nextInt(1, 5) <= this.stabilityAltars) manaBlessingWeight = Math.max(0, manaBlessingWeight - 1);
+            if (random.nextInt(1, 5) <= this.stabilityAltars) frostBlessingWeight = Math.max(0, frostBlessingWeight - 1);
+            if (random.nextInt(1, 5) <= this.stabilityAltars) scorchBlessingWeight = Math.max(0, scorchBlessingWeight - 1);
+            if (random.nextInt(1, 5) <= this.stabilityAltars) flowBlessingWeight = Math.max(0, flowBlessingWeight - 1);
+            if (random.nextInt(1, 5) <= this.stabilityAltars) chaosBlessingWeight = Math.max(0, chaosBlessingWeight - 1);
+            if (random.nextInt(1, 5) <= this.stabilityAltars) greedBlessingWeight = Math.max(0, greedBlessingWeight - 1);
+            if (random.nextInt(1, 5) <= this.stabilityAltars) mightBlessingWeight = Math.max(0, mightBlessingWeight - 1);
 
             int curseWeight = Math.max(0, this.stability * -1);
 
@@ -499,41 +509,49 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             locMight += iBooks / 4;
 
             locMana += aMana * 3;
-            locFlow -= aMana;
-            locChaos -= aMana;
-            locGreed -= aMana;
-            locMight -= aMana;
-            locStability -= aMana;
+            locChaos -= aMana * 5;
+            locStability -= aMana * 3;
             locDivinity += aMana;
 
             locFrost += aFrost * 3;
             locScorch -= aFrost * 5;
-            locStability -= aFrost;
+            locStability -= aFrost * 3;
             locDivinity += aFrost;
 
             locScorch += aScorch * 3;
             locFrost -= aScorch * 5;
-            locStability -= aScorch;
+            locStability -= aScorch * 3;
             locDivinity += aScorch;
 
             locFlow += aFlow * 5;
             locStability -= aFlow * 3;
+            locGreed -= aFlow * 3;
             locDivinity += aFlow;
 
             locChaos += aChaos * 5;
             locStability -= aChaos * 3;
+            locMana -= aChaos * 3;
             locDivinity += aChaos;
 
             locGreed += aGreed * 5;
             locStability -= aGreed * 3;
+            locFlow -= aGreed * 3;
             locDivinity += aGreed;
 
             locMight += aMight * 5;
             locStability -= aMight * 3;
+            locChaos -= aMight;
+            locGreed -= aMight;
+            locFlow -= aMight;
+            locScorch -= aMight;
+            locFrost -= aMight;
+            locMana -= aMight;
             locDivinity += aMight;
 
             locStability += aStability * 3;
-            locDivinity -= aStability / 2;
+            locDivinity -= aStability / 4;
+
+            locMight -= aPower * 5;
 
             this.totalBookshelves = tBooks;
             this.bookshelves = nBooks;
