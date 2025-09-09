@@ -216,7 +216,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     for (int j = 0; j < 3; j++) {
                         this.costs[j] = EnchantmentHelper.getEnchantmentCost(this.random, j, ix, itemStack);
                         if (this.costs[j] >= 1) {
-                            this.costs[j] += itemStack.getEnchantments().size() * 3 + EnchantingHelper.getBlessings(itemStack) * 3 - EnchantingHelper.getCurses(itemStack) * 3 + this.totalAltars * 3 - this.powerAltars * 6;
+                            this.costs[j] += itemStack.getEnchantments().size() * 3 + EnchantingHelper.getBlessings(itemStack) * 3 - EnchantingHelper.getCurses(itemStack) * 3 + this.totalAltars * 3 - this.stabilityAltars * 6 - this.powerAltars * 6;
                         }
                         if (EnchantmentHelper.getEnchantmentCost(this.random, j, ix, itemStack) >= 1) {
                             if (this.costs[0] < 1) {
@@ -398,7 +398,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             if (random.nextInt(1, 5) <= this.stabilityAltars) greedBlessingWeight = Math.max(0, greedBlessingWeight - 1);
             if (random.nextInt(1, 5) <= this.stabilityAltars) mightBlessingWeight = Math.max(0, mightBlessingWeight - 1);
 
-            int curseWeight = Math.max(0, this.stability * -1);
+            int curseWeight = Math.max(0, this.stability * -1 * 3);
 
             int totalWeight = this.mana + this.frost + this.scorch + this.flow + this.chaos + this.greed + this.might + curseWeight + manaBlessingWeight + frostBlessingWeight + scorchBlessingWeight + flowBlessingWeight + chaosBlessingWeight + greedBlessingWeight + mightBlessingWeight;
             if (totalWeight <= 0) break;
@@ -510,36 +510,36 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
             locMana += aMana * 3;
             locChaos -= aMana * 5;
-            locStability -= aMana * 3;
+            locStability -= aMana;
             locDivinity += aMana;
 
             locFrost += aFrost * 3;
             locScorch -= aFrost * 5;
-            locStability -= aFrost * 3;
+            locStability -= aFrost;
             locDivinity += aFrost;
 
             locScorch += aScorch * 3;
             locFrost -= aScorch * 5;
-            locStability -= aScorch * 3;
+            locStability -= aScorch;
             locDivinity += aScorch;
 
             locFlow += aFlow * 5;
-            locStability -= aFlow * 3;
+            locStability -= aFlow;
             locGreed -= aFlow * 3;
             locDivinity += aFlow;
 
             locChaos += aChaos * 5;
-            locStability -= aChaos * 3;
+            locStability -= aChaos;
             locMana -= aChaos * 3;
             locDivinity += aChaos;
 
             locGreed += aGreed * 5;
-            locStability -= aGreed * 3;
+            locStability -= aGreed;
             locFlow -= aGreed * 3;
             locDivinity += aGreed;
 
             locMight += aMight * 5;
-            locStability -= aMight * 3;
+            locStability -= aMight;
             locChaos -= aMight;
             locGreed -= aMight;
             locFlow -= aMight;
@@ -548,10 +548,16 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             locMana -= aMight;
             locDivinity += aMight;
 
-            locStability += aStability * 3;
+            locStability += aStability;
             locDivinity -= aStability / 4;
 
             locMight -= aPower * 5;
+            locChaos += aPower;
+            locGreed += aPower;
+            locFlow += aPower;
+            locScorch += aPower;
+            locFrost += aPower;
+            locMana += aPower;
 
             this.totalBookshelves = tBooks;
             this.bookshelves = nBooks;
