@@ -72,7 +72,7 @@ public abstract class LivingEntityMixin {
         if (damageSource.getEntity() instanceof LivingEntity attacker) {
             ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
             if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.INFERNO_BLESSING) && entity.isOnFire()) {
-                int setFireTicks = (int) (entity.getRemainingFireTicks() + amount * 10);
+                int setFireTicks = entity.getRemainingFireTicks() + 50;
                 if (setFireTicks > 200) setFireTicks = 200;
                 entity.setRemainingFireTicks(setFireTicks);
             }
@@ -83,7 +83,7 @@ public abstract class LivingEntityMixin {
         if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
             ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
             if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.INFERNO_BLESSING)) {
-                value += 2;
+                value += 1;
             }
         }
         return value;

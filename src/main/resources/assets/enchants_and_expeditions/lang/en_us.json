@@ -6,9 +6,11 @@
   "desc.enchants_and_expeditions.decreases": "Reduces",
   "desc.enchants_and_expeditions.blessing": "Blessing",
   "desc.enchants_and_expeditions.curse": "Curse",
-  "desc.enchants_and_expeditions.power": "Experience",
+  "desc.enchants_and_expeditions.experience": "Experience",
+  "desc.enchants_and_expeditions.enchanting": "Enchanting",
   "desc.enchants_and_expeditions.chance": "chance",
   "desc.enchants_and_expeditions.requirements": "requirements",
+  "desc.enchants_and_expeditions.power": "power",
 
   "desc.enchants_and_expeditions.mana": "Mana",
   "desc.enchants_and_expeditions.frost": "Frost",
@@ -17,7 +19,7 @@
   "desc.enchants_and_expeditions.chaos": "Chaos",
   "desc.enchants_and_expeditions.greed": "Greed",
   "desc.enchants_and_expeditions.might": "Might",
-  "desc.enchants_and_expeditions.stability": "Stability",
+  "desc.enchants_and_expeditions.corruption": "Corruption",
   "desc.enchants_and_expeditions.divinity": "Divinity",
 
   "enchantment.enchants_and_expeditions.arcane_protection": "Arcane Protection",

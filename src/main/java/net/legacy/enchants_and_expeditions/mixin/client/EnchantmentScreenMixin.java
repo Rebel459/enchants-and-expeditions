@@ -100,7 +100,7 @@ public abstract class EnchantmentScreenMixin {
         int chaos = enchantingAttributes.chaos();
         int greed = enchantingAttributes.greed();
         int might = enchantingAttributes.might();
-        int stability = enchantingAttributes.stability();
+        int corruption = enchantingAttributes.corruption();
         int divinity = enchantingAttributes.divinity();
 
         // Calculate tooltip background dimensions
@@ -109,15 +109,15 @@ public abstract class EnchantmentScreenMixin {
         int textWidth = 100; // Base width, adjusted based on longest text
 
         // Calculate exact width using Font#width
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.mana").append(": " + mana)));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.frost").append(": " + frost)));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + scorch)));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.flow").append(": " + flow)));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + chaos)));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.greed").append(": " + greed)));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.might").append(": " + might)));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.stability").append(": " + stability)));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + divinity)));
+        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana))));
+        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost))));
+        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch))));
+        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow))));
+        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos))));
+        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed))));
+        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.might").append(": " + Math.max(0, might))));
+        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption))));
+        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity))));
 
         // Position tooltip relative to the enchanting table GUI
         int x = 10;
@@ -144,15 +144,15 @@ public abstract class EnchantmentScreenMixin {
 
         // Draw attribute text
         y += 1; // Center text in tooltip box
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.mana").append(": " + mana), x, y, ChatFormatting.DARK_BLUE.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.frost").append(": " + frost), x, y, ChatFormatting.DARK_AQUA.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + scorch), x, y, ChatFormatting.DARK_RED.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.flow").append(": " + flow), x, y, ChatFormatting.AQUA.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + chaos), x, y, ChatFormatting.DARK_GRAY.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.greed").append(": " + greed), x, y, ChatFormatting.YELLOW.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.might").append(": " + might), x, y, ChatFormatting.DARK_GREEN.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.stability").append(": " + stability), x, y, ChatFormatting.RED.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + divinity), x, y, ChatFormatting.GOLD.getColor());
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana)), x, y, ChatFormatting.DARK_BLUE.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost)), x, y, ChatFormatting.DARK_AQUA.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch)), x, y, ChatFormatting.DARK_RED.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow)), x, y, ChatFormatting.AQUA.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos)), x, y, ChatFormatting.DARK_GRAY.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed)), x, y, ChatFormatting.YELLOW.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.might").append(": " + Math.max(0, might)), x, y, ChatFormatting.DARK_GREEN.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption)), x, y, ChatFormatting.RED.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity)), x, y, ChatFormatting.GOLD.getColor());
     }
 
     @Unique

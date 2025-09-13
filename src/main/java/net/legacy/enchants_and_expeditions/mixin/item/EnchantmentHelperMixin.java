@@ -24,14 +24,6 @@ import static net.minecraft.world.item.enchantment.EnchantmentHelper.selectEncha
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
 
-    @Inject(method = "getAvailableEnchantmentResults", at = @At("HEAD"), cancellable = true)
-    private static void EaE$filterDisabledEnchantments(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<Stream<Holder<Enchantment>>> cir) {
-        possibleEnchantments = possibleEnchantments.filter(enchantment -> {
-            return !EnchantingHelper.configureEnchantments(enchantment);
-        });
-        cir.setReturnValue(possibleEnchantments);
-    }
-
     @Inject(method = "enchantItem(Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/item/ItemStack;ILjava/util/stream/Stream;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"), cancellable = true)
     private static void EaE$enchantItem(RandomSource random, ItemStack stack, int level, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<ItemStack> cir) {
         if (EaEConfig.get.general.enchantment_limit != 0) return;
@@ -94,7 +86,7 @@ public class EnchantmentHelperMixin {
                     break;
                 }
             }
-            if (isCompatible) {
+            if (isCompatible && !EnchantingHelper.configureEnchantments(instance.enchantment())) {
                 filteredResults.add(instance);
             }
         }

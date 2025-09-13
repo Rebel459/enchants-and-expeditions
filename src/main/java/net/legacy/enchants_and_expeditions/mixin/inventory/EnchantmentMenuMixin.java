@@ -71,7 +71,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Unique private int chaosAltars = 0;
     @Unique private int greedAltars = 0;
     @Unique private int mightAltars = 0;
-    @Unique private int stabilityAltars = 0;
+    @Unique private int corruptionAltars = 0;
     @Unique private int powerAltars = 0;
 
     @Unique private int mana = 0;
@@ -81,7 +81,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Unique private int chaos = 0;
     @Unique private int greed = 0;
     @Unique private int might = 0;
-    @Unique private int stability = 0;
+    @Unique private int corruption = 0;
     @Unique private int divinity = 0;
 
     @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/inventory/ContainerLevelAccess;)V", at = @At("TAIL"))
@@ -143,7 +143,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     this.chaosAltars = 0;
                     this.greedAltars = 0;
                     this.mightAltars = 0;
-                    this.stabilityAltars = 0;
+                    this.corruptionAltars = 0;
                     this.powerAltars = 0;
 
                     for (BlockPos off : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
@@ -201,7 +201,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                                 this.totalAltars++;
                             }
                             if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.STABILITY_TOME) {
-                                this.stabilityAltars++;
+                                this.corruptionAltars++;
                                 this.totalAltars++;
                             }
                             if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.POWER_TOME) {
@@ -216,7 +216,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     for (int j = 0; j < 3; j++) {
                         this.costs[j] = EnchantmentHelper.getEnchantmentCost(this.random, j, ix, itemStack);
                         if (this.costs[j] >= 1) {
-                            this.costs[j] += itemStack.getEnchantments().size() * 3 + EnchantingHelper.getBlessings(itemStack) * 3 - EnchantingHelper.getCurses(itemStack) * 3 + this.totalAltars * 3 - this.stabilityAltars * 6 - this.powerAltars * 6;
+                            this.costs[j] += itemStack.getEnchantments().size() * 3 + EnchantingHelper.getBlessings(itemStack) * 3 - EnchantingHelper.getCurses(itemStack) * 3 + this.totalAltars * 3 - this.corruptionAltars * 6 - this.powerAltars * 6;
                         }
                         if (EnchantmentHelper.getEnchantmentCost(this.random, j, ix, itemStack) >= 1) {
                             if (this.costs[0] < 1) {
@@ -236,7 +236,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
                     for (int jx = 0; jx < 3; jx++) {
                         if (this.costs[jx] > 0) {
-                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx] + this.powerAltars * 3);
+                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx] + this.powerAltars * 3 + this.corruptionAltars * 3);
                             if (list != null && !list.isEmpty()) {
                                 EnchantmentInstance inst = list.get(this.random.nextInt(list.size()));
                                 this.enchantClue[jx] = idMap.getId(inst.enchantment());
@@ -309,10 +309,11 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> mightBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EaEEnchantmentTags.ENCHANTING_TABLE_MIGHT_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
 
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> stabilityCurses = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> corruptionCurses = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EnchantmentTags.CURSE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-
-        enchantingPower += 1 + random.nextInt(enchantable.value() / 4 + 1) + random.nextInt(enchantable.value() / 4 + 1);
+        
+        int enchantability = Math.max(0, enchantable.value() + this.powerAltars * 3 - this.corruptionAltars * 3);
+        enchantingPower += 1 + random.nextInt(enchantability / 4 + 1) + random.nextInt(enchantability / 4 + 1);
         float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
         enchantingPower = Mth.clamp(Math.round((float)enchantingPower + (float)enchantingPower * f), 1, Integer.MAX_VALUE);
 
@@ -332,7 +333,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         List<EnchantmentInstance> greedBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, greedBlessings.stream());
         List<EnchantmentInstance> mightBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, mightBlessings.stream());
 
-        List<EnchantmentInstance> curseList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, stabilityCurses.stream());
+        List<EnchantmentInstance> curseList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, corruptionCurses.stream());
 
         manaList = EnchantingHelper.evaluateEnchantments(stack, manaList);
         frostList = EnchantingHelper.evaluateEnchantments(stack, frostList);
@@ -389,16 +390,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             int greedBlessingWeight = Math.max(0, this.greedAltars * 3);
             int mightBlessingWeight = Math.max(0, this.mightAltars * 3);
 
-            // Stability Tome Divinity reduction
-            if (random.nextInt(1, 5) <= this.stabilityAltars) manaBlessingWeight = Math.max(0, manaBlessingWeight - 1);
-            if (random.nextInt(1, 5) <= this.stabilityAltars) frostBlessingWeight = Math.max(0, frostBlessingWeight - 1);
-            if (random.nextInt(1, 5) <= this.stabilityAltars) scorchBlessingWeight = Math.max(0, scorchBlessingWeight - 1);
-            if (random.nextInt(1, 5) <= this.stabilityAltars) flowBlessingWeight = Math.max(0, flowBlessingWeight - 1);
-            if (random.nextInt(1, 5) <= this.stabilityAltars) chaosBlessingWeight = Math.max(0, chaosBlessingWeight - 1);
-            if (random.nextInt(1, 5) <= this.stabilityAltars) greedBlessingWeight = Math.max(0, greedBlessingWeight - 1);
-            if (random.nextInt(1, 5) <= this.stabilityAltars) mightBlessingWeight = Math.max(0, mightBlessingWeight - 1);
-
-            int curseWeight = Math.max(0, this.stability * -1 * 3);
+            int curseWeight = Math.max(0, this.corruption * 3);
 
             int totalWeight = this.mana + this.frost + this.scorch + this.flow + this.chaos + this.greed + this.might + curseWeight + manaBlessingWeight + frostBlessingWeight + scorchBlessingWeight + flowBlessingWeight + chaosBlessingWeight + greedBlessingWeight + mightBlessingWeight;
             if (totalWeight <= 0) break;
@@ -460,7 +452,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     public Attributes calculateAttributes() {
         Attributes result = this.access.evaluate((level, tablePos) -> {
             int tBooks = 0, nBooks = 0, aBooks = 0, gBooks = 0, iBooks = 0;
-            int tAltars = 0, aMana = 0, aFrost = 0, aScorch = 0, aFlow = 0, aChaos = 0, aGreed = 0, aMight = 0, aStability = 0, aPower = 0;
+            int tAltars = 0, aMana = 0, aFrost = 0, aScorch = 0, aFlow = 0, aChaos = 0, aGreed = 0, aMight = 0, aCorruption = 0, aPower = 0;
 
             // Count bookshelves and altars
             for (BlockPos off : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
@@ -478,12 +470,12 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.CHAOS_TOME) { aChaos++; tAltars++; }
                     if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.GREED_TOME) { aGreed++; tAltars++; }
                     if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.MIGHT_TOME) { aMight++; tAltars++; }
-                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.STABILITY_TOME) { aStability++; tAltars++; }
+                    if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.STABILITY_TOME) { aCorruption++; tAltars++; }
                     if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.POWER_TOME) { aPower++; tAltars++; }
                 }
             }
 
-            int locMana = 0, locFrost = 0, locScorch = 0, locFlow = 0, locChaos = 0, locGreed = 0, locMight = 0, locStability = 0, locDivinity = 0;
+            int locMana = 0, locFrost = 0, locScorch = 0, locFlow = 0, locChaos = 0, locGreed = 0, locMight = 0, locCorruption = 0, locDivinity = 0;
 
             locMana += nBooks / 2;
             locFrost += nBooks / 4;
@@ -510,36 +502,36 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
             locMana += aMana * 3;
             locChaos -= aMana * 5;
-            locStability -= aMana;
+            locCorruption -= aMana;
             locDivinity += aMana;
 
             locFrost += aFrost * 3;
             locScorch -= aFrost * 5;
-            locStability -= aFrost;
+            locCorruption -= aFrost;
             locDivinity += aFrost;
 
             locScorch += aScorch * 3;
             locFrost -= aScorch * 5;
-            locStability -= aScorch;
+            locCorruption -= aScorch;
             locDivinity += aScorch;
 
             locFlow += aFlow * 5;
-            locStability -= aFlow;
+            locCorruption -= aFlow;
             locGreed -= aFlow * 3;
             locDivinity += aFlow;
 
             locChaos += aChaos * 5;
-            locStability -= aChaos;
+            locCorruption -= aChaos;
             locMana -= aChaos * 3;
             locDivinity += aChaos;
 
             locGreed += aGreed * 5;
-            locStability -= aGreed;
+            locCorruption -= aGreed;
             locFlow -= aGreed * 3;
             locDivinity += aGreed;
 
             locMight += aMight * 5;
-            locStability -= aMight;
+            locCorruption -= aMight;
             locChaos -= aMight;
             locGreed -= aMight;
             locFlow -= aMight;
@@ -548,8 +540,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             locMana -= aMight;
             locDivinity += aMight;
 
-            locStability += aStability;
-            locDivinity -= aStability / 4;
+            locCorruption += aCorruption;
 
             locMight -= aPower * 5;
             locChaos += aPower;
@@ -573,7 +564,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             this.chaosAltars = aChaos;
             this.greedAltars = aGreed;
             this.mightAltars = aMight;
-            this.stabilityAltars = aStability;
+            this.corruptionAltars = aCorruption;
             this.powerAltars = aPower;
 
             this.mana = locMana;
@@ -583,11 +574,11 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             this.chaos = locChaos;
             this.greed = locGreed;
             this.might = locMight;
-            this.stability = locStability;
+            this.corruption = locCorruption;
             this.divinity = locDivinity;
 
-            return new Attributes(locMana, locFrost, locScorch, locFlow, locChaos, locGreed, locMight, locStability, locDivinity);
-        }, new Attributes(this.mana, this.frost, this.scorch, this.flow, this.chaos, this.greed, this.might, Math.max(this.stability, 10), this.divinity));
+            return new Attributes(locMana, locFrost, locScorch, locFlow, locChaos, locGreed, locMight, locCorruption, locDivinity);
+        }, new Attributes(this.mana, this.frost, this.scorch, this.flow, this.chaos, this.greed, this.might, Math.max(this.corruption, 10), this.divinity));
 
         return result;
     }

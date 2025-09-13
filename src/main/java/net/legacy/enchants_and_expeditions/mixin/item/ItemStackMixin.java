@@ -79,7 +79,7 @@ public abstract class ItemStackMixin {
             String chaos = "0";
             String greed = "0";
             String might = "0";
-            String stability = "0";
+            String corruption = "0";
             String divinity = "0";
             if (this.is(Blocks.BOOKSHELF.asItem())) {
                 mana = "0.5";
@@ -95,7 +95,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("scorch", scorch));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEBlocks.ARCANE_BOOKSHELF.asItem())) {
@@ -107,7 +107,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("mana", mana));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEBlocks.GLACIAL_BOOKSHELF.asItem())) {
@@ -119,7 +119,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("frost", frost));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEBlocks.INFERNAL_BOOKSHELF.asItem())) {
@@ -131,99 +131,99 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("scorch", scorch));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEItems.TOME_OF_MANA)) {
                 mana = "3.0";
                 chaos = "-5.0";
-                stability = "-1.0";
+                corruption = "1.0";
                 divinity = "1.0";
                 consumer.accept(altarTooltip());
                 consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
-                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("mana", mana));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEItems.TOME_OF_FROST)) {
                 frost = "3.0";
                 scorch = "-5.0";
-                stability = "-1.0";
+                corruption = "1.0";
                 divinity = "1.0";
                 consumer.accept(altarTooltip());
                 consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
-                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("frost", frost));
                 consumer.accept(attributeTooltip("scorch", scorch));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEItems.TOME_OF_SCORCH)) {
                 scorch = "3.0";
                 frost = "-5.0";
-                stability = "-1.0";
+                corruption = "1.0";
                 divinity = "1.0";
                 consumer.accept(altarTooltip());
                 consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
-                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("scorch", scorch));
                 consumer.accept(attributeTooltip("frost", frost));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEItems.TOME_OF_FLOW)) {
                 flow = "5.0";
                 greed = "-3.0";
-                stability = "-1.0";
+                corruption = "1.0";
                 divinity = "1.0";
                 consumer.accept(altarTooltip());
                 consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
-                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_flow", flow));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEItems.TOME_OF_CHAOS)) {
                 chaos = "5.0";
                 mana = "-3.0";
-                stability = "-1.0";
+                corruption = "1.0";
                 divinity = "1.0";
                 consumer.accept(altarTooltip());
                 consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
-                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_chaos", chaos));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEItems.TOME_OF_GREED)) {
                 greed = "5.0";
                 flow = "-3.0";
-                stability = "-1.0";
+                corruption = "1.0";
                 divinity = "1.0";
                 consumer.accept(altarTooltip());
                 consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
-                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_greed", greed));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEItems.TOME_OF_MIGHT)) {
@@ -234,11 +234,11 @@ public abstract class ItemStackMixin {
                 scorch = "-1.0";
                 frost = "-1.0";
                 mana = "-1.0";
-                stability = "-1.0";
+                corruption = "1.0";
                 divinity = "1.0";
                 consumer.accept(altarTooltip());
                 consumer.accept(attributeTooltip("increases_blessing_chance", divinity));
-                consumer.accept(attributeTooltip("increases_curse_chance", stability));
+                consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_might", might));
                 consumer.accept(attributeTooltip("mana", mana));
@@ -246,19 +246,18 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("scorch", scorch));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEItems.TOME_OF_STABILITY)) {
-                stability = "1.0";
-                divinity = "-0.25";
+                corruption = "-1.0";
                 consumer.accept(altarTooltip());
-                consumer.accept(attributeTooltip("decreases_blessing_chance", divinity));
-                consumer.accept(attributeTooltip("decreases_curse_chance", stability));
+                consumer.accept(attributeTooltip("decreases_curse_chance", corruption));
+                consumer.accept(attributeTooltip("decreases_enchanting_power", String.valueOf(3)));
                 consumer.accept(attributeTooltip("decreases_experience_requirements", String.valueOf(3)));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
             else if (this.is(EaEItems.TOME_OF_POWER)) {
@@ -270,13 +269,14 @@ public abstract class ItemStackMixin {
                 frost = "1.0";
                 mana = "1.0";
                 consumer.accept(altarTooltip());
+                consumer.accept(attributeTooltip("increases_enchanting_power", String.valueOf(3)));
                 consumer.accept(attributeTooltip("decreases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("mana", mana));
                 consumer.accept(attributeTooltip("frost", frost));
                 consumer.accept(attributeTooltip("scorch", scorch));
                 if (Screen.hasShiftDown()) {
                     consumer.accept(Component.literal(""));
-                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, stability, divinity));
+                    consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
             }
         }
@@ -306,11 +306,17 @@ public abstract class ItemStackMixin {
         else if (attribute == "decreases_curse_chance") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.curse").withStyle(ChatFormatting.RED)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
         }
+        else if (attribute == "increases_enchanting_power") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.enchanting").withStyle(ChatFormatting.GREEN)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.power").withStyle(ChatFormatting.BLUE));
+        }
+        else if (attribute == "decreases_enchanting_power") {
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.enchanting").withStyle(ChatFormatting.GREEN)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.power").withStyle(ChatFormatting.BLUE));
+        }
         else if (attribute == "increases_experience_requirements") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.power").withStyle(ChatFormatting.GREEN)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.requirements").withStyle(ChatFormatting.BLUE));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.experience").withStyle(ChatFormatting.GREEN)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.requirements").withStyle(ChatFormatting.BLUE));
         }
         else if (attribute == "decreases_experience_requirements") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.power").withStyle(ChatFormatting.GREEN)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.requirements").withStyle(ChatFormatting.BLUE));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.experience").withStyle(ChatFormatting.GREEN)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.requirements").withStyle(ChatFormatting.BLUE));
         }
         else if (attribute == "mana") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.mana").withColor(ChatFormatting.DARK_BLUE.getColor()).append(": " + amount));
@@ -337,7 +343,7 @@ public abstract class ItemStackMixin {
     }
 
     @Unique
-    private MutableComponent statTooltip(String mana, String frost, String scorch, String flow, String chaos, String greed, String might, String stability, String divinity) {
+    private MutableComponent statTooltip(String mana, String frost, String scorch, String flow, String chaos, String greed, String might, String corruption, String divinity) {
         return Component.literal(" ")
                 .append(Component.literal(mana + ", ").withStyle(ChatFormatting.DARK_BLUE))
                 .append(Component.literal(frost + ", ").withStyle(ChatFormatting.DARK_AQUA))
@@ -346,7 +352,7 @@ public abstract class ItemStackMixin {
                 .append(Component.literal(chaos + ", ").withStyle(ChatFormatting.DARK_GRAY))
                 .append(Component.literal(greed + ", ").withStyle(ChatFormatting.YELLOW))
                 .append(Component.literal(might + ", ").withStyle(ChatFormatting.DARK_GREEN))
-                .append(Component.literal(stability + ", ").withStyle(ChatFormatting.RED))
+                .append(Component.literal(corruption + ", ").withStyle(ChatFormatting.RED))
                 .append(Component.literal(divinity).withStyle(ChatFormatting.GOLD));
     }
 }
