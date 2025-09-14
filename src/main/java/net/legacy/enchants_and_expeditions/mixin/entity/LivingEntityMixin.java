@@ -2,6 +2,7 @@ package net.legacy.enchants_and_expeditions.mixin.entity;
 
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -13,6 +14,8 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,6 +34,12 @@ public abstract class LivingEntityMixin {
 
     @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot slot);
 
+    @Shadow public abstract @NotNull ItemStack getWeaponItem();
+
+    @Shadow public abstract @Nullable ItemStack getItemBlockingWith();
+
+    @Shadow public abstract void heal(float healAmount);
+
     @Unique
     DamageSource damageSource;
 
@@ -40,18 +49,6 @@ public abstract class LivingEntityMixin {
     @Inject(method = "hurtServer", at = @At(value = "HEAD"))
     private void getDamageSource(ServerLevel level, DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
         this.damageSource = damageSource;
-    }
-
-    @Inject(method = "getFrictionInfluencedSpeed", at = @At(value = "TAIL"), cancellable = true)
-    private void icebound(float friction, CallbackInfoReturnable<Float> cir) {
-        LivingEntity entity = LivingEntity.class.cast(this);
-        ItemStack stack;
-        if (entity instanceof Animal) stack = entity.getItemBySlot(EquipmentSlot.BODY);
-        else stack = entity.getItemBySlot(EquipmentSlot.FEET);
-        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.ICEBOUND) && entity.getBlockStateOn().is(Blocks.ICE)) {
-            int multiplier = 1 + EnchantingHelper.getLevel(stack, EaEEnchantments.ICEBOUND) / 10;
-            cir.setReturnValue(cir.getReturnValue() * multiplier);
-        }
     }
 
     @Inject(method = "getSpeed", at = @At(value = "TAIL"), cancellable = true)
@@ -168,6 +165,7 @@ public abstract class LivingEntityMixin {
     @Unique
     private void second() {
         temperingBlessing();
+        fluidityBlessing();
     }
 
     @Unique
@@ -179,6 +177,39 @@ public abstract class LivingEntityMixin {
                     stack.setDamageValue(stack.getDamageValue() - 1);
                     if (stack.getDamageValue() < 0) stack.setDamageValue(0);
                 }
+            }
+        }
+    }
+
+    @Unique
+    private void fluidityBlessing() {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.isArmor()) {
+                ItemStack stack = this.getItemBySlot(slot);
+                if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.FLUIDITY_BLESSING)) {
+                    this.heal(0.5F);
+                }
+            }
+        }
+    }
+
+    @Inject(method = "getSecondsToDisableBlocking", at = @At(value = "TAIL"), cancellable = true)
+    private void cleaving(CallbackInfoReturnable<Float> cir) {
+        float disableTime = cir.getReturnValue();
+        if (disableTime <= 0) return;
+        ItemStack stack = this.getWeaponItem();
+        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.CLEAVING)) {
+            disableTime = disableTime + EnchantingHelper.getLevel(stack, EaEEnchantments.CLEAVING);
+            cir.setReturnValue(disableTime);
+        }
+    }
+
+    @Inject(method = "getSecondsToDisableBlocking", at = @At(value = "HEAD"), cancellable = true)
+    private void parry(CallbackInfoReturnable<Float> cir) {
+        ItemStack stack = this.getItemBlockingWith();
+        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.PARRY)) {
+            if (new Random().nextInt(1, 6) <= EnchantingHelper.getLevel(stack, EaEEnchantments.PARRY)) {
+                cir.setReturnValue(0F);
             }
         }
     }

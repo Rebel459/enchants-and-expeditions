@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "minecraft:soul_speed"
+    "minecraft:soul_speed",
+    "enchants_and_expeditions:icebound",
+    "enchants_and_expeditions:blazing"
   ]
 }

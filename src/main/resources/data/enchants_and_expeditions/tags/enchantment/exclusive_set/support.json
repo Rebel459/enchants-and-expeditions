@@ -1,8 +1,9 @@
 {
   "values": [
+    "minecraft:fire_aspect",
     "minecraft:sweeping_edge",
     "minecraft:knockback",
-    "minecraft:fire_aspect",
+    "enchants_and_expeditions:bloodlust",
     {
       "id": "remnants:dueling",
       "required": false

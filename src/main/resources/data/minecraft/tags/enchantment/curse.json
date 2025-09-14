@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "enchants_and_expeditions:fragility_curse"
+    "enchants_and_expeditions:fragility_curse",
+    "enchants_and_expeditions:impotence_curse"
   ]
 }

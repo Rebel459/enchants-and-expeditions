@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:power",
+    "minecraft:quick_charge",
+    "enchants_and_expeditions:velocity"
+  ]
+}

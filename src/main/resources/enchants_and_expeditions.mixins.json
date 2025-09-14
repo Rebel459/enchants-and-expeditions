@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "block.BaseFireBlockMixin",
+    "entity.AbstractArrowMixin",
     "entity.AbstractHorseMixin",
     "entity.EntityEquipmentMixin",
     "entity.EntityMixin",

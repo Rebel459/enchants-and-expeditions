@@ -2,10 +2,15 @@ package net.legacy.enchants_and_expeditions.mixin.item;
 
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.*;
@@ -104,5 +109,13 @@ public class EnchantmentHelperMixin {
             return stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
         else
             return stack.is(Items.BOOK);
+    }
+
+    @Inject(method = "modifyDamage", at = @At("TAIL"), cancellable = true)
+    private static void EaE$impotenceCurse(ServerLevel level, ItemStack tool, Entity entity, DamageSource damageSource, float damage, CallbackInfoReturnable<Float> cir) {
+        if (!(EnchantingHelper.hasEnchantment(tool, EaEEnchantments.IMPOTENCE_CURSE) && damageSource.is(DamageTypeTags.IS_PROJECTILE))) return;
+        float oldDamage = cir.getReturnValue();
+        float newDamage = Math.max(1, oldDamage / 2 - 1);
+        cir.setReturnValue(Math.min(oldDamage, newDamage));
     }
 }

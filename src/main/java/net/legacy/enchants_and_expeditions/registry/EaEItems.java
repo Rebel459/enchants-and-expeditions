@@ -36,6 +36,7 @@ public final class EaEItems {
             Item::new,
             new Item.Properties()
                     .rarity(Rarity.RARE)
+                    .fireResistant()
                     .stacksTo(1)
     );
     public static final Item TOME_OF_FLOW = register("tome_of_flow",

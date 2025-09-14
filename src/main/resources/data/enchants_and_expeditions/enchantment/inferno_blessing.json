@@ -3,9 +3,7 @@
   "description": {
     "translate": "enchantment.enchants_and_expeditions.inferno_blessing"
   },
-  "effects": {
-
-  },
+  "effects": {},
   "exclusive_set": "#enchants_and_expeditions:blessing",
   "max_cost": {
     "base": 90,

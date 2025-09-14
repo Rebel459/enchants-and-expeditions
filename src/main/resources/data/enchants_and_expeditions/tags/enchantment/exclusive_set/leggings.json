@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:swift_sneak",
+    "enchants_and_expeditions:quickstep"
+  ]
+}

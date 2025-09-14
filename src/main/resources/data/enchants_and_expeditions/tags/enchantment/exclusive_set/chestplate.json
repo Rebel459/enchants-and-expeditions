@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:thorns",
+    "enchants_and_expeditions:frostbite",
     {
       "id": "progression_reborn:collection",
       "required": false
