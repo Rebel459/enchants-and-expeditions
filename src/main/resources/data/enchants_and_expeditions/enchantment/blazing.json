@@ -1,0 +1,22 @@
+{
+  "anvil_cost": 6,
+  "description": {
+    "translate": "enchantment.enchants_and_expeditions.blazing"
+  },
+  "effects": {},
+  "exclusive_set": "#minecraft:exclusive_set/boots",
+  "max_cost": {
+    "base": 25,
+    "per_level_above_first": 10
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 10,
+    "per_level_above_first": 10
+  },
+  "slots": [
+    "armor"
+  ],
+  "supported_items": "#enchants_and_expeditions:enchantable/horse_and_foot_armor",
+  "weight": 2
+}

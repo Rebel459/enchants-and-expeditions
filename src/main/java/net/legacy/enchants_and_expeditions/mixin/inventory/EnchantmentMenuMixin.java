@@ -260,7 +260,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
     @Inject(method = "getEnchantmentList", at = @At(value = "HEAD"), cancellable = true)
     private void EaE$getEnchantmentList(RegistryAccess registryAccess, ItemStack stack, int slot, int enchantingPower, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
-        this.random.setSeed((long)(this.enchantmentSeed.get() + slot));
+        this.random.setSeed(this.enchantmentSeed.get() + slot);
         if (!stack.getComponents().has(DataComponents.ENCHANTABLE)) {
             cir.setReturnValue(List.of());
         } else {
@@ -278,6 +278,9 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         }
 
         calculateAttributes();
+
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> baseEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.ENCHANTING_TABLE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
 
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> manaEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EaEEnchantmentTags.MANA).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
@@ -317,6 +320,8 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
         enchantingPower = Mth.clamp(Math.round((float)enchantingPower + (float)enchantingPower * f), 1, Integer.MAX_VALUE);
 
+        List<EnchantmentInstance> baseList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, baseEnchantments.stream());
+
         List<EnchantmentInstance> manaList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, manaEnchantments.stream());
         List<EnchantmentInstance> frostList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, frostEnchantments.stream());
         List<EnchantmentInstance> scorchList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, scorchEnchantments.stream());
@@ -334,6 +339,8 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         List<EnchantmentInstance> mightBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, mightBlessings.stream());
 
         List<EnchantmentInstance> curseList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, corruptionCurses.stream());
+
+        baseList = EnchantingHelper.evaluateEnchantments(stack, baseList);
 
         manaList = EnchantingHelper.evaluateEnchantments(stack, manaList);
         frostList = EnchantingHelper.evaluateEnchantments(stack, frostList);
@@ -353,9 +360,10 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
         curseList = EnchantingHelper.evaluateEnchantments(stack, curseList);
 
-        if (manaList.isEmpty() && frostList.isEmpty() && scorchList.isEmpty() && flowList.isEmpty() && chaosList.isEmpty() && greedList.isEmpty() && mightList.isEmpty()
-                && manaBlessingList.isEmpty() && frostBlessingList.isEmpty() && scorchBlessingList.isEmpty() && flowBlessingList.isEmpty() && chaosBlessingList.isEmpty() && greedBlessingList.isEmpty() && mightBlessingList.isEmpty()
-                && curseList.isEmpty()) {
+        if (baseList.isEmpty()
+                        && manaList.isEmpty() && frostList.isEmpty() && scorchList.isEmpty() && flowList.isEmpty() && chaosList.isEmpty() && greedList.isEmpty() && mightList.isEmpty()
+                        && manaBlessingList.isEmpty() && frostBlessingList.isEmpty() && scorchBlessingList.isEmpty() && flowBlessingList.isEmpty() && chaosBlessingList.isEmpty() && greedBlessingList.isEmpty() && mightBlessingList.isEmpty()
+                        && curseList.isEmpty()) {
             return list;
         }
 
@@ -364,6 +372,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
         while ((random.nextInt(50) <= enchantingPower || !firstEnchant || list.isEmpty()) && attempts < 10) {
             if (!list.isEmpty()) {
+                EnchantmentHelper.filterCompatibleEnchantments(baseList, Util.lastOf(list));
                 EnchantmentHelper.filterCompatibleEnchantments(manaList, Util.lastOf(list));
                 EnchantmentHelper.filterCompatibleEnchantments(frostList, Util.lastOf(list));
                 EnchantmentHelper.filterCompatibleEnchantments(scorchList, Util.lastOf(list));
@@ -393,7 +402,10 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             int curseWeight = Math.max(0, this.corruption * 3);
 
             int totalWeight = this.mana + this.frost + this.scorch + this.flow + this.chaos + this.greed + this.might + curseWeight + manaBlessingWeight + frostBlessingWeight + scorchBlessingWeight + flowBlessingWeight + chaosBlessingWeight + greedBlessingWeight + mightBlessingWeight;
-            if (totalWeight <= 0) break;
+
+            if (totalWeight <= 0) {
+                WeightedRandom.getRandomItem(random, baseList, EnchantmentInstance::weight).ifPresent(list::add);
+            }
 
             int randomValue = random.nextInt(totalWeight);
             int cumulative = 0;
@@ -578,7 +590,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             this.divinity = locDivinity;
 
             return new Attributes(locMana, locFrost, locScorch, locFlow, locChaos, locGreed, locMight, locCorruption, locDivinity);
-        }, new Attributes(this.mana, this.frost, this.scorch, this.flow, this.chaos, this.greed, this.might, Math.max(this.corruption, 10), this.divinity));
+        }, new Attributes(this.mana, this.frost, this.scorch, this.flow, this.chaos, this.greed, this.might, this.corruption, this.divinity));
 
         return result;
     }

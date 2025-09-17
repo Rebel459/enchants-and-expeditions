@@ -1,0 +1,23 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.enchants_and_expeditions.parry"
+  },
+  "effects": {},
+  "exclusive_set": "#enchants_and_expeditions:exclusive_set/shield",
+  "max_cost": {
+    "base": 20,
+    "per_level_above_first": 12
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 5,
+    "per_level_above_first": 12
+  },
+  "slots": [
+    "mainhand",
+    "offhand"
+  ],
+  "supported_items": "#enchants_and_expeditions:enchantable/shield",
+  "weight": 2
+}

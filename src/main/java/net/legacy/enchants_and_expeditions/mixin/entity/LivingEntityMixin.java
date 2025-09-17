@@ -7,6 +7,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
@@ -170,6 +171,8 @@ public abstract class LivingEntityMixin {
 
     @Unique
     private void temperingBlessing() {
+        Entity entity = Entity.class.cast(this);
+        if (!(entity.getRemainingFireTicks() > 0)) return;
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (slot.isArmor()) {
                 ItemStack stack = this.getItemBySlot(slot);
@@ -183,6 +186,8 @@ public abstract class LivingEntityMixin {
 
     @Unique
     private void fluidityBlessing() {
+        Entity entity = Entity.class.cast(this);
+        if (!entity.isInWater()) return;
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (slot.isArmor()) {
                 ItemStack stack = this.getItemBySlot(slot);
@@ -201,16 +206,6 @@ public abstract class LivingEntityMixin {
         if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.CLEAVING)) {
             disableTime = disableTime + EnchantingHelper.getLevel(stack, EaEEnchantments.CLEAVING);
             cir.setReturnValue(disableTime);
-        }
-    }
-
-    @Inject(method = "getSecondsToDisableBlocking", at = @At(value = "HEAD"), cancellable = true)
-    private void parry(CallbackInfoReturnable<Float> cir) {
-        ItemStack stack = this.getItemBlockingWith();
-        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.PARRY)) {
-            if (new Random().nextInt(1, 6) <= EnchantingHelper.getLevel(stack, EaEEnchantments.PARRY)) {
-                cir.setReturnValue(0F);
-            }
         }
     }
 }

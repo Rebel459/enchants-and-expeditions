@@ -16,3 +16,4 @@ accessible field net/minecraft/client/gui/screens/Screen minecraft Lnet/minecraf
 accessible field net/minecraft/world/entity/player/Inventory items Lnet/minecraft/core/NonNullList;
 accessible field net/minecraft/world/entity/player/Inventory equipment Lnet/minecraft/world/entity/EntityEquipment;
 accessible field net/minecraft/world/entity/EntityEquipment items Ljava/util/EnumMap;
+accessible method net/minecraft/world/item/enchantment/ItemEnchantments getTagOrEmpty (Lnet/minecraft/core/HolderLookup$Provider;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/tags/TagKey;)Lnet/minecraft/core/HolderSet;

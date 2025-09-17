@@ -50,6 +50,7 @@
       }
     ]
   },
+  "exclusive_set": "#enchants_and_expeditions:exclusive_set/chestplate",
   "max_cost": {
     "base": 60,
     "per_level_above_first": 20

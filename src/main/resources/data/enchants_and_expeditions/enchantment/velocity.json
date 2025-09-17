@@ -1,0 +1,22 @@
+{
+  "anvil_cost": 1,
+  "description": {
+    "translate": "enchantment.enchants_and_expeditions.velocity"
+  },
+  "effects": {},
+  "exclusive_set": "#enchants_and_expeditions:exclusive_set/arrow",
+  "max_cost": {
+    "base": 17,
+    "per_level_above_first": 16
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 16
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#enchants_and_expeditions:enchantable/arrow",
+  "weight": 5
+}

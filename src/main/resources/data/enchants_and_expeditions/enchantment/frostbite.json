@@ -1,0 +1,22 @@
+{
+  "anvil_cost": 6,
+  "description": {
+    "translate": "enchantment.enchants_and_expeditions.frostbite"
+  },
+  "effects": {},
+  "exclusive_set": "#enchants_and_expeditions:exclusive_set/chestplate",
+  "max_cost": {
+    "base": 25,
+    "per_level_above_first": 10
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 10
+  },
+  "slots": [
+    "armor"
+  ],
+  "supported_items": "#minecraft:enchantable/chest_armor",
+  "weight": 1
+}

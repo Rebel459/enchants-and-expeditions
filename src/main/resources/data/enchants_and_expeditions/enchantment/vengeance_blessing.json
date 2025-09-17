@@ -1,7 +1,7 @@
 {
   "anvil_cost": 9,
   "description": {
-    "translate": "enchantment.enchants_and_expeditions.inferno_blessing"
+    "translate": "enchantment.enchants_and_expeditions.vengeance_blessing"
   },
   "effects": {},
   "exclusive_set": "#enchants_and_expeditions:blessing",

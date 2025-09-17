@@ -1,7 +1,8 @@
 {
-  "replace": false,
+  "replace": true,
   "values": [
     "minecraft:soul_speed",
+    "minecraft:depth_strider",
     "enchants_and_expeditions:icebound",
     "enchants_and_expeditions:blazing"
   ]

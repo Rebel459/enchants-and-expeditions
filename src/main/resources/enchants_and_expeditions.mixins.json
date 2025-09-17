@@ -6,6 +6,7 @@
     "block.BaseFireBlockMixin",
     "entity.AbstractArrowMixin",
     "entity.AbstractHorseMixin",
+    "entity.BlocksAttacksMixin",
     "entity.EntityEquipmentMixin",
     "entity.EntityMixin",
     "entity.InventoryMixin",
@@ -21,6 +22,7 @@
     "inventory.GrindstoneMenuMixin",
     "item.EnchantmentHelperMixin",
     "item.EnchantmentMixin",
+    "item.ItemEnchantmentsMixin",
     "item.ItemStackMixin",
     "recipe.ShapedRecipeMixin"
   ],

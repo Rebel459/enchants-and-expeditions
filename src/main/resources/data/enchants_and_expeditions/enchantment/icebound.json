@@ -1,5 +1,5 @@
 {
-  "anvil_cost": 8,
+  "anvil_cost": 4,
   "description": {
     "translate": "enchantment.enchants_and_expeditions.icebound"
   },
@@ -199,8 +199,8 @@
     "per_level_above_first": 10
   },
   "slots": [
-    "feet"
+    "armor"
   ],
-  "supported_items": "#minecraft:enchantable/foot_armor",
+  "supported_items": "#enchants_and_expeditions:enchantable/horse_and_foot_armor",
   "weight": 1
 }

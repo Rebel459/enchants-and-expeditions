@@ -1,7 +1,7 @@
 {
   "anvil_cost": 9,
   "description": {
-    "translate": "enchantment.enchants_and_expeditions.inferno_blessing"
+    "translate": "enchantment.enchants_and_expeditions.tempering_blessing"
   },
   "effects": {},
   "exclusive_set": "#enchants_and_expeditions:blessing",
@@ -15,8 +15,8 @@
     "per_level_above_first": 30
   },
   "slots": [
-    "mainhand"
+    "armor"
   ],
-  "supported_items": "#minecraft:enchantable/weapon",
+  "supported_items": "#minecraft:enchantable/armor",
   "weight": 2
 }

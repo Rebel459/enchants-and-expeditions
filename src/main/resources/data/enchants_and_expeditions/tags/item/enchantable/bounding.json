@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "#minecraft:enchantable/durability",
-    "#minecraft:compasses"
+    "#minecraft:compasses",
+    "minecraft:writable_book",
+    "minecraft:written_book"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "anvil_cost": 8,
+  "anvil_cost": 1,
   "description": {
     "translate": "enchantment.enchants_and_expeditions.impotence_curse"
   },
@@ -14,7 +14,7 @@
     "per_level_above_first": 0
   },
   "slots": [
-    "any"
+    "mainhand"
   ],
   "supported_items": "#enchants_and_expeditions:enchantable/arrow",
   "weight": 1

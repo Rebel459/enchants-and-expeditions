@@ -3,11 +3,13 @@ package net.legacy.enchants_and_expeditions.mixin.item;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
+import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -91,7 +93,9 @@ public class EnchantmentHelperMixin {
                     break;
                 }
             }
-            if (isCompatible && !EnchantingHelper.configureEnchantments(instance.enchantment())) {
+            if (isCompatible
+                    && !EnchantingHelper.configureEnchantments(instance.enchantment())
+                    && !(stack.is(ItemTags.AXES) && instance.enchantment.is(EaEEnchantmentTags.REPLACED_BY_CLEAVING))) {
                 filteredResults.add(instance);
             }
         }

@@ -61,6 +61,9 @@ public class EaEConfig implements ConfigData {
     public boolean enchant_function_fallback = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
+    public boolean ordered_enchantment_tooltips = true;
+    @ConfigEntry.Category("config")
+    @ConfigEntry.Gui.Tooltip
     public boolean loot_table_injects = true;
   }
 
