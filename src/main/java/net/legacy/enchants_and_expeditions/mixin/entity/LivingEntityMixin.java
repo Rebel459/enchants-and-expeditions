@@ -2,9 +2,9 @@ package net.legacy.enchants_and_expeditions.mixin.entity;
 
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -14,7 +14,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BaseFireBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,10 +37,6 @@ public abstract class LivingEntityMixin {
 
     @Shadow public abstract @NotNull ItemStack getWeaponItem();
 
-    @Shadow public abstract @Nullable ItemStack getItemBlockingWith();
-
-    @Shadow public abstract void heal(float healAmount);
-
     @Unique
     DamageSource damageSource;
 
@@ -50,18 +46,6 @@ public abstract class LivingEntityMixin {
     @Inject(method = "hurtServer", at = @At(value = "HEAD"))
     private void getDamageSource(ServerLevel level, DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
         this.damageSource = damageSource;
-    }
-
-    @Inject(method = "getSpeed", at = @At(value = "TAIL"), cancellable = true)
-    private void blazingSpeed(CallbackInfoReturnable<Float> cir) {
-        LivingEntity entity = LivingEntity.class.cast(this);
-        ItemStack stack;
-        if (entity instanceof Animal) stack = entity.getItemBySlot(EquipmentSlot.BODY);
-        else stack = entity.getItemBySlot(EquipmentSlot.FEET);
-        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BLAZING) && entity.getInBlockState().is(Blocks.FIRE)) {
-            int multiplier = 1 + EnchantingHelper.getLevel(stack, EaEEnchantments.BLAZING) / 10;
-            cir.setReturnValue(cir.getReturnValue() * multiplier);
-        }
     }
 
     @Inject(method = "hurtServer", at = @At(value = "TAIL"))
@@ -92,8 +76,8 @@ public abstract class LivingEntityMixin {
         LivingEntity attacked = LivingEntity.class.cast(this);
         if (damageSource.getEntity() instanceof LivingEntity attacker) {
             ItemStack attackedChestplate = attacked.getItemBySlot(EquipmentSlot.CHEST);
-            if (EnchantingHelper.hasEnchantment(attackedChestplate, EaEEnchantments.FROSTBITE) && attacked.getHealth() >= attacked.getMaxHealth()) {
-                int duration = 60;
+            if (EnchantingHelper.hasEnchantment(attackedChestplate, EaEEnchantments.FROSTBITE) && attacked.getHealth() > attacked.getMaxHealth() - 1) {
+                int duration = 200;
                 if (attacker.getTicksFrozen() < duration) attacker.setTicksFrozen(duration);
                 level.sendParticles(ParticleTypes.SNOWFLAKE, attacker.getX(), attacker.getRandomY(), attacker.getZ(), 10, 0, -1, 0, 0.5);
             }
@@ -116,9 +100,8 @@ public abstract class LivingEntityMixin {
     private float vengeanceBlessing(float value) {
         if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
             ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
-            if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.VENGEANCE_BLESSING) && attacker.getHealth() <= 6) {
+            if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.VENGEANCE_BLESSING) && attacker.getHealth() < 7) {
                 float amount = -attacker.getHealth() / 2 + 6;
-                this.makePoofParticles();
                 value += amount;
             }
         }
@@ -192,7 +175,7 @@ public abstract class LivingEntityMixin {
             if (slot.isArmor()) {
                 ItemStack stack = this.getItemBySlot(slot);
                 if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.FLUIDITY_BLESSING)) {
-                    this.heal(0.5F);
+                    if (entity instanceof LivingEntity livingEntity) livingEntity.heal(0.5F);
                 }
             }
         }

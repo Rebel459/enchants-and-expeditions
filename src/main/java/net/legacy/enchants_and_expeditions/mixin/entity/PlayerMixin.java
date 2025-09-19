@@ -7,6 +7,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -24,6 +26,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PlayerMixin {
 
     @Shadow public int experienceLevel;
+
+    @Shadow public abstract SoundSource getSoundSource();
 
     @Inject(method = "getXpNeededForNextLevel", at = @At(value = "HEAD"), cancellable = true)
     protected void EaE$experienceRebalance(CallbackInfoReturnable<Integer> cir) {
@@ -92,6 +96,31 @@ public abstract class PlayerMixin {
             if (EnchantmentHelper.processAmmoUse(level, weaponStack, Items.ARROW.getDefaultInstance(), 1) == 0) {
                 cir.setReturnValue(Items.ARROW.getDefaultInstance());
             }
+        }
+    }
+
+    @Inject(method = "killedEntity", at = @At(value = "HEAD"))
+    private void bloodlust(ServerLevel level, LivingEntity killed, CallbackInfoReturnable<Boolean> cir) {
+        Player player = Player.class.cast(this);
+        ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
+
+        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BLOODLUST)) {
+            int amount = EnchantingHelper.getLevel(stack, EaEEnchantments.BLOODLUST);
+            player.setHealth(player.getHealth() + amount);
+            if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
+            level.playSound(player, player.blockPosition(), SoundEvents.THORNS_HIT, this.getSoundSource(), 1F, 1F);
+        }
+    }
+
+    @Inject(method = "killedEntity", at = @At(value = "HEAD"))
+    private void quickstep(ServerLevel level, LivingEntity killed, CallbackInfoReturnable<Boolean> cir) {
+        Player player = Player.class.cast(this);
+        ItemStack stack = player.getItemBySlot(EquipmentSlot.LEGS);
+
+        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.QUICKSTEP)) {
+            int seconds = EnchantingHelper.getLevel(stack, EaEEnchantments.QUICKSTEP) * 2;
+            int ticks = seconds * 20;
+            if (!player.hasEffect(MobEffects.SPEED) || player.getEffect(MobEffects.SPEED).getDuration() < ticks) player.addEffect(new MobEffectInstance(MobEffects.SPEED, ticks));
         }
     }
 }

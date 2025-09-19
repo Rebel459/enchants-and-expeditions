@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "enchants_and_expeditions:fragility_curse",
-    "enchants_and_expeditions:impotence_curse"
+    "enchants_and_expeditions:faltering_curse",
+    "enchants_and_expeditions:shattering_curse"
   ]
 }

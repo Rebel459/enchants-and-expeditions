@@ -6,13 +6,13 @@
   "effects": {},
   "exclusive_set": "#enchants_and_expeditions:exclusive_set/chestplate",
   "max_cost": {
-    "base": 25,
-    "per_level_above_first": 10
+    "base": 50,
+    "per_level_above_first": 0
   },
-  "max_level": 3,
+  "max_level": 1,
   "min_cost": {
     "base": 20,
-    "per_level_above_first": 10
+    "per_level_above_first": 0
   },
   "slots": [
     "armor"

@@ -114,12 +114,4 @@ public class EnchantmentHelperMixin {
         else
             return stack.is(Items.BOOK);
     }
-
-    @Inject(method = "modifyDamage", at = @At("TAIL"), cancellable = true)
-    private static void EaE$impotenceCurse(ServerLevel level, ItemStack tool, Entity entity, DamageSource damageSource, float damage, CallbackInfoReturnable<Float> cir) {
-        if (!(EnchantingHelper.hasEnchantment(tool, EaEEnchantments.IMPOTENCE_CURSE) && damageSource.is(DamageTypeTags.IS_PROJECTILE))) return;
-        float oldDamage = cir.getReturnValue();
-        float newDamage = Math.max(1, oldDamage / 2 - 1);
-        cir.setReturnValue(Math.min(oldDamage, newDamage));
-    }
 }

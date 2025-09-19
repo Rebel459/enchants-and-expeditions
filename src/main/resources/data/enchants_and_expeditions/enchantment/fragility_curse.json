@@ -30,6 +30,6 @@
   "slots": [
     "any"
   ],
-  "supported_items": "#enchants_and_expeditions:enchantable/tool",
+  "supported_items": "#minecraft:enchantable/durability",
   "weight": 1
 }
