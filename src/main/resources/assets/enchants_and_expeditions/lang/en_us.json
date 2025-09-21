@@ -91,12 +91,12 @@
   "enchantment.enchants_and_expeditions.recovery": "Recovery",
   "enchantment.enchants_and_expeditions.recovery.desc": "Allows wolves to passively regenerate health over time",
   "enchantment.enchants_and_expeditions.velocity": "Velocity",
-  "enchantment.enchants_and_expeditions.velocity.desc": "Increases the travel speed and accuracy of fired projectiles",
+  "enchantment.enchants_and_expeditions.velocity.desc": "Increases the travel speed and accuracy of projectiles",
 
   "enchantment.enchants_and_expeditions.fragility_curse": "Curse of Fragility",
   "enchantment.enchants_and_expeditions.fragility_curse.desc": "The cursed item has a chance to take increased durability damage when used",
   "enchantment.enchants_and_expeditions.faltering_curse": "Curse of Faltering",
-  "enchantment.enchants_and_expeditions.faltering_curse.desc": "Decreases the accuracy of fired projectiles",
+  "enchantment.enchants_and_expeditions.faltering_curse.desc": "Decreases the accuracy of projectiles",
   "enchantment.enchants_and_expeditions.shattering_curse": "Curse of Shattering",
   "enchantment.enchants_and_expeditions.shattering_curse.desc": "Blocks mined with the cursed item have a chance to drop nothing when destroyed",
 
