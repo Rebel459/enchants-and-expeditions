@@ -1,7 +1,8 @@
 {
   "values": [
-    "#enchants_and_expeditions:enchanting_table",
+    "#enchants_and_expeditions:enchanting_table/all",
     "minecraft:flame",
-    "enchants_and_expeditions:smiting"
+    "enchants_and_expeditions:smiting",
+    "enchants_and_expeditions:blazing"
   ]
 }

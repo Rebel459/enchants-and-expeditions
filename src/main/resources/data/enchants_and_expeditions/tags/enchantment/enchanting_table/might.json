@@ -1,6 +1,6 @@
 {
   "values": [
-    "#enchants_and_expeditions:enchanting_table",
+    "#enchants_and_expeditions:enchanting_table/all",
     "minecraft:piercing",
     "minecraft:knockback",
     "minecraft:punch",
@@ -9,6 +9,9 @@
     "minecraft:riptide",
     "enchants_and_expeditions:arcane_protection",
     "enchants_and_expeditions:bloodlust",
+    "enchants_and_expeditions:ferocity",
+    "enchants_and_expeditions:cleaving",
+    "enchants_and_expeditions:parry",
     {
       "id": "legacies_and_legends:striking",
       "required": false

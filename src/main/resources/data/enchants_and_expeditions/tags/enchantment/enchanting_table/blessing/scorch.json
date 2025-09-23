@@ -1,5 +1,7 @@
 {
   "values": [
-    "#enchants_and_expeditions:enchanting_table/blessing"
+    "#enchants_and_expeditions:enchanting_table/blessing/all",
+    "enchants_and_expeditions:inferno_blessing",
+    "enchants_and_expeditions:tempering_blessing"
   ]
 }

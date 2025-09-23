@@ -1,20 +1,27 @@
 package net.legacy.enchants_and_expeditions.mixin.entity;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.wolf.Wolf;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,6 +43,8 @@ public abstract class LivingEntityMixin {
     @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot slot);
 
     @Shadow public abstract @NotNull ItemStack getWeaponItem();
+
+    @Shadow @Nullable public abstract ItemEntity drop(ItemStack stack, boolean randomizeMotion, boolean includeThrower);
 
     @Unique
     DamageSource damageSource;
@@ -69,6 +78,24 @@ public abstract class LivingEntityMixin {
             }
         }
         return value;
+    }
+
+    @Inject(method = "hurtServer", at = @At(value = "TAIL"))
+    private void displacementCurse(ServerLevel level, DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = LivingEntity.class.cast(this);
+        ItemStack stack = entity.getItemBySlot(EquipmentSlot.CHEST);
+        if (damageSource.getEntity() instanceof LivingEntity attacker && EnchantingHelper.hasEnchantment(stack, EaEEnchantments.DISPLACEMENT_CURSE)) {
+            for (MobEffectInstance instance : entity.getActiveEffectsMap().values()) {
+                if (!entity.hasEffect(instance.getEffect())) return;
+
+                Holder<MobEffect> effect = instance.getEffect();
+                int duration = entity.getEffect(effect).getDuration();
+
+                entity.removeEffect(effect);
+                if (!attacker.hasEffect(effect)) attacker.addEffect(new MobEffectInstance(effect, duration / 2));
+                entity.addEffect(new MobEffectInstance(effect, duration / 2));
+            }
+        }
     }
 
     @Inject(method = "hurtServer", at = @At(value = "TAIL"))
@@ -190,5 +217,12 @@ public abstract class LivingEntityMixin {
             disableTime = disableTime + EnchantingHelper.getLevel(stack, EaEEnchantments.CLEAVING);
             cir.setReturnValue(disableTime);
         }
+    }
+
+    @WrapOperation(method = "travelInAir", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getFriction()F"))
+    private float slidingCurse(Block block, Operation<Float> original) {
+        ItemStack stack = this.getItemBySlot(EquipmentSlot.FEET);
+        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SLIDING_CURSE) && original.call(block) >= 0.6F && original.call(block) < 0.98F) return 0.98F;
+        else return original.call(block);
     }
 }

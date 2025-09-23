@@ -1,6 +1,6 @@
 {
   "values": [
-    "#enchants_and_expeditions:enchanting_table",
+    "#enchants_and_expeditions:enchanting_table/all",
     "minecraft:sharpness",
     "minecraft:sweeping_edge",
     "minecraft:efficiency",
@@ -8,6 +8,8 @@
     "minecraft:silk_touch",
     "minecraft:density",
     "enchants_and_expeditions:physical_protection",
+    "enchants_and_expeditions:galloping",
+    "enchants_and_expeditions:recovery",
     {
       "id": "legacies_and_legends:rebound",
       "required": false

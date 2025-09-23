@@ -298,19 +298,19 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 .get(EaEEnchantmentTags.MIGHT).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
 
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> manaBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.ENCHANTING_TABLE_MANA_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+                .get(EaEEnchantmentTags.MANA_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> frostBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.ENCHANTING_TABLE_FROST_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+                .get(EaEEnchantmentTags.FROST_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> scorchBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.ENCHANTING_TABLE_SCORCH_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+                .get(EaEEnchantmentTags.SCORCH_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> flowBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.ENCHANTING_TABLE_FLOW_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+                .get(EaEEnchantmentTags.FLOW_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> chaosBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.ENCHANTING_TABLE_CHAOS_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+                .get(EaEEnchantmentTags.CHAOS_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> greedBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.ENCHANTING_TABLE_GREED_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+                .get(EaEEnchantmentTags.GREED_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> mightBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.ENCHANTING_TABLE_MIGHT_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+                .get(EaEEnchantmentTags.MIGHT_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
 
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> corruptionCurses = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EnchantmentTags.CURSE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();

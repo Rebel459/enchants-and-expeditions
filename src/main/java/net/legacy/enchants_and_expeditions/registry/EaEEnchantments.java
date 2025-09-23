@@ -46,6 +46,8 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> FRAGILITY_CURSE = key("fragility_curse");
 	public static final ResourceKey<Enchantment> FALTERING_CURSE = key("faltering_curse");
 	public static final ResourceKey<Enchantment> SHATTERING_CURSE = key("shattering_curse");
+	public static final ResourceKey<Enchantment> DISPLACEMENT_CURSE = key("displacement_curse");
+	public static final ResourceKey<Enchantment> SLIDING_CURSE = key("sliding_curse");
 
 	// Integration
 	public static final ResourceKey<Enchantment> TANGLED = keyLegaciesAndLegends("tangled");

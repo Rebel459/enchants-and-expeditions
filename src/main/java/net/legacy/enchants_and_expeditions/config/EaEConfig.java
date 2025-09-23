@@ -38,7 +38,6 @@ public class EaEConfig implements ConfigData {
   public static class GeneralConfig {
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.BoundedDiscrete(max=10L)
     public int enchantment_limit = 3;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
@@ -58,10 +57,10 @@ public class EaEConfig implements ConfigData {
   public static class MiscConfig {
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    public boolean enchant_function_fallback = true;
+    public boolean ordered_enchantment_tooltips = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
-    public boolean ordered_enchantment_tooltips = true;
+    public boolean enchant_function_fallback = true;
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.Tooltip
     public boolean loot_table_injects = true;
@@ -75,12 +74,20 @@ public class EaEConfig implements ConfigData {
     public boolean legacies_and_legends_integration = true;
 
     @ConfigEntry.Category("config")
-    public boolean progression_reborn_integration = true;
-
-    @ConfigEntry.Category("config")
     public boolean trailier_tales_integration = true;
 
     @ConfigEntry.Category("config")
+    public boolean remnants_integration = true;
+
+    @ConfigEntry.Category("config")
     public boolean enderscape_integration = true;
+  }
+
+  @ConfigEntry.Gui.Tooltip
+  @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+  public Notice disable_enchantments = Notice.INFO;
+
+  public enum Notice {
+    INFO
   }
 }

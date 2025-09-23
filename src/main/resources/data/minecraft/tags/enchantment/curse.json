@@ -3,6 +3,8 @@
   "values": [
     "enchants_and_expeditions:fragility_curse",
     "enchants_and_expeditions:faltering_curse",
-    "enchants_and_expeditions:shattering_curse"
+    "enchants_and_expeditions:shattering_curse",
+    "enchants_and_expeditions:displacement_curse",
+    "enchants_and_expeditions:sliding_curse"
   ]
 }

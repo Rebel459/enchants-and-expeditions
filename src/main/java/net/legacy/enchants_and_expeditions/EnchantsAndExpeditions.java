@@ -81,9 +81,9 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		EaEConfig.initClient();
 
 		ResourceManagerHelper.registerBuiltinResourcePack(
-				ResourceLocation.fromNamespaceAndPath(MOD_ID, "rebalanced_vanilla_enchants"),
+				ResourceLocation.fromNamespaceAndPath(MOD_ID, "vanilla_tag_replacements"),
 				modContainer.get(),
-				Component.translatable("pack.enchants_and_expeditions.rebalanced_vanilla_enchants"),
+				Component.translatable("pack.enchants_and_expeditions.vanilla_tag_replacements"),
 				ResourcePackActivationType.ALWAYS_ENABLED
 		);
 		if (EaEConfig.get.integrations.item_tooltips_overrides) {

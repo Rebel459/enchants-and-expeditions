@@ -1,5 +1,12 @@
 {
   "values": [
-    "minecraft:unbreaking"
+    "#enchants_and_expeditions:enchanting_table/all",
+    "#enchants_and_expeditions:enchanting_table/mana",
+    "#enchants_and_expeditions:enchanting_table/frost",
+    "#enchants_and_expeditions:enchanting_table/scorch",
+    "#enchants_and_expeditions:enchanting_table/flow",
+    "#enchants_and_expeditions:enchanting_table/chaos",
+    "#enchants_and_expeditions:enchanting_table/greed",
+    "#enchants_and_expeditions:enchanting_table/might"
   ]
 }

@@ -1,8 +1,9 @@
 {
   "values": [
-    "#enchants_and_expeditions:enchanting_table",
-    "minecraft:frost_walker",
+    "#enchants_and_expeditions:enchanting_table/all",
     "enchants_and_expeditions:chilled",
+    "enchants_and_expeditions:icebound",
+    "enchants_and_expeditions:frostbite",
     {
       "id": "legacies_and_legends:shatter",
       "required": false

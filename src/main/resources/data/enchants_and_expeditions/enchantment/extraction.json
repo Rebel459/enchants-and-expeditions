@@ -1,0 +1,38 @@
+{
+  "anvil_cost": 5,
+  "description": {
+    "translate": "enchantment.enchants_and_expeditions.extraction"
+  },
+  "effects": {
+    "minecraft:block_experience": [
+      {
+        "effect": {
+          "type": "minecraft:multiply",
+          "value": {
+            "type": "minecraft:linear"
+          },
+          "factor": {
+            "type": "minecraft:linear",
+            "base": 1.5,
+            "per_level_above_first": 0.5
+          }
+        }
+      }
+    ]
+  },
+  "exclusive_set": "#enchants_and_expeditions:exclusive_set/helmet",
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 5
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 5
+  },
+  "slots": [
+    "head"
+  ],
+  "supported_items": "#minecraft:enchantable/head_armor",
+  "weight": 1
+}

@@ -1,12 +1,17 @@
 {
   "values": [
-    "#enchants_and_expeditions:enchanting_table",
+    "#enchants_and_expeditions:enchanting_table/all",
     "minecraft:lure",
     "minecraft:loyalty",
     "minecraft:quick_charge",
     "minecraft:aqua_affinity",
     "minecraft:respiration",
     "minecraft:depth_strider",
+    "enchants_and_expeditions:leaping",
+    "enchants_and_expeditions:equestrian",
+    "enchants_and_expeditions:quickstep",
+    "enchants_and_expeditions:leaping",
+    "enchants_and_expeditions:velocity",
     {
       "id": "remnants:dueling",
       "required": false

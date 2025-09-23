@@ -15,16 +15,16 @@ public class EaEEnchantmentTags {
     public static final TagKey<Enchantment> ENCHANTMENT_ORDER = register("enchantment_order");
     public static final TagKey<Enchantment> REPLACED_BY_CLEAVING = register("replaced_by_cleaving");
 
-    public static final TagKey<Enchantment> ENCHANTING_TABLE = register("enchanting_table");
+    public static final TagKey<Enchantment> ENCHANTING_TABLE = register("enchanting_table/all");
 
-    public static final TagKey<Enchantment> ENCHANTING_TABLE_BLESSING = register("enchanting_table/blessing");
-    public static final TagKey<Enchantment> ENCHANTING_TABLE_MANA_BLESSING = register("enchanting_table/blessing/mana");
-    public static final TagKey<Enchantment> ENCHANTING_TABLE_FROST_BLESSING = register("enchanting_table/blessing/frost");
-    public static final TagKey<Enchantment> ENCHANTING_TABLE_SCORCH_BLESSING = register("enchanting_table/blessing/scorch");
-    public static final TagKey<Enchantment> ENCHANTING_TABLE_FLOW_BLESSING = register("enchanting_table/blessing/flow");
-    public static final TagKey<Enchantment> ENCHANTING_TABLE_CHAOS_BLESSING = register("enchanting_table/blessing/chaos");
-    public static final TagKey<Enchantment> ENCHANTING_TABLE_GREED_BLESSING = register("enchanting_table/blessing/greed");
-    public static final TagKey<Enchantment> ENCHANTING_TABLE_MIGHT_BLESSING = register("enchanting_table/blessing/might");
+    public static final TagKey<Enchantment> ENCHANTING_TABLE_BLESSING = register("enchanting_table/blessing/all");
+    public static final TagKey<Enchantment> MANA_BLESSING = register("enchanting_table/blessing/mana");
+    public static final TagKey<Enchantment> FROST_BLESSING = register("enchanting_table/blessing/frost");
+    public static final TagKey<Enchantment> SCORCH_BLESSING = register("enchanting_table/blessing/scorch");
+    public static final TagKey<Enchantment> FLOW_BLESSING = register("enchanting_table/blessing/flow");
+    public static final TagKey<Enchantment> CHAOS_BLESSING = register("enchanting_table/blessing/chaos");
+    public static final TagKey<Enchantment> GREED_BLESSING = register("enchanting_table/blessing/greed");
+    public static final TagKey<Enchantment> MIGHT_BLESSING = register("enchanting_table/blessing/might");
 
     public static final TagKey<Enchantment> MANA = register("enchanting_table/mana");
     public static final TagKey<Enchantment> FROST = register("enchanting_table/frost");

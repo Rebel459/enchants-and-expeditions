@@ -1,13 +1,10 @@
 {
   "values": [
-    "#enchants_and_expeditions:enchanting_table",
+    "#enchants_and_expeditions:enchanting_table/all",
     "minecraft:luck_of_the_sea",
     "minecraft:fortune",
     "minecraft:looting",
-    {
-      "id": "legacies_and_legends:extraction",
-      "required": false
-    },
+    "enchants_and_expeditions:extraction",
     {
       "id": "progression_reborn:collection",
       "required": false
