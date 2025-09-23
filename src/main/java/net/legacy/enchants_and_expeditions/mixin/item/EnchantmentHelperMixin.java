@@ -33,34 +33,7 @@ public class EnchantmentHelperMixin {
 
     @Inject(method = "enchantItem(Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/item/ItemStack;ILjava/util/stream/Stream;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"), cancellable = true)
     private static void EaE$enchantItem(RandomSource random, ItemStack stack, int level, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<ItemStack> cir) {
-        if (EaEConfig.get.general.enchantment_limit != 0) return;
-
-        Stream<Holder<Enchantment>> newEnchantments = possibleEnchantments.limit(EaEConfig.get.general.enchantment_limit);
-
-        List<EnchantmentInstance> list = selectEnchantment(random, stack, level, newEnchantments);
-        list = EnchantingHelper.evaluateEnchantments(stack, list);
-        if (stack.is(Items.BOOK)) {
-            stack = new ItemStack(Items.ENCHANTED_BOOK);
-        }
-
-        for (EnchantmentInstance enchantmentInstance : list) {
-            stack.enchant(enchantmentInstance.enchantment(), enchantmentInstance.level());
-        }
-
-        cir.setReturnValue(stack);
-    }
-
-    @Inject(method = "selectEnchantment", at = @At("HEAD"), cancellable = true)
-    private static void EaE$selectEnchantment(RandomSource random, ItemStack stack, int level, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<ItemStack> cir) {
-        if (EaEConfig.get.general.enchantment_limit != 0) return;
-
-        possibleEnchantments = possibleEnchantments.filter(enchantment -> {
-            return !EnchantingHelper.configureEnchantments(enchantment);
-        });
-
-        Stream<Holder<Enchantment>> newEnchantments = possibleEnchantments.limit(EaEConfig.get.general.enchantment_limit);
-
-        List<EnchantmentInstance> list = selectEnchantment(random, stack, level, newEnchantments);
+        List<EnchantmentInstance> list = selectEnchantment(random, stack, level, possibleEnchantments);
         list = EnchantingHelper.evaluateEnchantments(stack, list);
         if (stack.is(Items.BOOK)) {
             stack = new ItemStack(Items.ENCHANTED_BOOK);
