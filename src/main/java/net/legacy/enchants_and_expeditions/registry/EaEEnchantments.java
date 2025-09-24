@@ -20,7 +20,6 @@ public class EaEEnchantments {
 	// Blessing
 	public static final ResourceKey<Enchantment> BOUNDING_BLESSING = key("bounding_blessing");
 	public static final ResourceKey<Enchantment> INFERNO_BLESSING = key("inferno_blessing");
-	public static final ResourceKey<Enchantment> FROST_BLESSING = key("frost_blessing");
 	public static final ResourceKey<Enchantment> VENGEANCE_BLESSING = key("vengeance_blessing");
 	public static final ResourceKey<Enchantment> TEMPERING_BLESSING = key("tempering_blessing");
 	public static final ResourceKey<Enchantment> FLUIDITY_BLESSING = key("fluidity_blessing");
@@ -49,22 +48,10 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> DISPLACEMENT_CURSE = key("displacement_curse");
 	public static final ResourceKey<Enchantment> SLIDING_CURSE = key("sliding_curse");
 
-	// Integration
-	public static final ResourceKey<Enchantment> TANGLED = keyLegaciesAndLegends("tangled");
-	public static final ResourceKey<Enchantment> REFORGE = keyProgressionReborn("reforge");
-
 	public static void init() {
 	}
 
 	private static @NotNull ResourceKey<Enchantment> key(String path) {
 		return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, path));
-	}
-
-	private static @NotNull ResourceKey<Enchantment> keyLegaciesAndLegends(String path) {
-		return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath("legacies_and_legends", path));
-	}
-
-	private static @NotNull ResourceKey<Enchantment> keyProgressionReborn(String path) {
-		return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath("progression_reborn", path));
 	}
 }
