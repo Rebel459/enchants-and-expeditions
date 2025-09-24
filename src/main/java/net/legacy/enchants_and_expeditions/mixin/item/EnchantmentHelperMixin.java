@@ -3,6 +3,7 @@ package net.legacy.enchants_and_expeditions.mixin.item;
 import com.google.common.collect.Lists;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;

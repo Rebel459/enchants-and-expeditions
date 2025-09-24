@@ -7,13 +7,16 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
+import net.minecraft.world.level.storage.loot.functions.SetEnchantmentsFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 
 public final class EaELootTables {
@@ -68,6 +71,14 @@ public final class EaELootTables {
                 LootPool.Builder pool;
 
                 if (EaEConfig.get.misc.loot_table_injects) {
+
+                    // Treasure
+                    if (BuiltInLootTables.END_CITY_TREASURE.equals(id)) {
+                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                                .add(EmptyLootItem.emptyItem().setWeight(11))
+                                .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING))));
+                        tableBuilder.withPool(pool);
+                    }
 
                     // Tomes
                     if (BuiltInLootTables.STRONGHOLD_LIBRARY.equals(id)) {
