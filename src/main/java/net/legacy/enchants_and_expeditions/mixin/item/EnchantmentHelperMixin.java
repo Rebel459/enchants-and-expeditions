@@ -1,35 +1,32 @@
 package net.legacy.enchants_and_expeditions.mixin.item;
 
+import com.google.common.collect.Lists;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
-import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.*;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static net.minecraft.world.item.enchantment.EnchantmentHelper.selectEnchantment;
 
 @Mixin(EnchantmentHelper.class)
-public class EnchantmentHelperMixin {
+public abstract class EnchantmentHelperMixin {
 
     @Inject(method = "enchantItem(Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/item/ItemStack;ILjava/util/stream/Stream;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"), cancellable = true)
     private static void EaE$enchantItem(RandomSource random, ItemStack stack, int level, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<ItemStack> cir) {
@@ -44,6 +41,25 @@ public class EnchantmentHelperMixin {
         }
 
         cir.setReturnValue(stack);
+    }
+
+    @Inject(method = "getAvailableEnchantmentResults", at = @At(value = "HEAD"), cancellable = true)
+    private static void EaE$getAvailableEnchantmentResults(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
+        List<EnchantmentInstance> list = Lists.newArrayList();
+        boolean bl; // allow enchanted book re-enchanting
+        if (stack.getEnchantments().size() < EaEConfig.get.general.enchantment_limit) bl = stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
+        else bl = stack.is(Items.BOOK);
+        possibleEnchantments.filter(holder -> holder.value().isPrimaryItem(stack) || bl).forEach(holder -> {
+            Enchantment enchantment = holder.value();
+
+            for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
+                if (level >= enchantment.getMinCost(j) && (level <= enchantment.getMaxCost(j) || (j == enchantment.getMaxLevel() && !holder.is(EaEEnchantmentTags.ENFORCE_MAXIMUM_LEVEL)))) { // override max level check
+                    list.add(new EnchantmentInstance(holder, j));
+                    break;
+                }
+            }
+        });
+        cir.setReturnValue(list);
     }
 
     @Inject(method = "getAvailableEnchantmentResults", at = @At("RETURN"), cancellable = true)
@@ -74,17 +90,5 @@ public class EnchantmentHelperMixin {
         }
 
         cir.setReturnValue(filteredResults);
-    }
-
-    @ModifyVariable(
-            method = "getAvailableEnchantmentResults",
-            at = @At(value = "STORE", ordinal = 0),
-            ordinal = 0
-    )
-    private static boolean EaE$modifyBookCheck(boolean original, int level, ItemStack stack, Stream<RegistryAccess.RegistryEntry<Enchantment>> possibleEnchantments) {
-        if (stack.getEnchantments().size() < EaEConfig.get.general.enchantment_limit)
-            return stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
-        else
-            return stack.is(Items.BOOK);
     }
 }

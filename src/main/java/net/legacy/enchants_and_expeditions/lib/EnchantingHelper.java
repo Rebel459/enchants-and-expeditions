@@ -57,7 +57,7 @@ public class EnchantingHelper {
         }
         if (EaEConfig.get.general.enchantment_limit != -1) {
             list.removeAll(enchantmentList);
-            while (enchantmentList.size() + stack.getEnchantments().size() > EaEConfig.get.general.enchantment_limit) {
+            while (enchantmentList.size() > EaEConfig.get.general.enchantment_limit) {
                 int x = new Random().nextInt(0, enchantmentList.size());
                 enchantmentList.remove(x);
             }
@@ -72,8 +72,8 @@ public class EnchantingHelper {
     }
 
     public static boolean onRandomLoot(Holder<Enchantment> enchantment, RandomSource randomSource) {
-        if (randomSource.nextInt(0, 3) < 3) {
-            return enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.ENCHANTING_TABLE_BLESSING) && configureEnchantments(enchantment);
+        if (randomSource.nextInt(0, 3) < 2) {
+            return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.ENCHANTING_TABLE_BLESSING)) || configureEnchantments(enchantment);
         }
         else return configureEnchantments(enchantment);
     }
