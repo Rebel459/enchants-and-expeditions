@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
+import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
@@ -25,6 +26,10 @@ public class EnchantingHelper {
     }
 
     public static List<EnchantmentInstance> evaluateEnchantments(ItemStack stack, List<EnchantmentInstance> list) {
+        list.removeIf(enchantmentInstance -> {
+            return enchantmentInstance.enchantment.is(EaEEnchantments.BOUNDING_BLESSING) && stack.is(EaEItemTags.UNBOUNDABLE);
+        });
+
         list.removeIf(enchantmentInstance -> {
             return configureEnchantments(enchantmentInstance.enchantment);
         });

@@ -2,6 +2,7 @@ package net.legacy.enchants_and_expeditions.mixin.entity;
 
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
+import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -67,6 +68,6 @@ public abstract class PlayerListMixin {
     @Unique
     private boolean shouldReserve(ItemStack stack) {
         if (stack.isEmpty()) return false;
-        return isPlayerAlive || EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING);
+        return isPlayerAlive || (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING) && !stack.is(EaEItemTags.UNBOUNDABLE));
     }
 }

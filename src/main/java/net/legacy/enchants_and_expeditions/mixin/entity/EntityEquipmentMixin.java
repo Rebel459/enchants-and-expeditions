@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
+import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.world.entity.EntityEquipment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,7 +32,7 @@ public abstract class EntityEquipmentMixin {
             )
     )
     private ItemEntity EaE$keepBoundEquipment(LivingEntity instance, ItemStack stack, boolean randomizeMotion, boolean includeThrower, Operation<ItemEntity> original) {
-        if (!EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING)) {
+        if (!EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING) || stack.is(EaEItemTags.UNBOUNDABLE)) {
             instance.drop(stack, true, false);
         }
         return null;
@@ -46,6 +47,6 @@ public abstract class EntityEquipmentMixin {
             )
     )
     private void EaE$keepBoundEquipmentFromClearing(EnumMap instance, BiFunction biFunction, Operation<Void> original) {
-        this.items.replaceAll((equipmentSlot, itemStack) -> EnchantingHelper.hasEnchantment(itemStack, EaEEnchantments.BOUNDING_BLESSING) ? itemStack : ItemStack.EMPTY);
+        this.items.replaceAll((equipmentSlot, itemStack) -> (EnchantingHelper.hasEnchantment(itemStack, EaEEnchantments.BOUNDING_BLESSING) && !itemStack.is(EaEItemTags.UNBOUNDABLE)) ? itemStack : ItemStack.EMPTY);
     }
 }
