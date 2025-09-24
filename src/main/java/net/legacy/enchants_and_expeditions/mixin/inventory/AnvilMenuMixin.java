@@ -140,8 +140,6 @@ public abstract class AnvilMenuMixin {
 
     @Inject(method = "onTake", at = @At(value = "HEAD"), cancellable = true)
     protected void EaE$onTake(Player player, ItemStack stack, CallbackInfo ci) {
-        if (EaEConfig.get.general.anvil_break_chance == 0.12) return;
-
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack additionItem = anvilMenu.slots.get(1).getItem();
 

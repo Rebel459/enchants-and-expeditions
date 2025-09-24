@@ -12,7 +12,7 @@ import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.item.enchantment.Repairable;
 
-public class EaEItemComponents {
+public class EaEDataComponents {
     public static void init(){
         DefaultItemComponentEvents.MODIFY.register(context -> {
             context.modify(Items.ENCHANTED_BOOK, builder -> {
