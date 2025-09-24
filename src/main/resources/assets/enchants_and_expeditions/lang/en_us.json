@@ -136,10 +136,10 @@
 
   "text.autoconfig.enchants_and_expeditions.option.integrations": "Mod Integration",
   "text.autoconfig.enchants_and_expeditions.option.integrations.item_tooltips_overrides": "Item Tooltips Overrides",
-  "text.autoconfig.enchants_and_expeditions.option.integrations.legacies_and_legends_integration": "Legacies and Legends Integration",
-  "text.autoconfig.enchants_and_expeditions.option.integrations.trailier_tales_integration": "Trailier Tales Integration",
-  "text.autoconfig.enchants_and_expeditions.option.integrations.remnants_integration": "Remnants Integration",
-  "text.autoconfig.enchants_and_expeditions.option.integrations.enderscape_integration": "Enderscape Integration",
+  "text.autoconfig.enchants_and_expeditions.option.integrations.legacies_and_legends": "Legacies and Legends",
+  "text.autoconfig.enchants_and_expeditions.option.integrations.trailier_tales": "Trailier Tales",
+  "text.autoconfig.enchants_and_expeditions.option.integrations.remnants": "Remnants",
+  "text.autoconfig.enchants_and_expeditions.option.integrations.enderscape": "Enderscape",
 
   "text.autoconfig.enchants_and_expeditions.option.disable_enchantments": "Disable Enchantments",
   "text.autoconfig.enchants_and_expeditions.option.disable_enchantments.@Tooltip": "You can add enchantments to the #enchants_and_expeditions:disabled_enchantments tag in order to disable them"

@@ -71,16 +71,16 @@ public class EaEConfig implements ConfigData {
     public boolean item_tooltips_overrides = true;
 
     @ConfigEntry.Category("config")
-    public boolean legacies_and_legends_integration = true;
+    public boolean legacies_and_legends = true;
 
     @ConfigEntry.Category("config")
-    public boolean trailier_tales_integration = true;
+    public boolean trailier_tales = true;
 
     @ConfigEntry.Category("config")
-    public boolean remnants_integration = true;
+    public boolean remnants = true;
 
     @ConfigEntry.Category("config")
-    public boolean enderscape_integration = true;
+    public boolean enderscape = true;
   }
 
   @ConfigEntry.Gui.Tooltip

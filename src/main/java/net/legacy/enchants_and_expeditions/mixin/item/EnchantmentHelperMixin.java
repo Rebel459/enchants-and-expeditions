@@ -5,6 +5,7 @@ import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
+import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.ItemTags;
@@ -85,7 +86,9 @@ public abstract class EnchantmentHelperMixin {
             }
             if (isCompatible
                     && !EnchantingHelper.configureEnchantments(instance.enchantment())
-                    && !(stack.is(ItemTags.AXES) && instance.enchantment.is(EaEEnchantmentTags.REPLACED_BY_CLEAVING))) {
+                    && !(stack.is(ItemTags.AXES) && instance.enchantment.is(EaEEnchantmentTags.NOT_ON_AXES))
+                    && !(stack.is(EaEItemTags.ANIMAL_ARMOR) && instance.enchantment.is(EaEEnchantmentTags.NOT_ON_ANIMAL_ARMOR))
+            ) {
                 filteredResults.add(instance);
             }
         }

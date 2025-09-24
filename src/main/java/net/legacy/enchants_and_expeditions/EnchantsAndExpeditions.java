@@ -95,7 +95,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 			);
 		}
 
-		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.get.integrations.legacies_and_legends_integration) {
+		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.get.integrations.legacies_and_legends) {
 			isLegaciesAndLegendsLoaded = true;
 			ResourceManagerHelper.registerBuiltinResourcePack(
 					ResourceLocation.fromNamespaceAndPath(MOD_ID, "legacies_and_legends_integration"),
@@ -107,7 +107,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		if (FabricLoader.getInstance().isModLoaded("progression_reborn")) {
 			isProgressionRebornLoaded = true;
 		}
-		if (FabricLoader.getInstance().isModLoaded("trailiertales") && EaEConfig.get.integrations.trailier_tales_integration) {
+		if (FabricLoader.getInstance().isModLoaded("trailiertales") && EaEConfig.get.integrations.trailier_tales) {
 			isTrailierTalesLoaded = true;
 			ResourceManagerHelper.registerBuiltinResourcePack(
 					ResourceLocation.fromNamespaceAndPath(MOD_ID, "trailier_tales_integration"),
@@ -116,7 +116,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 					ResourcePackActivationType.ALWAYS_ENABLED
 			);
 		}
-		if (FabricLoader.getInstance().isModLoaded("enderscape") && EaEConfig.get.integrations.enderscape_integration) {
+		if (FabricLoader.getInstance().isModLoaded("enderscape") && EaEConfig.get.integrations.enderscape) {
 			isEnderscapeLoaded = true;
 			ResourceManagerHelper.registerBuiltinResourcePack(
 					ResourceLocation.fromNamespaceAndPath(MOD_ID, "enderscape_integration"),

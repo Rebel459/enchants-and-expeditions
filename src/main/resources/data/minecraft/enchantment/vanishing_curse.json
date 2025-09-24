@@ -6,7 +6,7 @@
   "effects": {
     "minecraft:prevent_equipment_drop": {}
   },
-  "exclusive_set": "#minecraft:curse",
+  "exclusive_set": "#enchants_and_expeditions:exclusive_set/vanishing_curse",
   "max_cost": {
     "base": 50,
     "per_level_above_first": 0

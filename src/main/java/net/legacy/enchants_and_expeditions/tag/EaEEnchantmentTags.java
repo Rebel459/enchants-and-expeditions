@@ -13,8 +13,10 @@ public class EaEEnchantmentTags {
     public static final TagKey<Enchantment> BLESSING = register("blessing");
     public static final TagKey<Enchantment> DISABLED_ENCHANTMENTS = register("disabled_enchantments");
     public static final TagKey<Enchantment> ENCHANTMENT_ORDER = register("enchantment_order");
-    public static final TagKey<Enchantment> REPLACED_BY_CLEAVING = register("replaced_by_cleaving");
     public static final TagKey<Enchantment> ENFORCE_MAXIMUM_LEVEL = register("enforce_maximum_level");
+
+    public static final TagKey<Enchantment> NOT_ON_AXES = register("not_on_axes");
+    public static final TagKey<Enchantment> NOT_ON_ANIMAL_ARMOR = register("not_on_animal_armor");
 
     public static final TagKey<Enchantment> ENCHANTING_TABLE = register("enchanting_table/all");
 

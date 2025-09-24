@@ -4,7 +4,7 @@
     "translate": "enchantment.enchants_and_expeditions.bounding_blessing"
   },
   "effects": {},
-  "exclusive_set": "#enchants_and_expeditions:blessing",
+  "exclusive_set": "#enchants_and_expeditions:exclusive_set/bounding_blessing",
   "max_cost": {
     "base": 90,
     "per_level_above_first": 30
