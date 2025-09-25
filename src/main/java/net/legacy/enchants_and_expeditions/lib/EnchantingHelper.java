@@ -77,10 +77,17 @@ public class EnchantingHelper {
     }
 
     public static boolean onRandomLoot(Holder<Enchantment> enchantment, RandomSource randomSource) {
-        if (randomSource.nextInt(0, 3) < 2) {
+        if (randomSource.nextInt(1, 5) < 4) {
             return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.ENCHANTING_TABLE_BLESSING)) || configureEnchantments(enchantment);
         }
         else return configureEnchantments(enchantment);
+    }
+
+    public static boolean onRandomlyEnchantedLoot(Holder<Enchantment> enchantment, RandomSource randomSource) {
+        if (randomSource.nextInt(1, 3) < 2) {
+            return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.ENCHANTING_TABLE_BLESSING)) || enchantment.is(EnchantmentTags.CURSE) || configureEnchantments(enchantment);
+        }
+        return onRandomLoot(enchantment, randomSource.fork());
     }
 
     public static int getBlessings(ItemStack stack) {

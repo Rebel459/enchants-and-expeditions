@@ -1,10 +1,7 @@
 package net.legacy.enchants_and_expeditions.mixin.function;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
-import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
@@ -15,12 +12,11 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.List;
 import java.util.Optional;
 
 @Mixin(EnchantRandomlyFunction.class)
@@ -42,11 +38,14 @@ public class EnchantRandomlyFunctionMixin {
         });
     }
 
-    @WrapOperation(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;getRandomSafe(Ljava/util/List;Lnet/minecraft/util/RandomSource;)Ljava/util/Optional;"))
-    protected Optional<Holder<Enchantment>> EaE$enchantFallback(List<Holder<Enchantment>> list, RandomSource randomSource, Operation<Optional<Holder<Enchantment>>> original) {
-        list.removeIf(enchantment -> {
-            return EnchantingHelper.onRandomLoot(enchantment, randomSource);
+    @ModifyVariable(
+            method = "run(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/storage/loot/LootContext;)Lnet/minecraft/world/item/ItemStack;",
+            at = @At(value = "STORE", ordinal = 0),
+            name = "optional"
+    )
+    private Optional<Holder<Enchantment>> EaE$filterRandomlyEnchantedLoot(Optional<Holder<Enchantment>> optional, ItemStack stack, LootContext context) {
+        return optional.filter(enchantment -> {
+            return !EnchantingHelper.onRandomlyEnchantedLoot(enchantment, context.getRandom());
         });
-        return Util.getRandomSafe(list, randomSource);
     }
 }
