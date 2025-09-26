@@ -4,48 +4,64 @@ import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @Mixin(EnchantRandomlyFunction.class)
 public class EnchantRandomlyFunctionMixin {
 
-    @Inject(method = "run", at = @At(value = "TAIL"), cancellable = true)
-    protected void EaE$enchantFallback(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir) {
-        EnchantRandomlyFunction function = EnchantRandomlyFunction.class.cast(this);
-        if (function.options.isPresent() || !EaEConfig.get.misc.enchant_function_fallback) return;
+    @Shadow @Final private boolean onlyCompatible;
 
-        RandomSource randomSource = context.getRandom();
-        Optional<HolderSet.Named<Enchantment>> enchantmentSet = Optional.of(context.getLevel().holderLookup(Registries.ENCHANTMENT).getOrThrow(EnchantmentTags.ON_RANDOM_LOOT));
+    @Shadow @Final public Optional<HolderSet<Enchantment>> options;
 
-        enchantmentSet.ifPresent(set -> {
-            Optional<Holder<Enchantment>> selectedHolder = set.getRandomElement(randomSource).filter(enchantment -> {
-                return !EnchantingHelper.onRandomLoot(enchantment, randomSource);
-            });
-            if (selectedHolder.isPresent()) cir.setReturnValue(EnchantRandomlyFunction.enchantItem(stack, selectedHolder.get(), randomSource));
+    @Unique
+    ItemStack itemStack;
+
+    @Unique
+    RandomSource randomSource;
+
+    @Inject(method = "run", at = @At(value = "HEAD"))
+    protected void EaE$run(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir) {
+        this.itemStack = stack;
+        this.randomSource = context.getRandom();
+    }
+
+    @Redirect(
+            method = "run(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/storage/loot/LootContext;)Lnet/minecraft/world/item/ItemStack;",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/util/stream/Stream;filter(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;")
+    )
+    private Stream<Holder<Enchantment>> EaE$filterRandomEnchantments(Stream<Holder<Enchantment>> stream, Predicate<? super Stream<Holder<Enchantment>>> predicate) {
+        ItemStack stack = this.itemStack;
+        RandomSource random = this.randomSource;
+        boolean bl = stack.is(Items.BOOK);
+        boolean bl2 = !bl && this.onlyCompatible;
+        return stream.filter(holder -> {
+            return (!bl2 || holder.value().canEnchant(stack)) && !EnchantingHelper.onRandomlyEnchantedLoot(holder, random) && enchantFallback(holder);
         });
     }
 
-    @ModifyVariable(
-            method = "run(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/storage/loot/LootContext;)Lnet/minecraft/world/item/ItemStack;",
-            at = @At(value = "STORE", ordinal = 0),
-            name = "optional"
-    )
-    private Optional<Holder<Enchantment>> EaE$filterRandomlyEnchantedLoot(Optional<Holder<Enchantment>> optional, ItemStack stack, LootContext context) {
-        return optional.filter(enchantment -> {
-            return !EnchantingHelper.onRandomlyEnchantedLoot(enchantment, context.getRandom());
-        });
+    @Unique
+    public boolean enchantFallback(Holder<Enchantment> holder) {
+        if (this.options.isPresent() || !EaEConfig.get.misc.enchant_function_fallback) return true;
+        else return holder.is(EnchantmentTags.ON_RANDOM_LOOT);
     }
 }
