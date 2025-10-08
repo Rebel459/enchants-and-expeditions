@@ -143,4 +143,9 @@ public class EnchantingHelper {
     public static boolean isEnchantment(Holder<Enchantment> enchantment) {
         return !enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EnchantmentTags.CURSE);
     }
+
+    public static int getStoredEnchantmentLevel(Holder<Enchantment> enchantment, ItemStack stack) {
+        ItemEnchantments itemEnchantments = stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
+        return itemEnchantments.getLevel(enchantment);
+    }
 }

@@ -1,9 +1,9 @@
-Remnants - Legacy License
+Enchants and Expeditions - Legacy License
 
-- Assets ARR / specific to the relevant rights holder. Assets include anything in the assets/ and structure/ directories
-- All code and code contributions licensed under LGPL-3.0 Only. This includes all code used in the java/, recipe/, worldgen/ and loot_table/ directories
+- Assets ARR / specific to the relevant rights holder. Assets include anything in the assets/ directories
+- All code and code contributions licensed under LGPL-3.0 Only. This includes all code used in the java/, recipe/ and loot_table/ directories
 
-Source code: https://github.com/Rebel459/remnants
+Source code: https://github.com/Rebel459/enchants-and-expeditions
 
 
 
