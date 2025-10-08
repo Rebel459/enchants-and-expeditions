@@ -98,7 +98,7 @@ public abstract class AnvilMenuMixin {
 
         if ((inputStack.isEnchanted() && additionStack.isEnchanted() && inputStack.getItem() == additionStack.getItem()) || additionStack.is(Items.ENCHANTED_BOOK)) {
             int enchantCost;
-            int multipler = 0;
+            int multipler = 1;
             float reduction = 1;
 
             if (inputStack.getItem() == additionStack.getItem()) enchantCost = Math.max(evaluateEnchantCost(inputStack, additionStack, outputStack), evaluateEnchantCost(additionStack, inputStack,outputStack));
@@ -109,11 +109,10 @@ public abstract class AnvilMenuMixin {
                 outputEnchantmentsList = outputStack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY).keySet().stream().toList();
             }
             for (Holder<Enchantment> enchantment : outputEnchantmentsList) {
-                if (enchantment.is(EaEEnchantmentTags.BLESSING)) multipler += 3;
-                else if (EnchantingHelper.isEnchantment(enchantment)) multipler += 2;
-                else if (enchantment.is(EnchantmentTags.CURSE)) multipler += 1;
+                if (enchantment.is(EaEEnchantmentTags.BLESSING)) multipler += 2;
+                else if (EnchantingHelper.isEnchantment(enchantment)) multipler += 1;
+                else if (enchantment.is(EnchantmentTags.CURSE)) multipler += 0;
             }
-            if (enchantCost >= 1 && multipler == 0) multipler = 1;
             if (outputStack.has(DataComponents.ENCHANTABLE)) reduction -= Math.min(25, outputStack.get(DataComponents.ENCHANTABLE).value() * 0.01F);
             float finalCost = enchantCost * multipler * reduction;
             cost.set((int) finalCost);

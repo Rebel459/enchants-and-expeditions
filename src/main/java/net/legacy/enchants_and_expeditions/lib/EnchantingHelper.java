@@ -1,6 +1,7 @@
 package net.legacy.enchants_and_expeditions.lib;
 
 import com.google.common.collect.Lists;
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
@@ -26,6 +27,8 @@ public class EnchantingHelper {
     }
 
     public static List<EnchantmentInstance> evaluateEnchantments(ItemStack stack, List<EnchantmentInstance> list) {
+        List<Holder<Enchantment>> stackEnchantments = stack.getEnchantments().keySet().stream().toList();
+
         list.removeIf(enchantmentInstance -> {
             return enchantmentInstance.enchantment.is(EaEEnchantments.BOUNDING_BLESSING) && stack.is(EaEItemTags.UNBOUNDABLE);
         });
@@ -37,8 +40,8 @@ public class EnchantingHelper {
             return stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY).getLevel(enchantmentInstance.enchantment) >= enchantmentInstance.level;
         });
         list.removeIf(enchantmentInstance -> {
-            for (int x = 0; x < enchantmentInstance.enchantment.value().exclusiveSet().size(); x++) {
-                if (enchantmentInstance.enchantment.value().exclusiveSet().get(x) == stack.getEnchantments()) return true;
+            for (Holder<Enchantment> stackEnchantment : stackEnchantments) {
+                if (!Enchantment.areCompatible(stackEnchantment, enchantmentInstance.enchantment())) return true;
             }
             return false;
         });
