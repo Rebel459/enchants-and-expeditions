@@ -1,16 +1,18 @@
 package net.legacy.enchants_and_expeditions.mixin.inventory;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.DataSlot;
@@ -21,6 +23,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.AnvilBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,9 +44,164 @@ public abstract class AnvilMenuMixin {
     @Final
     private DataSlot cost;
 
-    @WrapOperation(method = "createResult", at = @At(
-            value = "INVOKE", target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V"))
-    private void EaE$bookLimit(AnvilMenu instance, Operation<Void> original) {
+    @Shadow
+    @Nullable
+    private String itemName;
+
+    @Inject(method = "createResult", at = @At(value = "HEAD"), cancellable = true)
+    private void EaE$createResult(CallbackInfo ci) {
+        AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
+        ItemStack itemStack = anvilMenu.inputSlots.getItem(0);
+        anvilMenu.onlyRenaming = false;
+        this.cost.set(1);
+        int i = 0;
+        long l = 0L;
+        int j = 0;
+        if (!itemStack.isEmpty() && EnchantmentHelper.canStoreEnchantments(itemStack)) {
+            ItemStack itemStack2 = itemStack.copy();
+            ItemStack itemStack3 = anvilMenu.inputSlots.getItem(1);
+            ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(itemStack2));
+            l += (long)itemStack.getOrDefault(DataComponents.REPAIR_COST, 0) + (long)itemStack3.getOrDefault(DataComponents.REPAIR_COST, 0);
+            anvilMenu.repairItemCountCost = 0;
+            if (!itemStack3.isEmpty()) {
+                boolean bl = itemStack3.has(DataComponents.STORED_ENCHANTMENTS);
+                if (itemStack2.isDamageableItem() && itemStack.isValidRepairItem(itemStack3)) {
+                    int k = Math.min(itemStack2.getDamageValue(), itemStack2.getMaxDamage() / 4);
+                    if (k <= 0) {
+                        anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
+                        this.cost.set(0);
+                        return;
+                    }
+
+                    int m;
+                    for(m = 0; k > 0 && m < itemStack3.getCount(); ++m) {
+                        int n = itemStack2.getDamageValue() - k;
+                        itemStack2.setDamageValue(n);
+                        ++i;
+                        k = Math.min(itemStack2.getDamageValue(), itemStack2.getMaxDamage() / 4);
+                    }
+
+                    anvilMenu.repairItemCountCost = m;
+                } else {
+                    if (!bl && (!itemStack2.is(itemStack3.getItem()) || !itemStack2.isDamageableItem())) {
+                        anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
+                        this.cost.set(0);
+                        return;
+                    }
+
+                    if (itemStack2.isDamageableItem() && !bl) {
+                        int k = itemStack.getMaxDamage() - itemStack.getDamageValue();
+                        int m = itemStack3.getMaxDamage() - itemStack3.getDamageValue();
+                        int n = m + itemStack2.getMaxDamage() * 12 / 100;
+                        int o = k + n;
+                        int p = itemStack2.getMaxDamage() - o;
+                        if (p < 0) {
+                            p = 0;
+                        }
+
+                        if (p < itemStack2.getDamageValue()) {
+                            itemStack2.setDamageValue(p);
+                            i += 2;
+                        }
+                    }
+
+                    ItemEnchantments itemEnchantments = EnchantmentHelper.getEnchantmentsForCrafting(itemStack3);
+                    boolean bl2 = false;
+                    boolean bl3 = false;
+
+                    for(Object2IntMap.Entry<Holder<Enchantment>> entry : itemEnchantments.entrySet()) {
+                        Holder<Enchantment> holder = entry.getKey();
+                        int q = mutable.getLevel(holder);
+                        int r = entry.getIntValue();
+                        r = q == r ? r + 1 : Math.max(r, q);
+                        Enchantment enchantment = holder.value();
+                        boolean bl4 = enchantment.canEnchant(itemStack);
+                        if (anvilMenu.player.hasInfiniteMaterials() || itemStack.is(Items.ENCHANTED_BOOK)) {
+                            bl4 = true;
+                        }
+
+                        for(Holder<Enchantment> holder2 : mutable.keySet()) {
+                            if (!holder2.equals(holder) && !Enchantment.areCompatible(holder, holder2)) {
+                                bl4 = false;
+                                ++i;
+                            }
+                        }
+
+                        if (!bl4) {
+                            bl3 = true;
+                        } else {
+                            bl2 = true;
+                            if (r > enchantment.getMaxLevel()) {
+                                r = enchantment.getMaxLevel();
+                            }
+
+                            mutable.set(holder, r);
+                            int s = enchantment.getAnvilCost();
+                            if (bl) {
+                                s = Math.max(1, s / 2);
+                            }
+
+                            i += s * r;
+                            if (itemStack.getCount() > 1) {
+                                i = 40;
+                            }
+                        }
+                    }
+
+                    if (bl3 && !bl2) {
+                        anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
+                        this.cost.set(0);
+                        return;
+                    }
+                }
+            }
+
+            if (this.itemName != null && !StringUtil.isBlank(this.itemName)) {
+                if (!this.itemName.equals(itemStack.getHoverName().getString())) {
+                    j = 1;
+                    i += j;
+                    itemStack2.set(DataComponents.CUSTOM_NAME, Component.literal(this.itemName));
+                }
+            } else if (itemStack.has(DataComponents.CUSTOM_NAME)) {
+                j = 1;
+                i += j;
+                itemStack2.remove(DataComponents.CUSTOM_NAME);
+            }
+
+            int t = i <= 0 ? 0 : (int) Mth.clamp(l + (long)i, 0L, 2147483647L);
+            this.cost.set(t);
+            if (i <= 0) {
+                itemStack2 = ItemStack.EMPTY;
+            }
+
+            if (!itemStack2.isEmpty()) {
+                int k = itemStack2.getOrDefault(DataComponents.REPAIR_COST, 0);
+                if (k < itemStack3.getOrDefault(DataComponents.REPAIR_COST, 0)) {
+                    k = itemStack3.getOrDefault(DataComponents.REPAIR_COST, 0);
+                }
+
+                if (j != i || j == 0) {
+                    k = AnvilMenu.calculateIncreasedRepairCost(k);
+                }
+
+                itemStack2.set(DataComponents.REPAIR_COST, k);
+                EnchantmentHelper.setEnchantments(itemStack2, mutable.toImmutable());
+            }
+
+            anvilMenu.resultSlots.setItem(0, itemStack2);
+            EaE$bookLimit();
+            EaE$modifyPrice();
+            EaE$repairBooksOnCombine();
+            anvilMenu.broadcastChanges();
+        } else {
+            anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
+            this.cost.set(0);
+        }
+        ci.cancel();
+    }
+
+    @Unique
+    private void EaE$bookLimit() {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack inputStack = anvilMenu.inputSlots.getItem(0);
         ItemStack additionStack = anvilMenu.inputSlots.getItem(1);
@@ -82,15 +240,10 @@ public abstract class AnvilMenuMixin {
             this.cost.set(0);
             return;
         }
-
-        original.call(instance);
     }
 
-    @Inject(method = "createResult",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V",
-                    shift = At.Shift.BEFORE))
-    public void EaE$modifyPrice(CallbackInfo ci) {
+    @Unique
+    public void EaE$modifyPrice() {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack inputStack = anvilMenu.slots.getFirst().getItem();
         ItemStack additionStack = anvilMenu.slots.get(1).getItem();
@@ -132,6 +285,17 @@ public abstract class AnvilMenuMixin {
             if (repairCost < 1) repairCost = 1;
 
             cost.set(repairCost * repairMultiplier);
+        }
+    }
+
+    @Unique
+    protected void EaE$repairBooksOnCombine() {
+        AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
+        ItemStack inputStack = anvilMenu.inputSlots.getItem(0);
+        ItemStack additionStack = anvilMenu.inputSlots.getItem(1);
+        ItemStack outputStack = anvilMenu.resultSlots.getItem(0);
+        if (inputStack.is(Items.ENCHANTED_BOOK) && additionStack.is(Items.ENCHANTED_BOOK) && outputStack.is(Items.ENCHANTED_BOOK)) {
+            outputStack.setDamageValue(0);
         }
     }
 
@@ -197,20 +361,9 @@ public abstract class AnvilMenuMixin {
         ci.cancel();
     }
 
-    @Inject(method = "createResult", at = @At(value = "TAIL"))
-    protected void EaE$repairBooksOnCombine(CallbackInfo ci) {
-        AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
-        ItemStack inputStack = anvilMenu.inputSlots.getItem(0);
-        ItemStack additionStack = anvilMenu.inputSlots.getItem(1);
-        ItemStack outputStack = anvilMenu.resultSlots.getItem(0);
-        if (inputStack.is(Items.ENCHANTED_BOOK) && additionStack.is(Items.ENCHANTED_BOOK) && outputStack.is(Items.ENCHANTED_BOOK)) {
-            outputStack.setDamageValue(0);
-        }
-    }
-
     @Inject(method = "mayPickup", at = @At(value = "HEAD"), cancellable = true)
     protected void EaE$mayPickup(Player player, boolean hasStack, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(true);
+        cir.setReturnValue(player.hasInfiniteMaterials() || player.experienceLevel >= this.cost.get() || this.cost.get() == 0);
     }
 
     @Inject(method = "calculateIncreasedRepairCost", at = @At(value = "HEAD"), cancellable = true)
