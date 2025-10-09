@@ -52,14 +52,14 @@ public abstract class AnvilMenuMixin {
     private void EaE$createResult(CallbackInfo ci) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack itemStack = anvilMenu.inputSlots.getItem(0);
-        anvilMenu.onlyRenaming = false;
+        ItemStack itemStack2 = itemStack.copy();
+        ItemStack itemStack3 = anvilMenu.inputSlots.getItem(1);
+        anvilMenu.onlyRenaming = this.cost.get() == 0 && itemStack3 == ItemStack.EMPTY; // custom onlyRenaming
         this.cost.set(1);
         int i = 0;
         long l = 0L;
         int j = 0;
         if (!itemStack.isEmpty() && EnchantmentHelper.canStoreEnchantments(itemStack)) {
-            ItemStack itemStack2 = itemStack.copy();
-            ItemStack itemStack3 = anvilMenu.inputSlots.getItem(1);
             ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(itemStack2));
             l += (long)itemStack.getOrDefault(DataComponents.REPAIR_COST, 0) + (long)itemStack3.getOrDefault(DataComponents.REPAIR_COST, 0);
             anvilMenu.repairItemCountCost = 0;
@@ -207,7 +207,7 @@ public abstract class AnvilMenuMixin {
         ItemStack additionStack = anvilMenu.inputSlots.getItem(1);
         ItemStack outputStack = anvilMenu.resultSlots.getItem(0);
 
-        if (EaEConfig.get.general.enchantment_limit != -1) {
+        if (EaEConfig.get.general.enchantment_limit != -1 && !anvilMenu.onlyRenaming) {
             int inputScore = EnchantingHelper.enchantmentScore(inputStack);
             int outputScore = EnchantingHelper.enchantmentScore(outputStack);
 
@@ -217,7 +217,7 @@ public abstract class AnvilMenuMixin {
                 return;
             }
         }
-        boolean shouldPass = false;
+        boolean shouldPass = anvilMenu.onlyRenaming;
         List<Holder<Enchantment>> list = outputStack.getEnchantments().keySet().stream().toList();
         if (outputStack.getDamageValue() < inputStack.getDamageValue()) shouldPass = true;
         if (!shouldPass) {
