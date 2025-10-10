@@ -1,4 +1,4 @@
-package net.legacy.enchants_and_expeditions.mixin.client;
+package net.legacy.enchants_and_expeditions.mixin.client.inventory;
 
 import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import org.spongepowered.asm.mixin.Mixin;

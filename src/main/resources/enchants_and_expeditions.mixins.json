@@ -30,7 +30,8 @@
     "defaultRequire": 1
   },
   "client": [
-    "client.AnvilScreenMixin",
-    "client.EnchantmentScreenMixin"
+    "client.inventory.AnvilScreenMixin",
+    "client.inventory.EnchantmentScreenMixin",
+    "client.item.ItemStackMixin"
   ]
 }

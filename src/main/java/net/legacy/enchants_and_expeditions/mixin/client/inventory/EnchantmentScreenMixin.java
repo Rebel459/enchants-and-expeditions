@@ -1,4 +1,4 @@
-package net.legacy.enchants_and_expeditions.mixin.client;
+package net.legacy.enchants_and_expeditions.mixin.client.inventory;
 
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.EnvType;
