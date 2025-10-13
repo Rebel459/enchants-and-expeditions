@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,32 +27,29 @@ public abstract class PlayerListMixin {
     private NonNullList<ItemStack> savedItems;
     @Unique
     private Map<EquipmentSlot, ItemStack> savedEquipment;
-    @Unique
-    private boolean isPlayerAlive;
 
     @Inject(method = "respawn", at = @At("HEAD"))
-    private void EaE$saveBoundItems(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
-        isPlayerAlive = alive;
+    private void EaE$saveItems(ServerPlayer player, boolean keepInventory, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
         Inventory inventory = player.getInventory();
         // Save main inventory
         savedItems = NonNullList.withSize(inventory.items.size(), ItemStack.EMPTY);
         for (int i = 0; i < inventory.items.size(); i++) {
             ItemStack itemStack = inventory.items.get(i);
-            if (shouldReserve(itemStack)) {
+            if (shouldReserve(itemStack, player)) {
                 savedItems.set(i, itemStack.copy());
             }
         }
         // Save equipment (armor and offhand)
         savedEquipment = new HashMap<>();
         inventory.equipment.items.forEach((slot, itemStack) -> {
-            if (shouldReserve(itemStack)) {
+            if (shouldReserve(itemStack, player)) {
                 savedEquipment.put(slot, itemStack.copy());
             }
         });
     }
 
     @Inject(method = "respawn", at = @At("RETURN"))
-    private void EaE$restoreBoundItems(ServerPlayer player, boolean alive, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
+    private void EaE$restoreItems(ServerPlayer player, boolean keepInventory, Entity.RemovalReason removalReason, CallbackInfoReturnable<ServerPlayer> cir) {
         ServerPlayer newPlayer = cir.getReturnValue();
         Inventory newInventory = newPlayer.getInventory();
         // Restore main inventory
@@ -66,8 +64,8 @@ public abstract class PlayerListMixin {
     }
 
     @Unique
-    private boolean shouldReserve(ItemStack stack) {
+    private boolean shouldReserve(ItemStack stack, ServerPlayer player) {
         if (stack.isEmpty()) return false;
-        return isPlayerAlive || (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING) && !stack.is(EaEItemTags.UNBOUNDABLE));
+        return player.server.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) || (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING) && !stack.is(EaEItemTags.UNBOUNDABLE));
     }
 }
