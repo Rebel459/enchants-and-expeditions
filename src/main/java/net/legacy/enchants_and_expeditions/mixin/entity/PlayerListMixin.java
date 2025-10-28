@@ -35,14 +35,14 @@ public abstract class PlayerListMixin {
         savedItems = NonNullList.withSize(inventory.items.size(), ItemStack.EMPTY);
         for (int i = 0; i < inventory.items.size(); i++) {
             ItemStack itemStack = inventory.items.get(i);
-            if (shouldReserve(itemStack, player)) {
+            if (shouldReserve(itemStack, player, keepInventory)) {
                 savedItems.set(i, itemStack.copy());
             }
         }
         // Save equipment (armor and offhand)
         savedEquipment = new HashMap<>();
         inventory.equipment.items.forEach((slot, itemStack) -> {
-            if (shouldReserve(itemStack, player)) {
+            if (shouldReserve(itemStack, player, keepInventory)) {
                 savedEquipment.put(slot, itemStack.copy());
             }
         });
@@ -64,8 +64,8 @@ public abstract class PlayerListMixin {
     }
 
     @Unique
-    private boolean shouldReserve(ItemStack stack, ServerPlayer player) {
+    private boolean shouldReserve(ItemStack stack, ServerPlayer player, boolean keepInventory) {
         if (stack.isEmpty()) return false;
-        return player.server.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) || (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING) && !stack.is(EaEItemTags.UNBOUNDABLE));
+        return player.server.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) || keepInventory || (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING) && !stack.is(EaEItemTags.UNBOUNDABLE));
     }
 }
