@@ -52,7 +52,7 @@ public abstract class ItemStackMixin {
             String corruption = "0";
             String divinity = "0";
             if (this.is(Blocks.BOOKSHELF.asItem())) {
-                mana = "0.5";
+                mana = "0.25";
                 frost = "0.25";
                 scorch = "0.25";
                 flow = "0.25";
@@ -221,6 +221,7 @@ public abstract class ItemStackMixin {
             }
             else if (this.is(EaEItems.TOME_OF_STABILITY)) {
                 corruption = "-1.0";
+                might = "-5.0";
                 consumer.accept(altarTooltip());
                 consumer.accept(attributeTooltip("decreases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("decreases_enchanting_power", String.valueOf(3)));
@@ -231,7 +232,7 @@ public abstract class ItemStackMixin {
                 }
             }
             else if (this.is(EaEItems.TOME_OF_POWER)) {
-                might = "-5.0";
+                might = "1.0";
                 chaos = "1.0";
                 flow = "1.0";
                 greed = "1.0";

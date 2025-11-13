@@ -157,6 +157,6 @@ public abstract class EnchantmentScreenMixin {
 
     @Unique
     private boolean isOverButton(int mouseX, int mouseY) {
-        return mouseX >= leftPos() && mouseX <= leftPos() + textureSize && mouseY >= topPos() && mouseY <= topPos() + textureSize;
+        return mouseX >= leftPos() && mouseX <= leftPos() + 14 && mouseY >= topPos() && mouseY <= topPos() + 14;
     }
 }

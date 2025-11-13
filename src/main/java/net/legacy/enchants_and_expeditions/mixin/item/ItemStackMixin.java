@@ -2,6 +2,8 @@ package net.legacy.enchants_and_expeditions.mixin.item;
 
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.TagKey;
@@ -27,6 +29,12 @@ public abstract class ItemStackMixin {
     @Shadow public abstract Item getItem();
 
     @Shadow public abstract ItemEnchantments getEnchantments();
+
+    @Shadow
+    public abstract boolean is(Holder<Item> item);
+
+    @Shadow
+    public abstract boolean is(HolderSet<Item> item);
 
     @Inject(method = "isEnchantable", at = @At("TAIL"), cancellable = true)
     private void canEnchant(CallbackInfoReturnable<Boolean> cir) {

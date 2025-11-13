@@ -27,6 +27,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
@@ -48,7 +49,6 @@ import java.util.stream.Stream;
 public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
     @Shadow @Final private RandomSource random;
-    @Shadow @Final private DataSlot enchantmentSeed;
     @Shadow @Final private Container enchantSlots;
     @Shadow @Final private ContainerLevelAccess access;
     @Shadow @Final public int[] costs;
@@ -56,6 +56,9 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Shadow @Final public int[] levelClue;
     @Shadow protected abstract List<EnchantmentInstance> getEnchantmentList(RegistryAccess registryAccess, ItemStack stack, int slot, int cost);
 
+    @Shadow
+    @Final
+    private DataSlot enchantmentSeed;
     @Unique private Player player;
     @Unique private int totalBookshelves = 0;
     @Unique private int bookshelves = 0;
@@ -123,7 +126,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         EnchantmentMenu enchantmentMenu = EnchantmentMenu.class.cast(this);
         if (container == this.enchantSlots) {
             ItemStack itemStack = container.getItem(0);
-            if (!itemStack.isEmpty() && (itemStack.isEnchantable())) {
+            if (!itemStack.isEmpty() && itemStack.isEnchantable() && !itemStack.is(Items.BOOK) && !itemStack.is(Items.ENCHANTED_BOOK)) {
                 this.access.execute((level, blockPos) -> {
                     IdMap<Holder<net.minecraft.world.item.enchantment.Enchantment>> idMap =
                             level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).asHolderIdMap();
@@ -154,7 +157,6 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                             if (enchantingBlockCheck(level, blockPos, off, Blocks.BOOKSHELF)) {
                                 this.bookshelves++;
                                 this.totalBookshelves++;
-
                             }
                             if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.ARCANE_BOOKSHELF)) {
                                 this.arcaneBooksheves++;
@@ -211,7 +213,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                         }
                     }
 
-                    this.random.setSeed((long)this.enchantmentSeed.get());
+                    this.random.setSeed(this.enchantmentSeed.get());
 
                     for (int j = 0; j < 3; j++) {
                         this.costs[j] = EnchantmentHelper.getEnchantmentCost(this.random, j, ix, itemStack);
@@ -270,6 +272,16 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     }
 
     @Unique
+    private int calculateEnchantingPower(Enchantable enchantable, int basePower, int secondaryPower) {
+        int returnPower = basePower / 4 + secondaryPower;
+        int enchantability = Math.max(0, enchantable.value() + this.powerAltars * 3 - this.stabilityAltars * 3);
+        returnPower += 1 + random.nextInt(enchantability / 4 + 1) + random.nextInt(enchantability / 4 + 1);
+        float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
+        returnPower = Mth.clamp(Math.round((float)returnPower + (float)returnPower * f), 1, Integer.MAX_VALUE);
+        return returnPower;
+    }
+
+    @Unique
     private List<EnchantmentInstance> EaE$selectEnchantment(RandomSource random, ItemStack stack, int slot, int enchantingPower, RegistryAccess registryAccess) {
         List<EnchantmentInstance> list = Lists.newArrayList();
         Enchantable enchantable = stack.get(DataComponents.ENCHANTABLE);
@@ -314,21 +326,25 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> corruptionCurses = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EnchantmentTags.CURSE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        
-        int enchantability = Math.max(0, enchantable.value() + this.powerAltars * 3 - this.stabilityAltars * 3);
-        enchantingPower += 1 + random.nextInt(enchantability / 4 + 1) + random.nextInt(enchantability / 4 + 1);
-        float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
-        enchantingPower = Mth.clamp(Math.round((float)enchantingPower + (float)enchantingPower * f), 1, Integer.MAX_VALUE);
+
+        enchantingPower = calculateEnchantingPower(enchantable, enchantingPower, enchantingPower);
+        int manaPower = calculateEnchantingPower(enchantable, enchantingPower, this.mana * 2);
+        int frostPower = calculateEnchantingPower(enchantable, enchantingPower, this.frost * 2);
+        int scorchPower = calculateEnchantingPower(enchantable, enchantingPower, this.scorch * 2);
+        int flowPower = calculateEnchantingPower(enchantable, enchantingPower, this.flow * 2);
+        int chaosPower = calculateEnchantingPower(enchantable, enchantingPower, this.chaos * 2);
+        int greedPower = calculateEnchantingPower(enchantable, enchantingPower, this.greed * 2);
+        int mightPower = calculateEnchantingPower(enchantable, enchantingPower, this.might * 2);
 
         List<EnchantmentInstance> baseList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, baseEnchantments.stream());
 
-        List<EnchantmentInstance> manaList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, manaEnchantments.stream());
-        List<EnchantmentInstance> frostList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, frostEnchantments.stream());
-        List<EnchantmentInstance> scorchList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, scorchEnchantments.stream());
-        List<EnchantmentInstance> flowList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, flowEnchantments.stream());
-        List<EnchantmentInstance> chaosList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, chaosEnchantments.stream());
-        List<EnchantmentInstance> greedList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, greedEnchantments.stream());
-        List<EnchantmentInstance> mightList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, mightEnchantments.stream());
+        List<EnchantmentInstance> manaList = EnchantmentHelper.getAvailableEnchantmentResults(manaPower, stack, manaEnchantments.stream());
+        List<EnchantmentInstance> frostList = EnchantmentHelper.getAvailableEnchantmentResults(frostPower, stack, frostEnchantments.stream());
+        List<EnchantmentInstance> scorchList = EnchantmentHelper.getAvailableEnchantmentResults(scorchPower, stack, scorchEnchantments.stream());
+        List<EnchantmentInstance> flowList = EnchantmentHelper.getAvailableEnchantmentResults(flowPower, stack, flowEnchantments.stream());
+        List<EnchantmentInstance> chaosList = EnchantmentHelper.getAvailableEnchantmentResults(chaosPower, stack, chaosEnchantments.stream());
+        List<EnchantmentInstance> greedList = EnchantmentHelper.getAvailableEnchantmentResults(greedPower, stack, greedEnchantments.stream());
+        List<EnchantmentInstance> mightList = EnchantmentHelper.getAvailableEnchantmentResults(mightPower, stack, mightEnchantments.stream());
 
         List<EnchantmentInstance> manaBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, manaBlessings.stream());
         List<EnchantmentInstance> frostBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, frostBlessings.stream());
@@ -489,7 +505,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
             int locMana = 0, locFrost = 0, locScorch = 0, locFlow = 0, locChaos = 0, locGreed = 0, locMight = 0, locCorruption = 0, locDivinity = 0;
 
-            locMana += nBooks / 2;
+            locMana += nBooks / 4;
             locFrost += nBooks / 4;
             locScorch += nBooks / 4;
             locFlow += nBooks / 4;
@@ -553,8 +569,9 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             locDivinity += aMight;
 
             locCorruption -= aStability;
+            locMight -= aStability * 5;
 
-            locMight -= aPower * 5;
+            locMight += aPower;
             locChaos += aPower;
             locGreed += aPower;
             locFlow += aPower;

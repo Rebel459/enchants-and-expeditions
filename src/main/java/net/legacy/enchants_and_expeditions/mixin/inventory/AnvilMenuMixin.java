@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.Player;
@@ -185,13 +186,21 @@ public abstract class AnvilMenuMixin {
                 }
 
                 itemStack2.set(DataComponents.REPAIR_COST, k);
+                ItemStack itemStack4 = itemStack2.copy();
+                if (!anvilMenu.player.hasInfiniteMaterials()) mutable.removeIf(holder -> (itemStack4.is(ItemTags.AXES) && holder.is(EaEEnchantmentTags.NOT_ON_AXES)) || (itemStack4.is(EaEItemTags.ANIMAL_ARMOR) && holder.is(EaEEnchantmentTags.NOT_ON_ANIMAL_ARMOR)));
                 EnchantmentHelper.setEnchantments(itemStack2, mutable.toImmutable());
             }
 
-            anvilMenu.resultSlots.setItem(0, itemStack2);
+            if (itemStack2 != itemStack) anvilMenu.resultSlots.setItem(0, itemStack2);
+            else {
+                anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
+                this.cost.set(0);
+            }
+
             EaE$bookLimit();
             EaE$modifyPrice();
             EaE$repairBooksOnCombine();
+
             anvilMenu.broadcastChanges();
         } else {
             anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
@@ -286,6 +295,7 @@ public abstract class AnvilMenuMixin {
 
             cost.set(repairCost * repairMultiplier);
         }
+        if (cost.get() > 99) cost.set(99);
     }
 
     @Unique

@@ -19,6 +19,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -51,11 +52,15 @@ public abstract class EnchantmentHelperMixin {
         boolean bl; // allow enchanted book re-enchanting
         if (stack.getEnchantments().size() < EaEConfig.get.general.enchantment_limit) bl = stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
         else bl = stack.is(Items.BOOK);
+
         possibleEnchantments.filter(holder -> holder.value().isPrimaryItem(stack) || bl).forEach(holder -> {
             Enchantment enchantment = holder.value();
 
             for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
-                if (level >= enchantment.getMinCost(j) && (level <= enchantment.getMaxCost(j) || (j == enchantment.getMaxLevel() && !holder.is(EaEEnchantmentTags.ENFORCE_MAXIMUM_LEVEL)))) { // override max level check
+                if (level >= enchantment.getMinCost(j) && (level <= enchantment.getMaxCost(j) || (j == enchantment.getMaxLevel() && !holder.is(EaEEnchantmentTags.ENFORCE_MAXIMUM_LEVEL)))  // override max level check
+                        && !EnchantingHelper.configureEnchantments(holder)
+                        && !(stack.is(ItemTags.AXES) && holder.is(EaEEnchantmentTags.NOT_ON_AXES))
+                        && !(stack.is(EaEItemTags.ANIMAL_ARMOR) && holder.is(EaEEnchantmentTags.NOT_ON_ANIMAL_ARMOR))) {
                     list.add(new EnchantmentInstance(holder, j));
                     break;
                 }
@@ -64,7 +69,7 @@ public abstract class EnchantmentHelperMixin {
         cir.setReturnValue(list);
     }
 
-    @Inject(method = "getAvailableEnchantmentResults", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getAvailableEnchantmentResults", at = @At("TAIL"), cancellable = true)
     private static void EaE$filterIncompatibleEnchantments(int power, ItemStack stack, Stream<Enchantment> enchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         List<EnchantmentInstance> originalResults = cir.getReturnValue();
 
@@ -84,13 +89,7 @@ public abstract class EnchantmentHelperMixin {
                     break;
                 }
             }
-            if (isCompatible
-                    && !EnchantingHelper.configureEnchantments(instance.enchantment())
-                    && !(stack.is(ItemTags.AXES) && instance.enchantment.is(EaEEnchantmentTags.NOT_ON_AXES))
-                    && !(stack.is(EaEItemTags.ANIMAL_ARMOR) && instance.enchantment.is(EaEEnchantmentTags.NOT_ON_ANIMAL_ARMOR))
-            ) {
-                filteredResults.add(instance);
-            }
+            if (isCompatible) filteredResults.add(instance);
         }
 
         cir.setReturnValue(filteredResults);

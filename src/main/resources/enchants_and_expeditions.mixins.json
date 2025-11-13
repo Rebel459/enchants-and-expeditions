@@ -23,6 +23,7 @@
     "item.EnchantmentHelperMixin",
     "item.EnchantmentMixin",
     "item.ItemEnchantmentsMixin",
+    "item.ItemPropertiesMixin",
     "item.ItemStackMixin",
     "recipe.ShapedRecipeMixin"
   ],

@@ -6,17 +6,34 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.*;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Objects;
+
 @Mixin(Enchantment.class)
 public abstract class EnchantmentMixin {
 
     @Shadow public abstract int getMaxLevel();
+
+    @Shadow
+    @Final
+    private Enchantment.EnchantmentDefinition definition;
+
+    @Shadow
+    @Final
+    private Component description;
+
+    @Shadow
+    public abstract Component description();
 
     @Inject(method = "getFullname", at = @At("TAIL"), cancellable = true)
     private static void EaE$addBlessings(Holder<Enchantment> enchantment, int level, CallbackInfoReturnable<MutableComponent> cir) {
