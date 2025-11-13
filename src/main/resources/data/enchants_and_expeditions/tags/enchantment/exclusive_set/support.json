@@ -5,10 +5,6 @@
     "minecraft:knockback",
     "enchants_and_expeditions:bloodlust",
     {
-      "id": "remnants:dueling",
-      "required": false
-    },
-    {
       "id": "remnants:relentless",
       "required": false
     }
