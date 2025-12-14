@@ -3,8 +3,6 @@ package net.legacy.enchants_and_expeditions.registry;
 import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +37,8 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> FEROCITY = key("ferocity");
 	public static final ResourceKey<Enchantment> VELOCITY = key("velocity");
 	public static final ResourceKey<Enchantment> CLEAVING = key("cleaving");
-	public static final ResourceKey<Enchantment> PARRY = key("parry");
+    public static final ResourceKey<Enchantment> PARRY = key("parry");
+    public static final ResourceKey<Enchantment> CHARGE = key("charge");
 
 	// Curse
 	public static final ResourceKey<Enchantment> FRAGILITY_CURSE = key("fragility_curse");
@@ -52,6 +51,6 @@ public class EaEEnchantments {
 	}
 
 	private static @NotNull ResourceKey<Enchantment> key(String path) {
-		return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(EnchantsAndExpeditions.MOD_ID, path));
+		return ResourceKey.create(Registries.ENCHANTMENT, EnchantsAndExpeditions.id(path));
 	}
 }

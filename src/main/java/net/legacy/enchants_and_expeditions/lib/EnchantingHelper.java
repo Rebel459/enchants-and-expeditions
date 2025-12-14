@@ -1,7 +1,5 @@
 package net.legacy.enchants_and_expeditions.lib;
 
-import com.google.common.collect.Lists;
-import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
@@ -10,11 +8,13 @@ import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.*;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.ArrayList;

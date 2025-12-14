@@ -16,24 +16,24 @@ public final class EaEBlockTagProvider extends FabricTagProvider.BlockTagProvide
 
     @Override
     protected void addTags(@NotNull HolderLookup.Provider arg) {
-        this.getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
+        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(EaEBlocks.ARCANE_BOOKSHELF)
                 .add(EaEBlocks.GLACIAL_BOOKSHELF)
                 .add(EaEBlocks.INFERNAL_BOOKSHELF)
                 .add(EaEBlocks.ALTAR);
 
-        this.getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE)
+        this.valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE)
                 .add(EaEBlocks.ARCANE_BOOKSHELF)
                 .add(EaEBlocks.GLACIAL_BOOKSHELF)
                 .add(EaEBlocks.INFERNAL_BOOKSHELF);
 
-        this.getOrCreateTagBuilder(BlockTags.ENCHANTMENT_POWER_PROVIDER)
+        this.valueLookupBuilder(BlockTags.ENCHANTMENT_POWER_PROVIDER)
                 .add(EaEBlocks.ALTAR)
                 .add(EaEBlocks.ARCANE_BOOKSHELF)
                 .add(EaEBlocks.GLACIAL_BOOKSHELF)
                 .add(EaEBlocks.INFERNAL_BOOKSHELF);
 
-        this.getOrCreateTagBuilder(BlockTags.ICE)
+        this.valueLookupBuilder(BlockTags.ICE)
                 .add(EaEBlocks.GLACIAL_BOOKSHELF);
     }
 }

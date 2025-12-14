@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -100,7 +101,7 @@ public abstract class PlayerMixin {
     }
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"))
-    private void bloodlust(ServerLevel level, LivingEntity killed, CallbackInfoReturnable<Boolean> cir) {
+    private void bloodlust(ServerLevel serverLevel, LivingEntity livingEntity, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
         Player player = Player.class.cast(this);
         ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
@@ -108,12 +109,12 @@ public abstract class PlayerMixin {
             int amount = EnchantingHelper.getLevel(stack, EaEEnchantments.BLOODLUST);
             player.setHealth(player.getHealth() + amount);
             if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
-            level.playSound(player, player.blockPosition(), SoundEvents.THORNS_HIT, this.getSoundSource(), 1F, 1F);
+            serverLevel.playSound(player, player.blockPosition(), SoundEvents.THORNS_HIT, this.getSoundSource(), 1F, 1F);
         }
     }
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"))
-    private void quickstep(ServerLevel level, LivingEntity killed, CallbackInfoReturnable<Boolean> cir) {
+    private void quickstep(ServerLevel serverLevel, LivingEntity livingEntity, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
         Player player = Player.class.cast(this);
         ItemStack stack = player.getItemBySlot(EquipmentSlot.LEGS);
 

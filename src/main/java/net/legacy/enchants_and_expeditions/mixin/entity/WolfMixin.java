@@ -3,7 +3,6 @@ package net.legacy.enchants_and_expeditions.mixin.entity;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

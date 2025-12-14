@@ -41,5 +41,4 @@ public class EaEEnchantmentTags {
     private static TagKey<Enchantment> register(@NotNull String path) {
         return TagKey.create(Registries.ENCHANTMENT, EnchantsAndExpeditions.id(path));
     }
-
 }

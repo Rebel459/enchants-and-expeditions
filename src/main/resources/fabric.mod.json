@@ -33,9 +33,10 @@
 		"enchants_and_expeditions.mixins.json"
 	],
 	"depends": {
-		"minecraft": "1.21.5",
-		"fabric-api": "*",
-		"cloth-config": "*"
+      "minecraft": "1.21.11",
+      "fabric-api": "*",
+      "cloth-config": "*",
+      "item_tooltips": "*"
 	},
 	"recommends": {
 		"legacies_and_legends": "*"

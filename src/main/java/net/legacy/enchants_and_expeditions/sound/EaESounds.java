@@ -4,7 +4,7 @@ import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,19 +15,19 @@ public class EaESounds {
 
 	@NotNull
 	private static SoundEvent register(@NotNull String string) {
-		ResourceLocation resourceLocation = EnchantsAndExpeditions.id(string);
-		return Registry.register(BuiltInRegistries.SOUND_EVENT, EnchantsAndExpeditions.id(string), SoundEvent.createVariableRangeEvent(resourceLocation));
+		Identifier identifier = EnchantsAndExpeditions.id(string);
+		return Registry.register(BuiltInRegistries.SOUND_EVENT, EnchantsAndExpeditions.id(string), SoundEvent.createVariableRangeEvent(identifier));
 	}
 
 	private static Holder.@NotNull Reference<SoundEvent> registerForHolder(String id) {
 		return registerForHolder(EnchantsAndExpeditions.id(id));
 	}
 
-	private static Holder.@NotNull Reference<SoundEvent> registerForHolder(ResourceLocation id) {
+	private static Holder.@NotNull Reference<SoundEvent> registerForHolder(Identifier id) {
 		return registerForHolder(id, id);
 	}
 
-	private static Holder.@NotNull Reference<SoundEvent> registerForHolder(ResourceLocation id, ResourceLocation soundId) {
+	private static Holder.@NotNull Reference<SoundEvent> registerForHolder(Identifier id, Identifier soundId) {
 		return Registry.registerForHolder(BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(soundId));
 	}
 

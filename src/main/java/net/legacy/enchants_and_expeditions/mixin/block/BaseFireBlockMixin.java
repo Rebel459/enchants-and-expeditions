@@ -30,7 +30,7 @@ import java.util.Random;
 public abstract class BaseFireBlockMixin {
 
     @Inject(method = "entityInside", at = @At(value = "HEAD"), cancellable = true)
-    private void blazingFireImmunity(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, CallbackInfo ci) {
+    private void blazingFireImmunity(BlockState blockState, Level level, BlockPos blockPos, Entity entity, InsideBlockEffectApplier insideBlockEffectApplier, boolean bl, CallbackInfo ci) {
         if (!(entity instanceof LivingEntity livingEntity)) return;
         ItemStack stack;
         if (entity instanceof Animal) stack = livingEntity.getItemBySlot(EquipmentSlot.BODY);

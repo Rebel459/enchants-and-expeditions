@@ -6,8 +6,8 @@ import net.legacy.enchants_and_expeditions.sound.EaEBlockSounds;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -62,7 +62,7 @@ public class EaEBlocks {
     }
 
     private static <T extends Block> @NotNull T registerWithoutItem(String path, Function<Properties, T> block, Properties properties) {
-        ResourceLocation id = EnchantsAndExpeditions.id(path);
+        Identifier id = EnchantsAndExpeditions.id(path);
         return doRegister(id, makeBlock(block, properties, id));
     }
 
@@ -72,14 +72,14 @@ public class EaEBlocks {
         return registered;
     }
 
-    private static <T extends Block> @NotNull T doRegister(ResourceLocation id, T block) {
+    private static <T extends Block> @NotNull T doRegister(Identifier id, T block) {
         if (BuiltInRegistries.BLOCK.getOptional(id).isEmpty()) {
             return Registry.register(BuiltInRegistries.BLOCK, id, block);
         }
         throw new IllegalArgumentException("Block with id " + id + " is already in the block registry.");
     }
 
-    private static <T extends Block> T makeBlock(@NotNull Function<Properties, T> function, @NotNull Properties properties, ResourceLocation id) {
+    private static <T extends Block> T makeBlock(@NotNull Function<Properties, T> function, @NotNull Properties properties, Identifier id) {
         return function.apply(properties.setId(ResourceKey.create(Registries.BLOCK, id)));
     }
 }

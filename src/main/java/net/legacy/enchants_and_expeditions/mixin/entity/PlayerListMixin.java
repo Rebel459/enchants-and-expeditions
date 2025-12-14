@@ -10,7 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -66,6 +66,6 @@ public abstract class PlayerListMixin {
     @Unique
     private boolean shouldReserve(ItemStack stack, ServerPlayer player, boolean keepInventory) {
         if (stack.isEmpty()) return false;
-        return player.server.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) || keepInventory || (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING) && !stack.is(EaEItemTags.UNBOUNDABLE));
+        return player.level().getGameRules().get(GameRules.KEEP_INVENTORY) || keepInventory || (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BOUNDING_BLESSING) && !stack.is(EaEItemTags.UNBOUNDABLE));
     }
 }

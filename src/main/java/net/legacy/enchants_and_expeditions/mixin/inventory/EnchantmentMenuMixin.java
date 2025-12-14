@@ -7,11 +7,9 @@ import net.legacy.enchants_and_expeditions.block.AltarBlock;
 import net.legacy.enchants_and_expeditions.block.AltarBlockType;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
-import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
-import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
-import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
-import net.minecraft.Util;
+import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
+import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -28,10 +26,13 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.*;
+import net.minecraft.world.item.enchantment.Enchantable;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.LecternBlockEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EnchantingTableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -95,7 +96,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Unique
     private static String EaE$blockId(BlockState state) {
         try {
-            return state.getBlock().builtInRegistryHolder().key().location().toString();
+            return state.getBlock().builtInRegistryHolder().key().identifier().toString();
         } catch (Throwable t) {
             return state.getBlock().getClass().getSimpleName();
         }
@@ -273,7 +274,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
     @Unique
     private int calculateEnchantingPower(Enchantable enchantable, int basePower, int secondaryPower) {
-        int returnPower = basePower / 4 + secondaryPower;
+        int returnPower = (int) (basePower * 0.25 + secondaryPower * 1.25);
         int enchantability = Math.max(0, enchantable.value() + this.powerAltars * 3 - this.stabilityAltars * 3);
         returnPower += 1 + random.nextInt(enchantability / 4 + 1) + random.nextInt(enchantability / 4 + 1);
         float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
@@ -334,7 +335,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         int flowPower = calculateEnchantingPower(enchantable, enchantingPower, this.flow * 2);
         int chaosPower = calculateEnchantingPower(enchantable, enchantingPower, this.chaos * 2);
         int greedPower = calculateEnchantingPower(enchantable, enchantingPower, this.greed * 2);
-        int mightPower = calculateEnchantingPower(enchantable, enchantingPower, this.might * 2);
+        int mightPower = calculateEnchantingPower(enchantable, enchantingPower * 2, this.might * 2);
 
         List<EnchantmentInstance> baseList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, baseEnchantments.stream());
 
@@ -388,22 +389,22 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
         while ((random.nextInt(50) <= enchantingPower || !firstEnchant || list.isEmpty()) && attempts < 10) {
             if (!list.isEmpty()) {
-                EnchantmentHelper.filterCompatibleEnchantments(baseList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(manaList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(frostList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(scorchList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(flowList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(chaosList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(greedList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(mightList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(manaBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(frostBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(scorchBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(flowBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(chaosBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(greedBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(mightBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(curseList, Util.lastOf(list));
+                EnchantmentHelper.filterCompatibleEnchantments(baseList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(manaList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(frostList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(scorchList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(flowList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(chaosList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(greedList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(mightList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(manaBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(frostBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(scorchBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(flowBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(chaosBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(greedBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(mightBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(curseList, list.getLast());
             }
 
             // Divinity enchantment pools

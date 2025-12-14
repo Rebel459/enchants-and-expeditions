@@ -10,7 +10,8 @@ import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EnchantmentScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import org.slf4j.Logger;
@@ -63,12 +64,14 @@ public abstract class EnchantmentScreenMixin {
     public int textureSize = 16;
 
     @Inject(method = "mouseClicked", at = @At("TAIL"))
-    private void EaE$enchantingTableClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
+    private void EaE$enchantingTableClicked(MouseButtonEvent mouseButtonEvent, boolean bl, CallbackInfoReturnable<Boolean> cir) {
         EnchantmentScreen screen = EnchantmentScreen.class.cast(this);
-        if (isOverButton((int) mouseX, (int) mouseY) && !this.attributesOpened) {
+        int mouseX = (int) mouseButtonEvent.x();
+        int mouseY = (int) mouseButtonEvent.y();
+        if (isOverButton(mouseX, mouseY) && !this.attributesOpened) {
             this.attributesOpened = true;
             screen.minecraft.player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
-        } else if (isOverButton((int) mouseX, (int) mouseY)) {
+        } else if (isOverButton(mouseX, mouseY)) {
             this.attributesOpened = false;
             screen.minecraft.player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
         }
@@ -80,9 +83,9 @@ public abstract class EnchantmentScreenMixin {
 
         // Render the 16x16 texture at the top-left of the enchanting table interface
         if (isOverButton(mouseX, mouseY)) {
-            guiGraphics.blit(RenderType::guiTextured, EnchantsAndExpeditions.id("textures/gui/attributes_hovered.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, EnchantsAndExpeditions.id("textures/gui/attributes_hovered.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
         } else {
-            guiGraphics.blit(RenderType::guiTextured, EnchantsAndExpeditions.id("textures/gui/attributes.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, EnchantsAndExpeditions.id("textures/gui/attributes.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
         }
 
         if (!attributesOpened) return;
@@ -144,15 +147,15 @@ public abstract class EnchantmentScreenMixin {
 
         // Draw attribute text
         y += 1; // Center text in tooltip box
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana)), x, y, ChatFormatting.DARK_BLUE.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost)), x, y, ChatFormatting.DARK_AQUA.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch)), x, y, ChatFormatting.DARK_RED.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow)), x, y, ChatFormatting.AQUA.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos)), x, y, ChatFormatting.DARK_GRAY.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed)), x, y, ChatFormatting.YELLOW.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.might").append(": " + Math.max(0, might)), x, y, ChatFormatting.DARK_GREEN.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption)), x, y, ChatFormatting.RED.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity)), x, y, ChatFormatting.GOLD.getColor());
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana)), x, y, 0xFF000000 | ChatFormatting.DARK_BLUE.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost)), x, y, 0xFF000000 | ChatFormatting.DARK_AQUA.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch)), x, y, 0xFF000000 | ChatFormatting.DARK_RED.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow)), x, y, 0xFF000000 | ChatFormatting.AQUA.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos)), x, y, 0xFF000000 | ChatFormatting.DARK_GRAY.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed)), x, y, 0xFF000000 | ChatFormatting.YELLOW.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.might").append(": " + Math.max(0, might)), x, y, 0xFF000000 | ChatFormatting.DARK_GREEN.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption)), x, y, 0xFF000000 | ChatFormatting.RED.getColor()); y += 10;
+        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity)), x, y, 0xFF000000 | ChatFormatting.GOLD.getColor());
     }
 
     @Unique

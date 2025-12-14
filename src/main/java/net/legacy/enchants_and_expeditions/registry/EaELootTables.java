@@ -4,8 +4,8 @@ import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
@@ -306,9 +306,9 @@ public final class EaELootTables {
     }
 
     private static @NotNull ResourceKey<LootTable> registerLegaciesAndLegends(String path) {
-        return ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("legacies_and_legends", path));
+        return ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("legacies_and_legends", path));
     }
     private static @NotNull ResourceKey<LootTable> registerRemnants(String path) {
-        return ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("remnants", path));
+        return ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("remnants", path));
     }
 }
