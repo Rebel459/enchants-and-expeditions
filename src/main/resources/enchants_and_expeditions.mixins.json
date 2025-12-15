@@ -7,7 +7,6 @@
     "block.BlockMixin",
     "entity.AbstractArrowMixin",
     "entity.AbstractHorseMixin",
-    "entity.BlocksAttacksMixin",
     "entity.EntityEquipmentMixin",
     "entity.InventoryMixin",
     "entity.LivingEntityMixin",

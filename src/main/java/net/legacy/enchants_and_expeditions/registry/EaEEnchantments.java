@@ -36,8 +36,6 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> LEAPING = key("leaping");
 	public static final ResourceKey<Enchantment> FEROCITY = key("ferocity");
 	public static final ResourceKey<Enchantment> VELOCITY = key("velocity");
-	public static final ResourceKey<Enchantment> CLEAVING = key("cleaving");
-    public static final ResourceKey<Enchantment> PARRY = key("parry");
     public static final ResourceKey<Enchantment> CHARGE = key("charge");
 
 	// Curse

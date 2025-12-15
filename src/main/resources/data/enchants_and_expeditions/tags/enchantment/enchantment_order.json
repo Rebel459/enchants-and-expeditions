@@ -5,13 +5,20 @@
     "enchants_and_expeditions:extraction",
     "enchants_and_expeditions:frostbite",
     "enchants_and_expeditions:parry",
+    {
+      "id": "combat_reborn:parry",
+      "required": false
+    },
     "enchants_and_expeditions:recovery",
     "enchants_and_expeditions:velocity",
     "enchants_and_expeditions:icebound",
     "minecraft:riptide",
     "minecraft:wind_burst",
     "minecraft:sharpness",
-    "enchants_and_expeditions:cleaving",
+    {
+      "id": "combat_reborn:cleaving",
+      "required": false
+    },
     "enchants_and_expeditions:smiting",
     "enchants_and_expeditions:chilled",
     "enchants_and_expeditions:entropy",

@@ -59,7 +59,7 @@ public abstract class EnchantmentHelperMixin {
             for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
                 if (level >= enchantment.getMinCost(j) && (level <= enchantment.getMaxCost(j) || (j == enchantment.getMaxLevel() && !holder.is(EaEEnchantmentTags.ENFORCE_MAXIMUM_LEVEL)))  // override max level check
                         && !EnchantingHelper.configureEnchantments(holder)
-                        && !(stack.is(ItemTags.AXES) && holder.is(EaEEnchantmentTags.NOT_ON_AXES))
+                        && !(stack.is(ItemTags.AXES) && holder.is(EaEEnchantmentTags.NOT_ON_AXES)) // handle axe enchantments
                         && !(stack.is(EaEItemTags.ANIMAL_ARMOR) && holder.is(EaEEnchantmentTags.NOT_ON_ANIMAL_ARMOR))) {
                     list.add(new EnchantmentInstance(holder, j));
                     break;

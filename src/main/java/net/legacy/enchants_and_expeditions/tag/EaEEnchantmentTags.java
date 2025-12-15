@@ -2,6 +2,7 @@ package net.legacy.enchants_and_expeditions.tag;
 
 import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -15,7 +16,7 @@ public class EaEEnchantmentTags {
     public static final TagKey<Enchantment> ENCHANTMENT_ORDER = register("enchantment_order");
     public static final TagKey<Enchantment> ENFORCE_MAXIMUM_LEVEL = register("enforce_maximum_level");
 
-    public static final TagKey<Enchantment> NOT_ON_AXES = register("not_on_axes");
+    public static final TagKey<Enchantment> NOT_ON_AXES = registerCombatReborn("not_on_axes");
     public static final TagKey<Enchantment> NOT_ON_ANIMAL_ARMOR = register("not_on_animal_armor");
 
     public static final TagKey<Enchantment> ENCHANTING_TABLE = register("enchanting_table/all");
@@ -40,5 +41,10 @@ public class EaEEnchantmentTags {
     @NotNull
     private static TagKey<Enchantment> register(@NotNull String path) {
         return TagKey.create(Registries.ENCHANTMENT, EnchantsAndExpeditions.id(path));
+    }
+
+    @NotNull
+    private static TagKey<Enchantment> registerCombatReborn(@NotNull String path) {
+        return TagKey.create(Registries.ENCHANTMENT, Identifier.fromNamespaceAndPath("combat_reborn", path));
     }
 }

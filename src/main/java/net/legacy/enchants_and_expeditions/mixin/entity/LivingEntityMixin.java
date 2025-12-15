@@ -208,17 +208,6 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "getSecondsToDisableBlocking", at = @At(value = "TAIL"), cancellable = true)
-    private void cleaving(CallbackInfoReturnable<Float> cir) {
-        float disableTime = cir.getReturnValue();
-        if (disableTime <= 0) return;
-        ItemStack stack = this.getWeaponItem();
-        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.CLEAVING)) {
-            disableTime = disableTime + EnchantingHelper.getLevel(stack, EaEEnchantments.CLEAVING);
-            cir.setReturnValue(disableTime);
-        }
-    }
-
     @WrapOperation(method = "travelInAir", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getFriction()F"))
     private float slidingCurse(Block block, Operation<Float> original) {
         ItemStack stack = this.getItemBySlot(EquipmentSlot.FEET);
