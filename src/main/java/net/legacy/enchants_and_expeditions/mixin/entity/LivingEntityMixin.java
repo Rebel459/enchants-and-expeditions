@@ -54,13 +54,7 @@ import java.util.Random;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
 
-    @Shadow public abstract void makePoofParticles();
-
     @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot slot);
-
-    @Shadow public abstract @NotNull ItemStack getWeaponItem();
-
-    @Shadow @Nullable public abstract ItemEntity drop(ItemStack stack, boolean randomizeMotion, boolean includeThrower);
 
     @Shadow
     public abstract @org.jspecify.annotations.Nullable LivingEntity asLivingEntity();
@@ -185,32 +179,6 @@ public abstract class LivingEntityMixin {
     }
 
     @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
-    private float slipstream(float value) {
-        if (this.damageSource.getEntity() instanceof Nautilus nautilus) {
-            ItemStack armor = nautilus.getBodyArmorItem();
-            if (EnchantingHelper.hasEnchantment(armor, EaEEnchantments.SLIPSTREAM)) {
-                int slipstream = EnchantingHelper.getLevel(armor, EaEEnchantments.SLIPSTREAM);
-                int duration = 0;
-                int amplifier = 0;
-                if (slipstream == 1) {
-                    duration = 100;
-                    amplifier = 0;
-                }
-                else if (slipstream == 2) {
-                    duration = 80;
-                    amplifier = 1;
-                }
-                else if (slipstream == 3) {
-                    duration = 60;
-                    amplifier = 2;
-                }
-                this.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, duration, amplifier));
-            }
-        }
-        return value;
-    }
-
-    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
     private float jousting(float value) {
         if (this.damageSource.getEntity() instanceof LivingEntity entity && entity.getControlledVehicle() != null && entity.getControlledVehicle() instanceof LivingEntity riddenEntity) {
             ItemStack stack = entity.getWeaponItem();
@@ -274,7 +242,10 @@ public abstract class LivingEntityMixin {
                             attackerMount.clearFire();
                         }
                         stack.hurtAndBreak(1, attacker, attacker.getEquipmentSlotForItem(stack));
-                        if (attacker instanceof Player player && stack.has(DataComponents.USE_COOLDOWN)) player.getCooldowns().addCooldown(stack, 100);
+                        if (attacker instanceof Player player && stack.has(DataComponents.USE_COOLDOWN)) {
+                            player.getCooldowns().addCooldown(stack, 200);
+                            player.stopUsingItem();
+                        }
                     }
                 }
             }
