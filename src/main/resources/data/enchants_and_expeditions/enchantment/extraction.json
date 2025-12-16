@@ -20,7 +20,6 @@
       }
     ]
   },
-  "exclusive_set": "#enchants_and_expeditions:exclusive_set/helmet",
   "max_cost": {
     "base": 50,
     "per_level_above_first": 5

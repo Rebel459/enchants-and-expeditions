@@ -4,7 +4,6 @@
     "translate": "enchantment.enchants_and_expeditions.quickstep"
   },
   "effects": {},
-  "exclusive_set": "#enchants_and_expeditions:exclusive_set/leggings",
   "max_cost": {
     "base": 25,
     "per_level_above_first": 10

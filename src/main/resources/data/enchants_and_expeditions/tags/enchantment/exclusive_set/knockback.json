@@ -1,9 +1,6 @@
 {
   "values": [
-    "minecraft:fire_aspect",
-    "minecraft:sweeping_edge",
     "minecraft:knockback",
-    "enchants_and_expeditions:bloodlust",
     {
       "id": "remnants:relentless",
       "required": false

@@ -25,7 +25,6 @@
       }
     ]
   },
-  "exclusive_set": "#enchants_and_expeditions:exclusive_set/support",
   "max_cost": {
     "base": 20,
     "per_level_above_first": 9

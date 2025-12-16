@@ -24,7 +24,6 @@
     "item.ItemEnchantmentsMixin",
     "item.ItemPropertiesMixin",
     "item.ItemStackMixin",
-    "item.KineticWeaponMixin",
     "recipe.ShapedRecipeMixin"
   ],
   "injectors": {

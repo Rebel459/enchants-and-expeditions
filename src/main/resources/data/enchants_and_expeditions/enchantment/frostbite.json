@@ -4,7 +4,7 @@
     "translate": "enchantment.enchants_and_expeditions.frostbite"
   },
   "effects": {},
-  "exclusive_set": "#enchants_and_expeditions:exclusive_set/chestplate",
+  "exclusive_set": "#enchants_and_expeditions:exclusive_set/thorns",
   "max_cost": {
     "base": 50,
     "per_level_above_first": 0

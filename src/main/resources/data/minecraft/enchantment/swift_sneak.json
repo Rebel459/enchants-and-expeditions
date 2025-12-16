@@ -17,7 +17,6 @@
       }
     ]
   },
-  "exclusive_set": "#enchants_and_expeditions:exclusive_set/leggings",
   "max_cost": {
     "base": 75,
     "per_level_above_first": 25
