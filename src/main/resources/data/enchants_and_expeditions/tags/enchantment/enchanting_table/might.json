@@ -15,6 +15,10 @@
       "required": false
     },
     {
+      "id": "combat_reborn:stagger",
+      "required": false
+    },
+    {
       "id": "legacies_and_legends:striking",
       "required": false
     }

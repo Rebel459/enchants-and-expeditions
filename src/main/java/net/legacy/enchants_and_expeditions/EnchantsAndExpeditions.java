@@ -75,6 +75,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 
 		EaEBlocks.init();
 		EaEItems.init();
+        EaEMobEffects.init();
 		EaECreativeInventorySorting.init();
 		EaESounds.init();
 		EaEBlockSounds.init();

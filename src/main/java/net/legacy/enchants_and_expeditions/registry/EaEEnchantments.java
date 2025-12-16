@@ -20,7 +20,8 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> INFERNO_BLESSING = key("inferno_blessing");
 	public static final ResourceKey<Enchantment> VENGEANCE_BLESSING = key("vengeance_blessing");
 	public static final ResourceKey<Enchantment> TEMPERING_BLESSING = key("tempering_blessing");
-	public static final ResourceKey<Enchantment> FLUIDITY_BLESSING = key("fluidity_blessing");
+    public static final ResourceKey<Enchantment> FLUIDITY_BLESSING = key("fluidity_blessing");
+    public static final ResourceKey<Enchantment> CONDUCTIVITY_BLESSING = key("conductivity_blessing");
 
 	// Normal
 	public static final ResourceKey<Enchantment> EXTRACTION = key("extraction");
@@ -36,7 +37,8 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> LEAPING = key("leaping");
 	public static final ResourceKey<Enchantment> FEROCITY = key("ferocity");
 	public static final ResourceKey<Enchantment> VELOCITY = key("velocity");
-    public static final ResourceKey<Enchantment> CHARGE = key("charge");
+    public static final ResourceKey<Enchantment> JOUSTING = key("jousting");
+    public static final ResourceKey<Enchantment> SLIPSTREAM = key("slipstream");
 
 	// Curse
 	public static final ResourceKey<Enchantment> FRAGILITY_CURSE = key("fragility_curse");

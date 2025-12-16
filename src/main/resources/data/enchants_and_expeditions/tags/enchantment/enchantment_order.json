@@ -4,7 +4,6 @@
     "enchants_and_expeditions:equestrian",
     "enchants_and_expeditions:extraction",
     "enchants_and_expeditions:frostbite",
-    "enchants_and_expeditions:parry",
     {
       "id": "combat_reborn:parry",
       "required": false
@@ -13,7 +12,12 @@
     "enchants_and_expeditions:velocity",
     "enchants_and_expeditions:icebound",
     "minecraft:riptide",
+    {
+      "id": "combat_reborn:endurance",
+      "required": false
+    },
     "minecraft:wind_burst",
+    "enchants_and_expeditions:jousting",
     "minecraft:sharpness",
     {
       "id": "combat_reborn:cleaving",
@@ -45,7 +49,12 @@
     "enchants_and_expeditions:bloodlust",
     "enchants_and_expeditions:ferocity",
     "enchants_and_expeditions:galloping",
+    "enchants_and_expeditions:slipstream",
     "enchants_and_expeditions:leaping",
+    {
+      "id": "combat_reborn:stagger",
+      "required": false
+    },
     "minecraft:feather_falling",
     "minecraft:fortune",
     "minecraft:looting",

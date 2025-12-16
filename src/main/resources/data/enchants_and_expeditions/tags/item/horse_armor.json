@@ -2,17 +2,10 @@
   "replace": false,
   "values": [
     "minecraft:leather_horse_armor",
+    "minecraft:copper_horse_armor",
     "minecraft:golden_horse_armor",
     "minecraft:iron_horse_armor",
     "minecraft:diamond_horse_armor",
-    {
-      "id": "minecraft:copper_horse_armor",
-      "required": false
-    },
-    {
-      "id": "progression_reborn:copper_horse_armor",
-      "required": false
-    },
     {
       "id": "progression_reborn:rose_horse_armor",
       "required": false
