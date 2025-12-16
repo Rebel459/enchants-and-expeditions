@@ -20,7 +20,7 @@
       "required": false
     },
     {
-      "id": "remnants:dueling",
+      "id": "combat_reborn:dueling",
       "required": false
     }
   ]

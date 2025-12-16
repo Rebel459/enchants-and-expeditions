@@ -21,6 +21,10 @@
     {
       "id": "legacies_and_legends:striking",
       "required": false
+    },
+    {
+      "id": "remnants:steadfast",
+      "required": false
     }
   ]
 }

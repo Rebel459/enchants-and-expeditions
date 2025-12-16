@@ -11,13 +11,12 @@
     "enchants_and_expeditions:recovery",
     "enchants_and_expeditions:velocity",
     "enchants_and_expeditions:icebound",
-    "minecraft:riptide",
     {
       "id": "combat_reborn:endurance",
       "required": false
     },
+    "minecraft:riptide",
     "minecraft:wind_burst",
-    "enchants_and_expeditions:jousting",
     "minecraft:sharpness",
     {
       "id": "combat_reborn:cleaving",
@@ -46,6 +45,7 @@
     "minecraft:blast_protection",
     "minecraft:fire_protection",
     "minecraft:projectile_protection",
+    "enchants_and_expeditions:jousting",
     "enchants_and_expeditions:bloodlust",
     "enchants_and_expeditions:ferocity",
     "enchants_and_expeditions:galloping",
@@ -53,6 +53,10 @@
     "enchants_and_expeditions:leaping",
     {
       "id": "combat_reborn:stagger",
+      "required": false
+    },
+    {
+      "id": "combat_reborn:dueling",
       "required": false
     },
     "minecraft:feather_falling",
