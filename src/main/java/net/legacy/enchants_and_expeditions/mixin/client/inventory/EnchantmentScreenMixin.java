@@ -9,11 +9,13 @@ import net.legacy.enchants_and_expeditions.EnchantsAndExpeditionsClient;
 import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.EnchantmentScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Player;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -66,14 +68,17 @@ public abstract class EnchantmentScreenMixin {
     @Inject(method = "mouseClicked", at = @At("TAIL"))
     private void EaE$enchantingTableClicked(MouseButtonEvent mouseButtonEvent, boolean bl, CallbackInfoReturnable<Boolean> cir) {
         EnchantmentScreen screen = EnchantmentScreen.class.cast(this);
+        Player player = screen.minecraft.player;
         int mouseX = (int) mouseButtonEvent.x();
         int mouseY = (int) mouseButtonEvent.y();
         if (isOverButton(mouseX, mouseY) && !this.attributesOpened) {
             this.attributesOpened = true;
-            screen.minecraft.player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
+            player.addTag("show_enchanting_attributes");
+            player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
         } else if (isOverButton(mouseX, mouseY)) {
             this.attributesOpened = false;
-            screen.minecraft.player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
+            player.removeTag("show_enchanting_attributes");
+            player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
         }
     }
 
@@ -87,6 +92,8 @@ public abstract class EnchantmentScreenMixin {
         } else {
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, EnchantsAndExpeditions.id("textures/gui/attributes.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
         }
+
+        attributesOpened = attributesOpened || screen.minecraft.player.getTags().contains("show_enchanting_attributes");
 
         if (!attributesOpened) return;
 
