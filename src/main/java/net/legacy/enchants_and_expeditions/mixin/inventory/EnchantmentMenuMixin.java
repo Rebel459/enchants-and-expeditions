@@ -273,7 +273,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
     @Unique
     private int calculateEnchantingPower(Enchantable enchantable, int basePower, int secondaryPower) {
-        int returnPower = basePower / 4 + secondaryPower;
+        int returnPower = (int) (basePower * 0.25 + secondaryPower * 1.25);
         int enchantability = Math.max(0, enchantable.value() + this.powerAltars * 3 - this.stabilityAltars * 3);
         returnPower += 1 + random.nextInt(enchantability / 4 + 1) + random.nextInt(enchantability / 4 + 1);
         float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
@@ -334,7 +334,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         int flowPower = calculateEnchantingPower(enchantable, enchantingPower, this.flow * 2);
         int chaosPower = calculateEnchantingPower(enchantable, enchantingPower, this.chaos * 2);
         int greedPower = calculateEnchantingPower(enchantable, enchantingPower, this.greed * 2);
-        int mightPower = calculateEnchantingPower(enchantable, enchantingPower, this.might * 2);
+        int mightPower = calculateEnchantingPower(enchantable, enchantingPower * 2, this.might * 2);
 
         List<EnchantmentInstance> baseList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, baseEnchantments.stream());
 
@@ -377,33 +377,35 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         curseList = EnchantingHelper.evaluateEnchantments(stack, curseList);
 
         if (baseList.isEmpty()
-                        && manaList.isEmpty() && frostList.isEmpty() && scorchList.isEmpty() && flowList.isEmpty() && chaosList.isEmpty() && greedList.isEmpty() && mightList.isEmpty()
-                        && manaBlessingList.isEmpty() && frostBlessingList.isEmpty() && scorchBlessingList.isEmpty() && flowBlessingList.isEmpty() && chaosBlessingList.isEmpty() && greedBlessingList.isEmpty() && mightBlessingList.isEmpty()
-                        && curseList.isEmpty()) {
+                && manaList.isEmpty() && frostList.isEmpty() && scorchList.isEmpty() && flowList.isEmpty() && chaosList.isEmpty() && greedList.isEmpty() && mightList.isEmpty()
+                && manaBlessingList.isEmpty() && frostBlessingList.isEmpty() && scorchBlessingList.isEmpty() && flowBlessingList.isEmpty() && chaosBlessingList.isEmpty() && greedBlessingList.isEmpty() && mightBlessingList.isEmpty()
+                && curseList.isEmpty()) {
             return list;
         }
+
+        boolean baseTable = this.mana == 0 && this.frost == 0 && this.scorch == 0 && this.flow == 0 && this.chaos == 0 && this.greed == 0;
 
         boolean firstEnchant = false;
         int attempts = 0;
 
         while ((random.nextInt(50) <= enchantingPower || !firstEnchant || list.isEmpty()) && attempts < 10) {
             if (!list.isEmpty()) {
-                EnchantmentHelper.filterCompatibleEnchantments(baseList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(manaList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(frostList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(scorchList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(flowList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(chaosList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(greedList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(mightList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(manaBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(frostBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(scorchBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(flowBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(chaosBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(greedBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(mightBlessingList, Util.lastOf(list));
-                EnchantmentHelper.filterCompatibleEnchantments(curseList, Util.lastOf(list));
+                EnchantmentHelper.filterCompatibleEnchantments(baseList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(manaList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(frostList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(scorchList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(flowList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(chaosList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(greedList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(mightList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(manaBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(frostBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(scorchBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(flowBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(chaosBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(greedBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(mightBlessingList, list.getLast());
+                EnchantmentHelper.filterCompatibleEnchantments(curseList, list.getLast());
             }
 
             // Divinity enchantment pools
@@ -423,39 +425,44 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 WeightedRandom.getRandomItem(random, baseList, EnchantmentInstance::weight).ifPresent(list::add);
             }
 
-            int randomValue = random.nextInt(totalWeight);
-            int cumulative = 0;
+            if (!baseTable) {
+                int randomValue = random.nextInt(totalWeight);
+                int cumulative = 0;
 
-            if (randomValue < (cumulative += this.mana)) {
-                WeightedRandom.getRandomItem(random, manaList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += this.frost)) {
-                WeightedRandom.getRandomItem(random, frostList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += this.scorch)) {
-                WeightedRandom.getRandomItem(random, scorchList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += this.flow)) {
-                WeightedRandom.getRandomItem(random, flowList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += this.chaos)) {
-                WeightedRandom.getRandomItem(random, chaosList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += this.greed)) {
-                WeightedRandom.getRandomItem(random, greedList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += this.might)) {
-                WeightedRandom.getRandomItem(random, mightList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += manaBlessingWeight)) {
-                WeightedRandom.getRandomItem(random, manaBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += frostBlessingWeight)) {
-                WeightedRandom.getRandomItem(random, frostBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += scorchBlessingWeight)) {
-                WeightedRandom.getRandomItem(random, scorchBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += flowBlessingWeight)) {
-                WeightedRandom.getRandomItem(random, flowBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += chaosBlessingWeight)) {
-                WeightedRandom.getRandomItem(random, chaosBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += greedBlessingWeight)) {
-                WeightedRandom.getRandomItem(random, greedBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += mightBlessingWeight)) {
-                WeightedRandom.getRandomItem(random, mightBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
-            } else if (randomValue < (cumulative += curseWeight)) {
-            WeightedRandom.getRandomItem(random, curseList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (randomValue < (cumulative += this.mana)) {
+                    WeightedRandom.getRandomItem(random, manaList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += this.frost)) {
+                    WeightedRandom.getRandomItem(random, frostList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += this.scorch)) {
+                    WeightedRandom.getRandomItem(random, scorchList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += this.flow)) {
+                    WeightedRandom.getRandomItem(random, flowList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += this.chaos)) {
+                    WeightedRandom.getRandomItem(random, chaosList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += this.greed)) {
+                    WeightedRandom.getRandomItem(random, greedList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += this.might)) {
+                    WeightedRandom.getRandomItem(random, mightList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += manaBlessingWeight)) {
+                    WeightedRandom.getRandomItem(random, manaBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += frostBlessingWeight)) {
+                    WeightedRandom.getRandomItem(random, frostBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += scorchBlessingWeight)) {
+                    WeightedRandom.getRandomItem(random, scorchBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += flowBlessingWeight)) {
+                    WeightedRandom.getRandomItem(random, flowBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += chaosBlessingWeight)) {
+                    WeightedRandom.getRandomItem(random, chaosBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += greedBlessingWeight)) {
+                    WeightedRandom.getRandomItem(random, greedBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += mightBlessingWeight)) {
+                    WeightedRandom.getRandomItem(random, mightBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                } else if (randomValue < (cumulative += curseWeight)) {
+                    WeightedRandom.getRandomItem(random, curseList, EnchantmentInstance::weight).ifPresent(list::add);
+                }
+            }
+            else {
+                WeightedRandom.getRandomItem(random, baseList, EnchantmentInstance::weight).ifPresent(list::add);
             }
 
             if (!firstEnchant) {
@@ -471,6 +478,12 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
         while (list.size() + EnchantingHelper.enchantmentScore(stack) > EaEConfig.get.general.enchantment_limit && EaEConfig.get.general.enchantment_limit >= 1) {
             list.remove(random.nextInt(list.size()));
+        }
+
+        if (list.isEmpty()) {
+            this.enchantClue[slot] = -1;
+            this.levelClue[slot] = -1;
+            this.costs[slot] = 0;
         }
 
         return list;
@@ -503,30 +516,30 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 }
             }
 
-            int locMana = 0, locFrost = 0, locScorch = 0, locFlow = 0, locChaos = 0, locGreed = 0, locMight = 0, locCorruption = 0, locDivinity = 0;
+            double locMana = 0, locFrost = 0, locScorch = 0, locFlow = 0, locChaos = 0, locGreed = 0, locMight = 0, locCorruption = 0, locDivinity = 0;
 
-            locMana += nBooks / 4;
-            locFrost += nBooks / 4;
-            locScorch += nBooks / 4;
-            locFlow += nBooks / 4;
-            locChaos += nBooks / 4;
-            locGreed += nBooks / 4;
-            locMight += nBooks / 4;
+            locMana += nBooks * 0.25;
+            locFrost += nBooks * 0.25;
+            locScorch += nBooks * 0.25;
+            locFlow += nBooks * 0.25;
+            locChaos += nBooks * 0.25;
+            locGreed += nBooks * 0.25;
+            locMight += nBooks * 0.25;
 
             locMana += aBooks;
-            locFlow += aBooks / 2;
-            locGreed += aBooks / 2;
-            locMight += aBooks / 4;
+            locFlow += aBooks * 0.5;
+            locGreed += aBooks * 0.5;
+            locMight += aBooks * 0.25;
 
             locFrost += gBooks;
-            locFlow += gBooks / 2;
-            locChaos += gBooks / 2;
-            locMight += gBooks / 4;
+            locFlow += gBooks * 0.5;
+            locChaos += gBooks * 0.5;
+            locMight += gBooks * 0.25;
 
             locScorch += iBooks;
-            locGreed += iBooks / 2;
-            locChaos += iBooks / 2;
-            locMight += iBooks / 4;
+            locGreed += iBooks * 0.5;
+            locChaos += iBooks * 0.5;
+            locMight += iBooks * 0.25;
 
             locMana += aMana * 3;
             locChaos -= aMana * 5;
@@ -579,34 +592,27 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             locFrost += aPower;
             locMana += aPower;
 
-            this.totalBookshelves = tBooks;
-            this.bookshelves = nBooks;
-            this.arcaneBooksheves = aBooks;
-            this.glacialBooksheves = gBooks;
-            this.infernalBooksheves = iBooks;
+            int finalMana = (int) Math.ceil(locMana);
+            int finalFrost = (int) Math.ceil(locFrost);
+            int finalScorch = (int) Math.ceil(locScorch);
+            int finalFlow = (int) Math.ceil(locFlow);
+            int finalChaos = (int) Math.ceil(locChaos);
+            int finalGreed = (int) Math.ceil(locGreed);
+            int finalMight = (int) Math.ceil(locMight);
+            int finalCorruption = (int) Math.ceil(locCorruption);
+            int finalDivinity = (int) Math.ceil(locDivinity);
 
-            this.totalAltars = tAltars;
-            this.manaAltars = aMana;
-            this.frostAltars = aFrost;
-            this.scorchAltars = aScorch;
-            this.flowAltars = aFlow;
-            this.chaosAltars = aChaos;
-            this.greedAltars = aGreed;
-            this.mightAltars = aMight;
-            this.stabilityAltars = aStability;
-            this.powerAltars = aPower;
+            this.mana = finalMana;
+            this.frost = finalFrost;
+            this.scorch = finalScorch;
+            this.flow = finalFlow;
+            this.chaos = finalChaos;
+            this.greed = finalGreed;
+            this.might = finalMight;
+            this.corruption = finalCorruption;
+            this.divinity = finalDivinity;
 
-            this.mana = locMana;
-            this.frost = locFrost;
-            this.scorch = locScorch;
-            this.flow = locFlow;
-            this.chaos = locChaos;
-            this.greed = locGreed;
-            this.might = locMight;
-            this.corruption = locCorruption;
-            this.divinity = locDivinity;
-
-            return new Attributes(locMana, locFrost, locScorch, locFlow, locChaos, locGreed, locMight, locCorruption, locDivinity);
+            return new Attributes(finalMana, finalFrost, finalScorch, finalFlow, finalChaos, finalGreed, finalMight, finalCorruption, finalDivinity);
         }, new Attributes(this.mana, this.frost, this.scorch, this.flow, this.chaos, this.greed, this.might, this.corruption, this.divinity));
 
         return result;
