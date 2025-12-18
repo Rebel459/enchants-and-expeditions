@@ -6,12 +6,16 @@ import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractNautilus.class)
 public abstract class AbstractNautilusMixin {
+
+    @Shadow
+    private int dashCooldown;
 
     @Inject(
             method = "executeRidersJump",
@@ -22,6 +26,7 @@ public abstract class AbstractNautilusMixin {
         ItemStack stack = nautilus.getBodyArmorItem();
         if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SLIPSTREAM)) {
             nautilus.heal(1);
+            this.dashCooldown = 50;
         }
     }
 }

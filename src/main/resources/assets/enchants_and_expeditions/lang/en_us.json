@@ -95,7 +95,7 @@
   "enchantment.enchants_and_expeditions.jousting": "Jousting",
   "enchantment.enchants_and_expeditions.jousting.desc": "Successful charge attacks with a Spear whilst mounted grant a health and speed boost to the mount",
   "enchantment.enchants_and_expeditions.slipstream": "Slipstream",
-  "enchantment.enchants_and_expeditions.slipstream.desc": "Nautiluses regain health and deflect projectiles whilst dashing",
+  "enchantment.enchants_and_expeditions.slipstream.desc": "Nautiluses regain health and deflect projectiles whilst dashing, at the cost of a slightly longer dash cooldown",
 
   "enchantment.enchants_and_expeditions.fragility_curse": "Curse of Fragility",
   "enchantment.enchants_and_expeditions.fragility_curse.desc": "The cursed item has a chance to take increased durability damage when used",
