@@ -3,6 +3,7 @@ package net.legacy.enchants_and_expeditions.mixin.entity;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.annotation.Nullable;
 import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
+import net.legacy.enchants_and_expeditions.sound.EaESounds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.animal.nautilus.Nautilus;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileDeflection;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -61,13 +63,13 @@ public abstract class ProjectileMixin {
             nautilus = checkedNautilus;
         }
         if (nautilus == null) return;
-        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SLIPSTREAM) && nautilus.isDashing()) {
+        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SLIPSTREAM) && (nautilus.isDashing() || nautilus.getJumpCooldown() > 30) && entity.isInWater()) {
             ProjectileDeflection projectileDeflection = ProjectileDeflection.MOMENTUM_DEFLECT;
             if (entity != this.lastDeflectedBy && this.deflect(projectileDeflection, entity, this.owner, false)) {
                 this.lastDeflectedBy = entity;
             }
-            ServerLevel serverLevel = nautilus.level().getServer().getLevel(nautilus.level().dimension());
-            if (serverLevel != null) serverLevel.playSound(projectile, projectile.blockPosition(), SoundEvents.BOAT_PADDLE_WATER, entity.getSoundSource());
+            Level level = nautilus.level();
+            level.playSound(null, projectile.blockPosition(), EaESounds.SLIPSTREAM_DEFLECT, entity.getSoundSource(), 1.5F, 1F);
             cir.setReturnValue(projectileDeflection);
         }
     }

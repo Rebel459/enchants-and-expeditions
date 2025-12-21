@@ -11,7 +11,11 @@ import org.jetbrains.annotations.NotNull;
 public class EaESounds {
 
 	public static final SoundEvent TOME_PLACE = register("item.tome.place");
-	public static final SoundEvent TOME_PICKUP = register("item.tome.pickup");
+    public static final SoundEvent TOME_PICKUP = register("item.tome.pickup");
+
+    public static final SoundEvent JOUSTING_RESTORE = register("enchantment.jousting.restore");
+    public static final SoundEvent JOUSTING_RESTORE_HORSE = register("enchantment.jousting.restore_horse");
+    public static final SoundEvent SLIPSTREAM_DEFLECT = register("enchantment.slipstream.deflect");
 
 	@NotNull
 	private static SoundEvent register(@NotNull String string) {

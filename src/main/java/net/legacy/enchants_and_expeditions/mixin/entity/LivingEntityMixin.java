@@ -8,6 +8,7 @@ import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.registry.EaEItems;
 import net.legacy.enchants_and_expeditions.registry.EaEMobEffects;
+import net.legacy.enchants_and_expeditions.sound.EaESounds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -23,6 +24,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.Horse;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -184,10 +186,14 @@ public abstract class LivingEntityMixin {
                         break;
                     }
                 }
-                if (value - ignoredDamage >= baseDamage * 1.5F && EnchantingHelper.hasEnchantment(stack, EaEEnchantments.JOUSTING)) {
+                if (value - ignoredDamage >= baseDamage * 2F && EnchantingHelper.hasEnchantment(stack, EaEEnchantments.JOUSTING)) {
                     riddenEntity.heal(1F);
-                    riddenEntity.addEffect(new MobEffectInstance(MobEffects.SPEED, 100));
-                    riddenEntity.level().getServer().getLevel(riddenEntity.level().dimension()).playSound(riddenEntity, riddenEntity.blockPosition(), SoundEvents.HORSE_EAT, entity.getSoundSource());
+                    riddenEntity.addEffect(new MobEffectInstance(MobEffects.SPEED, 60));
+                    ServerLevel level = riddenEntity.level().getServer().getLevel(riddenEntity.level().dimension());
+                    if (level != null) {
+                        if (riddenEntity instanceof Horse) level.playSound(riddenEntity, riddenEntity.blockPosition(), EaESounds.JOUSTING_RESTORE_HORSE, entity.getSoundSource());
+                        else level.playSound(riddenEntity, riddenEntity.blockPosition(), EaESounds.JOUSTING_RESTORE, entity.getSoundSource());
+                    }
                 }
             }
         }
