@@ -25,6 +25,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.animal.equine.Horse;
+import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +37,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -292,6 +294,17 @@ public abstract class LivingEntityMixin {
                 }
             }
         }
+    }
+
+    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
+    private float slipstream(float f) {
+        LivingEntity entity = LivingEntity.class.cast(this);
+        Entity attackerEntity = this.damageSource.getEntity();
+        if (entity.getVehicle() instanceof AbstractNautilus nautilus && attackerEntity instanceof LivingEntity attacker && EnchantingHelper.hasEnchantment(nautilus.getBodyArmorItem(), EaEEnchantments.SLIPSTREAM) && nautilus.isInWater() && (nautilus.isDashing() || nautilus.getJumpCooldown() > 30)) {
+            f = 0F;
+            nautilus.level().playSound(null, nautilus.blockPosition(), EaESounds.SLIPSTREAM_DEFLECT, attacker.getSoundSource(), 1.5F, 1F);
+        }
+        return f;
     }
 
     @WrapOperation(method = "travelInAir", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;getFriction()F"))

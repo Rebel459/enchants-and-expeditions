@@ -6,12 +6,9 @@
     "minecraft:golden_horse_armor",
     "minecraft:iron_horse_armor",
     "minecraft:diamond_horse_armor",
+    "minecraft:netherite_horse_armor",
     {
       "id": "progression_reborn:rose_horse_armor",
-      "required": false
-    },
-    {
-      "id": "progression_reborn:netherite_horse_armor",
       "required": false
     },
     {

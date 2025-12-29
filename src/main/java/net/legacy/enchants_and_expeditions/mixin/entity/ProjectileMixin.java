@@ -37,7 +37,7 @@ public abstract class ProjectileMixin {
     protected EntityReference<Entity> owner;
 
     @Inject(method = "hitTargetOrDeflectSelf", at = @At(value = "HEAD"), cancellable = true)
-    public void amuletOfDeflection(HitResult hitResult, CallbackInfoReturnable<ProjectileDeflection> cir) {
+    public void slipstream(HitResult hitResult, CallbackInfoReturnable<ProjectileDeflection> cir) {
         Projectile projectile = Projectile.class.cast(this);
         if (hitResult.getType() == HitResult.Type.ENTITY) {
             EntityHitResult entityHitResult = (EntityHitResult) hitResult;

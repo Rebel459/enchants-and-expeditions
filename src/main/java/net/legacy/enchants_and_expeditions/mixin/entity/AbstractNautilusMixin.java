@@ -23,7 +23,7 @@ public abstract class AbstractNautilusMixin {
         AbstractNautilus nautilus = AbstractNautilus.class.cast(this);
         ItemStack stack = nautilus.getBodyArmorItem();
         if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SLIPSTREAM) && nautilus.isInWater() && (nautilus.isDashing() || nautilus.getJumpCooldown() > 30)) {
-            f = f / 2F;
+            f = 0F;
         }
         return f;
     }
