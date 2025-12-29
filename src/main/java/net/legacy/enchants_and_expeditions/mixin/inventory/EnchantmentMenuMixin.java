@@ -519,13 +519,13 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
             double locMana = 0, locFrost = 0, locScorch = 0, locFlow = 0, locChaos = 0, locGreed = 0, locMight = 0, locCorruption = 0, locDivinity = 0;
 
-            locMana += nBooks * 0.25;
-            locFrost += nBooks * 0.25;
-            locScorch += nBooks * 0.25;
-            locFlow += nBooks * 0.25;
-            locChaos += nBooks * 0.25;
-            locGreed += nBooks * 0.25;
-            locMight += nBooks * 0.25;
+            locMana += nBooks * 0.2;
+            locFrost += nBooks * 0.2;
+            locScorch += nBooks * 0.2;
+            locFlow += nBooks * 0.2;
+            locChaos += nBooks * 0.2;
+            locGreed += nBooks * 0.2;
+            locMight += nBooks * 0.2;
 
             locMana += aBooks;
             locFlow += aBooks * 0.5;

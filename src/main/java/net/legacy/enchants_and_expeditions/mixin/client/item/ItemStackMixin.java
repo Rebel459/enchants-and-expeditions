@@ -53,13 +53,13 @@ public abstract class ItemStackMixin {
             String corruption = "0";
             String divinity = "0";
             if (this.is(Blocks.BOOKSHELF.asItem())) {
-                mana = "0.25";
-                frost = "0.25";
-                scorch = "0.25";
-                flow = "0.25";
-                chaos = "0.25";
-                greed = "0.25";
-                might = "0.25";
+                mana = "0.2";
+                frost = "0.2";
+                scorch = "0.2";
+                flow = "0.2";
+                chaos = "0.2";
+                greed = "0.2";
+                might = "0.2";
                 consumer.accept(placedTooltip());
                 consumer.accept(attributeTooltip("mana", mana));
                 consumer.accept(attributeTooltip("frost", frost));
