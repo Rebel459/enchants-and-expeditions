@@ -1,6 +1,7 @@
 package net.legacy.enchants_and_expeditions.mixin;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.tree.ClassNode;
@@ -16,7 +17,7 @@ public final class EaEMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        this.hasCombatReborn = FabricLoader.getInstance().isModLoaded("combat_reborn");
+        this.hasCombatReborn = FabricLoader.getInstance().isModLoaded("combat_reborn") && EaEConfig.get.integrations.combat_reborn;
     }
 
     @Override
