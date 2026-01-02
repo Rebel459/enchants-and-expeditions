@@ -188,10 +188,8 @@ public abstract class LivingEntityMixin {
 
     @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
     private float conductivityBlessing(float value) {
-        LogUtils.getLogger().info("Info: " + this.damageSource);
         LivingEntity attacked = LivingEntity.class.cast(this);
         if (attacked.hasEffect(EaEMobEffects.LIGHTNING_IMMUNE) && this.damageSource.is(DamageTypes.LIGHTNING_BOLT)) {
-            LogUtils.getLogger().info("Tried");
             return 0F;
         }
         if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
