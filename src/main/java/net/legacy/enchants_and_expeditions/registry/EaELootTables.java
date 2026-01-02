@@ -64,6 +64,8 @@ public final class EaELootTables {
     public static final ResourceKey<LootTable> REMNANTS_VAULT = registerRemnants("chests/remnants/vault");
     public static final ResourceKey<LootTable> REMNANTS_OMINOUS_VAULT = registerRemnants("chests/remnants/ominous_vault");
 
+    public static final ResourceKey<LootTable> ENDERSCAPE_STRONGHOLD_LIBRARY = registerRemnants("stronghold/chest/library");
+
     public static void init() {
             LootTableEvents.MODIFY.register((id, tableBuilder, source, registries) -> {
                 LootPool.Builder pool;
@@ -80,6 +82,12 @@ public final class EaELootTables {
 
                     // Tomes
                     if (BuiltInLootTables.STRONGHOLD_LIBRARY.equals(id)) {
+                        pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                                .add(EmptyLootItem.emptyItem().setWeight(2))
+                                .add(LootItem.lootTableItem(EaEItems.TOME_OF_MANA).setWeight(1));
+                        tableBuilder.withPool(pool);
+                    }
+                    if (ENDERSCAPE_STRONGHOLD_LIBRARY.equals(id) && EaEConfig.get.integrations.enderscape) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                                 .add(EmptyLootItem.emptyItem().setWeight(2))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_MANA).setWeight(1));
@@ -311,5 +319,8 @@ public final class EaELootTables {
     }
     private static @NotNull ResourceKey<LootTable> registerRemnants(String path) {
         return ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("remnants", path));
+    }
+    private static @NotNull ResourceKey<LootTable> registerEnderscape(String path) {
+        return ResourceKey.create(Registries.LOOT_TABLE, Identifier.fromNamespaceAndPath("enderscape", path));
     }
 }
