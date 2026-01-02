@@ -1,7 +1,7 @@
 {
 	"parent": "enchants_and_expeditions:block/altar_tome",
 	"textures": {
-		"2": "enchants_and_expeditions:block/altar_tome_mana",
-		"particle": "enchants_and_expeditions:block/altar_tome_mana"
+		"2": "enchants_and_expeditions:block/altar_tome_might",
+		"particle": "enchants_and_expeditions:block/altar_tome_might"
 	}
 }

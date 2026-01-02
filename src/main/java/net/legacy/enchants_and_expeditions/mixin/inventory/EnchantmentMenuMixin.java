@@ -383,7 +383,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             return list;
         }
 
-        boolean baseTable = this.mana == 0 && this.frost == 0 && this.scorch == 0 && this.flow == 0 && this.chaos == 0 && this.greed == 0;
+        boolean baseTable = this.mana == 0 && this.frost == 0 && this.scorch == 0 && this.flow == 0 && this.chaos == 0 && this.greed == 0 && this.might == 0;
 
         boolean firstEnchant = false;
         int attempts = 0;
