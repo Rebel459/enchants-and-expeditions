@@ -71,7 +71,7 @@ public final class EaELootTables {
                 if (EaEConfig.get.misc.loot_table_injects) {
 
                     // Treasure
-                    if (BuiltInLootTables.END_CITY_TREASURE.equals(id) && !EnchantsAndExpeditions.isEnderscapeLoaded) {
+                    if (BuiltInLootTables.END_CITY_TREASURE.equals(id) && (!EnchantsAndExpeditions.isEnderscapeLoaded || !EaEConfig.get.integrations.enderscape)) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                                 .add(EmptyLootItem.emptyItem().setWeight(11))
                                 .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING))));
