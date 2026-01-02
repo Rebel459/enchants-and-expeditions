@@ -100,6 +100,15 @@ public class EnchantsAndExpeditions implements ModInitializer {
 			);
 		}
 
+        if (FabricLoader.getInstance().isModLoaded("combat_reborn") && EaEConfig.get.integrations.combat_reborn) {
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    EnchantsAndExpeditions.id("combat_reborn_integration"),
+                    modContainer.get(),
+                    Component.translatable("pack.enchants_and_expeditions.combat_reborn_integration"),
+                    ResourcePackActivationType.ALWAYS_ENABLED
+            );
+        }
+
 		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.get.integrations.legacies_and_legends) {
 			isLegaciesAndLegendsLoaded = true;
 			ResourceManagerHelper.registerBuiltinResourcePack(
@@ -123,12 +132,6 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		}
 		if (FabricLoader.getInstance().isModLoaded("enderscape") && EaEConfig.get.integrations.enderscape) {
 			isEnderscapeLoaded = true;
-			ResourceManagerHelper.registerBuiltinResourcePack(
-					EnchantsAndExpeditions.id("enderscape_integration"),
-					modContainer.get(),
-					Component.translatable("pack.enchants_and_expeditions.enderscape_integration"),
-					ResourcePackActivationType.ALWAYS_ENABLED
-			);
 		}
 	}
 }

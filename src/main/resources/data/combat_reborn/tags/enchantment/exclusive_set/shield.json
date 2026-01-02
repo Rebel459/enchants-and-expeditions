@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "enchants_and_expeditions:frostbite",
+      "required": false
+    },
+    {
+      "id": "enchants_and_expeditions:scorch",
+      "required": false
+    }
+  ]
+}

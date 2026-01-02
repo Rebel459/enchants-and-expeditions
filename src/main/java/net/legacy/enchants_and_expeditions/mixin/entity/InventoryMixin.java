@@ -2,7 +2,7 @@ package net.legacy.enchants_and_expeditions.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.world.entity.player.Inventory;

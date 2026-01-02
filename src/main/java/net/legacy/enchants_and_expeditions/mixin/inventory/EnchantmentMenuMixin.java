@@ -6,7 +6,7 @@ import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.legacy.enchants_and_expeditions.block.AltarBlock;
 import net.legacy.enchants_and_expeditions.block.AltarBlockType;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
@@ -384,7 +384,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             return list;
         }
 
-        boolean baseTable = this.mana == 0 && this.frost == 0 && this.scorch == 0 && this.flow == 0 && this.chaos == 0 && this.greed == 0;
+        boolean baseTable = this.mana == 0 && this.frost == 0 && this.scorch == 0 && this.flow == 0 && this.chaos == 0 && this.greed == 0 && this.might == 0;
 
         boolean firstEnchant = false;
         int attempts = 0;

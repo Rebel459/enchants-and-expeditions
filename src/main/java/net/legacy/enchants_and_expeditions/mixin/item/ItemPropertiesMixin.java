@@ -35,7 +35,7 @@ public  class ItemPropertiesMixin {
     private void addCooldown(ToolMaterial toolMaterial, float f, float g, float h, float i, float j, float k, float l, float m, float n, CallbackInfoReturnable<Item.Properties> cir) {
         cir.setReturnValue(
                 cir.getReturnValue()
-                        .useCooldown(15F)
+                        .useCooldown(5F)
         );
     }
 }

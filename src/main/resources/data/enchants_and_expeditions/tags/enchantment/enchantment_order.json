@@ -3,7 +3,6 @@
     "enchants_and_expeditions:blazing",
     "enchants_and_expeditions:equestrian",
     "enchants_and_expeditions:extraction",
-    "enchants_and_expeditions:frostbite",
     {
       "id": "combat_reborn:parry",
       "required": false
@@ -53,6 +52,14 @@
     "enchants_and_expeditions:leaping",
     {
       "id": "combat_reborn:stagger",
+      "required": false
+    },
+    {
+      "id": "enchants_and_expeditions:frostbite",
+      "required": false
+    },
+    {
+      "id": "enchants_and_expeditions:scorch",
       "required": false
     },
     {

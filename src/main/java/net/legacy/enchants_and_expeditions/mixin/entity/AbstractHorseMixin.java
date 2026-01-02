@@ -1,6 +1,6 @@
 package net.legacy.enchants_and_expeditions.mixin.entity;
 
-import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.player.Player;

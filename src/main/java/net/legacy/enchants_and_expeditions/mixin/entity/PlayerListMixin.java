@@ -1,6 +1,6 @@
 package net.legacy.enchants_and_expeditions.mixin.entity;
 
-import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.NonNullList;

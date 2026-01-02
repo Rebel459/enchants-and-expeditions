@@ -2,6 +2,7 @@
   "required": true,
   "package": "net.legacy.enchants_and_expeditions.mixin",
   "compatibilityLevel": "JAVA_21",
+  "plugin": "net.legacy.enchants_and_expeditions.mixin.EaEMixinPlugin",
   "mixins": [
     "block.BaseFireBlockMixin",
     "block.BlockMixin",
@@ -34,6 +35,7 @@
   "client": [
     "client.inventory.AnvilScreenMixin",
     "client.inventory.EnchantmentScreenMixin",
-    "client.item.ItemStackMixin"
+    "client.item.ItemStackMixin",
+    "integration.combat_reborn.ShieldHelperMixin"
   ]
 }

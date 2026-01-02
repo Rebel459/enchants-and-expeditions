@@ -4,16 +4,14 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.logging.LogUtils;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.legacy.enchants_and_expeditions.registry.EaEItems;
 import net.legacy.enchants_and_expeditions.registry.EaEMobEffects;
 import net.legacy.enchants_and_expeditions.sound.EaESounds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -37,7 +35,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -103,19 +100,6 @@ public abstract class LivingEntityMixin {
                 entity.removeEffect(effect);
                 if (!attacker.hasEffect(effect)) attacker.addEffect(new MobEffectInstance(effect, duration / 2));
                 entity.addEffect(new MobEffectInstance(effect, duration / 2));
-            }
-        }
-    }
-
-    @Inject(method = "hurtServer", at = @At(value = "TAIL"))
-    private void frostbite(ServerLevel level, DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
-        LivingEntity attacked = LivingEntity.class.cast(this);
-        if (damageSource.getEntity() instanceof LivingEntity attacker) {
-            ItemStack attackedChestplate = attacked.getItemBySlot(EquipmentSlot.CHEST);
-            if (EnchantingHelper.hasEnchantment(attackedChestplate, EaEEnchantments.FROSTBITE) && attacked.getHealth() > attacked.getMaxHealth() - 1) {
-                int duration = 200;
-                if (attacker.getTicksFrozen() < duration) attacker.setTicksFrozen(duration);
-                level.sendParticles(ParticleTypes.SNOWFLAKE, attacker.getX(), attacker.getRandomY(), attacker.getZ(), 10, 0, -1, 0, 0.5);
             }
         }
     }
@@ -240,7 +224,7 @@ public abstract class LivingEntityMixin {
                         }
                         stack.hurtAndBreak(1, attacker, attacker.getEquipmentSlotForItem(stack));
                         if (attacker instanceof Player player && stack.has(DataComponents.USE_COOLDOWN)) {
-                            player.getCooldowns().addCooldown(stack, 300);
+                            player.getCooldowns().addCooldown(stack, 100);
                             player.stopUsingItem();
                         }
                     }

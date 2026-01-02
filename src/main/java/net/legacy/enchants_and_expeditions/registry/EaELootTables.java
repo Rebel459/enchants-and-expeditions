@@ -1,6 +1,7 @@
 package net.legacy.enchants_and_expeditions.registry;
 
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.registries.Registries;
@@ -70,7 +71,7 @@ public final class EaELootTables {
                 if (EaEConfig.get.misc.loot_table_injects) {
 
                     // Treasure
-                    if (BuiltInLootTables.END_CITY_TREASURE.equals(id)) {
+                    if (BuiltInLootTables.END_CITY_TREASURE.equals(id) && !EnchantsAndExpeditions.isEnderscapeLoaded) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
                                 .add(EmptyLootItem.emptyItem().setWeight(11))
                                 .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withEnchantment(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING))));

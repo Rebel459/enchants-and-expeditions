@@ -2,8 +2,7 @@ package net.legacy.enchants_and_expeditions.mixin.item;
 
 import com.google.common.collect.Lists;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
-import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.Holder;
@@ -19,7 +18,6 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;

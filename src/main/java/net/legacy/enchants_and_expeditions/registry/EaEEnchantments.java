@@ -31,7 +31,6 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> RECOVERY = key("recovery");
 	public static final ResourceKey<Enchantment> ICEBOUND = key("icebound");
 	public static final ResourceKey<Enchantment> BLAZING = key("blazing");
-	public static final ResourceKey<Enchantment> FROSTBITE = key("frostbite");
 	public static final ResourceKey<Enchantment> QUICKSTEP = key("quickstep");
 	public static final ResourceKey<Enchantment> GALLOPING = key("galloping");
 	public static final ResourceKey<Enchantment> LEAPING = key("leaping");
@@ -46,6 +45,10 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> SHATTERING_CURSE = key("shattering_curse");
 	public static final ResourceKey<Enchantment> DISPLACEMENT_CURSE = key("displacement_curse");
 	public static final ResourceKey<Enchantment> SLIDING_CURSE = key("sliding_curse");
+
+    // Combat Reborn
+    public static final ResourceKey<Enchantment> FROSTBITE = key("frostbite");
+    public static final ResourceKey<Enchantment> SCORCH = key("scorch");
 
 	public static void init() {
 	}

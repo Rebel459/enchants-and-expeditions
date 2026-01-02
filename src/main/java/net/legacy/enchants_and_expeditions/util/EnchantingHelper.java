@@ -1,4 +1,4 @@
-package net.legacy.enchants_and_expeditions.lib;
+package net.legacy.enchants_and_expeditions.util;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
@@ -7,9 +7,18 @@ import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -19,6 +28,7 @@ import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class EnchantingHelper {
@@ -150,5 +160,13 @@ public class EnchantingHelper {
     public static int getStoredEnchantmentLevel(Holder<Enchantment> enchantment, ItemStack stack) {
         ItemEnchantments itemEnchantments = stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
         return itemEnchantments.getLevel(enchantment);
+    }
+
+    public static void applyFreezing(ServerLevel level, LivingEntity affected, LivingEntity affector, int duration) {
+        Optional<Holder.Reference<MobEffect>> freeze = BuiltInRegistries.MOB_EFFECT.get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
+        if (freeze.isPresent() && EaEConfig.get.integrations.legacies_and_legends) affected.addEffect(new MobEffectInstance(freeze.get(), duration));
+        level.sendParticles(ParticleTypes.SNOWFLAKE, affected.getX(), affected.getRandomY(), affected.getZ(), 10, 0, -1, 0, 0.5);
+        level.playSound(affected, affected.blockPosition(), SoundEvents.SNOW_HIT, affector.getSoundSource());
+        if (affected.getTicksFrozen() < duration) affected.setTicksFrozen(duration);
     }
 }

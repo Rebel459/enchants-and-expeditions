@@ -3,6 +3,10 @@
     "#enchants_and_expeditions:enchanting_table/all",
     "minecraft:flame",
     "enchants_and_expeditions:smiting",
-    "enchants_and_expeditions:blazing"
+    "enchants_and_expeditions:blazing",
+    {
+      "id": "enchants_and_expeditions:scorch",
+      "required": false
+    }
   ]
 }

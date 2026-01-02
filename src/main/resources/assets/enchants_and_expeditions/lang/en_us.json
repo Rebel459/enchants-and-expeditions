@@ -78,8 +78,6 @@
   "enchantment.enchants_and_expeditions.extraction.desc": "Increases experience gained from mining certain blocks",
   "enchantment.enchants_and_expeditions.ferocity": "Ferocity",
   "enchantment.enchants_and_expeditions.ferocity.desc": "Increases wolf damage",
-  "enchantment.enchants_and_expeditions.frostbite": "Frostbite",
-  "enchantment.enchants_and_expeditions.frostbite.desc": "Freezes the attacker when the wearer is struck whilst at full health",
   "enchantment.enchants_and_expeditions.galloping": "Galloping",
   "enchantment.enchants_and_expeditions.galloping.desc": "Increases horse speed",
   "enchantment.enchants_and_expeditions.icebound": "Icebound",
@@ -108,11 +106,17 @@
   "enchantment.enchants_and_expeditions.sliding_curse": "Curse of Sliding",
   "enchantment.enchants_and_expeditions.sliding_curse.desc": "Makes most blocks slippery",
 
+  "enchantment.enchants_and_expeditions.frostbite": "Frostbite",
+  "enchantment.enchants_and_expeditions.frostbite.desc": "Parrying an attack freezes the attacker",
+  "enchantment.enchants_and_expeditions.scorch": "Scorch",
+  "enchantment.enchants_and_expeditions.scorch.desc": "Parrying an attack sets the attacker on fire",
+
   "subtitles.item.tome.place": "Tome is placed",
   "subtitles.item.tome.pickup": "Tome is picked up",
 
   "pack.enchants_and_expeditions.vanilla_tag_replacements": "Vanilla Tag Replacements",
   "pack.enchants_and_expeditions.item_tooltips_overrides": "Item Tooltips Overrides",
+  "pack.enchants_and_expeditions.combat_reborn_integration": "Combat Reborn Integration",
   "pack.enchants_and_expeditions.legacies_and_legends_integration": "Legacies and Legends Integration",
   "pack.enchants_and_expeditions.trailier_tales_integration": "Trailier Tales Integration",
   "pack.enchants_and_expeditions.enderscape_integration": "Enderscape Integration",
