@@ -83,7 +83,6 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		EaEEnchantments.init();
 		EaEDataComponents.init();
 		EaEEnchantmentEffects.register();
-		EaEConfig.initClient();
 
 		ResourceManagerHelper.registerBuiltinResourcePack(
 				EnchantsAndExpeditions.id("vanilla_tag_replacements"),

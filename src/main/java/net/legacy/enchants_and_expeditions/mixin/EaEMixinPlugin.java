@@ -17,6 +17,7 @@ public final class EaEMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
+        EaEConfig.initClient();
         this.hasCombatReborn = FabricLoader.getInstance().isModLoaded("combat_reborn") && EaEConfig.get.integrations.combat_reborn;
     }
 
