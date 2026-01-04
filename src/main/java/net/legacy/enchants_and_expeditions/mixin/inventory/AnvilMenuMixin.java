@@ -34,6 +34,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -305,7 +306,7 @@ public abstract class AnvilMenuMixin {
         ItemStack additionStack = anvilMenu.inputSlots.getItem(1);
         ItemStack outputStack = anvilMenu.resultSlots.getItem(0);
         if (inputStack.is(Items.ENCHANTED_BOOK) && additionStack.is(Items.ENCHANTED_BOOK) && outputStack.is(Items.ENCHANTED_BOOK)) {
-            outputStack.setDamageValue(0);
+            outputStack.setDamageValue((int) Math.min(0, (inputStack.getDamageValue() + additionStack.getDamageValue()) - outputStack.getMaxDamage() * 1.1F));
         }
     }
 
@@ -333,8 +334,9 @@ public abstract class AnvilMenuMixin {
                         anvilMenu.player.playSound(SoundEvents.ITEM_BREAK.value());
                     }
                 }
-                else
+                else {
                     anvilMenu.inputSlots.setItem(1, ItemStack.EMPTY);
+                }
             }
         } else if (!anvilMenu.onlyRenaming) {
             if (additionItem.is(Items.ENCHANTED_BOOK) && !stack.is(Items.ENCHANTED_BOOK)) {
@@ -368,6 +370,15 @@ public abstract class AnvilMenuMixin {
             }
 
         });
+
+        if (anvilMenu.inputSlots.getItem(1).is(Items.ENCHANTED_BOOK)) {
+            ItemStack book = anvilMenu.inputSlots.getItem(1).copy();
+            ItemEnchantments itemEnchantments = EnchantmentHelper.updateEnchantments(book, mutable -> mutable.removeIf(holder -> holder.is(EnchantmentTags.CURSE) || holder.is(EaEEnchantmentTags.BLESSING)));
+            if (book.is(Items.ENCHANTED_BOOK) && itemEnchantments.isEmpty()) {
+                book = book.transmuteCopy(Items.BOOK);
+            }
+            anvilMenu.inputSlots.setItem(1, book);
+        }
         ci.cancel();
     }
 
