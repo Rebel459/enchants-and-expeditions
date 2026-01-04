@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": "minecraft:polished_deepslate",
-    "A": "minecraft:amethyst_shard"
+    "#": {
+      "item": "minecraft:polished_deepslate"
+    },
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    }
   },
   "pattern": [
     "A#A",

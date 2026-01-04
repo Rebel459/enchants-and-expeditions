@@ -22,16 +22,6 @@ import java.util.Objects;
 @Mixin(Enchantment.class)
 public abstract class EnchantmentMixin {
 
-    @Shadow public abstract int getMaxLevel();
-
-    @Shadow
-    @Final
-    private Enchantment.EnchantmentDefinition definition;
-
-    @Shadow
-    @Final
-    private Component description;
-
     @Shadow
     public abstract Component description();
 

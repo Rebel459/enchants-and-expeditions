@@ -2,9 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": "minecraft:iron_ingot",
-    "B": "minecraft:bookshelf",
-    "#": "minecraft:packed_ice"
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "item": "minecraft:bookshelf"
+    },
+    "#": {
+      "item": "minecraft:packed_ice"
+      }
   },
   "pattern": [
     "I",

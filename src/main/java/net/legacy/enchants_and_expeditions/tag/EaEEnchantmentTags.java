@@ -2,7 +2,7 @@ package net.legacy.enchants_and_expeditions.tag;
 
 import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -45,6 +45,6 @@ public class EaEEnchantmentTags {
 
     @NotNull
     private static TagKey<Enchantment> registerCombatReborn(@NotNull String path) {
-        return TagKey.create(Registries.ENCHANTMENT, Identifier.fromNamespaceAndPath("combat_reborn", path));
+        return TagKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath("combat_reborn", path));
     }
 }

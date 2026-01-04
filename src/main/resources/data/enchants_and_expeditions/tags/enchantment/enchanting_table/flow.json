@@ -8,13 +8,11 @@
     "minecraft:respiration",
     "minecraft:depth_strider",
     "minecraft:impaling",
-    "minecraft:lunge",
     "enchants_and_expeditions:leaping",
     "enchants_and_expeditions:equestrian",
     "enchants_and_expeditions:quickstep",
     "enchants_and_expeditions:leaping",
     "enchants_and_expeditions:velocity",
-    "enchants_and_expeditions:slipstream",
     {
       "id": "combat_reborn:parry",
       "required": false

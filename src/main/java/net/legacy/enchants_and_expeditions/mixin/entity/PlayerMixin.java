@@ -1,6 +1,7 @@
 package net.legacy.enchants_and_expeditions.mixin.entity;
 
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
+import net.legacy.enchants_and_expeditions.tag.EaEItemTags;
 import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.minecraft.server.level.ServerLevel;
@@ -12,6 +13,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,7 +22,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(Player.class)
 public abstract class PlayerMixin {
@@ -100,7 +104,7 @@ public abstract class PlayerMixin {
     }
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"))
-    private void bloodlust(ServerLevel serverLevel, LivingEntity livingEntity, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
+    private void bloodlust(ServerLevel serverLevel, LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
         Player player = Player.class.cast(this);
         ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
@@ -113,14 +117,14 @@ public abstract class PlayerMixin {
     }
 
     @Inject(method = "killedEntity", at = @At(value = "HEAD"))
-    private void quickstep(ServerLevel serverLevel, LivingEntity livingEntity, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir) {
+    private void quickstep(ServerLevel serverLevel, LivingEntity livingEntity, CallbackInfoReturnable<Boolean> cir) {
         Player player = Player.class.cast(this);
         ItemStack stack = player.getItemBySlot(EquipmentSlot.LEGS);
 
         if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.QUICKSTEP)) {
             int seconds = EnchantingHelper.getLevel(stack, EaEEnchantments.QUICKSTEP) * 2;
             int ticks = seconds * 20;
-            if (!player.hasEffect(MobEffects.SPEED) || player.getEffect(MobEffects.SPEED).getDuration() < ticks) player.addEffect(new MobEffectInstance(MobEffects.SPEED, ticks));
+            if (!player.hasEffect(MobEffects.MOVEMENT_SPEED) || player.getEffect(MobEffects.MOVEMENT_SPEED).getDuration() < ticks) player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, ticks));
         }
     }
 }

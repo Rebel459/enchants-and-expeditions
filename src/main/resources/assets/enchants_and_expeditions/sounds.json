@@ -24,56 +24,5 @@
       }
     ],
     "subtitle": "subtitles.item.tome.pickup"
-  },
-  "enchantment.jousting.restore": {
-    "sounds": [
-      {
-        "name": "enchants_and_expeditions:enchantment/jousting/restore1",
-        "volume": 1.0
-      },
-      {
-        "name": "enchants_and_expeditions:enchantment/jousting/restore2",
-        "volume": 1.0
-      },
-      {
-        "name": "enchants_and_expeditions:enchantment/jousting/restore3",
-        "volume": 1.0
-      }
-    ],
-    "subtitle": "subtitles.enchantment.jousting.restore"
-  },
-  "enchantment.jousting.restore_horse": {
-    "sounds": [
-      {
-        "name": "enchants_and_expeditions:enchantment/jousting/restore_horse1",
-        "volume": 1.0
-      },
-      {
-        "name": "enchants_and_expeditions:enchantment/jousting/restore_horse2",
-        "volume": 1.0
-      },
-      {
-        "name": "enchants_and_expeditions:enchantment/jousting/restore_horse3",
-        "volume": 1.0
-      }
-    ],
-    "subtitle": "subtitles.enchantment.jousting.restore"
-  },
-  "enchantment.slipstream.deflect": {
-    "sounds": [
-      {
-        "name": "enchants_and_expeditions:enchantment/slipstream/deflect1",
-        "volume": 1.0
-      },
-      {
-        "name": "enchants_and_expeditions:enchantment/slipstream/deflect2",
-        "volume": 1.0
-      },
-      {
-        "name": "enchants_and_expeditions:enchantment/slipstream/deflect3",
-        "volume": 1.0
-      }
-    ],
-    "subtitle": "subtitles.enchantment.slipstream.deflect"
   }
 }

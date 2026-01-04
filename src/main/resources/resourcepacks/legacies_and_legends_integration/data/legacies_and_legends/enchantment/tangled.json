@@ -11,7 +11,7 @@
           "base": 0.25,
           "per_level_above_first": 0.25
         },
-        "attribute": "minecraft:movement_efficiency",
+        "attribute": "minecraft:generic.movement_efficiency",
         "id": "legacies_and_legends:enchantment.tangled",
         "operation": "add_value"
       }

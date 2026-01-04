@@ -2,9 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": "minecraft:lapis_lazuli",
-    "B": "minecraft:bookshelf",
-    "#": "minecraft:calcite"
+    "I": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "B": {
+      "item": "minecraft:bookshelf"
+    },
+    "#": {
+      "item": "minecraft:calcite"
+    }
   },
   "pattern": [
     "I",

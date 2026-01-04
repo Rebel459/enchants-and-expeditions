@@ -9,7 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -51,7 +51,7 @@ public class EnchantingHelper {
         });
         list.removeIf(enchantmentInstance -> {
             for (Holder<Enchantment> stackEnchantment : stackEnchantments) {
-                if (!Enchantment.areCompatible(stackEnchantment, enchantmentInstance.enchantment())) return true;
+                if (!Enchantment.areCompatible(stackEnchantment, enchantmentInstance.enchantment)) return true;
             }
             return false;
         });
@@ -163,10 +163,15 @@ public class EnchantingHelper {
     }
 
     public static void applyFreezing(ServerLevel level, LivingEntity affected, LivingEntity affector, int duration) {
-        Optional<Holder.Reference<MobEffect>> freeze = BuiltInRegistries.MOB_EFFECT.get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
+        Optional<Holder.Reference<MobEffect>> freeze = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.fromNamespaceAndPath("legacies_and_legends", "freezing"));
         if (freeze.isPresent() && EaEConfig.get.integrations.legacies_and_legends) affected.addEffect(new MobEffectInstance(freeze.get(), duration));
         level.sendParticles(ParticleTypes.SNOWFLAKE, affected.getX(), affected.getRandomY(), affected.getZ(), 10, 0, -1, 0, 0.5);
-        level.playSound(affected, affected.blockPosition(), SoundEvents.SNOW_HIT, affector.getSoundSource());
+        level.playSound(affected, affected.blockPosition(), SoundEvents.SNOW_HIT, affector.getSoundSource(), 1F, 1F);
         if (affected.getTicksFrozen() < duration) affected.setTicksFrozen(duration);
     }
+
+    public static boolean isValidRepairItem(ItemStack item, ItemStack ingredient) {
+        return item.getItem().isValidRepairItem(item, ingredient);
+    };
+
 }

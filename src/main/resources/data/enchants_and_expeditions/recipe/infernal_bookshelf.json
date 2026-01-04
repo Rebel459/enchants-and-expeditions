@@ -2,9 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": "minecraft:fire_charge",
-    "B": "minecraft:bookshelf",
-    "#": "minecraft:blackstone"
+    "I": {
+      "item": "minecraft:fire_charge"
+    },
+    "B": {
+      "item": "minecraft:bookshelf"
+    },
+    "#": {
+      "item": "minecraft:blackstone"
+    }
   },
   "pattern": [
     "I",

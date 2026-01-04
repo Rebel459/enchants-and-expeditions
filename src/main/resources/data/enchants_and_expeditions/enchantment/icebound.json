@@ -16,7 +16,7 @@
                 "base": 0.01,
                 "per_level_above_first": 0.01
               },
-              "attribute": "minecraft:movement_speed",
+              "attribute": "minecraft:generic.movement_speed",
               "id": "enchants_and_expeditions:enchantment.icebound",
               "operation": "add_value"
             }
@@ -111,7 +111,7 @@
       },
       {
         "effect": {
-          "type": "minecraft:change_item_damage",
+          "type": "minecraft:damage_item",
           "amount": 1.0
         },
         "requirements": {

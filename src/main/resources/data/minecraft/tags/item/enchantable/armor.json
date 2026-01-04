@@ -1,7 +1,6 @@
 {
   "values": [
     "minecraft:wolf_armor",
-    "#enchants_and_expeditions:horse_armor",
-    "#enchants_and_expeditions:nautilus_armor"
+    "#enchants_and_expeditions:horse_armor"
   ]
 }

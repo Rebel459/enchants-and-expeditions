@@ -3,34 +3,28 @@ package net.legacy.enchants_and_expeditions.registry;
 import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.legacy.enchants_and_expeditions.block.AltarBlock;
 import net.legacy.enchants_and_expeditions.sound.EaEBlockSounds;
+import net.legacy.enchants_and_expeditions.util.CreativeTabs;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Function;
 
 public class EaEBlocks {
-    public static final Block ARCANE_BOOKSHELF = register("arcane_bookshelf",
-            Block::new,
+    public static final Block ARCANE_BOOKSHELF = new Block(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.TERRACOTTA_WHITE)
                     .instrument(NoteBlockInstrument.BASS)
                     .strength(1.5F)
                     .sound(EaEBlockSounds.ARCANE_BOOKSHELF)
     );
-    public static final Block GLACIAL_BOOKSHELF = register("glacial_bookshelf",
-            Block::new,
+    public static final Block GLACIAL_BOOKSHELF = new Block(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.ICE)
                     .instrument(NoteBlockInstrument.BASS)
@@ -39,8 +33,7 @@ public class EaEBlocks {
                     .friction(0.98F)
                     .ignitedByLava()
     );
-    public static final Block INFERNAL_BOOKSHELF = register("infernal_bookshelf",
-            Block::new,
+    public static final Block INFERNAL_BOOKSHELF = new Block(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_BLACK)
                     .instrument(NoteBlockInstrument.BASS)
@@ -48,8 +41,7 @@ public class EaEBlocks {
                     .sound(EaEBlockSounds.INFERNAL_BOOKSHELF)
     );
 
-    public static final AltarBlock ALTAR = register("altar",
-            AltarBlock::new,
+    public static final AltarBlock ALTAR = new AltarBlock(
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.DEEPSLATE)
                     .strength(3.0F)
@@ -59,27 +51,38 @@ public class EaEBlocks {
     );
 
     public static void init() {
+        registerBlockAfter(Blocks.BOOKSHELF, "arcane_bookshelf", ARCANE_BOOKSHELF, CreativeModeTabs.FUNCTIONAL_BLOCKS);
+        registerBlockAfter(EaEBlocks.ARCANE_BOOKSHELF, "glacial_bookshelf", GLACIAL_BOOKSHELF, CreativeModeTabs.FUNCTIONAL_BLOCKS);
+        registerBlockAfter(EaEBlocks.GLACIAL_BOOKSHELF, "infernal_bookshelf", INFERNAL_BOOKSHELF, CreativeModeTabs.FUNCTIONAL_BLOCKS);
+        registerBlockAfter(Blocks.ENCHANTING_TABLE, "altar", ALTAR, CreativeModeTabs.FUNCTIONAL_BLOCKS);
     }
 
-    private static <T extends Block> @NotNull T registerWithoutItem(String path, Function<Properties, T> block, Properties properties) {
-        Identifier id = EnchantsAndExpeditions.id(path);
-        return doRegister(id, makeBlock(block, properties, id));
+    @SafeVarargs
+    private static void registerBlockAfter(ItemLike comparedItem, String path, Block block, ResourceKey<CreativeModeTab>... tabs) {
+        registerBlockItemAfter(comparedItem, path, block, tabs);
+        actualRegisterBlock(path, block);
     }
 
-    private static <T extends Block> @NotNull T register(String path, Function<Properties, T> block, Properties properties) {
-        T registered = registerWithoutItem(path, block, properties);
-        Items.registerBlock(registered);
-        return registered;
+    @SafeVarargs
+    private static void registerBlockItemAfter(ItemLike comparedItem, String name, Block block, ResourceKey<CreativeModeTab>... tabs) {
+        registerBlockItemAfter(comparedItem, name, block, CreativeModeTab.TabVisibility.PARENT_AND_SEARCH_TABS, tabs);
     }
 
-    private static <T extends Block> @NotNull T doRegister(Identifier id, T block) {
-        if (BuiltInRegistries.BLOCK.getOptional(id).isEmpty()) {
-            return Registry.register(BuiltInRegistries.BLOCK, id, block);
+    @SafeVarargs
+    private static void registerBlockItemAfter(ItemLike comparedItem, String path, Block block, CreativeModeTab.TabVisibility visibility, ResourceKey<CreativeModeTab>... tabs) {
+        actualRegisterBlockItem(path, block);
+        CreativeTabs.addAfter(comparedItem, block, visibility, tabs);
+    }
+
+    private static void actualRegisterBlock(String path, Block block) {
+        if (BuiltInRegistries.BLOCK.getOptional(EnchantsAndExpeditions.id(path)).isEmpty()) {
+            Registry.register(BuiltInRegistries.BLOCK, EnchantsAndExpeditions.id(path), block);
         }
-        throw new IllegalArgumentException("Block with id " + id + " is already in the block registry.");
     }
 
-    private static <T extends Block> T makeBlock(@NotNull Function<Properties, T> function, @NotNull Properties properties, Identifier id) {
-        return function.apply(properties.setId(ResourceKey.create(Registries.BLOCK, id)));
+    private static void actualRegisterBlockItem(String path, Block block) {
+        if (BuiltInRegistries.ITEM.getOptional(EnchantsAndExpeditions.id(path)).isEmpty()) {
+            Registry.register(BuiltInRegistries.ITEM, EnchantsAndExpeditions.id(path), new BlockItem(block, new Item.Properties()));
+        }
     }
 }

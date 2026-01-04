@@ -1,8 +1,8 @@
 package net.legacy.enchants_and_expeditions.mixin.entity;
 
-import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
-import net.minecraft.world.entity.animal.equine.AbstractHorse;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;

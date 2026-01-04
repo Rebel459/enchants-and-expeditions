@@ -3,7 +3,7 @@ package net.legacy.enchants_and_expeditions.mixin.entity;
 import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.animal.wolf.Wolf;
+import net.minecraft.world.entity.animal.Wolf;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Wolf.class)
 public abstract class WolfMixin {
-
 
     @Inject(method = "aiStep", at = @At(value = "TAIL"), cancellable = true)
     private void modifyHealingCondition(CallbackInfo ci) {

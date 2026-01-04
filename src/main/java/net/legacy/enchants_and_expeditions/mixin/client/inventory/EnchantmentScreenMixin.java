@@ -9,10 +9,7 @@ import net.legacy.enchants_and_expeditions.EnchantsAndExpeditionsClient;
 import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.EnchantmentScreen;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
@@ -66,11 +63,11 @@ public abstract class EnchantmentScreenMixin {
     public int textureSize = 16;
 
     @Inject(method = "mouseClicked", at = @At("TAIL"))
-    private void EaE$enchantingTableClicked(MouseButtonEvent mouseButtonEvent, boolean bl, CallbackInfoReturnable<Boolean> cir) {
+    private void EaE$enchantingTableClicked(double d, double e, int i, CallbackInfoReturnable<Boolean> cir) {
         EnchantmentScreen screen = EnchantmentScreen.class.cast(this);
         Player player = screen.minecraft.player;
-        int mouseX = (int) mouseButtonEvent.x();
-        int mouseY = (int) mouseButtonEvent.y();
+        int mouseX = (int) d;
+        int mouseY = (int) e;
         if (isOverButton(mouseX, mouseY) && !this.attributesOpened) {
             this.attributesOpened = true;
             player.addTag("show_enchanting_attributes");
@@ -88,9 +85,9 @@ public abstract class EnchantmentScreenMixin {
 
         // Render the 16x16 texture at the top-left of the enchanting table interface
         if (isOverButton(mouseX, mouseY)) {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, EnchantsAndExpeditions.id("textures/gui/attributes_hovered.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
+            guiGraphics.blit(EnchantsAndExpeditions.id("textures/gui/attributes_hovered.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
         } else {
-            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, EnchantsAndExpeditions.id("textures/gui/attributes.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
+            guiGraphics.blit(EnchantsAndExpeditions.id("textures/gui/attributes.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
         }
 
         attributesOpened = attributesOpened || screen.minecraft.player.getTags().contains("show_enchanting_attributes");
@@ -99,7 +96,7 @@ public abstract class EnchantmentScreenMixin {
 
         EnchantingAttributes.Attributes enchantingAttributes = EnchantsAndExpeditionsClient.getClientEnchantingAttributes();
         if (enchantingAttributes == null) {
-            guiGraphics.drawString(screen.getFont(), Component.literal("[EaE] awaiting attribute sync..."), leftPos() + 20, topPos() + 20, ChatFormatting.GRAY.getColor());
+            guiGraphics.drawString(screen.font, Component.literal("[EaE] awaiting attribute sync..."), leftPos() + 20, topPos() + 20, ChatFormatting.GRAY.getColor());
             return;
         }
 
@@ -119,15 +116,15 @@ public abstract class EnchantmentScreenMixin {
         int textWidth = 100; // Base width, adjusted based on longest text
 
         // Calculate exact width using Font#width
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana))));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost))));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch))));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow))));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos))));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed))));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.might").append(": " + Math.max(0, might))));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption))));
-        textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity))));
+        textWidth = Math.max(textWidth, screen.font.width(Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana))));
+        textWidth = Math.max(textWidth, screen.font.width(Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost))));
+        textWidth = Math.max(textWidth, screen.font.width(Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch))));
+        textWidth = Math.max(textWidth, screen.font.width(Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow))));
+        textWidth = Math.max(textWidth, screen.font.width(Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos))));
+        textWidth = Math.max(textWidth, screen.font.width(Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed))));
+        textWidth = Math.max(textWidth, screen.font.width(Component.translatable("desc.enchants_and_expeditions.might").append(": " + Math.max(0, might))));
+        textWidth = Math.max(textWidth, screen.font.width(Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption))));
+        textWidth = Math.max(textWidth, screen.font.width(Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity))));
 
         // Position tooltip relative to the enchanting table GUI
         int x = 10;
@@ -154,15 +151,15 @@ public abstract class EnchantmentScreenMixin {
 
         // Draw attribute text
         y += 1; // Center text in tooltip box
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana)), x, y, 0xFF000000 | ChatFormatting.DARK_BLUE.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost)), x, y, 0xFF000000 | ChatFormatting.DARK_AQUA.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch)), x, y, 0xFF000000 | ChatFormatting.DARK_RED.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow)), x, y, 0xFF000000 | ChatFormatting.AQUA.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos)), x, y, 0xFF000000 | ChatFormatting.DARK_GRAY.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed)), x, y, 0xFF000000 | ChatFormatting.YELLOW.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.might").append(": " + Math.max(0, might)), x, y, 0xFF000000 | ChatFormatting.DARK_GREEN.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption)), x, y, 0xFF000000 | ChatFormatting.RED.getColor()); y += 10;
-        guiGraphics.drawString(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity)), x, y, 0xFF000000 | ChatFormatting.GOLD.getColor());
+        guiGraphics.drawString(screen.font, Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana)), x, y, 0xFF000000 | ChatFormatting.DARK_BLUE.getColor()); y += 10;
+        guiGraphics.drawString(screen.font, Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost)), x, y, 0xFF000000 | ChatFormatting.DARK_AQUA.getColor()); y += 10;
+        guiGraphics.drawString(screen.font, Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch)), x, y, 0xFF000000 | ChatFormatting.DARK_RED.getColor()); y += 10;
+        guiGraphics.drawString(screen.font, Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow)), x, y, 0xFF000000 | ChatFormatting.AQUA.getColor()); y += 10;
+        guiGraphics.drawString(screen.font, Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos)), x, y, 0xFF000000 | ChatFormatting.DARK_GRAY.getColor()); y += 10;
+        guiGraphics.drawString(screen.font, Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed)), x, y, 0xFF000000 | ChatFormatting.YELLOW.getColor()); y += 10;
+        guiGraphics.drawString(screen.font, Component.translatable("desc.enchants_and_expeditions.might").append(": " + Math.max(0, might)), x, y, 0xFF000000 | ChatFormatting.DARK_GREEN.getColor()); y += 10;
+        guiGraphics.drawString(screen.font, Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption)), x, y, 0xFF000000 | ChatFormatting.RED.getColor()); y += 10;
+        guiGraphics.drawString(screen.font, Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity)), x, y, 0xFF000000 | ChatFormatting.GOLD.getColor());
     }
 
     @Unique

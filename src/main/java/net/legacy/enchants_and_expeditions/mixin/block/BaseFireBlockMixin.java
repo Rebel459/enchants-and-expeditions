@@ -20,13 +20,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BaseFireBlockMixin {
 
     @Inject(method = "entityInside", at = @At(value = "HEAD"), cancellable = true)
-    private void blazingFireImmunity(BlockState blockState, Level level, BlockPos blockPos, Entity entity, InsideBlockEffectApplier insideBlockEffectApplier, boolean bl, CallbackInfo ci) {
+    private void blazingFireImmunity(BlockState blockState, Level level, BlockPos blockPos, Entity entity, CallbackInfo ci) {
         if (!(entity instanceof LivingEntity livingEntity)) return;
         ItemStack stack;
         if (entity instanceof Animal) stack = livingEntity.getItemBySlot(EquipmentSlot.BODY);
         else stack = livingEntity.getItemBySlot(EquipmentSlot.FEET);
         if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BLAZING)) {
-            if (!livingEntity.hasEffect(MobEffects.SPEED)) livingEntity.addEffect(new MobEffectInstance(MobEffects.SPEED));
+            if (!livingEntity.hasEffect(MobEffects.MOVEMENT_SPEED)) livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED));
             if (entity.getRemainingFireTicks() == 0) entity.setRemainingFireTicks(1);
             ci.cancel();
         }

@@ -6,12 +6,11 @@ import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.legacy.enchants_and_expeditions.block.AltarBlock;
 import net.legacy.enchants_and_expeditions.block.AltarBlockType;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.legacy.enchants_and_expeditions.registry.EaEBlocks;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
+import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.minecraft.core.*;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EnchantmentTags;
@@ -26,7 +25,6 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.Level;
@@ -96,7 +94,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Unique
     private static String EaE$blockId(BlockState state) {
         try {
-            return state.getBlock().builtInRegistryHolder().key().identifier().toString();
+            return state.getBlock().builtInRegistryHolder().key().registry().toString();
         } catch (Throwable t) {
             return state.getBlock().getClass().getSimpleName();
         }
@@ -130,7 +128,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             if (!itemStack.isEmpty() && itemStack.isEnchantable() && !itemStack.is(Items.BOOK) && !itemStack.is(Items.ENCHANTED_BOOK)) {
                 this.access.execute((level, blockPos) -> {
                     IdMap<Holder<net.minecraft.world.item.enchantment.Enchantment>> idMap =
-                            level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).asHolderIdMap();
+                            level.registryAccess().registryOrThrow(Registries.ENCHANTMENT).asHolderIdMap();
                     int ix = 0;
 
                     this.totalBookshelves = 0;
@@ -242,8 +240,8 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                             List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx] + this.powerAltars * 3 + this.stabilityAltars * 3);
                             if (list != null && !list.isEmpty()) {
                                 EnchantmentInstance inst = list.get(this.random.nextInt(list.size()));
-                                this.enchantClue[jx] = idMap.getId(inst.enchantment());
-                                this.levelClue[jx] = inst.level();
+                                this.enchantClue[jx] = idMap.getId(inst.enchantment);
+                                this.levelClue[jx] = inst.level;
                             }
                         }
                     }
@@ -264,7 +262,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Inject(method = "getEnchantmentList", at = @At(value = "HEAD"), cancellable = true)
     private void EaE$getEnchantmentList(RegistryAccess registryAccess, ItemStack stack, int slot, int enchantingPower, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         this.random.setSeed(this.enchantmentSeed.get() + slot);
-        if (!stack.getComponents().has(DataComponents.ENCHANTABLE)) {
+        if (stack.getItem().getEnchantmentValue() == 0) {
             cir.setReturnValue(List.of());
         } else {
             List<EnchantmentInstance> list = EaE$selectEnchantment(this.random, stack, slot, enchantingPower, registryAccess);
@@ -273,9 +271,9 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     }
 
     @Unique
-    private int calculateEnchantingPower(Enchantable enchantable, int basePower, int secondaryPower) {
+    private int calculateEnchantingPower(int enchantable, int basePower, int secondaryPower) {
         int returnPower = (int) (basePower * 0.25 + secondaryPower * 1.25);
-        int enchantability = Math.max(0, enchantable.value() + this.powerAltars * 3 - this.stabilityAltars * 3);
+        int enchantability = Math.max(0, enchantable + this.powerAltars * 3 - this.stabilityAltars * 3);
         returnPower += 1 + random.nextInt(enchantability / 4 + 1) + random.nextInt(enchantability / 4 + 1);
         float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
         returnPower = Mth.clamp(Math.round((float)returnPower + (float)returnPower * f), 1, Integer.MAX_VALUE);
@@ -285,8 +283,8 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Unique
     private List<EnchantmentInstance> EaE$selectEnchantment(RandomSource random, ItemStack stack, int slot, int enchantingPower, RegistryAccess registryAccess) {
         List<EnchantmentInstance> list = Lists.newArrayList();
-        Enchantable enchantable = stack.get(DataComponents.ENCHANTABLE);
-        if (enchantable == null) {
+        int enchantable = stack.getItem().getEnchantmentValue();
+        if (enchantable == 0) {
             return list;
         }
 
@@ -423,7 +421,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             int totalWeight = this.mana + this.frost + this.scorch + this.flow + this.chaos + this.greed + this.might + curseWeight + manaBlessingWeight + frostBlessingWeight + scorchBlessingWeight + flowBlessingWeight + chaosBlessingWeight + greedBlessingWeight + mightBlessingWeight;
 
             if (totalWeight <= 0) {
-                WeightedRandom.getRandomItem(random, baseList, EnchantmentInstance::weight).ifPresent(list::add);
+                WeightedRandom.getRandomItem(random, baseList).ifPresent(list::add);
             }
 
             if (!baseTable) {
@@ -431,39 +429,39 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 int cumulative = 0;
 
                 if (randomValue < (cumulative += this.mana)) {
-                    WeightedRandom.getRandomItem(random, manaList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, manaList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += this.frost)) {
-                    WeightedRandom.getRandomItem(random, frostList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, frostList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += this.scorch)) {
-                    WeightedRandom.getRandomItem(random, scorchList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, scorchList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += this.flow)) {
-                    WeightedRandom.getRandomItem(random, flowList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, flowList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += this.chaos)) {
-                    WeightedRandom.getRandomItem(random, chaosList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, chaosList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += this.greed)) {
-                    WeightedRandom.getRandomItem(random, greedList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, greedList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += this.might)) {
-                    WeightedRandom.getRandomItem(random, mightList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, mightList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += manaBlessingWeight)) {
-                    WeightedRandom.getRandomItem(random, manaBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, manaBlessingList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += frostBlessingWeight)) {
-                    WeightedRandom.getRandomItem(random, frostBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, frostBlessingList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += scorchBlessingWeight)) {
-                    WeightedRandom.getRandomItem(random, scorchBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, scorchBlessingList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += flowBlessingWeight)) {
-                    WeightedRandom.getRandomItem(random, flowBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, flowBlessingList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += chaosBlessingWeight)) {
-                    WeightedRandom.getRandomItem(random, chaosBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, chaosBlessingList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += greedBlessingWeight)) {
-                    WeightedRandom.getRandomItem(random, greedBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, greedBlessingList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += mightBlessingWeight)) {
-                    WeightedRandom.getRandomItem(random, mightBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, mightBlessingList).ifPresent(list::add);
                 } else if (randomValue < (cumulative += curseWeight)) {
-                    WeightedRandom.getRandomItem(random, curseList, EnchantmentInstance::weight).ifPresent(list::add);
+                    WeightedRandom.getRandomItem(random, curseList).ifPresent(list::add);
                 }
             }
             else {
-                WeightedRandom.getRandomItem(random, baseList, EnchantmentInstance::weight).ifPresent(list::add);
+                WeightedRandom.getRandomItem(random, baseList).ifPresent(list::add);
             }
 
             if (!firstEnchant) {

@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.minecraft.core.*;
-import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.EnchantmentTags;
@@ -29,7 +28,7 @@ public abstract class ItemEnchantmentsMixin {
     Object2IntOpenHashMap<Holder<Enchantment>> enchantments;
 
     @Inject(method = "addToTooltip", at = @At("HEAD"), cancellable = true)
-    private void EaE$enchantmentTooltipOrder(Item.TooltipContext context, Consumer<Component> tooltipAdder, TooltipFlag flag, DataComponentGetter componentGetter, CallbackInfo ci) {
+    private void EaE$enchantmentTooltipOrder(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag tooltipFlagto, CallbackInfo ci) {
         if (!EaEConfig.get.misc.ordered_enchantment_tooltips) return;
 
         HolderLookup.Provider provider = context.registries();
@@ -41,27 +40,27 @@ public abstract class ItemEnchantmentsMixin {
         for (Holder<Enchantment> holder : blessingSet) {
             int i = this.enchantments.getInt(holder);
             if (i > 0) {
-                tooltipAdder.accept(Enchantment.getFullname(holder, i));
+                consumer.accept(Enchantment.getFullname(holder, i));
             }
         }
 
         for (Holder<Enchantment> holder : enchantmentSet) {
             int i = this.enchantments.getInt(holder);
             if (i > 0 && !blessingSet.contains(holder) && !curseSet.contains(holder)) {
-                tooltipAdder.accept(Enchantment.getFullname(holder, i));
+                consumer.accept(Enchantment.getFullname(holder, i));
             }
         }
         for (Object2IntMap.Entry<Holder<Enchantment>> entry : this.enchantments.object2IntEntrySet()) {
             Holder<Enchantment> holder2 = entry.getKey();
             if (!blessingSet.contains(holder2) && !enchantmentSet.contains(holder2) && !curseSet.contains(holder2)) {
-                tooltipAdder.accept(Enchantment.getFullname(entry.getKey(), entry.getIntValue()));
+                consumer.accept(Enchantment.getFullname(entry.getKey(), entry.getIntValue()));
             }
         }
 
         for (Holder<Enchantment> holder : curseSet) {
             int i = this.enchantments.getInt(holder);
             if (i > 0) {
-                tooltipAdder.accept(Enchantment.getFullname(holder, i));
+                consumer.accept(Enchantment.getFullname(holder, i));
             }
         }
 

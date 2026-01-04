@@ -21,9 +21,6 @@
 		"client": [
 			"net.legacy.enchants_and_expeditions.EnchantsAndExpeditionsClient"
 		],
-		"fabric-datagen": [
-			"net.legacy.enchants_and_expeditions.datagen.EaEDataGenerator"
-		],
 		"modmenu": [
 			"net.legacy.enchants_and_expeditions.config.EaEModMenuIntegration"
 		]
@@ -33,12 +30,9 @@
 		"enchants_and_expeditions.mixins.json"
 	],
 	"depends": {
-      "minecraft": "1.21.11",
+      "minecraft": ">=1.21 <=1.21.1",
       "fabric-api": "*",
       "cloth-config": "*",
       "item_tooltips": "*"
-	},
-	"recommends": {
-		"legacies_and_legends": "*"
 	}
 }

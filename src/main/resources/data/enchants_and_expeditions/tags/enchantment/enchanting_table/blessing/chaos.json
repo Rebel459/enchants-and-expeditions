@@ -1,7 +1,6 @@
 {
   "values": [
     "#enchants_and_expeditions:enchanting_table/blessing/all",
-    "minecraft:channeling",
-    "enchants_and_expeditions:conductivity_blessing"
+    "minecraft:channeling"
   ]
 }

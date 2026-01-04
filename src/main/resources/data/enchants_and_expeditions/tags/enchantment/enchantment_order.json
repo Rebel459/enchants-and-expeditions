@@ -44,11 +44,9 @@
     "minecraft:blast_protection",
     "minecraft:fire_protection",
     "minecraft:projectile_protection",
-    "enchants_and_expeditions:jousting",
     "enchants_and_expeditions:bloodlust",
     "enchants_and_expeditions:ferocity",
     "enchants_and_expeditions:galloping",
-    "enchants_and_expeditions:slipstream",
     "enchants_and_expeditions:leaping",
     {
       "id": "combat_reborn:stagger",

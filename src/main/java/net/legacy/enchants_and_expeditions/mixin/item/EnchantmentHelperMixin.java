@@ -38,7 +38,7 @@ public abstract class EnchantmentHelperMixin {
         }
 
         for (EnchantmentInstance enchantmentInstance : list) {
-            stack.enchant(enchantmentInstance.enchantment(), enchantmentInstance.level());
+            stack.enchant(enchantmentInstance.enchantment, enchantmentInstance.level);
         }
 
         cir.setReturnValue(stack);

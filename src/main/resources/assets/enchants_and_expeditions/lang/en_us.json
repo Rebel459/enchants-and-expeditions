@@ -51,8 +51,6 @@
   "enchantment.enchants_and_expeditions.tempering_blessing.desc": "Worn equipment passively repairs itself whilst the wearer is on fire",
   "enchantment.enchants_and_expeditions.vengeance_blessing": "Blessing of Vengeance",
   "enchantment.enchants_and_expeditions.vengeance_blessing.desc": "The blessed weapon deals significantly increased damage whilst its wielder is low on health",
-  "enchantment.enchants_and_expeditions.conductivity_blessing": "Blessing of Conductivity",
-  "enchantment.enchants_and_expeditions.conductivity_blessing.desc": "The blessed Spear summons lightning after a successful charge attack during rain or storms",
 
   "enchantment.enchants_and_expeditions.arcane_protection": "Arcane Protection",
   "enchantment.enchants_and_expeditions.arcane_protection.desc": "Protects from magical and blast damage sources",
@@ -90,10 +88,6 @@
   "enchantment.enchants_and_expeditions.recovery.desc": "Allows wolves to passively regenerate health over time",
   "enchantment.enchants_and_expeditions.velocity": "Velocity",
   "enchantment.enchants_and_expeditions.velocity.desc": "Increases the travel speed and accuracy of projectiles",
-  "enchantment.enchants_and_expeditions.jousting": "Jousting",
-  "enchantment.enchants_and_expeditions.jousting.desc": "Successful charge attacks with a Spear whilst mounted grant a health and speed boost to the mount",
-  "enchantment.enchants_and_expeditions.slipstream": "Slipstream",
-  "enchantment.enchants_and_expeditions.slipstream.desc": "Nautiluses deflect incoming attacks whilst dashing",
 
   "enchantment.enchants_and_expeditions.fragility_curse": "Curse of Fragility",
   "enchantment.enchants_and_expeditions.fragility_curse.desc": "The cursed item has a chance to take increased durability damage when used",

@@ -49,13 +49,16 @@ public abstract class AnvilMenuMixin {
     @Nullable
     private String itemName;
 
+    @Unique
+    private boolean onlyRenaming;
+
     @Inject(method = "createResult", at = @At(value = "HEAD"), cancellable = true)
     private void EaE$createResult(CallbackInfo ci) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
         ItemStack itemStack = anvilMenu.inputSlots.getItem(0);
         ItemStack itemStack2 = itemStack.copy();
         ItemStack itemStack3 = anvilMenu.inputSlots.getItem(1);
-        anvilMenu.onlyRenaming = this.cost.get() == 0 && itemStack3 == ItemStack.EMPTY; // custom onlyRenaming
+        this.onlyRenaming = this.cost.get() == 0 && itemStack3 == ItemStack.EMPTY; // custom onlyRenaming
         this.cost.set(1);
         int i = 0;
         long l = 0L;
@@ -66,7 +69,7 @@ public abstract class AnvilMenuMixin {
             anvilMenu.repairItemCountCost = 0;
             if (!itemStack3.isEmpty()) {
                 boolean bl = itemStack3.has(DataComponents.STORED_ENCHANTMENTS);
-                if (itemStack2.isDamageableItem() && itemStack.isValidRepairItem(itemStack3)) {
+                if (itemStack2.isDamageableItem() && EnchantingHelper.isValidRepairItem(itemStack2, itemStack3)) {
                     int k = Math.min(itemStack2.getDamageValue(), itemStack2.getMaxDamage() / 4);
                     if (k <= 0) {
                         anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
@@ -216,7 +219,7 @@ public abstract class AnvilMenuMixin {
         ItemStack additionStack = anvilMenu.inputSlots.getItem(1);
         ItemStack outputStack = anvilMenu.resultSlots.getItem(0);
 
-        if (EaEConfig.get.general.enchantment_limit != -1 && !anvilMenu.onlyRenaming) {
+        if (EaEConfig.get.general.enchantment_limit != -1 && !this.onlyRenaming) {
             int inputScore = EnchantingHelper.enchantmentScore(inputStack);
             int outputScore = EnchantingHelper.enchantmentScore(outputStack);
 
@@ -226,7 +229,7 @@ public abstract class AnvilMenuMixin {
                 return;
             }
         }
-        boolean shouldPass = anvilMenu.onlyRenaming;
+        boolean shouldPass = this.onlyRenaming;
         List<Holder<Enchantment>> list = outputStack.getEnchantments().keySet().stream().toList();
         if (outputStack.getDamageValue() < inputStack.getDamageValue()) shouldPass = true;
         if (!shouldPass) {
@@ -275,12 +278,12 @@ public abstract class AnvilMenuMixin {
                 else if (EnchantingHelper.isEnchantment(enchantment)) multipler += 1;
                 else if (enchantment.is(EnchantmentTags.CURSE)) multipler += 0;
             }
-            if (outputStack.has(DataComponents.ENCHANTABLE)) reduction -= Math.min(25, outputStack.get(DataComponents.ENCHANTABLE).value() * 0.01F);
+            reduction -= Math.min(25, outputStack.getItem().getEnchantmentValue() * 0.01F);
             float finalCost = enchantCost * multipler * reduction;
             cost.set((int) finalCost);
         }
         else if (!inputStack.is(EaEItemTags.VARIABLE_REPAIR_COST)) cost.set(0);
-        else if (inputStack.getComponents().has(DataComponents.ENCHANTABLE)) {
+        else if (inputStack.getItem().getEnchantmentValue() > 0) {
             int repairMultiplier = additionStack.getCount();
             double percentageDamaged = (double) inputStack.getDamageValue() / inputStack.getMaxDamage();
             if (percentageDamaged > 0.75 && repairMultiplier > 4) repairMultiplier = 4;
@@ -288,7 +291,7 @@ public abstract class AnvilMenuMixin {
             else if (percentageDamaged > 0.25 && percentageDamaged <= 0.5 && repairMultiplier > 2) repairMultiplier = 2;
             else if (percentageDamaged <= 0.25 && repairMultiplier > 1) repairMultiplier = 1;
 
-            int repairCost = Objects.requireNonNull(inputStack.get(DataComponents.ENCHANTABLE)).value();
+            int repairCost = inputStack.getItem().getEnchantmentValue();
             if (repairCost > 25) repairCost = 25;
             repairCost = (26 - repairCost) / 4;
             if (repairCost < 1) repairCost = 1;
@@ -330,20 +333,20 @@ public abstract class AnvilMenuMixin {
                         anvilMenu.inputSlots.setItem(1, additionItem);
                     else {
                         anvilMenu.inputSlots.setItem(1, ItemStack.EMPTY);
-                        anvilMenu.player.playSound(SoundEvents.ITEM_BREAK.value());
+                        anvilMenu.player.playSound(SoundEvents.ITEM_BREAK);
                     }
                 }
                 else
                     anvilMenu.inputSlots.setItem(1, ItemStack.EMPTY);
             }
-        } else if (!anvilMenu.onlyRenaming) {
+        } else if (!this.onlyRenaming) {
             if (additionItem.is(Items.ENCHANTED_BOOK) && !stack.is(Items.ENCHANTED_BOOK)) {
                 additionItem.setDamageValue(additionItem.getDamageValue() + 1);
                 if (additionItem.getDamageValue() < additionItem.getMaxDamage())
                     anvilMenu.inputSlots.setItem(1, additionItem);
                 else {
                     anvilMenu.inputSlots.setItem(1, ItemStack.EMPTY);
-                    anvilMenu.player.playSound(SoundEvents.ITEM_BREAK.value());
+                    anvilMenu.player.playSound(SoundEvents.ITEM_BREAK);
                 }
             }
             else

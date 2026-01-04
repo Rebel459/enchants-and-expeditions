@@ -15,7 +15,7 @@ import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.legacy.enchants_and_expeditions.sound.EaEBlockSounds;
 import net.legacy.enchants_and_expeditions.sound.EaESounds;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import org.slf4j.Logger;
@@ -27,8 +27,8 @@ public class EnchantsAndExpeditions implements ModInitializer {
 	public static final String MOD_ID = "enchants_and_expeditions";
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static Identifier id(String path) {
-        return Identifier.fromNamespaceAndPath(MOD_ID, path);
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
 	public static boolean debug = false;
@@ -47,7 +47,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 				EnchantingAttributes.Request.ID,
 				(payload, context) -> context.server().execute(() -> {
 					ServerPlayer player = context.player();
-					String who = (player != null) ? player.getGameProfile().name() : "<null player>";
+					String who = (player != null) ? player.getGameProfile().getName() : "<null player>";
 					if (debug) LOGGER.info("[EaE] C2S Request received from {}", who);
 
 					if (player == null) {
@@ -75,13 +75,10 @@ public class EnchantsAndExpeditions implements ModInitializer {
 
 		EaEBlocks.init();
 		EaEItems.init();
-        EaEMobEffects.init();
-		EaECreativeInventorySorting.init();
 		EaESounds.init();
 		EaEBlockSounds.init();
 		EaELootTables.init();
 		EaEEnchantments.init();
-		EaEDataComponents.init();
 		EaEEnchantmentEffects.register();
 
 		ResourceManagerHelper.registerBuiltinResourcePack(

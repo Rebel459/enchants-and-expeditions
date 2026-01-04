@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": "enchants_and_expeditions:ice_shard"
+    "#": {
+      "item": "enchants_and_expeditions:ice_shard"
+    }
   },
   "pattern": [
     "##",
