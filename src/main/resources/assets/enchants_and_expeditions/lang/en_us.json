@@ -113,6 +113,8 @@
 
   "subtitles.item.tome.place": "Tome is placed",
   "subtitles.item.tome.pickup": "Tome is picked up",
+  "subtitles.enchantment.jousting.restore": "Jousting restores",
+  "subtitles.enchantment.slipstream.deflect": "Slipstream deflects",
 
   "pack.enchants_and_expeditions.vanilla_tag_replacements": "Vanilla Tag Replacements",
   "pack.enchants_and_expeditions.item_tooltips_overrides": "Item Tooltips Overrides",
