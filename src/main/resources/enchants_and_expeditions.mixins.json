@@ -23,7 +23,6 @@
     "inventory.EnchantmentMenuMixin",
     "inventory.GrindstoneMenuMixin",
     "item.EnchantmentHelperMixin",
-    "item.EnchantmentMixin",
     "item.ItemEnchantmentsMixin",
     "item.ItemPropertiesMixin",
     "item.ItemStackMixin",
