@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "#minecraft:melee_weapon"
+    {
+      "id": "#minecraft:enchantable/melee_weapon",
+      "required": false
+    }
   ]
 }

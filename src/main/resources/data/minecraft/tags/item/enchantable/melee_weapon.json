@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "#minecraft:sharp_weapon"
+    {
+      "id": "#minecraft:enchantable/sharp_weapon",
+      "required": false
+    }
   ]
 }
