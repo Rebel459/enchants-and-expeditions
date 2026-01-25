@@ -18,6 +18,10 @@
     {
       "id": "legacies_and_legends:rebound",
       "required": false
+    },
+    {
+      "id": "enderscape:resonance",
+      "required": false
     }
   ]
 }

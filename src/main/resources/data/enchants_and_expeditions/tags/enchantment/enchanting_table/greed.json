@@ -8,6 +8,10 @@
     {
       "id": "progression_reborn:collection",
       "required": false
+    },
+    {
+      "id": "enderscape:bundling",
+      "required": false
     }
   ]
 }
