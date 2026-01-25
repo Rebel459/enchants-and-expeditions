@@ -45,15 +45,7 @@
       "required": false
     },
     {
-      "id": "enderscape:lightspeed",
-      "required": false
-    },
-    {
-      "id": "enderscape:resonance",
-      "required": false
-    },
-    {
-      "id": "enderscape:bundling",
+      "id": "enderscape:transdimensional",
       "required": false
     },
     {
