@@ -273,13 +273,13 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     }
 
     @Unique
-    private int calculateEnchantingPower(Enchantable enchantable, int basePower, int secondaryPower) {
+    private int calculateEnchantingPower(Enchantable enchantable, int basePower, int secondaryPower, int slot) {
         int returnPower = (int) (basePower * 0.25 + secondaryPower * 1.25);
         int enchantability = Math.max(0, enchantable.value() + this.powerAltars * 3 - this.stabilityAltars * 3);
         returnPower += 1 + random.nextInt(enchantability / 4 + 1) + random.nextInt(enchantability / 4 + 1);
         float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
         returnPower = Mth.clamp(Math.round((float)returnPower + (float)returnPower * f), 1, Integer.MAX_VALUE);
-        return returnPower;
+        return returnPower * (slot + 1) / 3;
     }
 
     @Unique
@@ -328,14 +328,14 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> corruptionCurses = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EnchantmentTags.CURSE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
 
-        enchantingPower = calculateEnchantingPower(enchantable, enchantingPower, enchantingPower);
-        int manaPower = calculateEnchantingPower(enchantable, enchantingPower, this.mana * 2);
-        int frostPower = calculateEnchantingPower(enchantable, enchantingPower, this.frost * 2);
-        int scorchPower = calculateEnchantingPower(enchantable, enchantingPower, this.scorch * 2);
-        int flowPower = calculateEnchantingPower(enchantable, enchantingPower, this.flow * 2);
-        int chaosPower = calculateEnchantingPower(enchantable, enchantingPower, this.chaos * 2);
-        int greedPower = calculateEnchantingPower(enchantable, enchantingPower, this.greed * 2);
-        int mightPower = calculateEnchantingPower(enchantable, enchantingPower * 2, this.might * 2);
+        enchantingPower = calculateEnchantingPower(enchantable, enchantingPower, enchantingPower, slot);
+        int manaPower = calculateEnchantingPower(enchantable, enchantingPower, this.mana * 2, slot);
+        int frostPower = calculateEnchantingPower(enchantable, enchantingPower, this.frost * 2, slot);
+        int scorchPower = calculateEnchantingPower(enchantable, enchantingPower, this.scorch * 2, slot);
+        int flowPower = calculateEnchantingPower(enchantable, enchantingPower, this.flow * 2, slot);
+        int chaosPower = calculateEnchantingPower(enchantable, enchantingPower, this.chaos * 2, slot);
+        int greedPower = calculateEnchantingPower(enchantable, enchantingPower, this.greed * 2, slot);
+        int mightPower = calculateEnchantingPower(enchantable, enchantingPower * 2, this.might * 2, slot);
 
         List<EnchantmentInstance> baseList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, baseEnchantments.stream());
 
