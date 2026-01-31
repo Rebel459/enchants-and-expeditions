@@ -30,7 +30,7 @@ public class EaEDataComponents {
                 HolderGetter<Item> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM);
                 builder.set(DataComponents.REPAIRABLE, new Repairable(holderGetter.getOrThrow(EaEItemTags.CROSSBOW_REPAIR_MATERIALS)));
             });
-            if (!EnchantsAndExpeditions.isLegaciesAndLegendsLoaded) {
+            if (!EnchantsAndExpeditions.isLegaciesAndLegendsLoaded && !EnchantsAndExpeditions.isLegaciesAndLegendsLoaded) {
                 context.modify(Items.TRIDENT, builder -> {
                     builder.set(DataComponents.ATTRIBUTE_MODIFIERS, TridentItem.createAttributes());
                     HolderGetter<Item> holderGetter = BuiltInRegistries.acquireBootstrapRegistrationLookup(BuiltInRegistries.ITEM);

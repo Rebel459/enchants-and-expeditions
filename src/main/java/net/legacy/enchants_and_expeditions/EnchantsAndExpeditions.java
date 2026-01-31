@@ -33,8 +33,9 @@ public class EnchantsAndExpeditions implements ModInitializer {
 
 	public static boolean debug = false;
 
-	public static boolean isLegaciesAndLegendsLoaded = false;
+    public static boolean isLegaciesAndLegendsLoaded = false;
 	public static boolean isProgressionRebornLoaded = false;
+    public static boolean isCombatRebornLoaded = false;
 	public static boolean isTrailierTalesLoaded = false;
 	public static boolean isEnderscapeLoaded = false;
 
@@ -71,7 +72,7 @@ public class EnchantsAndExpeditions implements ModInitializer {
 				})
 		);
 
-		Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer("enchants_and_expeditions");
+        loadResources();
 
 		EaEBlocks.init();
 		EaEItems.init();
@@ -83,21 +84,25 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		EaEEnchantments.init();
 		EaEDataComponents.init();
 		EaEEnchantmentEffects.register();
+	}
 
-		ResourceManagerHelper.registerBuiltinResourcePack(
-				EnchantsAndExpeditions.id("vanilla_tag_replacements"),
-				modContainer.get(),
-				Component.translatable("pack.enchants_and_expeditions.vanilla_tag_replacements"),
-				ResourcePackActivationType.ALWAYS_ENABLED
-		);
-		if (EaEConfig.get.integrations.item_tooltips_overrides) {
-			ResourceManagerHelper.registerBuiltinResourcePack(
-					EnchantsAndExpeditions.id("item_tooltips_overrides"),
-					modContainer.get(),
-					Component.translatable("pack.enchants_and_expeditions.item_tooltips_overrides"),
-					ResourcePackActivationType.ALWAYS_ENABLED
-			);
-		}
+    public void loadResources() {
+        Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer("enchants_and_expeditions");
+
+        ResourceManagerHelper.registerBuiltinResourcePack(
+                EnchantsAndExpeditions.id("vanilla_tag_replacements"),
+                modContainer.get(),
+                Component.translatable("pack.enchants_and_expeditions.vanilla_tag_replacements"),
+                ResourcePackActivationType.ALWAYS_ENABLED
+        );
+        if (EaEConfig.get.integrations.item_tooltips_overrides) {
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    EnchantsAndExpeditions.id("item_tooltips_overrides"),
+                    modContainer.get(),
+                    Component.translatable("pack.enchants_and_expeditions.item_tooltips_overrides"),
+                    ResourcePackActivationType.ALWAYS_ENABLED
+            );
+        }
 
         if (FabricLoader.getInstance().isModLoaded("combat_reborn") && EaEConfig.get.integrations.combat_reborn) {
             ResourceManagerHelper.registerBuiltinResourcePack(
@@ -108,29 +113,32 @@ public class EnchantsAndExpeditions implements ModInitializer {
             );
         }
 
-		if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.get.integrations.legacies_and_legends) {
-			isLegaciesAndLegendsLoaded = true;
-			ResourceManagerHelper.registerBuiltinResourcePack(
-					EnchantsAndExpeditions.id("legacies_and_legends_integration"),
-					modContainer.get(),
-					Component.translatable("pack.enchants_and_expeditions.legacies_and_legends_integration"),
-					ResourcePackActivationType.ALWAYS_ENABLED
-			);
-		}
-		if (FabricLoader.getInstance().isModLoaded("progression_reborn")) {
-			isProgressionRebornLoaded = true;
-		}
-		if (FabricLoader.getInstance().isModLoaded("trailiertales") && EaEConfig.get.integrations.trailier_tales) {
-			isTrailierTalesLoaded = true;
-			ResourceManagerHelper.registerBuiltinResourcePack(
-					EnchantsAndExpeditions.id("trailier_tales_integration"),
-					modContainer.get(),
-					Component.translatable("pack.enchants_and_expeditions.trailier_tales_integration"),
-					ResourcePackActivationType.ALWAYS_ENABLED
-			);
-		}
-		if (FabricLoader.getInstance().isModLoaded("enderscape") && EaEConfig.get.integrations.enderscape) {
-			isEnderscapeLoaded = true;
-		}
-	}
+        if (FabricLoader.getInstance().isModLoaded("legacies_and_legends") && EaEConfig.get.integrations.legacies_and_legends) {
+            isLegaciesAndLegendsLoaded = true;
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    EnchantsAndExpeditions.id("legacies_and_legends_integration"),
+                    modContainer.get(),
+                    Component.translatable("pack.enchants_and_expeditions.legacies_and_legends_integration"),
+                    ResourcePackActivationType.ALWAYS_ENABLED
+            );
+        }
+        if (FabricLoader.getInstance().isModLoaded("progression_reborn")) {
+            isProgressionRebornLoaded = true;
+        }
+        if (FabricLoader.getInstance().isModLoaded("combat_reborn")) {
+            isCombatRebornLoaded = true;
+        }
+        if (FabricLoader.getInstance().isModLoaded("trailiertales") && EaEConfig.get.integrations.trailier_tales) {
+            isTrailierTalesLoaded = true;
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    EnchantsAndExpeditions.id("trailier_tales_integration"),
+                    modContainer.get(),
+                    Component.translatable("pack.enchants_and_expeditions.trailier_tales_integration"),
+                    ResourcePackActivationType.ALWAYS_ENABLED
+            );
+        }
+        if (FabricLoader.getInstance().isModLoaded("enderscape") && EaEConfig.get.integrations.enderscape) {
+            isEnderscapeLoaded = true;
+        }
+    }
 }
