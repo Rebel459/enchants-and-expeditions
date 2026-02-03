@@ -18,5 +18,5 @@
   ],
   "exclusive_set": "#minecraft:exclusive_set/damage",
   "supported_items": "#minecraft:enchantable/sharp_weapon",
-  "weight": 5
+  "weight": 3
 }

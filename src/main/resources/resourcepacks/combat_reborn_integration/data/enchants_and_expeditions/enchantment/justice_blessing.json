@@ -1,7 +1,7 @@
 {
   "anvil_cost": 9,
   "description": {
-    "translate": "enchantment.enchants_and_expeditions.conductivity_blessing"
+    "translate": "enchantment.enchants_and_expeditions.justice_blessing"
   },
   "effects": {},
   "exclusive_set": "#enchants_and_expeditions:blessing",
@@ -15,8 +15,9 @@
     "per_level_above_first": 30
   },
   "slots": [
-    "hand"
+    "mainhand",
+    "offhand"
   ],
-  "supported_items": "#minecraft:enchantable/lunge",
+  "supported_items": "#combat_reborn:enchantable/shield",
   "weight": 2
 }

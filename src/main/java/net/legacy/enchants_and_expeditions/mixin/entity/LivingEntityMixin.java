@@ -2,7 +2,6 @@ package net.legacy.enchants_and_expeditions.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.mojang.logging.LogUtils;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
 import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
@@ -114,6 +113,38 @@ public abstract class LivingEntityMixin {
             }
         }
         return value;
+    }
+
+    @Inject(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "TAIL"))
+    private void freezeAndFire(ServerLevel serverLevel, DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity attacked = LivingEntity.class.cast(this);
+        if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
+            boolean equilibriumTriggered = false;
+            ItemStack stack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
+            if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.EQUILIBRIUM)) {
+                float conversion = 2.5F;
+                if (attacked.isOnFire() && attacked.getTicksFrozen() == 0) {
+                    EnchantingHelper.applyFreezing(serverLevel, attacked, attacker, (int) (attacked.getRemainingFireTicks() * conversion));
+                    attacked.clearFire();
+                    equilibriumTriggered = true;
+                }
+                else if (attacked.getTicksFrozen() > 0 && !attacked.isOnFire()) {
+                    attacked.setRemainingFireTicks((int) (attacked.getTicksFrozen() / conversion));
+                    EnchantingHelper.removeFreezing(attacked);
+                    equilibriumTriggered = true;
+                }
+            }
+            if (!equilibriumTriggered) {
+                if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.CHILLED)) {
+                    if (serverLevel.random.nextInt(1, 6) >= 6 - EnchantingHelper.getLevel(stack, EaEEnchantments.CHILLED)) {
+                        EnchantingHelper.applyFreezing(serverLevel, attacked, attacker, EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 300, 50));
+                    }
+                }
+                if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SMITING)) {
+                    attacked.setRemainingFireTicks(EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 80, 40));
+                }
+            }
+        }
     }
 
     @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)

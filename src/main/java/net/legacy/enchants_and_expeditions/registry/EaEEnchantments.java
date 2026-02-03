@@ -3,12 +3,13 @@ package net.legacy.enchants_and_expeditions.registry;
 import net.legacy.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
 public class EaEEnchantments {
 
-	// Core
+	// Remake
 	public static final ResourceKey<Enchantment> ARCANE_PROTECTION = key("arcane_protection");
 	public static final ResourceKey<Enchantment> ELEMENTAL_PROTECTION = key("elemental_protection");
 	public static final ResourceKey<Enchantment> PHYSICAL_PROTECTION = key("physical_protection");
@@ -38,6 +39,9 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> VELOCITY = key("velocity");
     public static final ResourceKey<Enchantment> JOUSTING = key("jousting");
     public static final ResourceKey<Enchantment> SLIPSTREAM = key("slipstream");
+    public static final ResourceKey<Enchantment> SOAR = key("soar");
+    public static final ResourceKey<Enchantment> FEATHER_FLIGHT = key("feather_flight");
+    public static final ResourceKey<Enchantment> EQUILIBRIUM = key("equilibrium");
 
 	// Curse
 	public static final ResourceKey<Enchantment> FRAGILITY_CURSE = key("fragility_curse");
@@ -47,6 +51,7 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> SLIDING_CURSE = key("sliding_curse");
 
     // Combat Reborn
+    public static final ResourceKey<Enchantment> JUSTICE_BLESSING = key("justice_blessing");
     public static final ResourceKey<Enchantment> FROSTBITE = key("frostbite");
     public static final ResourceKey<Enchantment> SCORCH = key("scorch");
 

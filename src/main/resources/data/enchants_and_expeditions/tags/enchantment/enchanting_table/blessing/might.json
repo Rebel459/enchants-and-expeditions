@@ -1,6 +1,10 @@
 {
   "values": [
     "#enchants_and_expeditions:enchanting_table/blessing/all",
-    "enchants_and_expeditions:vengeance_blessing"
+    "enchants_and_expeditions:vengeance_blessing",
+    {
+      "id": "enchants_and_expeditions:justice_blessing",
+      "required": false
+    }
   ]
 }

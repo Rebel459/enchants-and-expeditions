@@ -14,6 +14,7 @@
     "enchants_and_expeditions:quickstep",
     "enchants_and_expeditions:velocity",
     "enchants_and_expeditions:slipstream",
+    "enchants_and_expeditions:feather_flight",
     {
       "id": "combat_reborn:parry",
       "required": false

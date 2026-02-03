@@ -94,6 +94,12 @@
   "enchantment.enchants_and_expeditions.jousting.desc": "Successful charge attacks with a Spear whilst mounted grant a health and speed boost to the mount",
   "enchantment.enchants_and_expeditions.slipstream": "Slipstream",
   "enchantment.enchants_and_expeditions.slipstream.desc": "Nautiluses deflect incoming attacks whilst dashing",
+  "enchantment.enchants_and_expeditions.soar": "Soar",
+  "enchantment.enchants_and_expeditions.soar.desc": "Increases the flying speed of Happy Ghasts",
+  "enchantment.enchants_and_expeditions.feather_flight": "Feather Flight",
+  "enchantment.enchants_and_expeditions.feather_flight.desc": "Provides Slow Falling on or falling from a Happy Ghast",
+  "enchantment.enchants_and_expeditions.equilibrium": "Equilibrium",
+  "enchantment.enchants_and_expeditions.equilibrium.desc": "Attacks converts fire to freeze, or freeze to fire",
 
   "enchantment.enchants_and_expeditions.fragility_curse": "Curse of Fragility",
   "enchantment.enchants_and_expeditions.fragility_curse.desc": "The cursed item has a chance to take increased durability damage when used",
@@ -106,10 +112,17 @@
   "enchantment.enchants_and_expeditions.sliding_curse": "Curse of Sliding",
   "enchantment.enchants_and_expeditions.sliding_curse.desc": "Makes most blocks slippery",
 
+  "enchantment.enchants_and_expeditions.justice_blessing": "Blessing of Justice",
+  "enchantment.enchants_and_expeditions.justice_blessing.desc": "When a Shield's blocking strength is overpowered, unleash a defensive shockwave",
   "enchantment.enchants_and_expeditions.frostbite": "Frostbite",
   "enchantment.enchants_and_expeditions.frostbite.desc": "Parrying an attack freezes the attacker",
   "enchantment.enchants_and_expeditions.scorch": "Scorch",
   "enchantment.enchants_and_expeditions.scorch.desc": "Parrying an attack sets the attacker on fire",
+
+  "effect.enchants_and_expeditions.lightning_immune": "Lightning Immune",
+  "effect.enchants_and_expeditions.lightning_immune.desc": "Provides immunity to lightning damage",
+  "effect.enchants_and_expeditions.overheal": "Overheal",
+  "effect.enchants_and_expeditions.overheal.desc": "Boosts the health of the affected with temporary hearts",
 
   "subtitles.item.tome.place": "Tome is placed",
   "subtitles.item.tome.pickup": "Tome is picked up",

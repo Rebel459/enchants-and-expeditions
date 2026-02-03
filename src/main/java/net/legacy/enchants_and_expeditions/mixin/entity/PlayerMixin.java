@@ -6,6 +6,7 @@ import net.legacy.enchants_and_expeditions.registry.EaEEnchantments;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,10 +17,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.block.Blocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Player.class)
@@ -121,6 +125,17 @@ public abstract class PlayerMixin {
             int seconds = EnchantingHelper.getLevel(stack, EaEEnchantments.QUICKSTEP) * 2;
             int ticks = seconds * 20;
             if (!player.hasEffect(MobEffects.SPEED) || player.getEffect(MobEffects.SPEED).getDuration() < ticks) player.addEffect(new MobEffectInstance(MobEffects.SPEED, ticks));
+        }
+    }
+
+    @Inject(method = "tick", at = @At(value = "TAIL"))
+    private void featherFlight(CallbackInfo ci) {
+        Player player = Player.class.cast(this);
+        if (player.hasEffect(MobEffects.SLOW_FALLING) && player.getEffect(MobEffects.SLOW_FALLING).isInfiniteDuration() && player.getTags().contains("has_feather_flight")) {
+            if (player.isFallFlying() || !player.getBlockStateOn().is(BlockTags.AIR) || player.isInWater()) {
+                player.removeTag("has_feather_flight");
+                player.removeEffect(MobEffects.SLOW_FALLING);
+            }
         }
     }
 }

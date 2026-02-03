@@ -30,7 +30,7 @@ dependencies {
 	include modImplementation("maven.modrinth:item-tooltips:${project.tooltips_version}")
 
     modImplementation("maven.modrinth:modmenu:$modmenu_version")
-    modCompileOnly("maven.modrinth:combat-reborn:$combat_version")
+    modImplementation("maven.modrinth:combat-reborn:$combat_version")
 
 }
 

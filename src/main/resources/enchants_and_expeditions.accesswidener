@@ -18,3 +18,5 @@ accessible field net/minecraft/world/entity/player/Inventory equipment Lnet/mine
 accessible field net/minecraft/world/entity/EntityEquipment items Ljava/util/EnumMap;
 accessible method net/minecraft/world/item/enchantment/ItemEnchantments getTagOrEmpty (Lnet/minecraft/core/HolderLookup$Provider;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/tags/TagKey;)Lnet/minecraft/core/HolderSet;
 accessible method net/minecraft/world/effect/MobEffect <init> (Lnet/minecraft/world/effect/MobEffectCategory;I)V
+accessible method net/minecraft/world/item/MaceItem knockbackPredicate (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)Ljava/util/function/Predicate;
+extendable class net/minecraft/world/effect/AbsorptionMobEffect

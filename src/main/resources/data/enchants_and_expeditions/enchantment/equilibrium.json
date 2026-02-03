@@ -1,7 +1,7 @@
 {
-  "anvil_cost": 6,
+  "anvil_cost": 2,
   "description": {
-    "translate": "enchantment.enchants_and_expeditions.recovery"
+    "translate": "enchantment.enchants_and_expeditions.equilibrium"
   },
   "effects": {},
   "max_cost": {
@@ -10,12 +10,12 @@
   },
   "max_level": 1,
   "min_cost": {
-    "base": 15,
+    "base": 20,
     "per_level_above_first": 0
   },
   "slots": [
-    "body"
+    "hand"
   ],
-  "supported_items": "#enchants_and_expeditions:enchantable/wolf_armor",
-  "weight": 3
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 2
 }

@@ -11,6 +11,7 @@
     "enchants_and_expeditions:galloping",
     "enchants_and_expeditions:recovery",
     "enchants_and_expeditions:jousting",
+    "enchants_and_expeditions:soar",
     {
       "id": "combat_reborn:endurance",
       "required": false

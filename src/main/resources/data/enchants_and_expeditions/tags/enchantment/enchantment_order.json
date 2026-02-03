@@ -21,6 +21,7 @@
       "id": "combat_reborn:cleaving",
       "required": false
     },
+    "enchants_and_expeditions:equilibrium",
     "enchants_and_expeditions:smiting",
     "enchants_and_expeditions:chilled",
     "enchants_and_expeditions:entropy",
@@ -48,6 +49,7 @@
     "enchants_and_expeditions:bloodlust",
     "enchants_and_expeditions:ferocity",
     "enchants_and_expeditions:galloping",
+    "enchants_and_expeditions:soar",
     "enchants_and_expeditions:slipstream",
     "enchants_and_expeditions:leaping",
     {
@@ -67,6 +69,7 @@
       "required": false
     },
     "minecraft:feather_falling",
+    "enchants_and_expeditions:feather_flight",
     "minecraft:fortune",
     "minecraft:looting",
     "minecraft:silk_touch",

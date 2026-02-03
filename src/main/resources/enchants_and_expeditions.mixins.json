@@ -10,6 +10,7 @@
     "entity.AbstractHorseMixin",
     "entity.AbstractNautilusMixin",
     "entity.EntityEquipmentMixin",
+    "entity.HappyGhastMixin",
     "entity.InventoryMixin",
     "entity.LivingEntityMixin",
     "entity.PlayerListMixin",

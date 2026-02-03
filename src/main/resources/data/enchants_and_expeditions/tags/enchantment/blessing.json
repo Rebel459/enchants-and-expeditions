@@ -9,6 +9,10 @@
     "enchants_and_expeditions:vengeance_blessing",
     "enchants_and_expeditions:tempering_blessing",
     "enchants_and_expeditions:fluidity_blessing",
-    "enchants_and_expeditions:conductivity_blessing"
+    "enchants_and_expeditions:conductivity_blessing",
+    {
+      "id": "enchants_and_expeditions:justice_blessing",
+      "required": false
+    }
   ]
 }

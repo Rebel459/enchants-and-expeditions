@@ -9,21 +9,28 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.ArrayList;
@@ -138,6 +145,14 @@ public class EnchantingHelper {
         return null;
     }
 
+    public static int getDuration(ItemStack stack, ResourceKey<Enchantment> enchantment, int durationPerLevel) {
+        return getDuration(stack, enchantment, durationPerLevel, durationPerLevel);
+    }
+    public static int getDuration(ItemStack stack, ResourceKey<Enchantment> enchantment, int baseDuration, int perLevelAboveFirst) {
+        int level = getLevel(stack, enchantment);
+        return baseDuration + ((level - 1) * perLevelAboveFirst);
+    }
+
     public static int getCurses(ItemStack stack) {
         var enchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
         if (enchantments.isEmpty()) {
@@ -163,10 +178,58 @@ public class EnchantingHelper {
     }
 
     public static void applyFreezing(ServerLevel level, LivingEntity affected, LivingEntity affector, int duration) {
-        Optional<Holder.Reference<MobEffect>> freeze = BuiltInRegistries.MOB_EFFECT.get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
-        if (freeze.isPresent() && EaEConfig.get.integrations.legacies_and_legends) affected.addEffect(new MobEffectInstance(freeze.get(), duration));
+        Optional<Holder.Reference<MobEffect>> freezing = BuiltInRegistries.MOB_EFFECT.get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
+        if (freezing.isPresent() && EaEConfig.get.integrations.legacies_and_legends) affected.addEffect(new MobEffectInstance(freezing.get(), duration));
         level.sendParticles(ParticleTypes.SNOWFLAKE, affected.getX(), affected.getRandomY(), affected.getZ(), 10, 0, -1, 0, 0.5);
         level.playSound(affected, affected.blockPosition(), SoundEvents.SNOW_HIT, affector.getSoundSource());
         if (affected.getTicksFrozen() < duration) affected.setTicksFrozen(duration);
+    }
+
+    public static void removeFreezing(LivingEntity entity) {
+        Optional<Holder.Reference<MobEffect>> freezing = BuiltInRegistries.MOB_EFFECT.get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
+        if (freezing.isPresent() && EaEConfig.get.integrations.legacies_and_legends) entity.removeEffect(freezing.get());
+        entity.setTicksFrozen(0);
+    }
+
+    public static int applyAreaKnockback(ServerLevel level, LivingEntity wielder, LivingEntity target, double strength) {
+        level.levelEvent(2013, target.getOnPos(), 750);
+        List<LivingEntity> entityList = level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(3.5F), MaceItem.knockbackPredicate(wielder, target));
+
+        int entityCount = 0;
+
+        for (LivingEntity livingEntity : entityList) {
+            Vec3 vec3 = livingEntity.position().subtract(target.position());
+            double d = strength * (1.0 - livingEntity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+            Vec3 vec32 = vec3.normalize().scale(d);
+            if (d > (double)0.0F) {
+                livingEntity.push(vec32.x, 0.7F, vec32.z);
+                if (livingEntity instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(serverPlayer));
+                }
+            }
+            entityCount += 1;
+        }
+
+        return entityCount;
+    }
+
+    public static int applyAreaEffect(ServerLevel level, LivingEntity wielder, LivingEntity target, MobEffectInstance mobEffect) {
+        level.levelEvent(2013, target.getOnPos(), 750);
+        List<LivingEntity> entityList = level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(3.5F), MaceItem.knockbackPredicate(wielder, target));
+
+        int entityCount = 0;
+
+        for (LivingEntity livingEntity : entityList) {
+            Optional<Holder.Reference<MobEffect>> freezing = BuiltInRegistries.MOB_EFFECT.get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
+            if (freezing.isPresent() && mobEffect.getEffect() == freezing.get()) {
+                applyFreezing(level, target, wielder, mobEffect.getDuration());
+            }
+            else {
+                livingEntity.addEffect(mobEffect);
+            }
+            entityCount += 1;
+        }
+
+        return entityCount;
     }
 }
