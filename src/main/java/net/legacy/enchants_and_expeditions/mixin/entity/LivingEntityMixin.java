@@ -141,7 +141,7 @@ public abstract class LivingEntityMixin {
                     }
                 }
                 if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SMITING)) {
-                    attacked.setRemainingFireTicks(EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 80, 40));
+                    attacked.setRemainingFireTicks(Math.max(attacked.getRemainingFireTicks(), EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 80, 40)));
                 }
             }
         }

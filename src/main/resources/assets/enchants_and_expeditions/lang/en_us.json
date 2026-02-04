@@ -85,7 +85,7 @@
   "enchantment.enchants_and_expeditions.leaping": "Leaping",
   "enchantment.enchants_and_expeditions.leaping.desc": "Increases horse jump height",
   "enchantment.enchants_and_expeditions.quickstep": "Quickstep",
-  "enchantment.enchants_and_expeditions.quickstep.desc": "Provides a burst of movement speed when the wearer eliminates an entity",
+  "enchantment.enchants_and_expeditions.quickstep.desc": "Provides a burst of movement speed when the wearer eliminates a target",
   "enchantment.enchants_and_expeditions.recovery": "Recovery",
   "enchantment.enchants_and_expeditions.recovery.desc": "Allows wolves to passively regenerate health over time",
   "enchantment.enchants_and_expeditions.velocity": "Velocity",
