@@ -50,13 +50,6 @@
           "condition": "minecraft:all_of",
           "terms": [
             {
-              "condition": "minecraft:entity_properties",
-              "entity": "this",
-              "predicate": {
-                "type": "#enchants_and_expeditions:sensitive_to_chilled"
-              }
-            },
-            {
               "chance": {
                 "type": "minecraft:enchantment_level",
                 "amount": {
