@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.legacy.enchants_and_expeditions.config.EaEConfig;
-import net.legacy.enchants_and_expeditions.enchantment.EaEEnchantmentEffects;
 import net.legacy.enchants_and_expeditions.registry.*;
 import net.legacy.enchants_and_expeditions.network.EnchantingAttributes;
 import net.legacy.enchants_and_expeditions.sound.EaEBlockSounds;
@@ -83,7 +82,6 @@ public class EnchantsAndExpeditions implements ModInitializer {
 		EaELootTables.init();
 		EaEEnchantments.init();
 		EaEDataComponents.init();
-		EaEEnchantmentEffects.register();
 	}
 
     public void loadResources() {
