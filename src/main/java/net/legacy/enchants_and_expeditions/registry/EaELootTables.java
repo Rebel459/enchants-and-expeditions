@@ -101,7 +101,7 @@ public final class EaELootTables {
                     }
                     if (EaELootTables.DUNGEON_LIBRARY_SIMPLE.equals(id) && EaEConfig.get.integrations.legacies_and_legends) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(8))
+                                .add(EmptyLootItem.emptyItem().setWeight(5))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_MANA).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
@@ -120,26 +120,26 @@ public final class EaELootTables {
                     }
                     if (EaELootTables.DUNGEON_LIBRARY_FROZEN.equals(id) && EaEConfig.get.integrations.legacies_and_legends) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(8))
+                                .add(EmptyLootItem.emptyItem().setWeight(5))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_FROST).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
 
                     if (BuiltInLootTables.NETHER_BRIDGE.equals(id)) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(14))
+                                .add(EmptyLootItem.emptyItem().setWeight(11))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_SCORCH).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
                     if (EaELootTables.SPIRE.equals(id) && EaEConfig.get.integrations.legacies_and_legends) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(14))
+                                .add(EmptyLootItem.emptyItem().setWeight(11))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_SCORCH).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
                     if (EaELootTables.DUNGEON_LIBRARY_INFERNAL.equals(id) && EaEConfig.get.integrations.legacies_and_legends) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(8))
+                                .add(EmptyLootItem.emptyItem().setWeight(5))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_SCORCH).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
@@ -147,33 +147,33 @@ public final class EaELootTables {
                     // Elder Guardian - Tome of Flow
                     if (EaELootTables.REMNANTS_OMINOUS_VAULT.equals(id) && EaEConfig.get.integrations.remnants) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(8))
+                                .add(EmptyLootItem.emptyItem().setWeight(5))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_FLOW).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
 
                     if (BuiltInLootTables.WOODLAND_MANSION.equals(id)) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(8))
+                                .add(EmptyLootItem.emptyItem().setWeight(5))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_CHAOS).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
                     if (EaELootTables.DUNGEON_LIBRARY_VERDANT.equals(id) && EaEConfig.get.integrations.legacies_and_legends) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(8))
+                                .add(EmptyLootItem.emptyItem().setWeight(5))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_CHAOS).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
 
                     if (BuiltInLootTables.ANCIENT_CITY.equals(id)) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(14))
+                                .add(EmptyLootItem.emptyItem().setWeight(11))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_GREED).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
                     if (EaELootTables.DUNGEON_LIBRARY_ARID.equals(id) && EaEConfig.get.integrations.legacies_and_legends) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(8))
+                                .add(EmptyLootItem.emptyItem().setWeight(5))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_GREED).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
@@ -186,7 +186,7 @@ public final class EaELootTables {
                     }
                     if (EaELootTables.DUNGEON_LIBRARY_DEEP.equals(id) && EaEConfig.get.integrations.legacies_and_legends) {
                         pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                .add(EmptyLootItem.emptyItem().setWeight(8))
+                                .add(EmptyLootItem.emptyItem().setWeight(5))
                                 .add(LootItem.lootTableItem(EaEItems.TOME_OF_MIGHT).setWeight(1));
                         tableBuilder.withPool(pool);
                     }
@@ -226,7 +226,7 @@ public final class EaELootTables {
                         }
                         if (EaELootTables.DUNGEON_LIBRARY_SIMPLE.equals(id)) {
                             pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                    .add(EmptyLootItem.emptyItem().setWeight(14))
+                                    .add(EmptyLootItem.emptyItem().setWeight(8))
                                     .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withOneOf(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantmentTags.MANA_BLESSING))));
                             tableBuilder.withPool(pool);
                         }
@@ -239,7 +239,7 @@ public final class EaELootTables {
                         }
                         if (EaELootTables.DUNGEON_LIBRARY_ARID.equals(id)) {
                             pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                    .add(EmptyLootItem.emptyItem().setWeight(14))
+                                    .add(EmptyLootItem.emptyItem().setWeight(8))
                                     .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withOneOf(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantmentTags.GREED_BLESSING))));
                             tableBuilder.withPool(pool);
                         }
@@ -252,7 +252,7 @@ public final class EaELootTables {
                         }
                         if (EaELootTables.DUNGEON_LIBRARY_FROZEN.equals(id)) {
                             pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                    .add(EmptyLootItem.emptyItem().setWeight(14))
+                                    .add(EmptyLootItem.emptyItem().setWeight(8))
                                     .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withOneOf(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantmentTags.FROST_BLESSING))));
                             tableBuilder.withPool(pool);
                         }
@@ -263,9 +263,9 @@ public final class EaELootTables {
                                     .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withOneOf(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantmentTags.MIGHT))));
                             tableBuilder.withPool(pool);
                         }
-                        if (EaELootTables.DUNGEON_CHEST_DEEP.equals(id)) {
+                        if (EaELootTables.DUNGEON_LIBRARY_DEEP.equals(id)) {
                             pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                    .add(EmptyLootItem.emptyItem().setWeight(14))
+                                    .add(EmptyLootItem.emptyItem().setWeight(8))
                                     .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withOneOf(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantmentTags.MIGHT_BLESSING))));
                             tableBuilder.withPool(pool);
                         }
@@ -276,9 +276,9 @@ public final class EaELootTables {
                                     .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withOneOf(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantmentTags.CHAOS))));
                             tableBuilder.withPool(pool);
                         }
-                        if (EaELootTables.DUNGEON_CHEST_VERDANT.equals(id)) {
+                        if (EaELootTables.DUNGEON_LIBRARY_VERDANT.equals(id)) {
                             pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                    .add(EmptyLootItem.emptyItem().setWeight(14))
+                                    .add(EmptyLootItem.emptyItem().setWeight(8))
                                     .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withOneOf(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantmentTags.CHAOS_BLESSING))));
                             tableBuilder.withPool(pool);
                         }
@@ -289,9 +289,9 @@ public final class EaELootTables {
                                     .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withOneOf(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantmentTags.SCORCH))));
                             tableBuilder.withPool(pool);
                         }
-                        if (EaELootTables.DUNGEON_CHEST_INFERNAL.equals(id)) {
+                        if (EaELootTables.DUNGEON_LIBRARY_INFERNAL.equals(id)) {
                             pool = LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
-                                    .add(EmptyLootItem.emptyItem().setWeight(14))
+                                    .add(EmptyLootItem.emptyItem().setWeight(8))
                                     .add(LootItem.lootTableItem(Items.BOOK).setWeight(1).apply(EnchantRandomlyFunction.randomEnchantment().withOneOf(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(EaEEnchantmentTags.SCORCH_BLESSING))));
                             tableBuilder.withPool(pool);
                         }
