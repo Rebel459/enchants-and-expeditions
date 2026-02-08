@@ -136,7 +136,7 @@ public abstract class LivingEntityMixin {
             }
             if (!equilibriumTriggered) {
                 if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.CHILLED)) {
-                    if (serverLevel.random.nextInt(1, 6) >= 6 - EnchantingHelper.getLevel(stack, EaEEnchantments.CHILLED)) {
+                    if (serverLevel.getRandom().nextInt(1, 6) >= 6 - EnchantingHelper.getLevel(stack, EaEEnchantments.CHILLED)) {
                         EnchantingHelper.applyFreezing(serverLevel, attacked, attacker, EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 300, 50));
                     }
                 }
@@ -330,6 +330,6 @@ public abstract class LivingEntityMixin {
     @Inject(method = "dropFromLootTable(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;Z)V", at = @At("TAIL"))
     public void elderGuardianLootInject(ServerLevel level, DamageSource damageSource, boolean playerKill, CallbackInfo ci) {
         LivingEntity entity = LivingEntity.class.cast(this);
-        if (entity.getType() == EntityType.ELDER_GUARDIAN && new Random().nextInt(3) == 2 && EaEConfig.get.misc.loot_table_injects) entity.spawnAtLocation(level, EaEItems.TOME_OF_FLOW);
+        if (entity.getType() == EntityType.ELDER_GUARDIAN && level.getRandom().nextInt(3) == 2 && EaEConfig.get.misc.loot_table_injects) entity.spawnAtLocation(level, EaEItems.TOME_OF_FLOW);
     }
 }
