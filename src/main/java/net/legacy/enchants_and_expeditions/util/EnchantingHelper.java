@@ -93,6 +93,9 @@ public class EnchantingHelper {
         if (randomSource.nextInt(1, 5) < 4) {
             return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.ENCHANTING_TABLE_BLESSING)) || configureEnchantments(enchantment);
         }
+        if (randomSource.nextInt(1, 3) < 2) {
+            return !enchantment.is(EnchantmentTags.CURSE) || configureEnchantments(enchantment);
+        }
         else return configureEnchantments(enchantment);
     }
 

@@ -237,14 +237,18 @@ public abstract class AnvilMenuMixin {
             if (outputStack.is(Items.ENCHANTED_BOOK) && outputStack.has(DataComponents.STORED_ENCHANTMENTS)) {
                 list = outputStack.get(DataComponents.STORED_ENCHANTMENTS).keySet().stream().toList();
                 for (int x = 0; x < outputStack.get(DataComponents.STORED_ENCHANTMENTS).size(); x++) {
-                    if (outputStack.get(DataComponents.STORED_ENCHANTMENTS).getLevel(list.get(x)) > EnchantingHelper.getStoredEnchantmentLevel(list.get(x), inputStack) && outputStack.get(DataComponents.STORED_ENCHANTMENTS).getLevel(list.get(x)) > EnchantingHelper.getStoredEnchantmentLevel(list.get(x), additionStack))
+                    if (outputStack.get(DataComponents.STORED_ENCHANTMENTS).getLevel(list.get(x)) > EnchantingHelper.getStoredEnchantmentLevel(list.get(x), inputStack)) {
                         shouldPass = true;
+                        break;
+                    }
                 }
             }
             else {
                 for (int x = 0; x < outputStack.getEnchantments().size(); x++) {
-                    if (outputStack.getEnchantments().getLevel(list.get(x)) > EnchantmentHelper.getItemEnchantmentLevel(list.get(x), inputStack) && outputStack.getEnchantments().getLevel(list.get(x)) > EnchantmentHelper.getItemEnchantmentLevel(list.get(x), additionStack))
+                    if (outputStack.getEnchantments().getLevel(list.get(x)) > EnchantmentHelper.getItemEnchantmentLevel(list.get(x), inputStack)) {
                         shouldPass = true;
+                        break;
+                    }
                 }
             }
         }
