@@ -24,7 +24,7 @@ public abstract class GrindstoneMenuMixin {
             ),
             index = 1
     )
-    private Consumer<ItemEnchantments.Mutable> EaE$keepBlessings(Consumer<ItemEnchantments.Mutable> updater) {
+    private Consumer<ItemEnchantments.Mutable> EaE$grindstoneBlessingsAndCurses(Consumer<ItemEnchantments.Mutable> updater) {
         return mutable -> {
             var enchantList = mutable.keySet().stream().toList();
             boolean hasEnchants = false;
