@@ -22,6 +22,7 @@
     "function.EnchantWithLevelsFunctionMixin",
     "inventory.AnvilMenuMixin",
     "inventory.EnchantmentMenuMixin",
+    "inventory.GrindstoneMenu$4Mixin",
     "inventory.GrindstoneMenuMixin",
     "item.EnchantmentHelperMixin",
     "item.ItemEnchantmentsMixin",
