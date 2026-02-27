@@ -1,6 +1,5 @@
 package net.legacy.enchants_and_expeditions.mixin.inventory;
 
-import com.llamalad7.mixinextras.expression.Expression;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.minecraft.core.Holder;
