@@ -1,8 +1,8 @@
 package net.legacy.enchants_and_expeditions.mixin.inventory;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.legacy.enchants_and_expeditions.lib.EnchantingHelper;
 import net.legacy.enchants_and_expeditions.tag.EaEEnchantmentTags;
-import net.legacy.enchants_and_expeditions.util.EnchantingHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.item.ItemStack;
