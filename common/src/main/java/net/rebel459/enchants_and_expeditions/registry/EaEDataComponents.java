@@ -73,7 +73,7 @@ public class EaEDataComponents {
             if (item == Items.WARPED_FUNGUS_ON_A_STICK) {
                 builder.set(DataComponents.REPAIRABLE, new Repairable(provider.getOrThrow(EaEItemTags.WARPED_FUNGUS_ON_A_STICK_REPAIR_MATERIALS)));
                 builder.set(DataComponents.ENCHANTABLE, new Enchantable(10));
-            };
+            }
 
             if (EaEConfig.get.general.craftable_experience_bottles) {
                 if ((stack.is(Items.POTION) || stack.is(Items.SPLASH_POTION) || stack.is(Items.LINGERING_POTION)) && stack.getMaxStackSize() == 1) {
