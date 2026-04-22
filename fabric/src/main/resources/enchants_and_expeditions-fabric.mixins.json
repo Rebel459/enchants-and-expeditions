@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "net.rebel459.enchants_and_expeditions.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "entity.LivingEntityFabricMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

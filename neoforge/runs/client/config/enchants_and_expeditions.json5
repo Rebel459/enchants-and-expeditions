@@ -1,0 +1,23 @@
+{
+	"general": {
+		"enchantment_limit": 3,
+		"repeat_table_enchanting": true,
+		"experience_rebalance": true,
+		"anvil_break_chance": 0.12,
+		"craftable_experience_bottles": true
+	},
+	"misc": {
+		"ordered_enchantment_tooltips": true,
+		"enchant_function_fallback": true,
+		"loot_table_injects": true
+	},
+	"integrations": {
+		"item_tooltips_overrides": true,
+		"combat_reborn": true,
+		"legacies_and_legends": true,
+		"trailier_tales": true,
+		"remnants": true,
+		"enderscape": true
+	},
+	"disable_enchantments": "INFO"
+}

@@ -1,0 +1,42 @@
+{
+  "required": true,
+  "package": "net.rebel459.enchants_and_expeditions.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "net.rebel459.enchants_and_expeditions.mixin.EaEMixinPlugin",
+  "mixins": [
+    "block.BaseFireBlockMixin",
+    "block.BlockMixin",
+    "entity.AbstractArrowMixin",
+    "entity.AbstractHorseMixin",
+    "entity.AbstractNautilusMixin",
+    "entity.EntityEquipmentMixin",
+    "entity.HappyGhastMixin",
+    "entity.InventoryMixin",
+    "entity.LivingEntityMixin",
+    "entity.PlayerListMixin",
+    "entity.PlayerMixin",
+    "entity.ProjectileMixin",
+    "entity.RandomStandGoalMixin",
+    "entity.WolfMixin",
+    "function.EnchantRandomlyFunctionMixin",
+    "function.EnchantWithLevelsFunctionMixin",
+    "inventory.AnvilMenuMixin",
+    "inventory.EnchantmentMenuMixin",
+    "inventory.GrindstoneMenuFourMixin",
+    "inventory.GrindstoneMenuMixin",
+    "item.EnchantmentHelperMixin",
+    "item.ItemEnchantmentsMixin",
+    "item.ItemPropertiesMixin",
+    "item.ItemStackMixin",
+    "recipe.ShapedRecipeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "client.inventory.AnvilScreenMixin",
+    "client.inventory.EnchantmentScreenMixin",
+    "client.item.ItemStackMixin",
+    "integration.combat_reborn.ShieldHelperMixin"
+  ]
+}

@@ -1,0 +1,325 @@
+package net.rebel459.enchants_and_expeditions.mixin.entity;
+
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.rebel459.enchants_and_expeditions.config.EaEConfig;
+import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
+import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
+import net.rebel459.enchants_and_expeditions.registry.EaEItems;
+import net.rebel459.enchants_and_expeditions.registry.EaEMobEffects;
+import net.rebel459.enchants_and_expeditions.sound.EaESounds;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.Horse;
+import net.minecraft.world.entity.animal.nautilus.AbstractNautilus;
+import net.minecraft.world.entity.animal.wolf.Wolf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.block.Block;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Random;
+
+@Mixin(LivingEntity.class)
+public abstract class LivingEntityMixin {
+
+    @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot slot);
+
+    @Shadow
+    public abstract @org.jspecify.annotations.Nullable LivingEntity asLivingEntity();
+
+    @Unique
+    DamageSource damageSource;
+
+    @Unique
+    int secondProgress;
+
+    @Inject(method = "hurtServer", at = @At(value = "HEAD"))
+    private void getDamageSource(ServerLevel level, DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
+        this.damageSource = damageSource;
+    }
+
+    @Inject(method = "hurtServer", at = @At(value = "TAIL"))
+    private void infernoBlessingExtendFire(ServerLevel level, DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = LivingEntity.class.cast(this);
+        if (damageSource.getEntity() instanceof LivingEntity attacker) {
+            ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
+            if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.INFERNO_BLESSING) && entity.isOnFire()) {
+                int setFireTicks = entity.getRemainingFireTicks() + 50;
+                if (setFireTicks > 200) setFireTicks = 200;
+                entity.setRemainingFireTicks(setFireTicks);
+            }
+        }
+    }
+    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
+    private float infernoBlessingDamage(float value) {
+        if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
+            ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
+            if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.INFERNO_BLESSING)) {
+                value += 1;
+            }
+        }
+        return value;
+    }
+
+    @Inject(method = "hurtServer", at = @At(value = "TAIL"))
+    private void displacementCurse(ServerLevel level, DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = LivingEntity.class.cast(this);
+        ItemStack stack = entity.getItemBySlot(EquipmentSlot.CHEST);
+        if (damageSource.getEntity() instanceof LivingEntity attacker && EnchantingHelper.hasEnchantment(stack, EaEEnchantments.DISPLACEMENT_CURSE)) {
+            for (MobEffectInstance instance : entity.getActiveEffectsMap().values()) {
+                if (!entity.hasEffect(instance.getEffect())) return;
+
+                Holder<MobEffect> effect = instance.getEffect();
+                int duration = entity.getEffect(effect).getDuration();
+
+                entity.removeEffect(effect);
+                if (!attacker.hasEffect(effect)) attacker.addEffect(new MobEffectInstance(effect, duration / 2));
+                entity.addEffect(new MobEffectInstance(effect, duration / 2));
+            }
+        }
+    }
+
+    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
+    private float entropy(float value) {
+        if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
+            ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
+            if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.ENTROPY)) {
+                int entropy = EnchantingHelper.getLevel(attackerStack, EaEEnchantments.ENTROPY);
+                value += new Random().nextInt(-1, 3 + entropy);
+            }
+        }
+        return value;
+    }
+
+    @Inject(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "TAIL"))
+    private void freezeAndFire(ServerLevel serverLevel, DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity attacked = LivingEntity.class.cast(this);
+        if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
+            boolean equilibriumTriggered = false;
+            ItemStack stack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
+            if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.EQUILIBRIUM)) {
+                float conversion = 2.5F;
+                if (attacked.isOnFire() && attacked.getTicksFrozen() == 0) {
+                    EnchantingHelper.applyFreezing(serverLevel, attacked, attacker, (int) (attacked.getRemainingFireTicks() * conversion));
+                    attacked.clearFire();
+                    equilibriumTriggered = true;
+                }
+                else if (attacked.getTicksFrozen() > 0 && !attacked.isOnFire()) {
+                    attacked.setRemainingFireTicks((int) (attacked.getTicksFrozen() / conversion));
+                    EnchantingHelper.removeFreezing(attacked);
+                    equilibriumTriggered = true;
+                }
+            }
+            if (!equilibriumTriggered) {
+                if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.CHILLED)) {
+                    if (serverLevel.getRandom().nextInt(1, 6) >= 6 - EnchantingHelper.getLevel(stack, EaEEnchantments.CHILLED)) {
+                        EnchantingHelper.applyFreezing(serverLevel, attacked, attacker, EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 300, 50));
+                    }
+                }
+                if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SMITING)) {
+                    attacked.setRemainingFireTicks(Math.max(attacked.getRemainingFireTicks(), EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 80, 40)));
+                }
+            }
+        }
+    }
+
+    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
+    private float vengeanceBlessing(float value) {
+        if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
+            ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
+            if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.VENGEANCE_BLESSING) && attacker.getHealth() < 7) {
+                float amount = -attacker.getHealth() / 2 + 6;
+                value += amount;
+            }
+        }
+        return value;
+    }
+
+    @Inject(
+            method = "getJumpPower()F",
+            at = @At(value = "TAIL"),
+            cancellable = true
+    )
+    private void leaping(CallbackInfoReturnable<Float> cir) {
+        LivingEntity livingEntity = LivingEntity.class.cast(this);
+        if (!(livingEntity instanceof AbstractHorse horse)) return;
+        ItemStack stack = horse.getBodyArmorItem();
+        if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.LEAPING)) {
+            int level = EnchantingHelper.getLevel(stack, EaEEnchantments.LEAPING);
+            cir.setReturnValue(cir.getReturnValue() * (1 + level * 0.1F));
+        }
+    }
+
+    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
+    private float ferocity(float value) {
+        if (this.damageSource.getEntity() instanceof Wolf wolf) {
+            ItemStack attackerStack = wolf.getBodyArmorItem();
+            if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.FEROCITY)) {
+                int ferocity = EnchantingHelper.getLevel(attackerStack, EaEEnchantments.FEROCITY);
+                value += ferocity;
+            }
+        }
+        return value;
+    }
+
+    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
+    private float jousting(float value) {
+        if (this.damageSource.getEntity() instanceof LivingEntity entity && entity.getControlledVehicle() != null && entity.getControlledVehicle() instanceof LivingEntity riddenEntity) {
+            ItemStack stack = entity.getWeaponItem();
+            if (stack.is(ItemTags.SPEARS)) {
+                float ignoredDamage = 0;
+                if (stack.isEnchanted()) {
+                    ignoredDamage = EnchantmentHelper.modifyDamage((ServerLevel) entity.level(), stack, this.asLivingEntity(), damageSource, 0F);
+                }
+                float baseDamage = 1;
+                var modifiers = stack.get(DataComponents.ATTRIBUTE_MODIFIERS).modifiers();
+                for (ItemAttributeModifiers.Entry modifier : modifiers) {
+                    if (modifier.attribute() == Attributes.ATTACK_DAMAGE) {
+                        baseDamage += (float) modifier.modifier().amount();
+                        break;
+                    }
+                }
+                if (value - ignoredDamage >= baseDamage * 2F && EnchantingHelper.hasEnchantment(stack, EaEEnchantments.JOUSTING)) {
+                    riddenEntity.heal(1F);
+                    riddenEntity.addEffect(new MobEffectInstance(MobEffects.SPEED, 60));
+                    ServerLevel level = riddenEntity.level().getServer().getLevel(riddenEntity.level().dimension());
+                    if (level != null) {
+                        if (riddenEntity instanceof Horse) level.playSound(riddenEntity, riddenEntity.blockPosition(), EaESounds.JOUSTING_RESTORE_HORSE.get(), entity.getSoundSource());
+                        else level.playSound(riddenEntity, riddenEntity.blockPosition(), EaESounds.JOUSTING_RESTORE.get(), entity.getSoundSource());
+                    }
+                }
+            }
+        }
+        return value;
+    }
+
+    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
+    private float conductivityBlessing(float value) {
+        LivingEntity attacked = LivingEntity.class.cast(this);
+        if (attacked.hasEffect(EaEMobEffects.LIGHTNING_IMMUNE) && this.damageSource.is(DamageTypes.LIGHTNING_BOLT)) {
+            return 0F;
+        }
+        if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
+            ItemStack stack = attacker.getWeaponItem();
+            if (stack.is(ItemTags.SPEARS)) {
+                float ignoredDamage = 0;
+                if (stack.isEnchanted()) {
+                    ignoredDamage = EnchantmentHelper.modifyDamage((ServerLevel) attacker.level(), stack, this.asLivingEntity(), damageSource, 0F);
+                }
+                float baseDamage = 1;
+                var modifiers = stack.get(DataComponents.ATTRIBUTE_MODIFIERS).modifiers();
+                for (ItemAttributeModifiers.Entry modifier : modifiers) {
+                    if (modifier.attribute() == Attributes.ATTACK_DAMAGE) {
+                        baseDamage += (float) modifier.modifier().amount();
+                        break;
+                    }
+                }
+                if (value - ignoredDamage >= baseDamage * 2F && EnchantingHelper.hasEnchantment(stack, EaEEnchantments.CONDUCTIVITY_BLESSING)) {
+                    ServerLevel level = attacked.level().getServer().getLevel(attacked.level().dimension());
+                    if (attacked.level().isRainingAt(attacked.blockPosition())) {
+                        LightningBolt lightning = new LightningBolt(EntityType.LIGHTNING_BOLT, level);
+                        lightning.setPos(attacked.position());
+                        lightning.setVisualOnly(false);
+                        level.addFreshEntity(lightning);
+                        attacker.addEffect(new MobEffectInstance(EaEMobEffects.LIGHTNING_IMMUNE, 20, 0, true, false, false));
+                        attacker.clearFire();
+                        if (attacker.getControlledVehicle() instanceof LivingEntity attackerMount) {
+                            attackerMount.addEffect(new MobEffectInstance(EaEMobEffects.LIGHTNING_IMMUNE, 20, 0, true, false, false));
+                            attackerMount.clearFire();
+                        }
+                        stack.hurtAndBreak(1, attacker, attacker.getEquipmentSlotForItem(stack));
+                        if (attacker instanceof Player player && stack.has(DataComponents.USE_COOLDOWN)) {
+                            player.getCooldowns().addCooldown(stack, 100);
+                            player.stopUsingItem();
+                        }
+                    }
+                }
+            }
+        }
+        return value;
+    }
+
+    @Inject(method = "tick", at = @At(value = "HEAD"))
+    private void ticksToSeconds(CallbackInfo ci) {
+        if (this.secondProgress < 20) {
+            this.secondProgress++;
+        }
+        else {
+            second();
+            this.secondProgress = 0;
+        }
+    }
+
+    @Unique
+    private void second() {
+        temperingBlessing();
+        fluidityBlessing();
+    }
+
+    @Unique
+    private void temperingBlessing() {
+        Entity entity = Entity.class.cast(this);
+        if (!(entity.getRemainingFireTicks() > 0)) return;
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.isArmor()) {
+                ItemStack stack = this.getItemBySlot(slot);
+                if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.TEMPERING_BLESSING) && stack.getDamageValue() >= 1) {
+                    stack.setDamageValue(stack.getDamageValue() - 1);
+                    if (stack.getDamageValue() < 0) stack.setDamageValue(0);
+                }
+            }
+        }
+    }
+
+    @Unique
+    private void fluidityBlessing() {
+        Entity entity = Entity.class.cast(this);
+        if (!entity.isInWater()) return;
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.isArmor()) {
+                ItemStack stack = this.getItemBySlot(slot);
+                if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.FLUIDITY_BLESSING)) {
+                    if (entity instanceof LivingEntity livingEntity) livingEntity.heal(0.5F);
+                }
+            }
+        }
+    }
+
+    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
+    private float slipstream(float f) {
+        LivingEntity entity = LivingEntity.class.cast(this);
+        Entity attackerEntity = this.damageSource.getEntity();
+        if (entity.getVehicle() instanceof AbstractNautilus nautilus && attackerEntity instanceof LivingEntity attacker && EnchantingHelper.hasEnchantment(nautilus.getBodyArmorItem(), EaEEnchantments.SLIPSTREAM) && nautilus.isInWater() && (nautilus.isDashing() || nautilus.getJumpCooldown() > 30)) {
+            f = 0F;
+            nautilus.level().playSound(null, nautilus.blockPosition(), EaESounds.SLIPSTREAM_DEFLECT.get(), attacker.getSoundSource(), 1.5F, 1F);
+        }
+        return f;
+    }
+
+    @Inject(method = "dropFromLootTable(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;Z)V", at = @At("TAIL"))
+    public void elderGuardianLootInject(ServerLevel level, DamageSource damageSource, boolean playerKill, CallbackInfo ci) {
+        LivingEntity entity = LivingEntity.class.cast(this);
+        if (entity.getType() == EntityType.ELDER_GUARDIAN && level.getRandom().nextInt(3) == 2 && EaEConfig.get.misc.loot_table_injects) entity.spawnAtLocation(level, EaEItems.TOME_OF_FLOW);
+    }
+}
