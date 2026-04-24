@@ -1,10 +1,6 @@
 package net.rebel459.enchants_and_expeditions.util;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.rebel459.enchants_and_expeditions.config.EaEConfig;
-import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
-import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
-import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
@@ -19,8 +15,6 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
@@ -29,8 +23,12 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.rebel459.enchants_and_expeditions.config.EaEConfig;
+import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
+import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
+import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
+import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
 import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.ArrayList;
@@ -39,12 +37,134 @@ import java.util.Optional;
 import java.util.Random;
 
 public class EnchantingHelper {
+
     public static int enchantmentScore(ItemStack stack) {
-        return stack.getEnchantments().size() - getBlessings(stack) - getCurses(stack);
+        return getInfo(stack).slotsUsed();
     }
 
-    public static List<EnchantmentInstance> evaluateEnchantments(ItemStack stack, List<EnchantmentInstance> list) {
+    public static int combinedEnchantmentScore(ItemStack stack, EnchantmentInstance instance) {
+        ItemEnchantments existing = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+
+        int newScore = getInfo(List.of(instance)).slotsUsed();
+        int oldScore = 0;
+
+        if (existing.getLevel(instance.enchantment()) > 0) {
+            oldScore = isPowerful(instance.enchantment()) ? 2 : 1;
+        }
+
+        return Math.max(0, newScore - oldScore);
+    }
+    public static int combinedEnchantmentScore(ItemStack stack, List<EnchantmentInstance> instances) {
+        int score = 0;
+        for (EnchantmentInstance instance : instances) {
+            score += combinedEnchantmentScore(stack, instance);
+        }
+        return score;
+    }
+
+    public static boolean allMaxLevel(ItemStack stack) {
+        ItemEnchantments enchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+        boolean allMaxLevel = true;
+        for (Holder<Enchantment> enchantment : enchantments.keySet().stream().toList()) {
+            if (enchantment.value().getMaxLevel() > enchantments.getLevel(enchantment)) {
+                allMaxLevel = false;
+                break;
+            }
+        }
+        return allMaxLevel;
+    }
+
+    public static boolean hasSlots(ItemStack stack) {
+        if (!stack.has(DataComponents.ENCHANTABLE) || stack.is(EaEItemTags.VARIABLE_REPAIR_COST)) return false;
+        else {
+            if (!stack.has(EaEDataComponents.ENCHANTING_SLOTS.get())) {
+                stack.set(EaEDataComponents.ENCHANTING_SLOTS.get(), EnchantingSlots.create(Math.clamp(Math.round(stack.get(DataComponents.ENCHANTABLE).value() / 4D), 3, 5)));
+            }
+            return stack.get(EaEDataComponents.ENCHANTING_SLOTS.get()).slots() != 0;
+        }
+    }
+
+    public static EnchantmentInfo getInfo(ItemStack stack) {
+        return getInfoFromHolder(stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY).keySet().stream().toList());
+    }
+    public static EnchantmentInfo getInfo(List<EnchantmentInstance> enchantmentInstances) {
+        List<Holder<Enchantment>> enchantments = new ArrayList<>();
+        for (EnchantmentInstance instance : enchantmentInstances) {
+            enchantments.add(instance.enchantment());
+        }
+        return getInfoFromHolder(enchantments);
+    }
+    private static EnchantmentInfo getInfoFromHolder(List<Holder<Enchantment>> enchantments) {
+        if (enchantments.isEmpty()) {
+            return EnchantmentInfo.EMPTY;
+        }
+
+        int blessings = 0;
+        int powerful = 0;
+        int regular = 0;
+        int curses = 0;
+
+        for (var enchantment : enchantments) {
+            if (enchantment.is(EaEEnchantmentTags.BLESSING)) {
+                blessings++;
+            }
+            else if (isPowerful(enchantment)) {
+                powerful++;
+            }
+            else if (enchantment.is(EnchantmentTags.CURSE)) {
+                curses++;
+            }
+            else {
+                regular++;
+            }
+        }
+        return new EnchantmentInfo(blessings, powerful, regular, curses, powerful * 2 + regular);
+    }
+
+    public static List<Double> getBookAttributes(ItemEnchantments enchantments) {
+        double locMana = 0, locFrost = 0, locScorch = 0, locFlow = 0, locChaos = 0, locGreed = 0, locMight = 0, locCorruption = 0, locDivinity = 0;
+        for (Holder<Enchantment> enchantment : enchantments.keySet()) {
+            if (enchantment.is(EaEEnchantmentTags.MANA) || enchantment.is(EaEEnchantmentTags.MANA_BLESSING)) {
+                locMana += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locMana += 0.1;
+            }
+            if (enchantment.is(EaEEnchantmentTags.FROST) || enchantment.is(EaEEnchantmentTags.FROST_BLESSING)) {
+                locFrost += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locFrost += 0.1;
+            }
+            if (enchantment.is(EaEEnchantmentTags.SCORCH) || enchantment.is(EaEEnchantmentTags.SCORCH_BLESSING)) {
+                locScorch += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locScorch += 0.1;
+            }
+            if (enchantment.is(EaEEnchantmentTags.FLOW) || enchantment.is(EaEEnchantmentTags.FLOW_BLESSING)) {
+                locFlow += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locFlow += 0.1;
+            }
+            if (enchantment.is(EaEEnchantmentTags.CHAOS) || enchantment.is(EaEEnchantmentTags.CHAOS_BLESSING)) {
+                locChaos += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locChaos += 0.1;
+            }
+            if (enchantment.is(EaEEnchantmentTags.GREED) || enchantment.is(EaEEnchantmentTags.GREED_BLESSING)) {
+                locGreed += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locGreed += 0.1;
+            }
+            if (enchantment.is(EaEEnchantmentTags.MIGHT) || enchantment.is(EaEEnchantmentTags.MIGHT_BLESSING)) {
+                locMight += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locMight += 0.1;
+            }
+            if (enchantment.is(EnchantmentTags.CURSE)) {
+                locCorruption += 0.2;
+            }
+        }
+        return List.of(locMana, locFrost, locScorch, locFlow, locChaos, locGreed, locMight, locCorruption, locDivinity);
+    }
+
+    public static List<EnchantmentInstance> evaluateEnchantments(ItemStack stack, List<EnchantmentInstance> list, int level, int slot) {
+        slot += 1;
         List<Holder<Enchantment>> stackEnchantments = stack.getEnchantments().keySet().stream().toList();
+        ItemEnchantments existingEnchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+
+        EnchantmentInfo info = getInfo(stack);
 
         list.removeIf(enchantmentInstance -> {
             return enchantmentInstance.enchantment().is(EaEEnchantments.BOUNDING_BLESSING) && stack.is(EaEItemTags.UNBOUNDABLE);
@@ -53,22 +173,42 @@ public class EnchantingHelper {
         list.removeIf(enchantmentInstance -> {
             return configureEnchantments(enchantmentInstance.enchantment());
         });
-        list.removeIf(enchantmentInstance -> {
-            return stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY).getLevel(enchantmentInstance.enchantment()) >= enchantmentInstance.level();
-        });
+
+        List<EnchantmentInstance> normalized = new ArrayList<>();
+        for (EnchantmentInstance instance : list) {
+            int stackLevel = existingEnchantments.getLevel(instance.enchantment());
+            if (stackLevel <= 0) {
+                normalized.add(instance);
+                continue;
+            }
+
+            int maxLevel = instance.enchantment().value().getMaxLevel();
+            int newLevel = stackLevel + 1;
+            if (stackLevel < maxLevel && ((stackLevel <= slot) || slot == 3) && level >= instance.enchantment().value().definition().minCost().calculate(newLevel)) {
+                normalized.add(new EnchantmentInstance(instance.enchantment(), newLevel));
+            }
+        }
+        list.clear();
+        list.addAll(normalized);
+
         list.removeIf(enchantmentInstance -> {
             for (Holder<Enchantment> stackEnchantment : stackEnchantments) {
-                if (!Enchantment.areCompatible(stackEnchantment, enchantmentInstance.enchantment())) return true;
+                if (stackEnchantment.equals(enchantmentInstance.enchantment())) {
+                    continue; // allow upgrade replacement
+                }
+                if (!Enchantment.areCompatible(stackEnchantment, enchantmentInstance.enchantment())) {
+                    return true;
+                }
             }
             return false;
         });
 
-        if (getBlessings(stack) >= 1) {
+        if (info.blessings() >= 1) {
             list.removeIf(enchantmentInstance -> {
                 return enchantmentInstance.enchantment().is(EaEEnchantmentTags.BLESSING);
             });
         }
-        if (getCurses(stack) >= 1) {
+        if (info.curses() >= 1) {
             list.removeIf(enchantmentInstance -> {
                 return enchantmentInstance.enchantment().is(EnchantmentTags.CURSE);
             });
@@ -80,14 +220,20 @@ public class EnchantingHelper {
                 enchantmentList.add(instance);
             }
         }
-        if (EaEConfig.get.general.enchantment_limit != -1) {
+        if (EaEConfig.get().general.enchantment_slots && hasSlots(stack)) {
             list.removeAll(enchantmentList);
-            while (enchantmentList.size() > EaEConfig.get.general.enchantment_limit) {
-                int x = new Random().nextInt(0, enchantmentList.size());
+            while (combinedEnchantmentScore(stack, enchantmentList) > stack.get(EaEDataComponents.ENCHANTING_SLOTS.get()).getRemaining(stack)) {
+                if (enchantmentList.size() == 1) {
+                    enchantmentList.removeFirst();
+                    break;
+                }
+                int x = new Random().nextInt(1, enchantmentList.size());
                 enchantmentList.remove(x);
             }
             list.addAll(enchantmentList);
         }
+
+        if (list.size() == 1 && list.getFirst().enchantment().is(EnchantmentTags.CURSE)) return List.of();
 
         return list;
     }
@@ -114,18 +260,11 @@ public class EnchantingHelper {
     }
 
     public static int getBlessings(ItemStack stack) {
-        var enchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-        if (enchantments.isEmpty()) {
-            return 0;
-        }
+        return getInfo(stack).blessings();
+    }
 
-        int blessingCount = 0;
-        for (var enchantment : enchantments.entrySet()) {
-            if (enchantment.getKey().is(EaEEnchantmentTags.BLESSING)) {
-                blessingCount++;
-            }
-        }
-        return blessingCount;
+    public static int getCurses(ItemStack stack) {
+        return getInfo(stack).curses();
     }
 
     public static boolean hasEnchantment(ItemStack stack, ResourceKey<Enchantment> enchantment) {
@@ -156,23 +295,12 @@ public class EnchantingHelper {
         return baseDuration + ((level - 1) * perLevelAboveFirst);
     }
 
-    public static int getCurses(ItemStack stack) {
-        var enchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-        if (enchantments.isEmpty()) {
-            return 0;
-        }
-
-        int curseCount = 0;
-        for (var enchantment : enchantments.entrySet()) {
-            if (enchantment.getKey().is(EnchantmentTags.CURSE)) {
-                curseCount++;
-            }
-        }
-        return curseCount;
-    }
-
     public static boolean isEnchantment(Holder<Enchantment> enchantment) {
         return !enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EnchantmentTags.CURSE);
+    }
+
+    public static boolean isPowerful(Holder<Enchantment> enchantment) {
+        return EaEConfig.get().general.powerful_enchantments && isEnchantment(enchantment) && enchantment.is(EaEEnchantmentTags.POWERFUL);
     }
 
     public static int getStoredEnchantmentLevel(Holder<Enchantment> enchantment, ItemStack stack) {
@@ -182,7 +310,7 @@ public class EnchantingHelper {
 
     public static void applyFreezing(ServerLevel level, LivingEntity affected, LivingEntity affector, int duration) {
         Optional<Holder.Reference<MobEffect>> freezing = BuiltInRegistries.MOB_EFFECT.get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
-        if (freezing.isPresent() && EaEConfig.get.integrations.legacies_and_legends) affected.addEffect(new MobEffectInstance(freezing.get(), duration));
+        if (freezing.isPresent() && EaEConfig.get().integrations.legacies_and_legends) affected.addEffect(new MobEffectInstance(freezing.get(), duration));
         level.sendParticles(ParticleTypes.SNOWFLAKE, affected.getX(), affected.getRandomY(), affected.getZ(), 10, 0, -1, 0, 0.5);
         level.playSound(affected, affected.blockPosition(), SoundEvents.SNOW_HIT, affector.getSoundSource());
         if (affected.getTicksFrozen() < duration) affected.setTicksFrozen(duration);
@@ -190,7 +318,7 @@ public class EnchantingHelper {
 
     public static void removeFreezing(LivingEntity entity) {
         Optional<Holder.Reference<MobEffect>> freezing = BuiltInRegistries.MOB_EFFECT.get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
-        if (freezing.isPresent() && EaEConfig.get.integrations.legacies_and_legends) entity.removeEffect(freezing.get());
+        if (freezing.isPresent() && EaEConfig.get().integrations.legacies_and_legends) entity.removeEffect(freezing.get());
         entity.setTicksFrozen(0);
     }
 
@@ -234,5 +362,9 @@ public class EnchantingHelper {
         }
 
         return entityCount;
+    }
+
+    public static int calculateEnchantingCost(int levels) {
+        return Math.clamp(levels / 3, 1, 30);
     }
 }

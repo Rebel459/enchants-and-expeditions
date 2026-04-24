@@ -20,3 +20,4 @@ accessible method net/minecraft/world/item/enchantment/ItemEnchantments getTagOr
 accessible method net/minecraft/world/effect/MobEffect <init> (Lnet/minecraft/world/effect/MobEffectCategory;I)V
 accessible method net/minecraft/world/item/MaceItem knockbackPredicate (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)Ljava/util/function/Predicate;
 extendable class net/minecraft/world/effect/AbsorptionMobEffect
+accessible method net/minecraft/world/inventory/AbstractContainerMenu addSlot (Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;

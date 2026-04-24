@@ -9,7 +9,7 @@ import net.rebel459.unified.util.PackType;
 public final class EnchantsAndExpeditionsClient {
 
     public static void init() {
-        if (EaEConfig.get.integrations.item_tooltips_overrides) {
+        if (EaEConfig.get().integrations.item_tooltips_overrides) {
             UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("item_tooltips_overrides"), PackType.REQUIRED_RESOURCES);
         }
     }

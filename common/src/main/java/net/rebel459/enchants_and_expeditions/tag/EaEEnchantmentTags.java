@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class EaEEnchantmentTags {
 
     public static final TagKey<Enchantment> BLESSING = register("blessing");
+    public static final TagKey<Enchantment> POWERFUL = register("powerful");
     public static final TagKey<Enchantment> DISABLED_ENCHANTMENTS = register("disabled_enchantments");
     public static final TagKey<Enchantment> ENCHANTMENT_ORDER = register("enchantment_order");
     public static final TagKey<Enchantment> ENFORCE_MAXIMUM_LEVEL = register("enforce_maximum_level");

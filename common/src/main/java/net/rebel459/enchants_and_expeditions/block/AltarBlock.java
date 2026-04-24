@@ -101,55 +101,55 @@ public class AltarBlock extends Block {
 	@Override
 	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (stack.isEmpty()) return InteractionResult.TRY_WITH_EMPTY_HAND;
-		if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_MANA)) {
+		if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_MANA.get())) {
 			stack.copyAndClear();
 			level.setBlock(pos, state.setValue(TOME, AltarBlockType.MANA_TOME), UPDATE_ALL);
 			level.playSound(player, pos, EaESounds.TOME_PLACE.get(), SoundSource.BLOCKS);
 			return InteractionResult.SUCCESS;
 		}
-		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_FROST)) {
+		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_FROST.get())) {
 			stack.copyAndClear();
 			level.setBlock(pos, state.setValue(TOME, AltarBlockType.FROST_TOME), UPDATE_ALL);
 			level.playSound(player, pos, EaESounds.TOME_PLACE.get(), SoundSource.BLOCKS);
 			return InteractionResult.SUCCESS;
 		}
-		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_SCORCH)) {
+		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_SCORCH.get())) {
 			stack.copyAndClear();
 			level.setBlock(pos, state.setValue(TOME, AltarBlockType.SCORCH_TOME), UPDATE_ALL);
 			level.playSound(player, pos, EaESounds.TOME_PLACE.get(), SoundSource.BLOCKS);
 			return InteractionResult.SUCCESS;
 		}
-		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_FLOW)) {
+		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_FLOW.get())) {
 			stack.copyAndClear();
 			level.setBlock(pos, state.setValue(TOME, AltarBlockType.FLOW_TOME), UPDATE_ALL);
 			level.playSound(player, pos, EaESounds.TOME_PLACE.get(), SoundSource.BLOCKS);
 			return InteractionResult.SUCCESS;
 		}
-		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_CHAOS)) {
+		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_CHAOS.get())) {
 			stack.copyAndClear();
 			level.setBlock(pos, state.setValue(TOME, AltarBlockType.CHAOS_TOME), UPDATE_ALL);
 			level.playSound(player, pos, EaESounds.TOME_PLACE.get(), SoundSource.BLOCKS);
 			return InteractionResult.SUCCESS;
 		}
-		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_GREED)) {
+		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_GREED.get())) {
 			stack.copyAndClear();
 			level.setBlock(pos, state.setValue(TOME, AltarBlockType.GREED_TOME), UPDATE_ALL);
 			level.playSound(player, pos, EaESounds.TOME_PLACE.get(), SoundSource.BLOCKS);
 			return InteractionResult.SUCCESS;
 		}
-		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_MIGHT)) {
+		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_MIGHT.get())) {
 			stack.copyAndClear();
 			level.setBlock(pos, state.setValue(TOME, AltarBlockType.MIGHT_TOME), UPDATE_ALL);
 			level.playSound(player, pos, EaESounds.TOME_PLACE.get(), SoundSource.BLOCKS);
 			return InteractionResult.SUCCESS;
 		}
-		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_STABILITY)) {
+		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_STABILITY.get())) {
 			stack.copyAndClear();
 			level.setBlock(pos, state.setValue(TOME, AltarBlockType.STABILITY_TOME), UPDATE_ALL);
 			level.playSound(player, pos, EaESounds.TOME_PLACE.get(), SoundSource.BLOCKS);
 			return InteractionResult.SUCCESS;
 		}
-		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_POWER)) {
+		else if (state.getValue(TOME) == AltarBlockType.EMPTY && stack.is(EaEItems.TOME_OF_POWER.get())) {
 			stack.copyAndClear();
 			level.setBlock(pos, state.setValue(TOME, AltarBlockType.POWER_TOME), UPDATE_ALL);
 			level.playSound(player, pos, EaESounds.TOME_PLACE.get(), SoundSource.BLOCKS);

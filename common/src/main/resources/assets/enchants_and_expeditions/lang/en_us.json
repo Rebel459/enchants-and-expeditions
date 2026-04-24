@@ -139,8 +139,8 @@
   "text.autoconfig.enchants_and_expeditions.title": "Enchants and Expeditions",
 
   "text.autoconfig.enchants_and_expeditions.option.general": "General",
-  "text.autoconfig.enchants_and_expeditions.option.general.enchantment_limit": "Enchantment Limit",
-  "text.autoconfig.enchants_and_expeditions.option.general.enchantment_limit.@Tooltip": "The maximum amount of enchantments a singular item can have, excluding blessings & curses. Set to -1 to disable",
+  "text.autoconfig.enchants_and_expeditions.option.general.enchantment_slots": "Enchantment Slots",
+  "text.autoconfig.enchants_and_expeditions.option.general.enchantment_slots.@Tooltip": "Whether enchantments should be limited by the slot system. Full slot values for each item / tag must be configured in the json file directly",
   "text.autoconfig.enchants_and_expeditions.option.general.repeat_table_enchanting": "Repeat Table Enchanting",
   "text.autoconfig.enchants_and_expeditions.option.general.repeat_table_enchanting.@Tooltip": "Whether already-enchanted items should be enchantable multiple times at the Enchanting Table",
   "text.autoconfig.enchants_and_expeditions.option.general.experience_rebalance": "Experience Rebalance",

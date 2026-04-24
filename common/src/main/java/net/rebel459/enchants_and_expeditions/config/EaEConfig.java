@@ -5,11 +5,14 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 
 @Config(name = EnchantsAndExpeditions.MOD_ID)
 public class EaEConfig implements ConfigData {
@@ -19,11 +22,12 @@ public class EaEConfig implements ConfigData {
         return Path.of("./config/" + EnchantsAndExpeditions.MOD_ID + "." + (json5 ? "json5" : "json"));
     }
 
-    public static EaEConfig get;
+    public static EaEConfig get() {
+        return AutoConfig.getConfigHolder(EaEConfig.class).getConfig();
+    };
 
     public static void initClient() {
         AutoConfig.register(EaEConfig.class, JanksonConfigSerializer::new);
-        get = AutoConfig.getConfigHolder(EaEConfig.class).getConfig();
     }
 
     @ConfigEntry.Gui.CollapsibleObject
@@ -38,7 +42,10 @@ public class EaEConfig implements ConfigData {
     public static class GeneralConfig {
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
-        public int enchantment_limit = 3;
+        public boolean enchantment_slots = true;
+        @ConfigEntry.Category("config")
+        @ConfigEntry.Gui.Tooltip
+        public boolean powerful_enchantments = true;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
         public boolean repeat_table_enchanting = true;
@@ -89,6 +96,12 @@ public class EaEConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
     public Notice disable_enchantments = Notice.INFO;
+
+    @ConfigEntry.Gui.Excluded
+    @Comment("A map to specify custom enchantment slot values. Accepts both item ids (`minecraft:iron_sword`) and item tags (`#minecraft:swords`)\nAnything not specified here falls back to the formula: `enchantability / 4 (min 3, max 5)`")
+    public Map<String, Integer> enchantment_slots = new HashMap<>(
+            Map.of()
+    );
 
     public enum Notice {
         INFO

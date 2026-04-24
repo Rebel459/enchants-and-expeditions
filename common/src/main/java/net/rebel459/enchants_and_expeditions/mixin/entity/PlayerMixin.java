@@ -49,7 +49,7 @@ public abstract class PlayerMixin implements FeatherFlightInterface {
 
     @Inject(method = "getXpNeededForNextLevel", at = @At(value = "HEAD"), cancellable = true)
     protected void EaE$experienceRebalance(CallbackInfoReturnable<Integer> cir) {
-        if (!EaEConfig.get.general.experience_rebalance) return;
+        if (!EaEConfig.get().general.experience_rebalance) return;
 
         // 0-30
 

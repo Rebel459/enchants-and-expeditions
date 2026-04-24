@@ -2,6 +2,7 @@ package net.rebel459.enchants_and_expeditions.mixin.inventory;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
+import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
@@ -34,7 +35,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -217,11 +217,11 @@ public abstract class AnvilMenuMixin {
         ItemStack additionStack = anvilMenu.inputSlots.getItem(1);
         ItemStack outputStack = anvilMenu.resultSlots.getItem(0);
 
-        if (EaEConfig.get.general.enchantment_limit != -1 && !anvilMenu.onlyRenaming) {
+        if (EaEConfig.get().general.enchantment_slots && !anvilMenu.onlyRenaming) {
             int inputScore = EnchantingHelper.enchantmentScore(inputStack);
             int outputScore = EnchantingHelper.enchantmentScore(outputStack);
 
-            if (outputScore > EaEConfig.get.general.enchantment_limit || EnchantingHelper.getBlessings(outputStack) > 1 || EnchantingHelper.getCurses(outputStack) > 1) {
+            if (EnchantingHelper.hasSlots(outputStack) && outputScore > outputStack.get(EaEDataComponents.ENCHANTING_SLOTS.get()).getTotal() || EnchantingHelper.getBlessings(outputStack) > 1 || EnchantingHelper.getCurses(outputStack) > 1) {
                 anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
                 this.cost.set(0);
                 return;
@@ -360,7 +360,7 @@ public abstract class AnvilMenuMixin {
         anvilMenu.inputSlots.setItem(0, ItemStack.EMPTY);
         anvilMenu.access.execute((level, blockPos) -> {
             BlockState blockState = level.getBlockState(blockPos);
-            if (!player.hasInfiniteMaterials() && blockState.is(BlockTags.ANVIL) && player.getRandom().nextFloat() < EaEConfig.get.general.anvil_break_chance) {
+            if (!player.hasInfiniteMaterials() && blockState.is(BlockTags.ANVIL) && player.getRandom().nextFloat() < EaEConfig.get().general.anvil_break_chance) {
                 BlockState blockState2 = AnvilBlock.damage(blockState);
                 if (blockState2 == null) {
                     level.removeBlock(blockPos, false);

@@ -61,7 +61,7 @@ public class EnchantRandomlyFunctionMixin {
 
     @Unique
     public boolean enchantFallback(Holder<Enchantment> holder) {
-        if (this.options.isPresent() || !EaEConfig.get.misc.enchant_function_fallback) return true;
+        if (this.options.isPresent() || !EaEConfig.get().misc.enchant_function_fallback) return true;
         else return holder.is(EnchantmentTags.ON_RANDOM_LOOT);
     }
 }

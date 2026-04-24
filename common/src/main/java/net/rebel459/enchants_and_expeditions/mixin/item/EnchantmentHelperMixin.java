@@ -2,6 +2,7 @@ package net.rebel459.enchants_and_expeditions.mixin.item;
 
 import com.google.common.collect.Lists;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
+import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
@@ -32,7 +33,7 @@ public abstract class EnchantmentHelperMixin {
     @Inject(method = "enchantItem(Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/item/ItemStack;ILjava/util/stream/Stream;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"), cancellable = true)
     private static void EaE$enchantItem(RandomSource random, ItemStack stack, int level, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<ItemStack> cir) {
         List<EnchantmentInstance> list = selectEnchantment(random, stack, level, possibleEnchantments);
-        list = EnchantingHelper.evaluateEnchantments(stack, list);
+        list = EnchantingHelper.evaluateEnchantments(stack, list, level, -1);
         if (stack.is(Items.BOOK)) {
             stack = new ItemStack(Items.ENCHANTED_BOOK);
         }
@@ -48,7 +49,7 @@ public abstract class EnchantmentHelperMixin {
     private static void EaE$getAvailableEnchantmentResults(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         List<EnchantmentInstance> list = Lists.newArrayList();
         boolean bl; // allow enchanted book re-enchanting
-        if (stack.getEnchantments().size() < EaEConfig.get.general.enchantment_limit) bl = stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
+        if (EnchantingHelper.hasSlots(stack) && stack.get(EaEDataComponents.ENCHANTING_SLOTS.get()).getRemaining(stack) > 0) bl = stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
         else bl = stack.is(Items.BOOK);
 
         possibleEnchantments.filter(holder -> holder.value().isPrimaryItem(stack) || bl).forEach(holder -> {

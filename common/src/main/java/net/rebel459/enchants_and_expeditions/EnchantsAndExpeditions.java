@@ -80,11 +80,11 @@ public class EnchantsAndExpeditions {
     public static void loadResources() {
         UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("vanilla_tag_replacements"), PackType.REQUIRED_DATA);
 
-        if (UnifiedPlatform.get().isModLoaded("combat_reborn") && EaEConfig.get.integrations.combat_reborn) {
+        if (UnifiedPlatform.get().isModLoaded("combat_reborn") && EaEConfig.get().integrations.combat_reborn) {
 			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("combat_reborn_integration"), PackType.REQUIRED_DATA);
         }
 
-        if (UnifiedPlatform.get().isModLoaded("legacies_and_legends") && EaEConfig.get.integrations.legacies_and_legends) {
+        if (UnifiedPlatform.get().isModLoaded("legacies_and_legends") && EaEConfig.get().integrations.legacies_and_legends) {
             isLegaciesAndLegendsLoaded = true;
 			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("legacies_and_legends_integration"), PackType.REQUIRED_DATA);
         }
@@ -94,11 +94,11 @@ public class EnchantsAndExpeditions {
         if (UnifiedPlatform.get().isModLoaded("combat_reborn")) {
             isCombatRebornLoaded = true;
         }
-        if (UnifiedPlatform.get().isModLoaded("trailiertales") && EaEConfig.get.integrations.trailier_tales) {
+        if (UnifiedPlatform.get().isModLoaded("trailiertales") && EaEConfig.get().integrations.trailier_tales) {
             isTrailierTalesLoaded = true;
 			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("trailier_tales_integration"), PackType.REQUIRED_DATA);
         }
-        if (UnifiedPlatform.get().isModLoaded("enderscape") && EaEConfig.get.integrations.enderscape) {
+        if (UnifiedPlatform.get().isModLoaded("enderscape") && EaEConfig.get().integrations.enderscape) {
             isEnderscapeLoaded = true;
         }
     }

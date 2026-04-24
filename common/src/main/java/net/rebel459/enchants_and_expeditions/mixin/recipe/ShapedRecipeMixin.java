@@ -19,7 +19,7 @@ public class ShapedRecipeMixin {
     @Inject(method = "assemble(Lnet/minecraft/world/item/crafting/CraftingInput;)Lnet/minecraft/world/item/ItemStack;", at = @At(value = "TAIL"), cancellable = true)
     private void EaE$craftExperienceBottles(CraftingInput input, CallbackInfoReturnable<ItemStack> cir) {
         if (cir.getReturnValue().is(Items.EXPERIENCE_BOTTLE) && input.getItem(1, 1).is(Items.POTION)) {
-            if (!(input.getItem(1, 1).getComponents().has(DataComponents.POTION_CONTENTS) && input.getItem(1, 1).getComponents().get(DataComponents.POTION_CONTENTS).is(Potions.WATER)) || !EaEConfig.get.general.craftable_experience_bottles)
+            if (!(input.getItem(1, 1).getComponents().has(DataComponents.POTION_CONTENTS) && input.getItem(1, 1).getComponents().get(DataComponents.POTION_CONTENTS).is(Potions.WATER)) || !EaEConfig.get().general.craftable_experience_bottles)
                 cir.setReturnValue(ItemStack.EMPTY);
         }
     }

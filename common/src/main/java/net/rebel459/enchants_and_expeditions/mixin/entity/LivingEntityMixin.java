@@ -320,6 +320,6 @@ public abstract class LivingEntityMixin {
     @Inject(method = "dropFromLootTable(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;Z)V", at = @At("TAIL"))
     public void elderGuardianLootInject(ServerLevel level, DamageSource damageSource, boolean playerKill, CallbackInfo ci) {
         LivingEntity entity = LivingEntity.class.cast(this);
-        if (entity.getType() == EntityType.ELDER_GUARDIAN && level.getRandom().nextInt(3) == 2 && EaEConfig.get.misc.loot_table_injects) entity.spawnAtLocation(level, EaEItems.TOME_OF_FLOW);
+        if (entity.getType() == EntityType.ELDER_GUARDIAN && level.getRandom().nextInt(3) == 2 && EaEConfig.get().misc.loot_table_injects) entity.spawnAtLocation(level, EaEItems.TOME_OF_FLOW);
     }
 }

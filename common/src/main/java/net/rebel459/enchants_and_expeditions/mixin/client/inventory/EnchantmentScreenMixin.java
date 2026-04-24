@@ -1,23 +1,25 @@
 package net.rebel459.enchants_and_expeditions.mixin.client.inventory;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
-import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditionsClient;
-import net.rebel459.enchants_and_expeditions.network.EnchantingAttributes;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.EnchantmentScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
+import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
+import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditionsClient;
+import net.rebel459.enchants_and_expeditions.network.EnchantingAttributes;
+import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.unified.platform.client.UnifiedClientHelpers;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -80,6 +82,25 @@ public abstract class EnchantmentScreenMixin {
             this.showAttributes = false;
             player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
         }
+    }
+
+    @ModifyExpressionValue(
+            method = "extractBackground",
+            at = @At(
+                    value = "FIELD",
+                    target = "Lnet/minecraft/world/inventory/EnchantmentMenu;costs:[I"
+            )
+    )
+    private int[] EaE$fixDisabledSlots(int[] costs, @Local(name = "i") int i) {
+        EnchantmentScreen screen = (EnchantmentScreen) (Object) this;
+
+        if (screen.getMenu().enchantClue[i] != -1) {
+            return costs;
+        }
+
+        int[] copy = costs.clone();
+        copy[i] = 0;
+        return copy;
     }
 
     @Inject(method = "extractBackground", at = @At("TAIL"))
@@ -168,5 +189,16 @@ public abstract class EnchantmentScreenMixin {
     @Unique
     private boolean isOverButton(int mouseX, int mouseY) {
         return mouseX >= leftPos() && mouseX <= leftPos() + 14 && mouseY >= topPos() && mouseY <= topPos() + 14;
+    }
+
+
+    @ModifyVariable(method = "extractRenderState", at = @At(value = "STORE"), name = "cost")
+    private int showEnchantingCost(int cost, @Local(ordinal = 4) int minLevel) {
+        return EnchantingHelper.calculateEnchantingCost(minLevel);
+    }
+
+    @ModifyConstant(method = "extractBackground", constant = @Constant(intValue = 1, ordinal = 0))
+    private int enchantmentSlotDisabledTexture(int original, @Local(name = "i") int i, @Local(name = "cost") int cost) {
+        return EnchantingHelper.calculateEnchantingCost(cost) - i;
     }
 }

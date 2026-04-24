@@ -21,6 +21,7 @@ public interface EnchantingAttributes {
 
     record Attributes(int mana, int frost, int scorch, int flow, int chaos, int greed, int might, int corruption, int divinity) implements CustomPacketPayload {
         public static final Type<Attributes> ID = new Type<>(EnchantsAndExpeditions.id("enchanting_attributes"));
+
         public static final StreamCodec<RegistryFriendlyByteBuf, Attributes> CODEC = StreamCodec.composite(
                 ByteBufCodecs.INT, Attributes::mana,
                 ByteBufCodecs.INT, Attributes::frost,
@@ -33,6 +34,7 @@ public interface EnchantingAttributes {
                 ByteBufCodecs.INT, Attributes::divinity,
                 Attributes::new
         );
+
         @Override
         public Type<? extends CustomPacketPayload> type() {
             return ID;

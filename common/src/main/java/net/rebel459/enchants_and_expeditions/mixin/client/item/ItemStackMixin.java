@@ -1,14 +1,18 @@
 package net.rebel459.enchants_and_expeditions.mixin.client.item;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.rebel459.enchants_and_expeditions.registry.EaEBlocks;
+import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
 import net.rebel459.enchants_and_expeditions.registry.EaEItems;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
+import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
+import net.rebel459.enchants_and_expeditions.util.EnchantingSlots;
 import net.rebel459.item_tooltips.util.ScreenHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +20,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Blocks;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -23,10 +28,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-@Mixin(ItemStack.class)
+@Mixin(value = ItemStack.class, priority = 999)
 public abstract class ItemStackMixin {
 
     @Shadow public abstract Item getItem();
@@ -36,8 +43,43 @@ public abstract class ItemStackMixin {
     @Shadow
     public abstract boolean is(Predicate<Holder<Item>> item);
 
+    @Inject(method = "addAttributeTooltips", at = @At("TAIL"))
+    private void addEnchantingSlots(Consumer<Component> consumer, TooltipDisplay display, @Nullable Player player, CallbackInfo ci) {
+        ItemStack stack = ItemStack.class.cast(this);
+        if (EnchantingHelper.hasSlots(stack) && !stack.has(DataComponents.STORED_ENCHANTMENTS)) {
+            EnchantingSlots slots = stack.get(EaEDataComponents.ENCHANTING_SLOTS.get());
+            consumer.accept(Component.literal("Slots Used: " + (slots.getTotal() - slots.getRemaining(stack)) + " / " + slots.getTotal()).withStyle(ChatFormatting.GRAY));
+        }
+    }
+
+    @Unique
+    private static String format(double value) {
+        return ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(value);
+    }
+
+    @Inject(method = "addDetailsToTooltip", at = @At("TAIL"))
+    private void addBookAttributes(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Player player, TooltipFlag tooltipFlag, Consumer<Component> consumer, CallbackInfo ci) {
+        ItemStack stack = ItemStack.class.cast(this);
+        if (stack.has(DataComponents.STORED_ENCHANTMENTS)) {
+            List<Double> bookAttributes = EnchantingHelper.getBookAttributes(stack.get(DataComponents.STORED_ENCHANTMENTS));
+            String mana = format(bookAttributes.getFirst());
+            String frost = format(bookAttributes.get(1));
+            String scorch = format(bookAttributes.get(2));
+            String flow = format(bookAttributes.get(3));
+            String chaos = format(bookAttributes.get(4));
+            String greed = format(bookAttributes.get(5));
+            String might = format(bookAttributes.get(6));
+            String corruption = format(bookAttributes.get(7));
+            String divinity = format(bookAttributes.getLast());
+            if (ScreenHelper.hasKeyDown()) {
+                consumer.accept(Component.literal(""));
+                consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity, true));
+            }
+        }
+    }
+
     @Inject(method = "addDetailsToTooltip", at = @At("HEAD"))
-    private void addDescription(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Player player, TooltipFlag tooltipFlag, Consumer<Component> consumer, CallbackInfo ci) {
+    private void addAttributes(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Player player, TooltipFlag tooltipFlag, Consumer<Component> consumer, CallbackInfo ci) {
         if (this.is(item -> item.is(EaEItemTags.ENCHANTING_POWER_PROVIDER))) {
             consumer.accept(Component.literal("")); // Line break
 
@@ -196,7 +238,7 @@ public abstract class ItemStackMixin {
                 }
             }
             else if (this.is(EaEItems.TOME_OF_MIGHT.get())) {
-                might = "5.0";
+                might = "7.0";
                 chaos = "-1.0";
                 flow = "-1.0";
                 greed = "-1.0";
@@ -314,16 +356,39 @@ public abstract class ItemStackMixin {
 
     @Unique
     private MutableComponent statTooltip(String mana, String frost, String scorch, String flow, String chaos, String greed, String might, String corruption, String divinity) {
-        return Component.literal(" ")
-                .append(Component.literal(mana + ", ").withStyle(ChatFormatting.DARK_BLUE))
-                .append(Component.literal(frost + ", ").withStyle(ChatFormatting.DARK_AQUA))
-                .append(Component.literal(scorch + ", ").withStyle(ChatFormatting.DARK_RED))
-                .append(Component.literal(flow + ", ").withStyle(ChatFormatting.AQUA))
-                .append(Component.literal(chaos + ", ").withStyle(ChatFormatting.DARK_GRAY))
-                .append(Component.literal(greed + ", ").withStyle(ChatFormatting.YELLOW))
-                .append(Component.literal(might + ", ").withStyle(ChatFormatting.DARK_GREEN))
-                .append(Component.literal(corruption + ", ").withStyle(ChatFormatting.RED))
-                .append(Component.literal(divinity).withStyle(ChatFormatting.GOLD));
+        return statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity, false);
+    }
+
+    @Unique
+    private MutableComponent statTooltip(String mana, String frost, String scorch, String flow, String chaos, String greed, String might, String corruption, String divinity, boolean skipZero) {
+        MutableComponent component = Component.literal(" ");
+        boolean hasPrevious = false;
+
+        hasPrevious = appendStat(component, hasPrevious, mana, ChatFormatting.DARK_BLUE, skipZero);
+        hasPrevious = appendStat(component, hasPrevious, frost, ChatFormatting.DARK_AQUA, skipZero);
+        hasPrevious = appendStat(component, hasPrevious, scorch, ChatFormatting.DARK_RED, skipZero);
+        hasPrevious = appendStat(component, hasPrevious, flow, ChatFormatting.AQUA, skipZero);
+        hasPrevious = appendStat(component, hasPrevious, chaos, ChatFormatting.DARK_GRAY, skipZero);
+        hasPrevious = appendStat(component, hasPrevious, greed, ChatFormatting.YELLOW, skipZero);
+        hasPrevious = appendStat(component, hasPrevious, might, ChatFormatting.DARK_GREEN, skipZero);
+        hasPrevious = appendStat(component, hasPrevious, corruption, ChatFormatting.RED, skipZero);
+        appendStat(component, hasPrevious, divinity, ChatFormatting.GOLD, skipZero);
+
+        return component;
+    }
+
+    @Unique
+    private boolean appendStat(MutableComponent component, boolean hasPrevious, String attribute, ChatFormatting formatting, boolean skipZero) {
+        if (!(!skipZero || !Objects.equals(attribute, "0"))) {
+            return hasPrevious;
+        }
+
+        if (hasPrevious) {
+            component.append(Component.literal(", "));
+        }
+
+        component.append(Component.literal(attribute).withStyle(formatting));
+        return true;
     }
 
     @Unique

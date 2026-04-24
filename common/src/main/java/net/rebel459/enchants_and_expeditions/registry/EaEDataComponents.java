@@ -1,6 +1,13 @@
 package net.rebel459.enchants_and_expeditions.registry;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TridentItem;
@@ -10,7 +17,13 @@ import net.minecraft.world.item.enchantment.Repairable;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
+import net.rebel459.enchants_and_expeditions.util.EnchantingSlots;
 import net.rebel459.unified.platform.UnifiedEvents;
+import net.rebel459.unified.platform.UnifiedRegistries;
+
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 public class EaEDataComponents {
 
@@ -18,12 +31,6 @@ public class EaEDataComponents {
         UnifiedEvents.DefaultDataComponents.modify((item, builder, provider) -> {
 
             ItemStack stack = item.getDefaultInstance();
-
-            if (item == Items.ENCHANTED_BOOK) {
-                builder.set(DataComponents.MAX_DAMAGE, 4);
-                builder.set(DataComponents.ENCHANTABLE, new Enchantable(1));
-                builder.set(DataComponents.REPAIRABLE, new Repairable(provider.getOrThrow(EaEItemTags.BOOK_REPAIR_MATERIALS)));
-            }
 
             if (item == Items.BOW) {
                 builder.set(DataComponents.REPAIRABLE, new Repairable(provider.getOrThrow(EaEItemTags.BOW_REPAIR_MATERIALS)));
@@ -75,13 +82,43 @@ public class EaEDataComponents {
                 builder.set(DataComponents.ENCHANTABLE, new Enchantable(10));
             }
 
-            if (EaEConfig.get.general.craftable_experience_bottles) {
+            if (EaEConfig.get().general.craftable_experience_bottles) {
                 if ((stack.is(Items.POTION) || stack.is(Items.SPLASH_POTION) || stack.is(Items.LINGERING_POTION)) && stack.getMaxStackSize() == 1) {
                     if (stack.has(DataComponents.POTION_CONTENTS) && stack.get(DataComponents.POTION_CONTENTS).is(Potions.WATER)) {
                         builder.set(DataComponents.MAX_STACK_SIZE, 16);
                     }
                 }
             }
+
+            HashMap<TagKey<Item>, Integer> itemTags = new HashMap<>();
+            HashMap<Item, Integer> items = new HashMap<>();
+            var itemLookup = provider.lookup(Registries.ITEM).get();
+
+            EaEConfig.get().enchantment_slots.forEach((key, value) -> {
+                if (key.startsWith("#")) {
+                    key = key.substring(1);
+                    TagKey<Item> tag = TagKey.create(Registries.ITEM, Identifier.parse(key));
+                    if (provider.get(tag).isPresent()) itemTags.put(tag, value);
+                } else {
+                    Optional<Holder.Reference<Item>> optional = itemLookup.get(ResourceKey.create(Registries.ITEM, Identifier.parse(key)));
+                    optional.ifPresent(reference -> items.put(reference.value(), value));
+                }
+            });
+
+            itemTags.forEach((key, value) -> {
+                if (stack.is(key)) {
+                    builder.set(EaEDataComponents.ENCHANTING_SLOTS.get(), EnchantingSlots.create(value));
+                }
+            });
+            items.forEach((key, value) -> {
+                if (item == key) {
+                    builder.set(EaEDataComponents.ENCHANTING_SLOTS.get(), EnchantingSlots.create(value));
+                }
+            });
         });
     }
+
+    static UnifiedRegistries.DataComponentTypes COMPONENTS = UnifiedRegistries.DataComponentTypes.create(EnchantsAndExpeditions.MOD_ID);
+
+    public static final Supplier<DataComponentType<EnchantingSlots>> ENCHANTING_SLOTS = COMPONENTS.register("enchantable", (b) -> b.persistent(EnchantingSlots.CODEC).networkSynchronized(EnchantingSlots.STREAM_CODEC).cacheEncoding());
 }
