@@ -1,0 +1,13 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "enchants_and_expeditions:font/enchant_badge_enabled.png",
+      "ascent": 7,
+      "height": 16,
+      "chars": [
+        "0123456789"
+      ]
+    }
+  ]
+}

@@ -17,7 +17,7 @@ import net.minecraft.world.item.enchantment.Repairable;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
-import net.rebel459.enchants_and_expeditions.util.EnchantingSlots;
+import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import net.rebel459.unified.platform.UnifiedEvents;
 import net.rebel459.unified.platform.UnifiedRegistries;
 
@@ -107,12 +107,12 @@ public class EaEDataComponents {
 
             itemTags.forEach((key, value) -> {
                 if (stack.is(key)) {
-                    builder.set(EaEDataComponents.ENCHANTING_SLOTS.get(), EnchantingSlots.create(value));
+                    builder.set(EaEDataComponents.ENCHANTMENT_SLOTS.get(), EnchantmentSlots.create(value));
                 }
             });
             items.forEach((key, value) -> {
                 if (item == key) {
-                    builder.set(EaEDataComponents.ENCHANTING_SLOTS.get(), EnchantingSlots.create(value));
+                    builder.set(EaEDataComponents.ENCHANTMENT_SLOTS.get(), EnchantmentSlots.create(value));
                 }
             });
         });
@@ -120,5 +120,5 @@ public class EaEDataComponents {
 
     static UnifiedRegistries.DataComponentTypes COMPONENTS = UnifiedRegistries.DataComponentTypes.create(EnchantsAndExpeditions.MOD_ID);
 
-    public static final Supplier<DataComponentType<EnchantingSlots>> ENCHANTING_SLOTS = COMPONENTS.register("enchantable", (b) -> b.persistent(EnchantingSlots.CODEC).networkSynchronized(EnchantingSlots.STREAM_CODEC).cacheEncoding());
+    public static final Supplier<DataComponentType<EnchantmentSlots>> ENCHANTMENT_SLOTS = COMPONENTS.register("enchantment_slots", (b) -> b.persistent(EnchantmentSlots.CODEC).networkSynchronized(EnchantmentSlots.STREAM_CODEC).cacheEncoding());
 }

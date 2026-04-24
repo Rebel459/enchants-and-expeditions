@@ -221,7 +221,7 @@ public abstract class AnvilMenuMixin {
             int inputScore = EnchantingHelper.enchantmentScore(inputStack);
             int outputScore = EnchantingHelper.enchantmentScore(outputStack);
 
-            if (EnchantingHelper.hasSlots(outputStack) && outputScore > outputStack.get(EaEDataComponents.ENCHANTING_SLOTS.get()).getTotal() || EnchantingHelper.getBlessings(outputStack) > 1 || EnchantingHelper.getCurses(outputStack) > 1) {
+            if (EnchantingHelper.hasSlots(outputStack) && outputScore > outputStack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getTotal() || EnchantingHelper.getBlessings(outputStack) > 1 || EnchantingHelper.getCurses(outputStack) > 1) {
                 anvilMenu.resultSlots.setItem(0, ItemStack.EMPTY);
                 this.cost.set(0);
                 return;
@@ -265,23 +265,11 @@ public abstract class AnvilMenuMixin {
 
         if ((inputStack.isEnchanted() && additionStack.isEnchanted() && inputStack.getItem() == additionStack.getItem()) || additionStack.is(Items.ENCHANTED_BOOK)) {
             int enchantCost;
-            int multipler = 1;
-            float reduction = 1;
+            float multiplier = 1;
 
-            if (inputStack.getItem() == additionStack.getItem()) enchantCost = Math.max(evaluateEnchantCost(inputStack, additionStack, outputStack), evaluateEnchantCost(additionStack, inputStack,outputStack));
-            else enchantCost = evaluateEnchantCost(inputStack, additionStack, outputStack);
-
-            List<Holder<Enchantment>> outputEnchantmentsList = outputStack.getEnchantments().keySet().stream().toList();
-            if (outputStack.is(Items.ENCHANTED_BOOK) && outputStack.has(DataComponents.STORED_ENCHANTMENTS)) {
-                outputEnchantmentsList = outputStack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY).keySet().stream().toList();
-            }
-            for (Holder<Enchantment> enchantment : outputEnchantmentsList) {
-                if (enchantment.is(EaEEnchantmentTags.BLESSING)) multipler += 2;
-                else if (EnchantingHelper.isEnchantment(enchantment)) multipler += 1;
-                else if (enchantment.is(EnchantmentTags.CURSE)) multipler += 0;
-            }
-            if (outputStack.has(DataComponents.ENCHANTABLE)) reduction -= Math.min(25, outputStack.get(DataComponents.ENCHANTABLE).value() * 0.01F);
-            float finalCost = enchantCost * multipler * reduction;
+            enchantCost = evaluateEnchantCost(outputStack);
+            if (outputStack.has(DataComponents.ENCHANTABLE)) multiplier -= Math.min(25, outputStack.get(DataComponents.ENCHANTABLE).value()) * 0.01F;
+            float finalCost = enchantCost * multiplier;
             cost.set((int) finalCost);
         }
         else if (!inputStack.is(EaEItemTags.VARIABLE_REPAIR_COST)) cost.set(0);
@@ -397,30 +385,17 @@ public abstract class AnvilMenuMixin {
     }
 
     @Unique
-    public int evaluateEnchantCost(ItemStack stack, ItemStack stack2, ItemStack outputStack) {
+    public int evaluateEnchantCost(ItemStack stack) {
         int value = 0;
-        Set<Holder<Enchantment>> additionEnchantments = stack2.getEnchantments().keySet();
-        if (stack2.is(Items.ENCHANTED_BOOK) && stack2.has(DataComponents.STORED_ENCHANTMENTS)) {
-            additionEnchantments = stack2.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY).keySet();
+        ItemEnchantments enchantments = stack.getEnchantments();
+        if (stack.is(Items.ENCHANTED_BOOK) && stack.has(DataComponents.STORED_ENCHANTMENTS)) {
+            enchantments = stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
         }
-        List<Holder<Enchantment>> additionEnchantmentsList = additionEnchantments.stream().toList();
-        for (int x = 0; x < additionEnchantments.size(); x++) {
-            Holder<Enchantment> enchantment = additionEnchantmentsList.get(x);
-            int enchantmentLevel = stack2.getEnchantments().getLevel(enchantment);
-            if (stack2.is(Items.ENCHANTED_BOOK) && stack2.has(DataComponents.STORED_ENCHANTMENTS)) {
-                enchantmentLevel = stack2.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY).getLevel(enchantment);
-            }
-            ItemEnchantments itemEnchantments = stack.getEnchantments();
-            if (stack.is(Items.ENCHANTED_BOOK) && stack.has(DataComponents.STORED_ENCHANTMENTS)) itemEnchantments = stack.get(DataComponents.STORED_ENCHANTMENTS);
-            ItemEnchantments itemEnchantments2 = stack2.getEnchantments();
-            if (stack2.is(Items.ENCHANTED_BOOK) && stack2.has(DataComponents.STORED_ENCHANTMENTS)) itemEnchantments2 = stack2.get(DataComponents.STORED_ENCHANTMENTS);
-            ItemEnchantments outputItemEnchantments = outputStack.getEnchantments();
-            if (outputStack.is(Items.ENCHANTED_BOOK) && outputStack.has(DataComponents.STORED_ENCHANTMENTS)) outputItemEnchantments = outputStack.get(DataComponents.STORED_ENCHANTMENTS);
-            if (!stack.is(Items.ENCHANTED_BOOK) && ((EnchantingHelper.hasEnchantment(stack, enchantment.unwrapKey().get()) && stack.getEnchantments().getLevel(enchantment) >= enchantmentLevel) || !EnchantingHelper.hasEnchantment(stack, enchantment.unwrapKey().get()) || (outputItemEnchantments.getLevel(enchantment) >= itemEnchantments.getLevel(enchantment) && outputItemEnchantments.getLevel(enchantment) >= itemEnchantments2.getLevel(enchantment)))) value += enchantment.value().getAnvilCost();
-            if (stack.is(Items.ENCHANTED_BOOK) && stack2.is(Items.ENCHANTED_BOOK) && (EnchantingHelper.getStoredEnchantmentLevel(enchantment, stack) >= enchantmentLevel || !EnchantingHelper.hasEnchantment(stack, enchantment.unwrapKey().get())) && (!EnchantingHelper.hasEnchantment(stack, enchantment.unwrapKey().get()) || !EnchantingHelper.hasEnchantment(stack, enchantment.unwrapKey().get()) || (outputItemEnchantments.getLevel(enchantment) >= itemEnchantments.getLevel(enchantment) && outputItemEnchantments.getLevel(enchantment) >= itemEnchantments2.getLevel(enchantment)))) {
-                value += enchantment.value().getAnvilCost();
-            }
+        List<Holder<Enchantment>> enchantmentsList = enchantments.keySet().stream().toList();
+        for (int x = 0; x < enchantments.size(); x++) {
+            Holder<Enchantment> enchantment = enchantmentsList.get(x);
+            value += enchantment.value().getAnvilCost() * enchantments.getLevel(enchantment);
         }
-        return value;
+        return Math.clamp(value, 1, 99);
     }
 }

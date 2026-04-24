@@ -8,26 +8,26 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 
-public record EnchantingSlots(int slots, int modifier) {
-    public static final Codec<EnchantingSlots> CODEC = RecordCodecBuilder.create(
+public record EnchantmentSlots(int slots, int modifier) {
+    public static final Codec<EnchantmentSlots> CODEC = RecordCodecBuilder.create(
             i -> i.group(
-                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("slots").forGetter(EnchantingSlots::slots),
-                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("modifier").forGetter(EnchantingSlots::modifier)
-            ).apply(i, EnchantingSlots::new)
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("slots").forGetter(EnchantmentSlots::slots),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("modifier").forGetter(EnchantmentSlots::modifier)
+            ).apply(i, EnchantmentSlots::new)
     );
 
-    public static final StreamCodec<ByteBuf, EnchantingSlots> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.VAR_INT, EnchantingSlots::slots,
-            ByteBufCodecs.VAR_INT, EnchantingSlots::modifier,
-            EnchantingSlots::new
+    public static final StreamCodec<ByteBuf, EnchantmentSlots> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.VAR_INT, EnchantmentSlots::slots,
+            ByteBufCodecs.VAR_INT, EnchantmentSlots::modifier,
+            EnchantmentSlots::new
     );
 
     public int getTotal() {
         return this.slots + this.modifier;
     }
 
-    public EnchantingSlots setModifier(int modifier) {
-        return new EnchantingSlots(this.slots, 0);
+    public EnchantmentSlots setModifier(int modifier) {
+        return new EnchantmentSlots(this.slots, 0);
     }
 
     public int getRemaining(ItemStack stack) {
@@ -38,11 +38,11 @@ public record EnchantingSlots(int slots, int modifier) {
         return getTotal() - info.slotsUsed();
     }
 
-    public static EnchantingSlots create(int slots) {
-        return new EnchantingSlots(slots, 0);
+    public static EnchantmentSlots create(int slots) {
+        return new EnchantmentSlots(slots, 0);
     }
 
-    public EnchantingSlots {
+    public EnchantmentSlots {
         if (slots < 0) {
             throw new IllegalArgumentException("Base slot count must not be negative, but was " + slots);
         }

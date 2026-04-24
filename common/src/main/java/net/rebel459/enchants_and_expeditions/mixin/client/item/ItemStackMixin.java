@@ -8,7 +8,7 @@ import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
 import net.rebel459.enchants_and_expeditions.registry.EaEItems;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
-import net.rebel459.enchants_and_expeditions.util.EnchantingSlots;
+import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import net.rebel459.item_tooltips.util.ScreenHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -47,7 +47,7 @@ public abstract class ItemStackMixin {
     private void addEnchantingSlots(Consumer<Component> consumer, TooltipDisplay display, @Nullable Player player, CallbackInfo ci) {
         ItemStack stack = ItemStack.class.cast(this);
         if (EnchantingHelper.hasSlots(stack) && !stack.has(DataComponents.STORED_ENCHANTMENTS)) {
-            EnchantingSlots slots = stack.get(EaEDataComponents.ENCHANTING_SLOTS.get());
+            EnchantmentSlots slots = stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get());
             consumer.accept(Component.literal("Slots Used: " + (slots.getTotal() - slots.getRemaining(stack)) + " / " + slots.getTotal()).withStyle(ChatFormatting.GRAY));
         }
     }

@@ -51,6 +51,9 @@ public class EaEConfig implements ConfigData {
         public boolean repeat_table_enchanting = true;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
+        public boolean new_table_costs = true;
+        @ConfigEntry.Category("config")
+        @ConfigEntry.Gui.Tooltip
         public boolean experience_rebalance = true;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip

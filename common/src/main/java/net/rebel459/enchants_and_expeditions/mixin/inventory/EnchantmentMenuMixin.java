@@ -37,6 +37,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EnchantingTableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.rebel459.enchants_and_expeditions.util.EnchantmentInfo;
+import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -121,12 +122,18 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 "[EaE] check targetPos={} targetBlock={} expectMatch={} actualMatch={} gapPos={} gapBlock={} transmitterMatch={}",
                 targetPos, EaE$blockId(targetState), block.getDescriptionId(), isMatch, gapPos, EaE$blockId(gapState), isTransmitter
         );
-        if (isMatch && block == Blocks.CHISELED_BOOKSHELF) {
-            if (level.getBlockEntity(targetPos) instanceof ChiseledBookShelfBlockEntity chiseledBookShelf) {
-                this.chiseledBookshelfItems.addAll(chiseledBookShelf.getItems());
-            }
-        }
         return isMatch && isTransmitter;
+    }
+
+    @Unique
+    private int collectChiseledBookshelfItems(Level level, BlockPos enchantingTablePos, BlockPos bookshelfPos, List<ItemStack> sink) {
+        BlockPos targetPos = enchantingTablePos.offset(bookshelfPos);
+        if (level.getBlockEntity(targetPos) instanceof ChiseledBookShelfBlockEntity chiseledBookShelf) {
+            List<ItemStack> items = chiseledBookShelf.getItems();
+            sink.addAll(items);
+            return items.size();
+        }
+        return 0;
     }
 
     @Unique
@@ -143,7 +150,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 this.access.execute((level, blockPos) -> {
                     IdMap<Holder<net.minecraft.world.item.enchantment.Enchantment>> idMap =
                             level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).asHolderIdMap();
-                    int ix = 0;
+                    float ix = 0;
 
                     this.totalBookshelves = 0;
                     this.bookshelves = 0;
@@ -165,12 +172,13 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     this.chiseledBookshelfItems.clear();
 
                     for (BlockPos off : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
-                        if (EnchantingTableBlock.isValidBookShelf(level, blockPos, off)) {
-                            ix++;
-                        }
                         if (this.totalBookshelves < 15) {
+                            if (EnchantingTableBlock.isValidBookShelf(level, blockPos, off)) {
+                                ix++;
+                            }
                             if (enchantingBlockCheck(level, blockPos, off, Blocks.CHISELED_BOOKSHELF)) {
                                 this.totalBookshelves++;
+                                ix += (collectChiseledBookshelfItems(level, blockPos, off, this.chiseledBookshelfItems) / 6F);
                             }
                             if (enchantingBlockCheck(level, blockPos, off, Blocks.BOOKSHELF)) {
                                 this.bookshelves++;
@@ -233,13 +241,15 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
                     this.random.setSeed(this.enchantmentSeed.get());
 
+                    int bookshelfPower = Math.round(ix);
+
                     for (int j = 0; j < 3; j++) {
-                        this.costs[j] = EnchantmentHelper.getEnchantmentCost(this.random, j, ix, itemStack);
+                        this.costs[j] = EnchantmentHelper.getEnchantmentCost(this.random, j, bookshelfPower, itemStack);
                         if (this.costs[j] >= 1) {
                             EnchantmentInfo info = EnchantingHelper.getInfo(itemStack);
                             this.costs[j] += info.standardEnchantments() + info.powerfulEnchantments() * 2 + info.blessings() * 3 + this.totalAltars * 3 - this.stabilityAltars * 6 - this.powerAltars * 6;
                         }
-                        if (EnchantmentHelper.getEnchantmentCost(this.random, j, ix, itemStack) >= 1) {
+                        if (EnchantmentHelper.getEnchantmentCost(this.random, j, bookshelfPower, itemStack) >= 1) {
                             if (this.costs[0] < 1) {
                                 this.costs[0] = 1;
                             } else if (this.costs[1] < 2) {
@@ -297,20 +307,22 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     }
 
     @Unique
-    private int calculateEnchantingPower(Enchantable enchantable, int basePower, int secondaryPower, int slot) {
+    private int calculateEnchantingPower(Enchantable enchantable, ItemStack stack, EnchantmentInfo info, int basePower, int secondaryPower, int slot) {
         int returnPower = (int) (basePower * 0.25 + secondaryPower * 1.25);
         int enchantability = Math.max(0, enchantable.value() + this.powerAltars * 3 - this.stabilityAltars * 3);
         returnPower += 1 + random.nextInt(enchantability / 4 + 1) + random.nextInt(enchantability / 4 + 1);
         float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
-        returnPower = Mth.clamp(Math.round((float)returnPower + (float)returnPower * f), 1, Integer.MAX_VALUE);
-        return returnPower * (slot + 1) / 3;
+        returnPower = Mth.clamp(Math.round((float) returnPower + (float) returnPower * f), 1, Integer.MAX_VALUE);
+        int maxPower = 36;
+        if (stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(info) == 0 && info.blessings() == 0 && EnchantingHelper.allMaxLevel(stack)) maxPower = 48;
+        return Math.min(returnPower * (slot + 1) / 3, maxPower);
     }
 
     @Unique
     private List<EnchantmentInstance> EaE$selectEnchantment(RandomSource random, ItemStack stack, int slot, int enchantingPower, RegistryAccess registryAccess) {
         List<EnchantmentInstance> list = Lists.newArrayList();
         Enchantable enchantable = stack.get(DataComponents.ENCHANTABLE);
-        if (enchantable == null) {
+        if (enchantable == null || !EnchantingHelper.hasSlots(stack)) {
             return list;
         }
 
@@ -352,18 +364,18 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> corruptionCurses = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EnchantmentTags.CURSE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
 
-        enchantingPower += Math.round(0.25F * this.chiseledBookshelfItems.size());
+        EnchantmentInfo info = EnchantingHelper.getInfo(stack);
 
-        enchantingPower = calculateEnchantingPower(enchantable, enchantingPower, enchantingPower, slot);
-        int manaPower = calculateEnchantingPower(enchantable, enchantingPower, this.mana * 2, slot);
-        int frostPower = calculateEnchantingPower(enchantable, enchantingPower, this.frost * 2, slot);
-        int scorchPower = calculateEnchantingPower(enchantable, enchantingPower, this.scorch * 2, slot);
-        int flowPower = calculateEnchantingPower(enchantable, enchantingPower, this.flow * 2, slot);
-        int chaosPower = calculateEnchantingPower(enchantable, enchantingPower, this.chaos * 2, slot);
-        int greedPower = calculateEnchantingPower(enchantable, enchantingPower, this.greed * 2, slot);
-        int mightPower = calculateEnchantingPower(enchantable, enchantingPower * 2, this.might * 2, slot);
+        int basePower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, enchantingPower, slot);
+        int manaPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.mana * 2, slot);
+        int frostPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.frost * 2, slot);
+        int scorchPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.scorch * 2, slot);
+        int flowPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.flow * 2, slot);
+        int chaosPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.chaos * 2, slot);
+        int greedPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.greed * 2, slot);
+        int mightPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.might * 2, slot);
 
-        List<EnchantmentInstance> baseList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, baseEnchantments.stream());
+        List<EnchantmentInstance> baseList = EnchantmentHelper.getAvailableEnchantmentResults(basePower, stack, baseEnchantments.stream());
 
         List<EnchantmentInstance> manaList = EnchantmentHelper.getAvailableEnchantmentResults(manaPower, stack, manaEnchantments.stream());
         List<EnchantmentInstance> frostList = EnchantmentHelper.getAvailableEnchantmentResults(frostPower, stack, frostEnchantments.stream());
@@ -373,35 +385,35 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         List<EnchantmentInstance> greedList = EnchantmentHelper.getAvailableEnchantmentResults(greedPower, stack, greedEnchantments.stream());
         List<EnchantmentInstance> mightList = EnchantmentHelper.getAvailableEnchantmentResults(mightPower, stack, mightEnchantments.stream());
 
-        List<EnchantmentInstance> manaBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, manaBlessings.stream());
-        List<EnchantmentInstance> frostBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, frostBlessings.stream());
-        List<EnchantmentInstance> scorchBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, scorchBlessings.stream());
-        List<EnchantmentInstance> flowBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, flowBlessings.stream());
-        List<EnchantmentInstance> chaosBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, chaosBlessings.stream());
-        List<EnchantmentInstance> greedBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, greedBlessings.stream());
-        List<EnchantmentInstance> mightBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, mightBlessings.stream());
+        List<EnchantmentInstance> manaBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(manaPower, stack, manaBlessings.stream());
+        List<EnchantmentInstance> frostBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(frostPower, stack, frostBlessings.stream());
+        List<EnchantmentInstance> scorchBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(scorchPower, stack, scorchBlessings.stream());
+        List<EnchantmentInstance> flowBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(flowPower, stack, flowBlessings.stream());
+        List<EnchantmentInstance> chaosBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(chaosPower, stack, chaosBlessings.stream());
+        List<EnchantmentInstance> greedBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(greedPower, stack, greedBlessings.stream());
+        List<EnchantmentInstance> mightBlessingList = EnchantmentHelper.getAvailableEnchantmentResults(mightPower, stack, mightBlessings.stream());
 
-        List<EnchantmentInstance> curseList = EnchantmentHelper.getAvailableEnchantmentResults(enchantingPower, stack, corruptionCurses.stream());
+        List<EnchantmentInstance> curseList = EnchantmentHelper.getAvailableEnchantmentResults(basePower, stack, corruptionCurses.stream());
 
-        baseList = EnchantingHelper.evaluateEnchantments(stack, baseList, enchantingPower, slot);
+        baseList = EnchantingHelper.evaluateEnchantments(stack, baseList, basePower);
 
-        manaList = EnchantingHelper.evaluateEnchantments(stack, manaList, enchantingPower, slot);
-        frostList = EnchantingHelper.evaluateEnchantments(stack, frostList, enchantingPower, slot);
-        scorchList = EnchantingHelper.evaluateEnchantments(stack, scorchList, enchantingPower, slot);
-        flowList = EnchantingHelper.evaluateEnchantments(stack, flowList, enchantingPower, slot);
-        chaosList = EnchantingHelper.evaluateEnchantments(stack, chaosList, enchantingPower, slot);
-        greedList = EnchantingHelper.evaluateEnchantments(stack, greedList, enchantingPower, slot);
-        mightList = EnchantingHelper.evaluateEnchantments(stack, mightList, enchantingPower, slot);
+        manaList = EnchantingHelper.evaluateEnchantments(stack, manaList, manaPower);
+        frostList = EnchantingHelper.evaluateEnchantments(stack, frostList, frostPower);
+        scorchList = EnchantingHelper.evaluateEnchantments(stack, scorchList, scorchPower);
+        flowList = EnchantingHelper.evaluateEnchantments(stack, flowList, flowPower);
+        chaosList = EnchantingHelper.evaluateEnchantments(stack, chaosList, chaosPower);
+        greedList = EnchantingHelper.evaluateEnchantments(stack, greedList, greedPower);
+        mightList = EnchantingHelper.evaluateEnchantments(stack, mightList, mightPower);
 
-        manaBlessingList = EnchantingHelper.evaluateEnchantments(stack, manaBlessingList, enchantingPower, slot);
-        frostBlessingList = EnchantingHelper.evaluateEnchantments(stack, frostBlessingList, enchantingPower, slot);
-        scorchBlessingList = EnchantingHelper.evaluateEnchantments(stack, scorchBlessingList, enchantingPower, slot);
-        flowBlessingList = EnchantingHelper.evaluateEnchantments(stack, flowBlessingList, enchantingPower, slot);
-        chaosBlessingList = EnchantingHelper.evaluateEnchantments(stack, chaosBlessingList, enchantingPower, slot);
-        greedBlessingList = EnchantingHelper.evaluateEnchantments(stack, greedBlessingList, enchantingPower, slot);
-        mightBlessingList = EnchantingHelper.evaluateEnchantments(stack, mightBlessingList, enchantingPower, slot);
+        manaBlessingList = EnchantingHelper.evaluateEnchantments(stack, manaBlessingList, manaPower);
+        frostBlessingList = EnchantingHelper.evaluateEnchantments(stack, frostBlessingList, frostPower);
+        scorchBlessingList = EnchantingHelper.evaluateEnchantments(stack, scorchBlessingList, scorchPower);
+        flowBlessingList = EnchantingHelper.evaluateEnchantments(stack, flowBlessingList, flowPower);
+        chaosBlessingList = EnchantingHelper.evaluateEnchantments(stack, chaosBlessingList, chaosPower);
+        greedBlessingList = EnchantingHelper.evaluateEnchantments(stack, greedBlessingList, greedPower);
+        mightBlessingList = EnchantingHelper.evaluateEnchantments(stack, mightBlessingList, mightPower);
 
-        curseList = EnchantingHelper.evaluateEnchantments(stack, curseList, enchantingPower, slot);
+        curseList = EnchantingHelper.evaluateEnchantments(stack, curseList, basePower);
 
         if (baseList.isEmpty()
                         && manaList.isEmpty() && frostList.isEmpty() && scorchList.isEmpty() && flowList.isEmpty() && chaosList.isEmpty() && greedList.isEmpty() && mightList.isEmpty()
@@ -415,7 +427,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         boolean firstEnchant = false;
         int attempts = 0;
 
-        while ((random.nextInt(50) <= enchantingPower || !firstEnchant || list.isEmpty()) && attempts < 10) {
+        while ((random.nextInt(50) <= basePower || !firstEnchant || list.isEmpty()) && attempts < 10) {
             if (!list.isEmpty()) {
                 EnchantmentHelper.filterCompatibleEnchantments(baseList, list.getLast());
                 EnchantmentHelper.filterCompatibleEnchantments(manaList, list.getLast());
@@ -494,18 +506,17 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
             if (!firstEnchant) {
                 firstEnchant = true;
-            } else if (list.isEmpty()) {
-                enchantingPower *= 2;
-            } else //if (!(slot + 1 > list.size())) // this guarantees a minimum enchantment amount per slot
-            {
-                enchantingPower /= 2;
+            } else if (list.isEmpty() && !stack.isEnchanted()) {
+                basePower *= 2;
+            } else {
+                basePower /= 2;
             }
 
             attempts += 1;
         }
 
         if (EnchantingHelper.hasSlots(stack)) {
-            while (EnchantingHelper.combinedEnchantmentScore(stack, list) > stack.get(EaEDataComponents.ENCHANTING_SLOTS.get()).getRemaining(stack) && EaEConfig.get().general.enchantment_slots) {
+            while (EnchantingHelper.combinedEnchantmentScore(stack, list) > stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(stack) && EaEConfig.get().general.enchantment_slots) {
                 if (list.size() == 1) {
                     list.removeFirst();
                     break;
@@ -533,12 +544,10 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             // Count bookshelves and altars
             for (BlockPos off : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
                 if (tBooks < 15) {
-                    List<ItemStack> copy = this.chiseledBookshelfItems;
                     if (enchantingBlockCheck(level, tablePos, off, Blocks.CHISELED_BOOKSHELF)) {
-                        this.totalBookshelves++;
+                        tBooks++;
+                        collectChiseledBookshelfItems(level, tablePos, off, chiseledBooks);
                     }
-                    chiseledBooks = this.chiseledBookshelfItems;
-                    this.chiseledBookshelfItems = copy;
                     if (enchantingBlockCheck(level, tablePos, off, Blocks.BOOKSHELF)) { nBooks++; tBooks++; }
                     if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.ARCANE_BOOKSHELF.get())) { aBooks++; tBooks++; }
                     if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.GLACIAL_BOOKSHELF.get())) { gBooks++; tBooks++; }
@@ -680,6 +689,6 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             ordinal=1
     )
     private int changeCost(int enchantmentCost) {
-        return EnchantingHelper.calculateEnchantingCost(this.costs[enchantmentCost - 1]);
+        return EnchantingHelper.calculateEnchantingCost(this.costs[enchantmentCost - 1], enchantmentCost - 1);
     }
 }

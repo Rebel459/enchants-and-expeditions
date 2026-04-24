@@ -23,7 +23,7 @@ public abstract class ItemStackMixin {
     private void canEnchant(CallbackInfoReturnable<Boolean> cir) {
         if (!EaEConfig.get().general.repeat_table_enchanting) return;
         ItemStack stack = ItemStack.class.cast(this);
-        if (!cir.getReturnValue() && stack.isEnchanted() && EnchantingHelper.hasSlots(stack) && (stack.get(EaEDataComponents.ENCHANTING_SLOTS.get()).getRemaining(stack) > 0) || EnchantingHelper.getBlessings(stack) == 0 || !EnchantingHelper.allMaxLevel(stack)) {
+        if (!cir.getReturnValue() && stack.isEnchanted() && EnchantingHelper.hasSlots(stack) && (stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(stack) > 0) || EnchantingHelper.getBlessings(stack) == 0 || !EnchantingHelper.allMaxLevel(stack)) {
             cir.setReturnValue(true);
         }
     }

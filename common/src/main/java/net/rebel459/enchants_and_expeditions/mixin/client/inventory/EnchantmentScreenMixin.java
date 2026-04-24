@@ -1,14 +1,19 @@
 package net.rebel459.enchants_and_expeditions.mixin.client.inventory;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.logging.LogUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.EnchantmentScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FontDescription;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
@@ -39,6 +44,10 @@ public abstract class EnchantmentScreenMixin {
     private static final int TOOLTIP_BG_COLOR = 0xA0100010; // Semi-translucent background
     @Unique
     private static final int TOOLTIP_BORDER = 0xA028007F; // Semi-translucent darker purple border
+    @Unique
+    private static final FontDescription ENABLED_BADGE_FONT = new FontDescription.Resource(EnchantsAndExpeditions.id("enchant_badge_enabled"));
+    @Unique
+    private static final FontDescription DISABLED_BADGE_FONT = new FontDescription.Resource(EnchantsAndExpeditions.id("enchant_badge_disabled"));
 
     @Inject(method = "init", at = @At("TAIL"))
     private void EaE$requestAttributesOnce(CallbackInfo ci) {
@@ -101,6 +110,33 @@ public abstract class EnchantmentScreenMixin {
         int[] copy = costs.clone();
         copy[i] = 0;
         return copy;
+    }
+
+    @WrapOperation(
+            method = "extractBackground",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V",
+                    ordinal = 2
+            )
+    )
+    private void EaE$drawDisabledBadgeText(GuiGraphicsExtractor graphics, RenderPipeline renderPipeline, Identifier location, int x, int y, int width, int height, Operation<Void> original, @Local(name = "i") int i) {
+
+        original.call(graphics, renderPipeline, location, x, y, width, height);
+        this.EaE$drawBadgeGlyph(graphics, x, y, EnchantingHelper.calculateEnchantingCost(EnchantmentScreen.class.cast(this).getMenu().costs[i], i), DISABLED_BADGE_FONT);
+    }
+
+    @WrapOperation(
+            method = "extractBackground",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V",
+                    ordinal = 5
+            )
+    )
+    private void EaE$drawEnabledBadgeText(GuiGraphicsExtractor graphics, RenderPipeline renderPipeline, Identifier location, int x, int y, int width, int height, Operation<Void> original, @Local(name = "i") int i) {
+        original.call(graphics, renderPipeline, location, x, y, width, height);
+        this.EaE$drawBadgeGlyph(graphics, x, y, EnchantingHelper.calculateEnchantingCost(EnchantmentScreen.class.cast(this).getMenu().costs[i], i), ENABLED_BADGE_FONT);
     }
 
     @Inject(method = "extractBackground", at = @At("TAIL"))
@@ -191,14 +227,44 @@ public abstract class EnchantmentScreenMixin {
         return mouseX >= leftPos() && mouseX <= leftPos() + 14 && mouseY >= topPos() && mouseY <= topPos() + 14;
     }
 
+    @Unique
+    private static final int BADGE_DIGIT_STEP = 6;
+    @Unique
+    private static final int BADGE_TEXT_OFFSET_X = 0;
+    @Unique
+    private static final int BADGE_TEXT_OFFSET_Y = 0;
+
+    @Unique
+    private void EaE$drawBadgeGlyph(GuiGraphicsExtractor graphics, int x, int y, int value, FontDescription fontId) {
+        EnchantmentScreen screen = EnchantmentScreen.class.cast(this);
+        String text = Integer.toString(value);
+
+        int totalWidth = (text.length() - 1) * BADGE_DIGIT_STEP + 16;
+        int startX = x + (16 - totalWidth) / 2 + BADGE_TEXT_OFFSET_X;
+        int drawY = y + BADGE_TEXT_OFFSET_Y;
+
+        for (int index = 0; index < text.length(); index++) {
+            Component glyph = Component.literal(String.valueOf(text.charAt(index)))
+                    .withStyle(style -> style.withFont(fontId));
+
+            graphics.text(
+                    screen.getFont(),
+                    glyph,
+                    startX + index * BADGE_DIGIT_STEP,
+                    drawY,
+                    0xFFFFFFFF,
+                    false
+            );
+        }
+    }
 
     @ModifyVariable(method = "extractRenderState", at = @At(value = "STORE"), name = "cost")
     private int showEnchantingCost(int cost, @Local(ordinal = 4) int minLevel) {
-        return EnchantingHelper.calculateEnchantingCost(minLevel);
+        return EnchantingHelper.calculateEnchantingCost(minLevel, cost);
     }
 
     @ModifyConstant(method = "extractBackground", constant = @Constant(intValue = 1, ordinal = 0))
     private int enchantmentSlotDisabledTexture(int original, @Local(name = "i") int i, @Local(name = "cost") int cost) {
-        return EnchantingHelper.calculateEnchantingCost(cost) - i;
+        return EnchantingHelper.calculateEnchantingCost(cost, original) - i;
     }
 }

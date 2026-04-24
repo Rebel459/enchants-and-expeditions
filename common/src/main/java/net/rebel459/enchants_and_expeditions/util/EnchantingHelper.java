@@ -77,10 +77,10 @@ public class EnchantingHelper {
     public static boolean hasSlots(ItemStack stack) {
         if (!stack.has(DataComponents.ENCHANTABLE) || stack.is(EaEItemTags.VARIABLE_REPAIR_COST)) return false;
         else {
-            if (!stack.has(EaEDataComponents.ENCHANTING_SLOTS.get())) {
-                stack.set(EaEDataComponents.ENCHANTING_SLOTS.get(), EnchantingSlots.create(Math.clamp(Math.round(stack.get(DataComponents.ENCHANTABLE).value() / 4D), 3, 5)));
+            if (!stack.has(EaEDataComponents.ENCHANTMENT_SLOTS.get())) {
+                stack.set(EaEDataComponents.ENCHANTMENT_SLOTS.get(), EnchantmentSlots.create(Math.clamp(Math.round(stack.get(DataComponents.ENCHANTABLE).value() / 4D), 3, 5)));
             }
-            return stack.get(EaEDataComponents.ENCHANTING_SLOTS.get()).slots() != 0;
+            return stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).slots() != 0;
         }
     }
 
@@ -124,6 +124,18 @@ public class EnchantingHelper {
     public static List<Double> getBookAttributes(ItemEnchantments enchantments) {
         double locMana = 0, locFrost = 0, locScorch = 0, locFlow = 0, locChaos = 0, locGreed = 0, locMight = 0, locCorruption = 0, locDivinity = 0;
         for (Holder<Enchantment> enchantment : enchantments.keySet()) {
+            if (enchantment.is(EaEEnchantmentTags.GENERIC) || enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) {
+                double increase = 0.015;
+                if (enchantment.is(EaEEnchantmentTags.BLESSING)) increase = 0.03;
+                locMana += increase;
+                locFrost += increase;
+                locScorch += increase;
+                locFlow += increase;
+                locChaos += increase;
+                locGreed += increase;
+                locMight += increase;
+                continue;
+            }
             if (enchantment.is(EaEEnchantmentTags.MANA) || enchantment.is(EaEEnchantmentTags.MANA_BLESSING)) {
                 locMana += 0.1;
                 if (enchantment.is(EaEEnchantmentTags.BLESSING)) locMana += 0.1;
@@ -159,8 +171,7 @@ public class EnchantingHelper {
         return List.of(locMana, locFrost, locScorch, locFlow, locChaos, locGreed, locMight, locCorruption, locDivinity);
     }
 
-    public static List<EnchantmentInstance> evaluateEnchantments(ItemStack stack, List<EnchantmentInstance> list, int level, int slot) {
-        slot += 1;
+    public static List<EnchantmentInstance> evaluateEnchantments(ItemStack stack, List<EnchantmentInstance> list, int level) {
         List<Holder<Enchantment>> stackEnchantments = stack.getEnchantments().keySet().stream().toList();
         ItemEnchantments existingEnchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
 
@@ -184,7 +195,7 @@ public class EnchantingHelper {
 
             int maxLevel = instance.enchantment().value().getMaxLevel();
             int newLevel = stackLevel + 1;
-            if (stackLevel < maxLevel && ((stackLevel <= slot) || slot == 3) && level >= instance.enchantment().value().definition().minCost().calculate(newLevel)) {
+            if (stackLevel < maxLevel && (level >= instance.enchantment().value().definition().minCost().calculate(newLevel) || level >= 30)) {
                 normalized.add(new EnchantmentInstance(instance.enchantment(), newLevel));
             }
         }
@@ -222,7 +233,7 @@ public class EnchantingHelper {
         }
         if (EaEConfig.get().general.enchantment_slots && hasSlots(stack)) {
             list.removeAll(enchantmentList);
-            while (combinedEnchantmentScore(stack, enchantmentList) > stack.get(EaEDataComponents.ENCHANTING_SLOTS.get()).getRemaining(stack)) {
+            while (combinedEnchantmentScore(stack, enchantmentList) > stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(stack)) {
                 if (enchantmentList.size() == 1) {
                     enchantmentList.removeFirst();
                     break;
@@ -244,7 +255,7 @@ public class EnchantingHelper {
 
     public static boolean onRandomLoot(Holder<Enchantment> enchantment, RandomSource randomSource) {
         if (randomSource.nextInt(1, 5) < 4) {
-            return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.ENCHANTING_TABLE_BLESSING)) || configureEnchantments(enchantment);
+            return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) || configureEnchantments(enchantment);
         }
         if (randomSource.nextInt(1, 3) < 2) {
             return !enchantment.is(EnchantmentTags.CURSE) || configureEnchantments(enchantment);
@@ -254,7 +265,7 @@ public class EnchantingHelper {
 
     public static boolean onRandomlyEnchantedLoot(Holder<Enchantment> enchantment, RandomSource randomSource) {
         if (randomSource.nextInt(1, 3) < 2) {
-            return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.ENCHANTING_TABLE_BLESSING)) || enchantment.is(EnchantmentTags.CURSE) || configureEnchantments(enchantment);
+            return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) || enchantment.is(EnchantmentTags.CURSE) || configureEnchantments(enchantment);
         }
         return onRandomLoot(enchantment, randomSource.fork());
     }
@@ -364,7 +375,9 @@ public class EnchantingHelper {
         return entityCount;
     }
 
-    public static int calculateEnchantingCost(int levels) {
-        return Math.clamp(levels / 3, 1, 30);
+    public static int calculateEnchantingCost(int levels, int slot) {
+        int cost = slot + 1;
+        if (EaEConfig.get().general.new_table_costs) cost = Math.clamp(levels / 3, cost, 30);
+        return cost;
     }
 }
