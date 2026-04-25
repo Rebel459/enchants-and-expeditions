@@ -4,9 +4,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -121,4 +123,5 @@ public class EaEDataComponents {
     static UnifiedRegistries.DataComponentTypes COMPONENTS = UnifiedRegistries.DataComponentTypes.create(EnchantsAndExpeditions.MOD_ID);
 
     public static final Supplier<DataComponentType<EnchantmentSlots>> ENCHANTMENT_SLOTS = COMPONENTS.register("enchantment_slots", (b) -> b.persistent(EnchantmentSlots.CODEC).networkSynchronized(EnchantmentSlots.STREAM_CODEC).cacheEncoding());
+    public static final Supplier<DataComponentType<Integer>> REROLLS = COMPONENTS.register("rerolls", (b) -> b.persistent(ExtraCodecs.NON_NEGATIVE_INT).ignoreSwapAnimation().networkSynchronized(ByteBufCodecs.VAR_INT));
 }

@@ -2,6 +2,7 @@ package net.rebel459.enchants_and_expeditions.mixin.client.item;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.rebel459.enchants_and_expeditions.registry.EaEBlocks;
 import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
@@ -46,9 +47,17 @@ public abstract class ItemStackMixin {
     @Inject(method = "addAttributeTooltips", at = @At("TAIL"))
     private void addEnchantingSlots(Consumer<Component> consumer, TooltipDisplay display, @Nullable Player player, CallbackInfo ci) {
         ItemStack stack = ItemStack.class.cast(this);
-        if (EnchantingHelper.hasSlots(stack) && !stack.has(DataComponents.STORED_ENCHANTMENTS)) {
+        if (EnchantingHelper.hasSlots(stack) && !stack.has(DataComponents.STORED_ENCHANTMENTS) && stack.getItem() != Items.BOOK) {
             EnchantmentSlots slots = stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get());
-            consumer.accept(Component.literal("Slots Used: " + (slots.getTotal() - slots.getRemaining(stack)) + " / " + slots.getTotal()).withStyle(ChatFormatting.GRAY));
+            ChatFormatting formatting = ChatFormatting.GRAY;
+            if (slots.modifier() > 0) formatting = ChatFormatting.BLUE;
+            else if (slots.modifier() < 0) formatting = ChatFormatting.RED;
+            consumer.accept(
+                    Component.literal("")
+                            .append(Component.translatable("tooltip.enchants_and_expeditions.slots_used").withStyle(ChatFormatting.GRAY))
+                            .append(Component.literal(": " + (slots.getTotal() - slots.getRemaining(stack)) + " / ").withStyle(ChatFormatting.GRAY))
+                            .append(Component.literal(String.valueOf(slots.getTotal())).withStyle(formatting))
+            );
         }
     }
 
@@ -57,7 +66,7 @@ public abstract class ItemStackMixin {
         return ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(value);
     }
 
-    @Inject(method = "addDetailsToTooltip", at = @At("TAIL"))
+/*    @Inject(method = "addDetailsToTooltip", at = @At("TAIL"))
     private void addBookAttributes(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Player player, TooltipFlag tooltipFlag, Consumer<Component> consumer, CallbackInfo ci) {
         ItemStack stack = ItemStack.class.cast(this);
         if (stack.has(DataComponents.STORED_ENCHANTMENTS)) {
@@ -76,7 +85,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity, true));
             }
         }
-    }
+    }*/
 
     @Inject(method = "addDetailsToTooltip", at = @At("HEAD"))
     private void addAttributes(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Player player, TooltipFlag tooltipFlag, Consumer<Component> consumer, CallbackInfo ci) {

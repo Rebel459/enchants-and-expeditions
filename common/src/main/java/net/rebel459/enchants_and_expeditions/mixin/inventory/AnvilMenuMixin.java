@@ -11,7 +11,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
@@ -37,7 +36,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Mixin(AnvilMenu.class)
 public abstract class AnvilMenuMixin {
@@ -200,7 +198,6 @@ public abstract class AnvilMenuMixin {
 
             EaE$bookLimit();
             EaE$modifyPrice();
-            EaE$repairBooksOnCombine();
 
             anvilMenu.broadcastChanges();
         } else {
@@ -267,7 +264,7 @@ public abstract class AnvilMenuMixin {
             int enchantCost;
             float multiplier = 1;
 
-            enchantCost = evaluateEnchantCost(outputStack);
+            enchantCost = EaE$evaluateEnchantCost(outputStack);
             if (outputStack.has(DataComponents.ENCHANTABLE)) multiplier -= Math.min(25, outputStack.get(DataComponents.ENCHANTABLE).value()) * 0.01F;
             float finalCost = enchantCost * multiplier;
             cost.set((int) finalCost);
@@ -291,17 +288,6 @@ public abstract class AnvilMenuMixin {
         if (cost.get() > 99) cost.set(99);
     }
 
-    @Unique
-    protected void EaE$repairBooksOnCombine() {
-        AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
-        ItemStack inputStack = anvilMenu.inputSlots.getItem(0);
-        ItemStack additionStack = anvilMenu.inputSlots.getItem(1);
-        ItemStack outputStack = anvilMenu.resultSlots.getItem(0);
-        if (inputStack.is(Items.ENCHANTED_BOOK) && additionStack.is(Items.ENCHANTED_BOOK) && outputStack.is(Items.ENCHANTED_BOOK)) {
-            outputStack.setDamageValue((int) Math.min(0, (inputStack.getDamageValue() + additionStack.getDamageValue()) - outputStack.getMaxDamage() * 1.1F));
-        }
-    }
-
     @Inject(method = "onTake", at = @At(value = "HEAD"), cancellable = true)
     protected void EaE$onTake(Player player, ItemStack stack, CallbackInfo ci) {
         AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
@@ -317,18 +303,7 @@ public abstract class AnvilMenuMixin {
                 itemStack.shrink(anvilMenu.repairItemCountCost);
                 anvilMenu.inputSlots.setItem(1, itemStack);
             } else {
-                if (additionItem.is(Items.ENCHANTED_BOOK) && !stack.is(Items.ENCHANTED_BOOK)) {
-                    additionItem.setDamageValue(additionItem.getDamageValue() + 1);
-                    if (additionItem.getDamageValue() < additionItem.getMaxDamage())
-                        anvilMenu.inputSlots.setItem(1, additionItem);
-                    else {
-                        anvilMenu.inputSlots.setItem(1, ItemStack.EMPTY);
-                        anvilMenu.player.playSound(SoundEvents.ITEM_BREAK.value());
-                    }
-                }
-                else {
-                    anvilMenu.inputSlots.setItem(1, ItemStack.EMPTY);
-                }
+                anvilMenu.inputSlots.setItem(1, ItemStack.EMPTY);
             }
         } else if (!anvilMenu.onlyRenaming) {
             if (additionItem.is(Items.ENCHANTED_BOOK) && !stack.is(Items.ENCHANTED_BOOK)) {
@@ -362,15 +337,6 @@ public abstract class AnvilMenuMixin {
             }
 
         });
-
-        if (anvilMenu.inputSlots.getItem(1).is(Items.ENCHANTED_BOOK)) {
-            ItemStack book = anvilMenu.inputSlots.getItem(1).copy();
-            ItemEnchantments itemEnchantments = EnchantmentHelper.updateEnchantments(book, mutable -> mutable.removeIf(holder -> holder.is(EnchantmentTags.CURSE) || holder.is(EaEEnchantmentTags.BLESSING)));
-            if (book.is(Items.ENCHANTED_BOOK) && itemEnchantments.isEmpty()) {
-                book = book.transmuteCopy(Items.BOOK);
-            }
-            anvilMenu.inputSlots.setItem(1, book);
-        }
         ci.cancel();
     }
 
@@ -385,7 +351,7 @@ public abstract class AnvilMenuMixin {
     }
 
     @Unique
-    public int evaluateEnchantCost(ItemStack stack) {
+    public int EaE$evaluateEnchantCost(ItemStack stack) {
         int value = 0;
         ItemEnchantments enchantments = stack.getEnchantments();
         if (stack.is(Items.ENCHANTED_BOOK) && stack.has(DataComponents.STORED_ENCHANTMENTS)) {

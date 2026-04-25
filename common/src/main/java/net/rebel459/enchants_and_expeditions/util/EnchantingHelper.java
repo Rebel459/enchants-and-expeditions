@@ -84,6 +84,19 @@ public class EnchantingHelper {
         }
     }
 
+    public static void addReroll(ItemStack stack) {
+        stack.set(EaEDataComponents.REROLLS.get(), Math.min(getRerolls(stack) + 1, 3));
+    }
+
+    public static void resetRerolls(ItemStack stack) {
+        stack.set(EaEDataComponents.REROLLS.get(), 0);
+    }
+
+    public static int getRerolls(ItemStack stack) {
+        if (!stack.has(EaEDataComponents.REROLLS.get())) stack.set(EaEDataComponents.REROLLS.get(), 0);
+        return stack.get(EaEDataComponents.REROLLS.get());
+    }
+
     public static EnchantmentInfo getInfo(ItemStack stack) {
         return getInfoFromHolder(stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY).keySet().stream().toList());
     }
@@ -125,8 +138,9 @@ public class EnchantingHelper {
         double locMana = 0, locFrost = 0, locScorch = 0, locFlow = 0, locChaos = 0, locGreed = 0, locMight = 0, locCorruption = 0, locDivinity = 0;
         for (Holder<Enchantment> enchantment : enchantments.keySet()) {
             if (enchantment.is(EaEEnchantmentTags.GENERIC) || enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) {
-                double increase = 0.015;
-                if (enchantment.is(EaEEnchantmentTags.BLESSING)) increase = 0.03;
+                double increase = 0.01;
+                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) increase = 0.02;
+                else if (enchantment.is(EaEEnchantmentTags.BLESSING)) increase = 0.03;
                 locMana += increase;
                 locFrost += increase;
                 locScorch += increase;
@@ -138,37 +152,47 @@ public class EnchantingHelper {
             }
             if (enchantment.is(EaEEnchantmentTags.MANA) || enchantment.is(EaEEnchantmentTags.MANA_BLESSING)) {
                 locMana += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locMana += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locMana += 0.1;
+                else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locMana += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.FROST) || enchantment.is(EaEEnchantmentTags.FROST_BLESSING)) {
                 locFrost += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locFrost += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locFrost += 0.1;
+                else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locFrost += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.SCORCH) || enchantment.is(EaEEnchantmentTags.SCORCH_BLESSING)) {
                 locScorch += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locScorch += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locScorch += 0.1;
+                else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locScorch += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.FLOW) || enchantment.is(EaEEnchantmentTags.FLOW_BLESSING)) {
                 locFlow += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locFlow += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locFlow += 0.1;
+                else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locFlow += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.CHAOS) || enchantment.is(EaEEnchantmentTags.CHAOS_BLESSING)) {
                 locChaos += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locChaos += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locChaos += 0.1;
+                else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locChaos += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.GREED) || enchantment.is(EaEEnchantmentTags.GREED_BLESSING)) {
                 locGreed += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locGreed += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locGreed += 0.1;
+                else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locGreed += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.MIGHT) || enchantment.is(EaEEnchantmentTags.MIGHT_BLESSING)) {
                 locMight += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.BLESSING)) locMight += 0.1;
+                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locMight += 0.1;
+                else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locMight += 0.2;
             }
             if (enchantment.is(EnchantmentTags.CURSE)) {
-                locCorruption += 0.2;
+                locCorruption += 0.3;
             }
         }
-        return List.of(locMana, locFrost, locScorch, locFlow, locChaos, locGreed, locMight, locCorruption, locDivinity);
+        List<Double> attributes = new ArrayList<>(List.of(locMana, locFrost, locScorch, locFlow, locChaos, locGreed, locMight, locCorruption, locDivinity));
+        int count = enchantments.size();
+        attributes.replaceAll(attribute -> attribute / count);
+        return attributes;
     }
 
     public static List<EnchantmentInstance> evaluateEnchantments(ItemStack stack, List<EnchantmentInstance> list, int level) {

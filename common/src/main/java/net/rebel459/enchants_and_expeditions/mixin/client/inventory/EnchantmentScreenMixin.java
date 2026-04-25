@@ -5,32 +5,54 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import com.mojang.logging.LogUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
 import net.minecraft.client.gui.screens.inventory.EnchantmentScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.Identifier;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FontDescription;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.EnchantmentMenu;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditionsClient;
 import net.rebel459.enchants_and_expeditions.network.EnchantingAttributes;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.unified.platform.client.UnifiedClientHelpers;
 import org.slf4j.Logger;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mixin(EnchantmentScreen.class)
 public abstract class EnchantmentScreenMixin {
+    @Unique
+    private static final int REROLL_CLUE = -2;
+    @Unique
+    private static final int NO_REROLL_CLUE = -3;
+    @Unique
+    private static final int REROLL_COST = 3;
 
+    @Shadow
+    @Final
+    private static Identifier[] ENABLED_LEVEL_SPRITES;
+    @Shadow
+    @Final
+    private static Identifier[] DISABLED_LEVEL_SPRITES;
     @Unique
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -55,6 +77,86 @@ public abstract class EnchantmentScreenMixin {
             EaE$requestedOnce = true;
             if (EnchantsAndExpeditions.debug) LOGGER.info("[EaE] Client sending C2S Request from EnchantmentScreen.init");
             UnifiedClientHelpers.NETWORKING.send(new EnchantingAttributes.Request());
+        }
+    }
+
+    @Inject(method = "extractBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/EnchantmentMenu;getGoldCount()I", shift =  At.Shift.AFTER), cancellable = true)
+    private void EaE$reroll(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci) {
+        EnchantmentScreen screen = EnchantmentScreen.class.cast(this);
+        EnchantmentMenu menu = screen.getMenu();
+        Player player = screen.minecraft.player;
+        boolean hasInfiniteMaterials = player.hasInfiniteMaterials();
+        int i = 1;
+        boolean isReroll = menu.enchantClue[i] == REROLL_CLUE;
+        boolean isNoReroll = menu.enchantClue[i] == NO_REROLL_CLUE;
+        if (isReroll || isNoReroll) {
+            int rerollXpRequirement = menu.levelClue[i];
+            int rerollCost = EnchantingHelper.calculateEnchantingCost(rerollXpRequirement, 2);
+            int xo = (screen.width - screen.imageWidth) / 2;
+            int yo = (screen.height - screen.imageHeight) / 2;
+            int leftPos = xo + 60;
+            int leftPosText = leftPos + 20;
+            int xx = mouseX - (xo + 60);
+            int yy = mouseY - (yo + 14 + 19 * i);
+            boolean hasEnoughLapis = menu.getGoldCount() >= rerollCost;
+            boolean hasEnoughXp = player.experienceLevel >= rerollXpRequirement;
+            boolean canReroll = isReroll && (hasInfiniteMaterials || hasEnoughLapis && hasEnoughXp);
+            boolean hovered = xx >= 0 && yy >= 0 && xx < 108 && yy < 19;
+            int col = isNoReroll ? ChatFormatting.RED.getColor() : 6839882;
+
+            if (!canReroll) {
+                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, EnchantmentScreen.ENCHANTMENT_SLOT_DISABLED_SPRITE, leftPos, yo + 14 + 19 * i, 108, 19);
+                if (!isNoReroll) {
+                    col = (col & 16711422) >> 1;
+                }
+            } else {
+                if (hovered) {
+                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, EnchantmentScreen.ENCHANTMENT_SLOT_HIGHLIGHTED_SPRITE, leftPos, yo + 14 + 19 * i, 108, 19);
+                    graphics.requestCursor(CursorTypes.POINTING_HAND);
+                    col = 16777088;
+                } else {
+                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, EnchantmentScreen.ENCHANTMENT_SLOT_SPRITE, leftPos, yo + 14 + 19 * i, 108, 19);
+                }
+            }
+
+            if (hovered) {
+                List<Component> tooltip = new ArrayList<>();
+                tooltip.add(Component.translatable(
+                        isNoReroll ? "container.enchants_and_expeditions.no_reroll" : "container.enchants_and_expeditions.reroll"
+                ).withStyle(isNoReroll ? ChatFormatting.RED : ChatFormatting.GREEN));
+                if (isReroll && !hasInfiniteMaterials) {
+                    int rerolls = 3 - EnchantingHelper.getRerolls(menu.getSlot(0).getItem());
+                    Component rerollsRemaining = Component.translatable("container.enchants_and_expeditions.rerolls_remaining");
+                    if (rerolls == 1) rerollsRemaining = Component.translatable("container.enchants_and_expeditions.reroll_remaining");
+                    tooltip.add(Component.literal(rerolls + " ").withStyle(ChatFormatting.GRAY).append(rerollsRemaining).withStyle(ChatFormatting.GRAY));
+                    tooltip.add(CommonComponents.SPACE);
+                    if (!hasEnoughXp) {
+                        tooltip.add(Component.translatable("container.enchant.level.requirement", rerollXpRequirement).withStyle(ChatFormatting.RED));
+                    } else {
+                        tooltip.add(Component.translatable("container.enchant.lapis.many", rerollCost).withStyle(hasEnoughLapis ? ChatFormatting.GRAY : ChatFormatting.RED));
+                        tooltip.add(Component.translatable("container.enchant.level.many", rerollCost).withStyle(ChatFormatting.GRAY));
+                    }
+                }
+                graphics.setComponentTooltipForNextFrame(screen.font, tooltip, mouseX, mouseY);
+            }
+
+            graphics.blitSprite(
+                    RenderPipelines.GUI_TEXTURED,
+                    canReroll ? ENABLED_LEVEL_SPRITES[i] : DISABLED_LEVEL_SPRITES[i],
+                    leftPos + 1,
+                    yo + 15 + 19 * i,
+                    16,
+                    16
+            );
+            if (!isNoReroll) {
+                this.EaE$drawBadgeGlyph(graphics, leftPos + 1, yo + 15 + 19 * i, rerollCost, canReroll ? ENABLED_BADGE_FONT : DISABLED_BADGE_FONT);
+            }
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, EnchantmentScreen.ENCHANTMENT_SLOT_DISABLED_SPRITE, leftPos, yo + 14, 108, 19);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, EnchantmentScreen.ENCHANTMENT_SLOT_DISABLED_SPRITE, leftPos, yo + 14 + 38, 108, 19);
+            FormattedText message = EnchantmentNames.getInstance().getRandomName(screen.font, 86);
+            graphics.textWithWordWrap(screen.font, message, leftPosText, yo + 16 + 19 * i, 86, col | 0xFF000000, false);
+            EaE$enchantingTableInterface(graphics, mouseX, mouseY, a, ci);
+            ci.cancel();
         }
     }
 

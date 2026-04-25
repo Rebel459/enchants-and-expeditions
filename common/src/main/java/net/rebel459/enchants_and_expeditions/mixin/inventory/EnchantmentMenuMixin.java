@@ -2,6 +2,8 @@ package net.rebel459.enchants_and_expeditions.mixin.inventory;
 
 import com.google.common.collect.Lists;
 import com.mojang.logging.LogUtils;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.rebel459.enchants_and_expeditions.block.AltarBlock;
@@ -37,7 +39,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EnchantingTableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.rebel459.enchants_and_expeditions.util.EnchantmentInfo;
-import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -54,6 +55,9 @@ import java.util.stream.Stream;
 
 @Mixin(EnchantmentMenu.class)
 public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
+    @Unique private static final int REROLL_CLUE = -2;
+    @Unique private static final int NO_REROLL_CLUE = -3;
+    @Unique private static final int REROLL_XP_REQUIREMENT = 15;
 
     @Shadow @Final private RandomSource random;
     @Shadow @Final private Container enchantSlots;
@@ -66,6 +70,10 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Shadow
     @Final
     private DataSlot enchantmentSeed;
+
+    @Shadow
+    public abstract void slotsChanged(Container container);
+
     @Unique private Player player;
     @Unique private int totalBookshelves = 0;
     @Unique private int bookshelves = 0;
@@ -242,12 +250,13 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     this.random.setSeed(this.enchantmentSeed.get());
 
                     int bookshelfPower = Math.round(ix);
+                    int rerollPower = EnchantingHelper.getRerolls(itemStack) * 3;
 
                     for (int j = 0; j < 3; j++) {
                         this.costs[j] = EnchantmentHelper.getEnchantmentCost(this.random, j, bookshelfPower, itemStack);
                         if (this.costs[j] >= 1) {
                             EnchantmentInfo info = EnchantingHelper.getInfo(itemStack);
-                            this.costs[j] += info.standardEnchantments() + info.powerfulEnchantments() * 2 + info.blessings() * 3 + this.totalAltars * 3 - this.stabilityAltars * 6 - this.powerAltars * 6;
+                            this.costs[j] += rerollPower + info.standardEnchantments() + info.powerfulEnchantments() * 2 + info.blessings() * 3 + this.totalAltars * 3 - this.stabilityAltars * 6 - this.powerAltars * 6;
                         }
                         if (EnchantmentHelper.getEnchantmentCost(this.random, j, bookshelfPower, itemStack) >= 1) {
                             if (this.costs[0] < 1) {
@@ -267,7 +276,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
                     for (int jx = 0; jx < 3; jx++) {
                         if (this.costs[jx] > 0) {
-                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx] + this.powerAltars * 3 + this.stabilityAltars * 3);
+                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx] - rerollPower + this.powerAltars * 3 + this.stabilityAltars * 3);
 
                             if (list == null || list.isEmpty()) {
                                 this.costs[jx] = 0;
@@ -280,6 +289,11 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                             this.enchantClue[jx] = idMap.getId(inst.enchantment());
                             this.levelClue[jx] = inst.level();
                         }
+                    }
+
+                    if (this.enchantClue[0] == -1 && this.enchantClue[1] == -1 && this.enchantClue[2] == -1) {
+                        this.enchantClue[1] = EnchantingHelper.getRerolls(itemStack) < 3 ? REROLL_CLUE : NO_REROLL_CLUE;
+                        this.levelClue[1] = REROLL_XP_REQUIREMENT;
                     }
 
                     enchantmentMenu.broadcastChanges();
@@ -313,6 +327,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         returnPower += 1 + random.nextInt(enchantability / 4 + 1) + random.nextInt(enchantability / 4 + 1);
         float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
         returnPower = Mth.clamp(Math.round((float) returnPower + (float) returnPower * f), 1, Integer.MAX_VALUE);
+        returnPower += EnchantingHelper.getRerolls(stack);
         int maxPower = 36;
         if (stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(info) == 0 && info.blessings() == 0 && EnchantingHelper.allMaxLevel(stack)) maxPower = 48;
         return Math.min(returnPower * (slot + 1) / 3, maxPower);
@@ -328,23 +343,38 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
         calculateAttributes();
 
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> baseEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.ENCHANTING_TABLE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> baseEnchantments = new ArrayList<>(registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.GENERIC).map(HolderSet.Named::stream).orElse(Stream.empty()).toList());
 
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> manaEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.MANA).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> frostEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.FROST).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> scorchEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.SCORCH).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> flowEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.FLOW).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> chaosEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.CHAOS).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> greedEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.GREED).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> mightEnchantments = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.MIGHT).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> manaEnchantments = new ArrayList<>(registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.MANA).map(HolderSet.Named::stream).orElse(Stream.empty()).toList());
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> frostEnchantments = new ArrayList<>(registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.FROST).map(HolderSet.Named::stream).orElse(Stream.empty()).toList());
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> scorchEnchantments = new ArrayList<>(registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.SCORCH).map(HolderSet.Named::stream).orElse(Stream.empty()).toList());
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> flowEnchantments = new ArrayList<>(registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.FLOW).map(HolderSet.Named::stream).orElse(Stream.empty()).toList());
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> chaosEnchantments = new ArrayList<>(registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.CHAOS).map(HolderSet.Named::stream).orElse(Stream.empty()).toList());
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> greedEnchantments = new ArrayList<>(registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.GREED).map(HolderSet.Named::stream).orElse(Stream.empty()).toList());
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> mightEnchantments = new ArrayList<>(registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.MIGHT).map(HolderSet.Named::stream).orElse(Stream.empty()).toList());
+
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> manaTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.MANA_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> frostTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.FROST_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> scorchTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.SCORCH_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> flowTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.FLOW_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> chaosTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.CHAOS_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> greedTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.GREED_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
+        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> mightTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+                .get(EaEEnchantmentTags.MIGHT_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
 
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> manaBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EaEEnchantmentTags.MANA_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
@@ -375,8 +405,19 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         int greedPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.greed * 2, slot);
         int mightPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.might * 2, slot);
 
-        List<EnchantmentInstance> baseList = EnchantmentHelper.getAvailableEnchantmentResults(basePower, stack, baseEnchantments.stream());
+        this.chiseledBookshelfItems.forEach(book -> book.getEnchantments().keySet().forEach(enchantment -> {
+            if (enchantment.is(EaEEnchantmentTags.GENERIC_TREASURE) && !baseEnchantments.contains(enchantment)) baseEnchantments.add(enchantment);
+            else if (enchantment.is(EaEEnchantmentTags.MANA_TREASURE) && !manaEnchantments.contains(enchantment)) manaEnchantments.add(enchantment);
+            else if (enchantment.is(EaEEnchantmentTags.FROST_TREASURE) && !frostEnchantments.contains(enchantment)) frostEnchantments.add(enchantment);
+            else if (enchantment.is(EaEEnchantmentTags.SCORCH_TREASURE) && !scorchEnchantments.contains(enchantment)) scorchEnchantments.add(enchantment);
+            else if (enchantment.is(EaEEnchantmentTags.FLOW_TREASURE) && !flowEnchantments.contains(enchantment)) flowEnchantments.add(enchantment);
+            else if (enchantment.is(EaEEnchantmentTags.CHAOS_TREASURE) && !chaosEnchantments.contains(enchantment)) chaosEnchantments.add(enchantment);
+            else if (enchantment.is(EaEEnchantmentTags.GREED_TREASURE) && !greedEnchantments.contains(enchantment)) greedEnchantments.add(enchantment);
+            else if (enchantment.is(EaEEnchantmentTags.MIGHT_TREASURE) && !mightEnchantments.contains(enchantment)) mightEnchantments.add(enchantment);
+        }));
 
+        List<EnchantmentInstance> baseList = EnchantmentHelper.getAvailableEnchantmentResults(basePower, stack, baseEnchantments.stream());
+        
         List<EnchantmentInstance> manaList = EnchantmentHelper.getAvailableEnchantmentResults(manaPower, stack, manaEnchantments.stream());
         List<EnchantmentInstance> frostList = EnchantmentHelper.getAvailableEnchantmentResults(frostPower, stack, frostEnchantments.stream());
         List<EnchantmentInstance> scorchList = EnchantmentHelper.getAvailableEnchantmentResults(scorchPower, stack, scorchEnchantments.stream());
@@ -427,6 +468,18 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         boolean firstEnchant = false;
         int attempts = 0;
 
+        int manaBlessingWeight = Math.max(0, this.manaAltars * 3);
+        int frostBlessingWeight = Math.max(0, this.frostAltars * 3);
+        int scorchBlessingWeight = Math.max(0, this.scorchAltars * 3);
+        int flowBlessingWeight = Math.max(0, this.flowAltars * 3);
+        int chaosBlessingWeight = Math.max(0, this.chaosAltars * 3);
+        int greedBlessingWeight = Math.max(0, this.greedAltars * 3);
+        int mightBlessingWeight = Math.max(0, this.mightAltars * 3);
+
+        int curseWeight = Math.max(0, this.corruption * 3);
+
+        int totalWeight = this.mana + this.frost + this.scorch + this.flow + this.chaos + this.greed + this.might + curseWeight + manaBlessingWeight + frostBlessingWeight + scorchBlessingWeight + flowBlessingWeight + chaosBlessingWeight + greedBlessingWeight + mightBlessingWeight;
+
         while ((random.nextInt(50) <= basePower || !firstEnchant || list.isEmpty()) && attempts < 10) {
             if (!list.isEmpty()) {
                 EnchantmentHelper.filterCompatibleEnchantments(baseList, list.getLast());
@@ -446,19 +499,6 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 EnchantmentHelper.filterCompatibleEnchantments(mightBlessingList, list.getLast());
                 EnchantmentHelper.filterCompatibleEnchantments(curseList, list.getLast());
             }
-
-            // Divinity enchantment pools
-            int manaBlessingWeight = Math.max(0, this.manaAltars * 3);
-            int frostBlessingWeight = Math.max(0, this.frostAltars * 3);
-            int scorchBlessingWeight = Math.max(0, this.scorchAltars * 3);
-            int flowBlessingWeight = Math.max(0, this.flowAltars * 3);
-            int chaosBlessingWeight = Math.max(0, this.chaosAltars * 3);
-            int greedBlessingWeight = Math.max(0, this.greedAltars * 3);
-            int mightBlessingWeight = Math.max(0, this.mightAltars * 3);
-
-            int curseWeight = Math.max(0, this.corruption * 3);
-
-            int totalWeight = this.mana + this.frost + this.scorch + this.flow + this.chaos + this.greed + this.might + curseWeight + manaBlessingWeight + frostBlessingWeight + scorchBlessingWeight + flowBlessingWeight + chaosBlessingWeight + greedBlessingWeight + mightBlessingWeight;
 
             if (totalWeight <= 0) {
                 WeightedRandom.getRandomItem(random, baseList, EnchantmentInstance::weight).ifPresent(list::add);
@@ -506,7 +546,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
             if (!firstEnchant) {
                 firstEnchant = true;
-            } else if (list.isEmpty() && !stack.isEnchanted()) {
+            } else if (list.isEmpty()) {
                 basePower *= 2;
             } else {
                 basePower /= 2;
@@ -532,6 +572,46 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         }
 
         return list;
+    }
+
+    @Inject(method = "clickMenuButton", at = @At(value = "HEAD"), cancellable = true)
+    private void EaE$clickRerollButton(Player player, int buttonId, CallbackInfoReturnable<Boolean> cir) {
+        if (buttonId == 1 && (this.enchantClue[1] == REROLL_CLUE || this.enchantClue[1] == NO_REROLL_CLUE)) {
+            if (this.enchantClue[1] == NO_REROLL_CLUE || EnchantingHelper.getRerolls(this.enchantSlots.getItem(0)) >= 3) {
+                cir.setReturnValue(false);
+                return;
+            }
+            int rerollXpRequirement = this.levelClue[1] > 0 ? this.levelClue[1] : REROLL_XP_REQUIREMENT;
+            int rerollCost = EnchantingHelper.calculateEnchantingCost(rerollXpRequirement, 2);
+            boolean hasEnoughLapis = this.enchantSlots.getItem(1).getCount() >= rerollCost;
+            boolean hasEnoughXp = player.experienceLevel >= rerollXpRequirement;
+            if (!player.hasInfiniteMaterials() && (!hasEnoughLapis || !hasEnoughXp)) {
+                cir.setReturnValue(false);
+                return;
+            }
+            this.access.execute((level, pos) -> {
+                ItemStack lapisStack = this.enchantSlots.getItem(1);
+                player.onEnchantmentPerformed(this.enchantSlots.getItem(0), rerollCost);
+                if (!player.hasInfiniteMaterials()) {
+                    lapisStack.consume(rerollCost, player);
+                    if (lapisStack.isEmpty()) {
+                        this.enchantSlots.setItem(1, ItemStack.EMPTY);
+                    }
+                }
+                EnchantingHelper.addReroll(this.enchantSlots.getItem(0));
+                this.enchantSlots.setChanged();
+                this.enchantmentSeed.set(player.getEnchantmentSeed());
+                this.slotsChanged(this.enchantSlots);
+                level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+            });
+            cir.setReturnValue(true);
+        }
+    }
+
+    @ModifyVariable(method = "clickMenuButton", at = @At(value = "STORE"), name = "enchantmentCost")
+    private int EaE$correctEnchantmentcost(int enchantmentCost) {
+        int slot = enchantmentCost - 1;
+        return EnchantingHelper.calculateEnchantingCost(this.costs[slot], slot);
     }
 
     @Override
@@ -681,14 +761,5 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         }, new Attributes(this.mana, this.frost, this.scorch, this.flow, this.chaos, this.greed, this.might, this.corruption, this.divinity));
 
         return result;
-    }
-
-    @ModifyVariable(
-            method="clickMenuButton",
-            at=@At("STORE"),
-            ordinal=1
-    )
-    private int changeCost(int enchantmentCost) {
-        return EnchantingHelper.calculateEnchantingCost(this.costs[enchantmentCost - 1], enchantmentCost - 1);
     }
 }

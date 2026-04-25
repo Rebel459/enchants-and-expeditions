@@ -41,6 +41,13 @@
   "desc.enchants_and_expeditions.corruption": "Corruption",
   "desc.enchants_and_expeditions.divinity": "Divinity",
 
+  "tooltip.enchants_and_expeditions.slots_used": "Slots Used",
+
+  "container.enchants_and_expeditions.reroll": "Reroll enchantment options",
+  "container.enchants_and_expeditions.no_reroll": "All rerolls used for this item",
+  "container.enchants_and_expeditions.rerolls_remaining": "rerolls remaining",
+  "container.enchants_and_expeditions.reroll_remaining": "reroll remaining",
+
   "enchantment.enchants_and_expeditions.bounding_blessing": "Blessing of Bounding",
   "enchantment.enchants_and_expeditions.bounding_blessing.desc": "The blessed item is retained upon death",
   "enchantment.enchants_and_expeditions.fluidity_blessing": "Blessing of Fluidity",

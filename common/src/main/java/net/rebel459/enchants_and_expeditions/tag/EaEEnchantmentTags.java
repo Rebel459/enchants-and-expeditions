@@ -18,7 +18,23 @@ public class EaEEnchantmentTags {
     public static final TagKey<Enchantment> NOT_ON_AXES = registerCombatReborn("not_on_axes");
     public static final TagKey<Enchantment> NOT_ON_ANIMAL_ARMOR = register("not_on_animal_armor");
 
-    public static final TagKey<Enchantment> ENCHANTING_TABLE = register("enchanting_table/all");
+    public static final TagKey<Enchantment> GENERIC = register("enchanting_table/all");
+    public static final TagKey<Enchantment> MANA = register("enchanting_table/mana");
+    public static final TagKey<Enchantment> FROST = register("enchanting_table/frost");
+    public static final TagKey<Enchantment> SCORCH = register("enchanting_table/scorch");
+    public static final TagKey<Enchantment> FLOW = register("enchanting_table/flow"); // Frost + Mana
+    public static final TagKey<Enchantment> CHAOS = register("enchanting_table/chaos"); // Frost + Scorch
+    public static final TagKey<Enchantment> GREED = register("enchanting_table/greed"); // Scorch + Mana
+    public static final TagKey<Enchantment> MIGHT = register("enchanting_table/might"); // Mana + Frost + Scorch
+
+    public static final TagKey<Enchantment> GENERIC_TREASURE = register("enchanting_table/treasure/all");
+    public static final TagKey<Enchantment> MANA_TREASURE = register("enchanting_table/treasure/mana");
+    public static final TagKey<Enchantment> FROST_TREASURE = register("enchanting_table/treasure/frost");
+    public static final TagKey<Enchantment> SCORCH_TREASURE = register("enchanting_table/treasure/scorch");
+    public static final TagKey<Enchantment> FLOW_TREASURE = register("enchanting_table/treasure/flow");
+    public static final TagKey<Enchantment> CHAOS_TREASURE = register("enchanting_table/treasure/chaos");
+    public static final TagKey<Enchantment> GREED_TREASURE = register("enchanting_table/treasure/greed");
+    public static final TagKey<Enchantment> MIGHT_TREASURE = register("enchanting_table/treasure/might");
 
     public static final TagKey<Enchantment> GENERIC_BLESSING = register("enchanting_table/blessing/all");
     public static final TagKey<Enchantment> MANA_BLESSING = register("enchanting_table/blessing/mana");
@@ -28,15 +44,6 @@ public class EaEEnchantmentTags {
     public static final TagKey<Enchantment> CHAOS_BLESSING = register("enchanting_table/blessing/chaos");
     public static final TagKey<Enchantment> GREED_BLESSING = register("enchanting_table/blessing/greed");
     public static final TagKey<Enchantment> MIGHT_BLESSING = register("enchanting_table/blessing/might");
-
-    public static final TagKey<Enchantment> GENERIC = register("enchanting_table/generic");
-    public static final TagKey<Enchantment> MANA = register("enchanting_table/mana");
-    public static final TagKey<Enchantment> FROST = register("enchanting_table/frost");
-    public static final TagKey<Enchantment> SCORCH = register("enchanting_table/scorch");
-    public static final TagKey<Enchantment> FLOW = register("enchanting_table/flow"); // Frost + Mana
-    public static final TagKey<Enchantment> CHAOS = register("enchanting_table/chaos"); // Frost + Scorch
-    public static final TagKey<Enchantment> GREED = register("enchanting_table/greed"); // Scorch + Mana
-    public static final TagKey<Enchantment> MIGHT = register("enchanting_table/might"); // Mana + Frost + Scorch
 
     @NotNull
     private static TagKey<Enchantment> register(@NotNull String path) {

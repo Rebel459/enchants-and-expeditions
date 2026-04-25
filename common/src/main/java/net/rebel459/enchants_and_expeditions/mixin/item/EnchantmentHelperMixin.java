@@ -47,7 +47,7 @@ public abstract class EnchantmentHelperMixin {
     @Inject(method = "getAvailableEnchantmentResults", at = @At(value = "HEAD"), cancellable = true)
     private static void EaE$getAvailableEnchantmentResults(int level, ItemStack stack, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
         List<EnchantmentInstance> list = Lists.newArrayList();
-        boolean bl; // allow enchanted book re-enchanting
+        boolean bl; // allow enchanted book re-enchanting (disabled)
         if (EnchantingHelper.hasSlots(stack) && stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(stack) > 0) bl = stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
         else bl = stack.is(Items.BOOK);
 

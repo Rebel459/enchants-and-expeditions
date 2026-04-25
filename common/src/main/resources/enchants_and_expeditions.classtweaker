@@ -21,3 +21,9 @@ accessible method net/minecraft/world/effect/MobEffect <init> (Lnet/minecraft/wo
 accessible method net/minecraft/world/item/MaceItem knockbackPredicate (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)Ljava/util/function/Predicate;
 extendable class net/minecraft/world/effect/AbsorptionMobEffect
 accessible method net/minecraft/world/inventory/AbstractContainerMenu addSlot (Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;
+accessible field net/minecraft/client/gui/screens/inventory/AbstractContainerScreen imageWidth I
+accessible field net/minecraft/client/gui/screens/inventory/AbstractContainerScreen imageHeight I
+accessible field net/minecraft/client/gui/screens/inventory/EnchantmentScreen ENCHANTMENT_SLOT_HIGHLIGHTED_SPRITE Lnet/minecraft/resources/Identifier;
+accessible field net/minecraft/client/gui/screens/inventory/EnchantmentScreen ENCHANTMENT_SLOT_SPRITE Lnet/minecraft/resources/Identifier;
+accessible field net/minecraft/client/gui/screens/Screen font Lnet/minecraft/client/gui/Font;
+accessible field net/minecraft/client/gui/screens/inventory/EnchantmentScreen ENCHANTMENT_SLOT_DISABLED_SPRITE Lnet/minecraft/resources/Identifier;
