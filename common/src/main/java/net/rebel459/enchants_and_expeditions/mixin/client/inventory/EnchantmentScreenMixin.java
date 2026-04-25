@@ -23,6 +23,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditionsClient;
+import net.rebel459.enchants_and_expeditions.client.EnchantingAttributesHelper;
+import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.network.EnchantingAttributes;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.unified.platform.client.UnifiedClientHelpers;
@@ -44,8 +46,6 @@ public abstract class EnchantmentScreenMixin {
     private static final int REROLL_CLUE = -2;
     @Unique
     private static final int NO_REROLL_CLUE = -3;
-    @Unique
-    private static final int REROLL_COST = 3;
 
     @Shadow
     @Final
@@ -60,7 +60,7 @@ public abstract class EnchantmentScreenMixin {
     private boolean EaE$requestedOnce;
 
     @Unique
-    private boolean attributesOpened = false;
+    private boolean attributesOpened = EaEConfig.get().misc.default_show_attributes;
 
     @Unique
     private static final int TOOLTIP_BG_COLOR = 0xA0100010; // Semi-translucent background
@@ -124,11 +124,12 @@ public abstract class EnchantmentScreenMixin {
                 tooltip.add(Component.translatable(
                         isNoReroll ? "container.enchants_and_expeditions.no_reroll" : "container.enchants_and_expeditions.reroll"
                 ).withStyle(isNoReroll ? ChatFormatting.RED : ChatFormatting.GREEN));
-                if (isReroll && !hasInfiniteMaterials) {
+                if (isReroll) {
                     int rerolls = 3 - EnchantingHelper.getRerolls(menu.getSlot(0).getItem());
                     Component rerollsRemaining = Component.translatable("container.enchants_and_expeditions.rerolls_remaining");
                     if (rerolls == 1) rerollsRemaining = Component.translatable("container.enchants_and_expeditions.reroll_remaining");
                     tooltip.add(Component.literal(rerolls + " ").withStyle(ChatFormatting.GRAY).append(rerollsRemaining).withStyle(ChatFormatting.GRAY));
+                    if (!hasInfiniteMaterials) {
                     tooltip.add(CommonComponents.SPACE);
                     if (!hasEnoughXp) {
                         tooltip.add(Component.translatable("container.enchant.level.requirement", rerollXpRequirement).withStyle(ChatFormatting.RED));
@@ -136,13 +137,25 @@ public abstract class EnchantmentScreenMixin {
                         tooltip.add(Component.translatable("container.enchant.lapis.many", rerollCost).withStyle(hasEnoughLapis ? ChatFormatting.GRAY : ChatFormatting.RED));
                         tooltip.add(Component.translatable("container.enchant.level.many", rerollCost).withStyle(ChatFormatting.GRAY));
                     }
+                    }
                 }
                 graphics.setComponentTooltipForNextFrame(screen.font, tooltip, mouseX, mouseY);
             }
 
+            int sprite = i;
+            if (rerollXpRequirement < 20 && rerollXpRequirement > 0) {
+                sprite = 0;
+            }
+            if (rerollXpRequirement >= 20) {
+                sprite = 1;
+            }
+            if (rerollXpRequirement >= 30) {
+                sprite = 2;
+            }
+
             graphics.blitSprite(
                     RenderPipelines.GUI_TEXTURED,
-                    canReroll ? ENABLED_LEVEL_SPRITES[i] : DISABLED_LEVEL_SPRITES[i],
+                    canReroll ? ENABLED_LEVEL_SPRITES[sprite] : DISABLED_LEVEL_SPRITES[sprite],
                     leftPos + 1,
                     yo + 15 + 19 * i,
                     16,
@@ -311,11 +324,25 @@ public abstract class EnchantmentScreenMixin {
         graphics.fill(x - padding, y + textHeight + padding - 1, x + textWidth + padding, y + textHeight + padding, TOOLTIP_BORDER); // Bottom
         graphics.fill(x + textWidth + padding - 1, y - padding, x + textWidth + padding, y + textHeight + padding, TOOLTIP_BORDER); // Right
 
+        int symbolX = x - 4;
+        int symbolY = y + 1;
+        x += 11;
+
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "mana"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "frost"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "scorch"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "flow"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "chaos"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "greed"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "might"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "corruption"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "divinity"), symbolX, symbolY, 0xFF000000);;
+
         // Draw attribute text
         y += 1; // Center text in tooltip box
         graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana)), x, y, 0xFF000000 | ChatFormatting.DARK_BLUE.getColor()); y += 10;
         graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost)), x, y, 0xFF000000 | ChatFormatting.DARK_AQUA.getColor()); y += 10;
-        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch)), x, y, 0xFF000000 | ChatFormatting.DARK_RED.getColor()); y += 10;
+        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch)), x, y, 0xFF000000 | EnchantingAttributesHelper.ORANGE); y += 10;
         graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow)), x, y, 0xFF000000 | ChatFormatting.AQUA.getColor()); y += 10;
         graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos)), x, y, 0xFF000000 | ChatFormatting.DARK_GRAY.getColor()); y += 10;
         graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed)), x, y, 0xFF000000 | ChatFormatting.YELLOW.getColor()); y += 10;

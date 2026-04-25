@@ -1,0 +1,13 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "enchants_and_expeditions:font/enchanting_attributes.png",
+      "ascent": 11,
+      "height": 16,
+      "chars": [
+        "0123456789"
+      ]
+    }
+  ]
+}

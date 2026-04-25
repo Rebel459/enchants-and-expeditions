@@ -4,6 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.rebel459.enchants_and_expeditions.client.EnchantingAttributesHelper;
 import net.rebel459.enchants_and_expeditions.registry.EaEBlocks;
 import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
 import net.rebel459.enchants_and_expeditions.registry.EaEItems;
@@ -346,7 +347,7 @@ public abstract class ItemStackMixin {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.frost").withColor(ChatFormatting.DARK_AQUA.getColor()).append(": " + amount));
         }
         else if (attribute == "scorch") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.scorch").withColor(ChatFormatting.DARK_RED.getColor()).append(": " + amount));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.scorch").withColor(EnchantingAttributesHelper.ORANGE).append(": " + amount));
         }
         else if (attribute == "increases_flow") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.flow").withStyle(ChatFormatting.AQUA)).append(" ");
@@ -373,21 +374,21 @@ public abstract class ItemStackMixin {
         MutableComponent component = Component.literal(" ");
         boolean hasPrevious = false;
 
-        hasPrevious = appendStat(component, hasPrevious, mana, ChatFormatting.DARK_BLUE, skipZero);
-        hasPrevious = appendStat(component, hasPrevious, frost, ChatFormatting.DARK_AQUA, skipZero);
-        hasPrevious = appendStat(component, hasPrevious, scorch, ChatFormatting.DARK_RED, skipZero);
-        hasPrevious = appendStat(component, hasPrevious, flow, ChatFormatting.AQUA, skipZero);
-        hasPrevious = appendStat(component, hasPrevious, chaos, ChatFormatting.DARK_GRAY, skipZero);
-        hasPrevious = appendStat(component, hasPrevious, greed, ChatFormatting.YELLOW, skipZero);
-        hasPrevious = appendStat(component, hasPrevious, might, ChatFormatting.DARK_GREEN, skipZero);
-        hasPrevious = appendStat(component, hasPrevious, corruption, ChatFormatting.RED, skipZero);
-        appendStat(component, hasPrevious, divinity, ChatFormatting.GOLD, skipZero);
+        hasPrevious = appendStat(component, hasPrevious, mana, ChatFormatting.DARK_BLUE.getColor(), skipZero);
+        hasPrevious = appendStat(component, hasPrevious, frost, ChatFormatting.DARK_AQUA.getColor(), skipZero);
+        hasPrevious = appendStat(component, hasPrevious, scorch, EnchantingAttributesHelper.ORANGE, skipZero);
+        hasPrevious = appendStat(component, hasPrevious, flow, ChatFormatting.AQUA.getColor(), skipZero);
+        hasPrevious = appendStat(component, hasPrevious, chaos, ChatFormatting.DARK_GRAY.getColor(), skipZero);
+        hasPrevious = appendStat(component, hasPrevious, greed, ChatFormatting.YELLOW.getColor(), skipZero);
+        hasPrevious = appendStat(component, hasPrevious, might, ChatFormatting.DARK_GREEN.getColor(), skipZero);
+        hasPrevious = appendStat(component, hasPrevious, corruption, ChatFormatting.RED.getColor(), skipZero);
+        appendStat(component, hasPrevious, divinity, ChatFormatting.GOLD.getColor(), skipZero);
 
         return component;
     }
 
     @Unique
-    private boolean appendStat(MutableComponent component, boolean hasPrevious, String attribute, ChatFormatting formatting, boolean skipZero) {
+    private boolean appendStat(MutableComponent component, boolean hasPrevious, String attribute, int color, boolean skipZero) {
         if (!(!skipZero || !Objects.equals(attribute, "0"))) {
             return hasPrevious;
         }
@@ -396,7 +397,7 @@ public abstract class ItemStackMixin {
             component.append(Component.literal(", "));
         }
 
-        component.append(Component.literal(attribute).withStyle(formatting));
+        component.append(Component.literal(attribute).withColor(color));
         return true;
     }
 

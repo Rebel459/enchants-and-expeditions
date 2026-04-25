@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:feather_falling",
+    {
+      "id": "enderscape:transdimensional",
+      "required": false
+    }
+  ]
+}

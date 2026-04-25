@@ -54,6 +54,10 @@ public class EaEConfig implements ConfigData {
         public boolean new_table_costs = true;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        public EnchantingAttributeTooltip enchanting_attribute_tooltip = EnchantingAttributeTooltip.ALWAYS;
+        @ConfigEntry.Category("config")
+        @ConfigEntry.Gui.Tooltip
         public boolean experience_rebalance = true;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
@@ -68,6 +72,9 @@ public class EaEConfig implements ConfigData {
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
         public boolean ordered_enchantment_tooltips = true;
+        @ConfigEntry.Category("config")
+        @ConfigEntry.Gui.Tooltip
+        public boolean default_show_attributes = true;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
         public boolean enchant_function_fallback = true;
@@ -108,5 +115,11 @@ public class EaEConfig implements ConfigData {
 
     public enum Notice {
         INFO
+    }
+
+    public enum EnchantingAttributeTooltip {
+        ALWAYS,
+        HOLD_KEY,
+        NEVER
     }
 }

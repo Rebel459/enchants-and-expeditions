@@ -18,6 +18,8 @@ public class EaEEnchantmentTags {
     public static final TagKey<Enchantment> NOT_ON_AXES = registerCombatReborn("not_on_axes");
     public static final TagKey<Enchantment> NOT_ON_ANIMAL_ARMOR = register("not_on_animal_armor");
 
+    public static final TagKey<Enchantment> ENCHANTING_TABLE = register("enchanting_table");
+
     public static final TagKey<Enchantment> GENERIC = register("enchanting_table/all");
     public static final TagKey<Enchantment> MANA = register("enchanting_table/mana");
     public static final TagKey<Enchantment> FROST = register("enchanting_table/frost");

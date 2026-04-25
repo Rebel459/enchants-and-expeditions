@@ -43,10 +43,10 @@
 
   "tooltip.enchants_and_expeditions.slots_used": "Slots Used",
 
-  "container.enchants_and_expeditions.reroll": "Reroll enchantment options",
+  "container.enchants_and_expeditions.reroll": "Reroll Enchantments",
   "container.enchants_and_expeditions.no_reroll": "All rerolls used for this item",
-  "container.enchants_and_expeditions.rerolls_remaining": "rerolls remaining",
-  "container.enchants_and_expeditions.reroll_remaining": "reroll remaining",
+  "container.enchants_and_expeditions.rerolls_remaining": "Rerolls Remaining",
+  "container.enchants_and_expeditions.reroll_remaining": "Reroll Remaining",
 
   "enchantment.enchants_and_expeditions.bounding_blessing": "Blessing of Bounding",
   "enchantment.enchants_and_expeditions.bounding_blessing.desc": "The blessed item is retained upon death",

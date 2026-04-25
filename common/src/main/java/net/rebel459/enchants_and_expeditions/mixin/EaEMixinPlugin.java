@@ -16,6 +16,7 @@ public final class EaEMixinPlugin implements IMixinConfigPlugin {
     private static boolean registeredConfig = false;
 
     private boolean hasCombatReborn;
+    private boolean hasItemTooltips;
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -24,6 +25,7 @@ public final class EaEMixinPlugin implements IMixinConfigPlugin {
             registeredConfig = true;
         }
         this.hasCombatReborn = UnifiedPlatform.get().isModLoaded("combat_reborn") && EaEConfig.get().integrations.combat_reborn;
+        this.hasItemTooltips = UnifiedPlatform.get().isModLoaded("item_tooltips");
     }
 
     @Override
@@ -36,6 +38,7 @@ public final class EaEMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, @NotNull String mixinClassName) {
 
         if (mixinClassName.contains("integration.combat_reborn.")) return this.hasCombatReborn;
+        if (mixinClassName.contains("integration.item_tooltips.")) return this.hasItemTooltips;
 
         return true;
     }

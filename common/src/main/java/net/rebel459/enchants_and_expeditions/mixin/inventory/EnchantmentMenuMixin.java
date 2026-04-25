@@ -57,7 +57,6 @@ import java.util.stream.Stream;
 public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Unique private static final int REROLL_CLUE = -2;
     @Unique private static final int NO_REROLL_CLUE = -3;
-    @Unique private static final int REROLL_XP_REQUIREMENT = 15;
 
     @Shadow @Final private RandomSource random;
     @Shadow @Final private Container enchantSlots;
@@ -251,11 +250,11 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
                     int bookshelfPower = Math.round(ix);
                     int rerollPower = EnchantingHelper.getRerolls(itemStack) * 3;
+                    EnchantmentInfo info = EnchantingHelper.getInfo(itemStack);
 
                     for (int j = 0; j < 3; j++) {
                         this.costs[j] = EnchantmentHelper.getEnchantmentCost(this.random, j, bookshelfPower, itemStack);
                         if (this.costs[j] >= 1) {
-                            EnchantmentInfo info = EnchantingHelper.getInfo(itemStack);
                             this.costs[j] += rerollPower + info.standardEnchantments() + info.powerfulEnchantments() * 2 + info.blessings() * 3 + this.totalAltars * 3 - this.stabilityAltars * 6 - this.powerAltars * 6;
                         }
                         if (EnchantmentHelper.getEnchantmentCost(this.random, j, bookshelfPower, itemStack) >= 1) {
@@ -276,7 +275,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
                     for (int jx = 0; jx < 3; jx++) {
                         if (this.costs[jx] > 0) {
-                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx] - rerollPower + this.powerAltars * 3 + this.stabilityAltars * 3);
+                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx] - rerollPower + this.powerAltars * 3);
 
                             if (list == null || list.isEmpty()) {
                                 this.costs[jx] = 0;
@@ -291,9 +290,15 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                         }
                     }
 
-                    if (this.enchantClue[0] == -1 && this.enchantClue[1] == -1 && this.enchantClue[2] == -1) {
+                    int rerollCost = EnchantingHelper.getRerollCost(itemStack);
+
+                    if (this.enchantClue[0] == -1 && this.enchantClue[1] == -1 &&
+                            this.enchantClue[2] == -1 &&
+                            !(EnchantingHelper.allMaxLevel(itemStack) && this.totalAltars - this.powerAltars - this.stabilityAltars <= 0) &&
+                            bookshelfPower * 2 + this.totalAltars * 3 - this.stabilityAltars * 3 - this.powerAltars * 3 > rerollCost
+                    ) {
                         this.enchantClue[1] = EnchantingHelper.getRerolls(itemStack) < 3 ? REROLL_CLUE : NO_REROLL_CLUE;
-                        this.levelClue[1] = REROLL_XP_REQUIREMENT;
+                        this.levelClue[1] = rerollCost;
                     }
 
                     enchantmentMenu.broadcastChanges();
@@ -581,7 +586,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 cir.setReturnValue(false);
                 return;
             }
-            int rerollXpRequirement = this.levelClue[1] > 0 ? this.levelClue[1] : REROLL_XP_REQUIREMENT;
+            int rerollXpRequirement = this.levelClue[1] > 0 ? this.levelClue[1] : EnchantingHelper.getRerollCost(this.enchantSlots.getItem(0));
             int rerollCost = EnchantingHelper.calculateEnchantingCost(rerollXpRequirement, 2);
             boolean hasEnoughLapis = this.enchantSlots.getItem(1).getCount() >= rerollCost;
             boolean hasEnoughXp = player.experienceLevel >= rerollXpRequirement;

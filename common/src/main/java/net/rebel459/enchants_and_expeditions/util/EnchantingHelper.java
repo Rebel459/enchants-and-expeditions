@@ -97,6 +97,10 @@ public class EnchantingHelper {
         return stack.get(EaEDataComponents.REROLLS.get());
     }
 
+    public static int getRerollCost(ItemStack stack) {
+        return (getRerolls(stack) + 1) * 10;
+    }
+
     public static EnchantmentInfo getInfo(ItemStack stack) {
         return getInfoFromHolder(stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY).keySet().stream().toList());
     }

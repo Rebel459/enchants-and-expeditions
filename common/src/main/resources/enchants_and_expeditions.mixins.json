@@ -24,6 +24,7 @@
     "inventory.EnchantmentMenuMixin",
     "inventory.GrindstoneMenuMixin",
     "item.EnchantmentHelperMixin",
+    "integration.item_tooltips.EnchantmentTooltipHelperMixin",
     "item.ItemEnchantmentsMixin",
     "item.ItemPropertiesMixin",
     "item.ItemStackMixin",

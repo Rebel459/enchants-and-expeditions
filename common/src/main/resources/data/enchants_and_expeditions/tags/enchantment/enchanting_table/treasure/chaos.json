@@ -1,0 +1,17 @@
+{
+  "values": [
+    "minecraft:soul_speed",
+    {
+      "id": "legacies_and_legends:rejuvenate",
+      "required": false
+    },
+    {
+      "id": "legacies_and_legends:decay",
+      "required": false
+    },
+    {
+      "id": "legacies_and_legends:shadowstep",
+      "required": false
+    }
+  ]
+}

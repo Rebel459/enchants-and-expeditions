@@ -1,56 +1,12 @@
 {
   "values": [
-    "minecraft:swift_sneak",
-    "minecraft:soul_speed",
-    "minecraft:wind_burst",
-    "minecraft:feather_falling",
-    {
-      "id": "legacies_and_legends:tangled",
-      "required": false
-    },
-    {
-      "id": "legacies_and_legends:rejuvenate",
-      "required": false
-    },
-    {
-      "id": "legacies_and_legends:decay",
-      "required": false
-    },
-    {
-      "id": "legacies_and_legends:featherweight",
-      "required": false
-    },
-    {
-      "id": "legacies_and_legends:freeze",
-      "required": false
-    },
-    {
-      "id": "legacies_and_legends:shadowstep",
-      "required": false
-    },
-    {
-      "id": "progression_reborn:reforge",
-      "required": false
-    },
-    {
-      "id": "remnants:relentless",
-      "required": false
-    },
-    {
-      "id": "trailiertales:reaping",
-      "required": false
-    },
-    {
-      "id": "trailiertales:rebrush",
-      "required": false
-    },
-    {
-      "id": "enderscape:transdimensional",
-      "required": false
-    },
-    {
-      "id": "enderscape:rebound",
-      "required": false
-    }
+    "#enchants_and_expeditions:enchanting_table/treasure/all",
+    "#enchants_and_expeditions:enchanting_table/treasure/mana",
+    "#enchants_and_expeditions:enchanting_table/treasure/frost",
+    "#enchants_and_expeditions:enchanting_table/treasure/scorch",
+    "#enchants_and_expeditions:enchanting_table/treasure/flow",
+    "#enchants_and_expeditions:enchanting_table/treasure/chaos",
+    "#enchants_and_expeditions:enchanting_table/treasure/greed",
+    "#enchants_and_expeditions:enchanting_table/treasure/might"
   ]
 }

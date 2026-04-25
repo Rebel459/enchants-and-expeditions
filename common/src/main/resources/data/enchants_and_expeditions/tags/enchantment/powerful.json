@@ -1,0 +1,49 @@
+{
+  "values": [
+    "minecraft:impaling",
+    "minecraft:lunge",
+    "minecraft:luck_of_the_sea",
+    "minecraft:fortune",
+    "minecraft:looting",
+    "minecraft:sharpness",
+    "minecraft:efficiency",
+    "minecraft:power",
+    "minecraft:density",
+    "minecraft:wind_burst",
+    "enchants_and_expeditions:elemental_protection",
+    "enchants_and_expeditions:velocity",
+    "enchants_and_expeditions:chilled",
+    "enchants_and_expeditions:physical_protection",
+    "enchants_and_expeditions:arcane_protection",
+    "enchants_and_expeditions:bloodlust",
+    "enchants_and_expeditions:smiting",
+    {
+      "id": "combat_reborn:endurance",
+      "required": false
+    },
+    {
+      "id": "combat_reborn:cleaving",
+      "required": false
+    },
+    {
+      "id": "legacies_and_legends:shatter",
+      "required": false
+    },
+    {
+      "id": "legacies_and_legends:striking",
+      "required": false
+    },
+    {
+      "id": "legacies_and_legends:shadowstep",
+      "required": false
+    },
+    {
+      "id": "progression_reborn:reforge",
+      "required": false
+    },
+    {
+      "id": "enderscape:transdimensional",
+      "required": false
+    }
+  ]
+}
