@@ -7,6 +7,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import com.mojang.logging.LogUtils;
+import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.CommonComponents;
@@ -19,6 +20,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FontDescription;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
@@ -60,9 +62,6 @@ public abstract class EnchantmentScreenMixin {
     private boolean EaE$requestedOnce;
 
     @Unique
-    private boolean attributesOpened = EaEConfig.get().misc.default_show_attributes;
-
-    @Unique
     private static final int TOOLTIP_BG_COLOR = 0xA0100010; // Semi-translucent background
     @Unique
     private static final int TOOLTIP_BORDER = 0xA028007F; // Semi-translucent darker purple border
@@ -70,6 +69,10 @@ public abstract class EnchantmentScreenMixin {
     private static final FontDescription ENABLED_BADGE_FONT = new FontDescription.Resource(EnchantsAndExpeditions.id("enchant_badge_enabled"));
     @Unique
     private static final FontDescription DISABLED_BADGE_FONT = new FontDescription.Resource(EnchantsAndExpeditions.id("enchant_badge_disabled"));
+    @Unique
+    private static final int ATTRIBUTE_PANEL_PADDING = 4;
+    @Unique
+    private static final int ATTRIBUTE_PANEL_MARGIN = 10;
 
     @Inject(method = "init", at = @At("TAIL"))
     private void EaE$requestAttributesOnce(CallbackInfo ci) {
@@ -189,22 +192,31 @@ public abstract class EnchantmentScreenMixin {
     public int textureSize = 16;
 
     @Unique
-    private boolean showAttributes;
+    private static EaEConfig.AttributeVisibility getAttributeVisibility() {
+        return EaEConfig.get().misc.attribute_visibility;
+    }
+
+    @Unique
+    private static void setAttributeVisibility(EaEConfig.AttributeVisibility visibility) {
+        var holder = AutoConfig.getConfigHolder(EaEConfig.class);
+        EaEConfig config = holder.getConfig();
+        config.misc.attribute_visibility = visibility;
+        holder.save();
+    }
 
     @Inject(method = "mouseClicked", at = @At("TAIL"))
-    private void EaE$enchantingTableClicked(MouseButtonEvent mouseButtonEvent, boolean bl, CallbackInfoReturnable<Boolean> cir) {
+    private void EaE$enchantingTableClicked(MouseButtonEvent event, boolean doubleClick, CallbackInfoReturnable<Boolean> cir) {
         EnchantmentScreen screen = EnchantmentScreen.class.cast(this);
         Player player = screen.minecraft.player;
-        int mouseX = (int) mouseButtonEvent.x();
-        int mouseY = (int) mouseButtonEvent.y();
-        if (isOverButton(mouseX, mouseY) && !this.attributesOpened) {
-            this.attributesOpened = true;
-            this.showAttributes = true;
-            player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
-        } else if (isOverButton(mouseX, mouseY)) {
-            this.attributesOpened = false;
-            this.showAttributes = false;
-            player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
+        int mouseX = (int) event.x();
+        int mouseY = (int) event.y();
+        if (isOverButton(mouseX, mouseY)) {
+            switch (getAttributeVisibility()) {
+                case BOTH -> setAttributeVisibility(EaEConfig.AttributeVisibility.NONE);
+                case LEFT -> setAttributeVisibility(EaEConfig.AttributeVisibility.BOTH);
+                case NONE -> setAttributeVisibility(EaEConfig.AttributeVisibility.LEFT);
+            }
+            if (player != null) player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
         }
     }
 
@@ -265,9 +277,7 @@ public abstract class EnchantmentScreenMixin {
             graphics.blit(RenderPipelines.GUI_TEXTURED, EnchantsAndExpeditions.id("textures/gui/attributes.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
         }
 
-        attributesOpened = attributesOpened || this.showAttributes;
-
-        if (!attributesOpened) return;
+        if (getAttributeVisibility() == EaEConfig.AttributeVisibility.NONE) return;
 
         EnchantingAttributes.Attributes enchantingAttributes = EnchantsAndExpeditionsClient.getClientEnchantingAttributes();
         if (enchantingAttributes == null) {
@@ -286,7 +296,7 @@ public abstract class EnchantmentScreenMixin {
         int divinity = enchantingAttributes.divinity();
 
         // Calculate tooltip background dimensions
-        int padding = 4;
+        int padding = ATTRIBUTE_PANEL_PADDING;
         int textHeight = 9 * 10; // 9 attributes, 10 pixels each (9 pixels font height + 1 spacing)
         int textWidth = 100; // Base width, adjusted based on longest text
 
@@ -302,7 +312,7 @@ public abstract class EnchantmentScreenMixin {
         textWidth = Math.max(textWidth, screen.getFont().width(Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity))));
 
         // Position tooltip relative to the enchanting table GUI
-        int x = 10;
+        int x = ATTRIBUTE_PANEL_MARGIN;
         int y = (screen.height - 96) / 2; // Align vertically with the button
 
         // Ensure tooltip stays within screen bounds
@@ -316,17 +326,14 @@ public abstract class EnchantmentScreenMixin {
             y = 5; // Prevent tooltip from going off the top of the screen
         }
 
-        // Draw semi-translucent tooltip background
-        graphics.fill(x - padding, y - padding, x + textWidth + padding, y + textHeight + padding, TOOLTIP_BG_COLOR);
-        // Draw semi-translucent borders
-        graphics.fill(x - padding, y - padding, x + textWidth + padding, y - padding + 1, TOOLTIP_BORDER); // Top
-        graphics.fill(x - padding, y - padding, x - padding + 1, y + textHeight + padding, TOOLTIP_BORDER); // Left
-        graphics.fill(x - padding, y + textHeight + padding - 1, x + textWidth + padding, y + textHeight + padding, TOOLTIP_BORDER); // Bottom
-        graphics.fill(x + textWidth + padding - 1, y - padding, x + textWidth + padding, y + textHeight + padding, TOOLTIP_BORDER); // Right
+        int leftPanelX = x;
+        int leftPanelY = y;
 
-        int symbolX = x - 4;
-        int symbolY = y + 1;
-        x += 11;
+        EaE$drawPanelBackground(graphics, leftPanelX, leftPanelY, textWidth, textHeight, padding);
+
+        int symbolX = leftPanelX - 4;
+        int symbolY = leftPanelY + 1;
+        x = leftPanelX + 11;
 
         graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("mana"), symbolX, symbolY, 0xFF000000); symbolY += 10;
         graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("frost"), symbolX, symbolY, 0xFF000000); symbolY += 10;
@@ -339,16 +346,114 @@ public abstract class EnchantmentScreenMixin {
         graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("divinity"), symbolX, symbolY, 0xFF000000);;
 
         // Draw attribute text
-        y += 1; // Center text in tooltip box
-        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana)), x, y, 0xFF000000 | ChatFormatting.DARK_BLUE.getColor()); y += 10;
-        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost)), x, y, 0xFF000000 | ChatFormatting.DARK_AQUA.getColor()); y += 10;
-        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch)), x, y, 0xFF000000 | EnchantingAttributesHelper.ORANGE); y += 10;
-        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow)), x, y, 0xFF000000 | ChatFormatting.AQUA.getColor()); y += 10;
-        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos)), x, y, 0xFF000000 | ChatFormatting.DARK_GRAY.getColor()); y += 10;
-        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed)), x, y, 0xFF000000 | ChatFormatting.YELLOW.getColor()); y += 10;
-        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.might").append(": " + Math.max(0, might)), x, y, 0xFF000000 | ChatFormatting.DARK_GREEN.getColor()); y += 10;
-        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption)), x, y, 0xFF000000 | ChatFormatting.RED.getColor()); y += 10;
-        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity)), x, y, 0xFF000000 | ChatFormatting.GOLD.getColor());
+        int leftTextY = leftPanelY + 1; // Center text in tooltip box
+        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.mana").append(": " + Math.max(0, mana)), x, leftTextY, 0xFF000000 | ChatFormatting.DARK_BLUE.getColor()); leftTextY += 10;
+        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.frost").append(": " + Math.max(0, frost)), x, leftTextY, 0xFF000000 | ChatFormatting.DARK_AQUA.getColor()); leftTextY += 10;
+        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.scorch").append(": " + Math.max(0, scorch)), x, leftTextY, 0xFF000000 | EnchantingAttributesHelper.ORANGE); leftTextY += 10;
+        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.flow").append(": " + Math.max(0, flow)), x, leftTextY, 0xFF000000 | ChatFormatting.AQUA.getColor()); leftTextY += 10;
+        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.chaos").append(": " + Math.max(0, chaos)), x, leftTextY, 0xFF000000 | ChatFormatting.DARK_GRAY.getColor()); leftTextY += 10;
+        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.greed").append(": " + Math.max(0, greed)), x, leftTextY, 0xFF000000 | ChatFormatting.YELLOW.getColor()); leftTextY += 10;
+        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.might").append(": " + Math.max(0, might)), x, leftTextY, 0xFF000000 | ChatFormatting.DARK_GREEN.getColor()); leftTextY += 10;
+        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption)), x, leftTextY, 0xFF000000 | ChatFormatting.RED.getColor()); leftTextY += 10;
+        graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity)), x, leftTextY, 0xFF000000 | ChatFormatting.GOLD.getColor());
+
+        if (getAttributeVisibility() != EaEConfig.AttributeVisibility.BOTH) return;
+
+        List<EaE$InfoEntry> entries = List.of(
+                new EaE$InfoEntry(
+                        "treasure",
+                        Component.translatable("container.enchants_and_expeditions.treasure"),
+                        EnchantingAttributesHelper.LIGHT_GREEN,
+                        Component.translatable("container.enchants_and_expeditions.treasure_desc")
+                ),
+                new EaE$InfoEntry(
+                        "powerful",
+                        Component.translatable("container.enchants_and_expeditions.powerful"),
+                        ChatFormatting.BLUE.getColor(),
+                        Component.translatable("container.enchants_and_expeditions.powerful_desc")
+                ),
+                new EaE$InfoEntry(
+                        "generic",
+                        Component.translatable("container.enchants_and_expeditions.generic"),
+                        ChatFormatting.WHITE.getColor(),
+                        Component.translatable("container.enchants_and_expeditions.generic_desc")
+                )
+        );
+
+        final int rightPanelEntrySpacing = 2;
+        final int rightPanelTitleDescSpacing = 1;
+        final int rightPanelTextIndent = 9;
+        final float rightPanelDescriptionScale = 0.6F;
+
+        int rightPanelWidth = textWidth;
+        int rightPanelTextWidth = rightPanelWidth - rightPanelTextIndent;
+        int rightPanelContentHeight = 0;
+        for (EaE$InfoEntry entry : entries) {
+            rightPanelContentHeight += screen.getFont().lineHeight;
+            rightPanelContentHeight += rightPanelTitleDescSpacing;
+            rightPanelContentHeight += EaE$getWrappedTextHeight(screen, entry.description(), rightPanelTextWidth, rightPanelDescriptionScale);
+            rightPanelContentHeight += rightPanelEntrySpacing;
+        }
+        rightPanelContentHeight -= rightPanelEntrySpacing;
+        int rightPanelHeight = Math.max(textHeight, rightPanelContentHeight);
+
+        int rightPanelX = screen.width - leftPanelX - rightPanelWidth;
+        int rightPanelY = leftPanelY;
+        if (rightPanelY + rightPanelHeight > screen.height - 5) {
+            rightPanelY = screen.height - rightPanelHeight - 5;
+        }
+        if (rightPanelY < 5) {
+            rightPanelY = 5;
+        }
+
+        EaE$drawPanelBackground(graphics, rightPanelX, rightPanelY, rightPanelWidth, rightPanelHeight, padding);
+
+        int rightPanelSymbolX = rightPanelX - 4;
+        int titleX = rightPanelX + rightPanelTextIndent;
+        int descriptionX = titleX - 4;
+        int textY = rightPanelY + 1;
+        for (EaE$InfoEntry entry : entries) {
+            graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(entry.attribute(), true), rightPanelSymbolX, textY, 0xFF000000);
+            graphics.text(screen.getFont(), entry.title(), titleX, textY, 0xFF000000 | entry.color());
+            textY += screen.getFont().lineHeight + rightPanelTitleDescSpacing;
+            textY = EaE$drawWrappedText(graphics, screen, entry.description(), descriptionX, textY, rightPanelTextWidth, 0xFF000000 | ChatFormatting.GRAY.getColor(), rightPanelDescriptionScale);
+            textY += rightPanelEntrySpacing;
+        }
+    }
+
+    @Unique
+    private void EaE$drawPanelBackground(GuiGraphicsExtractor graphics, int x, int y, int width, int height, int padding) {
+        graphics.fill(x - padding, y - padding, x + width + padding, y + height + padding, TOOLTIP_BG_COLOR);
+        graphics.fill(x - padding, y - padding, x + width + padding, y - padding + 1, TOOLTIP_BORDER);
+        graphics.fill(x - padding, y - padding, x - padding + 1, y + height + padding, TOOLTIP_BORDER);
+        graphics.fill(x - padding, y + height + padding - 1, x + width + padding, y + height + padding, TOOLTIP_BORDER);
+        graphics.fill(x + width + padding - 1, y - padding, x + width + padding, y + height + padding, TOOLTIP_BORDER);
+    }
+
+    @Unique
+    private int EaE$getWrappedTextHeight(EnchantmentScreen screen, Component text, int width, float scale) {
+        int scaledWidth = Math.max(1, Math.round(width / scale));
+        int lines = screen.getFont().split(text, scaledWidth).size();
+        return Math.round(lines * screen.getFont().lineHeight * scale);
+    }
+
+    @Unique
+    private int EaE$drawWrappedText(GuiGraphicsExtractor graphics, EnchantmentScreen screen, Component text, int x, int y, int width, int color, float scale) {
+        int scaledWidth = Math.max(1, Math.round(width / scale));
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(x, y);
+        graphics.pose().scale(scale, scale);
+        int scaledY = 0;
+        for (FormattedCharSequence line : screen.getFont().split(text, scaledWidth)) {
+            graphics.text(screen.getFont(), line, 0, scaledY, color, false);
+            scaledY += screen.getFont().lineHeight;
+        }
+        graphics.pose().popMatrix();
+        return y + Math.round(scaledY * scale);
+    }
+
+    @Unique
+    private record EaE$InfoEntry(String attribute, Component title, int color, Component description) {
     }
 
     @Unique

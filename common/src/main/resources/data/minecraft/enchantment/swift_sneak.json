@@ -18,13 +18,13 @@
     ]
   },
   "max_cost": {
-    "base": 75,
-    "per_level_above_first": 25
+    "base": 60,
+    "per_level_above_first": 8
   },
   "max_level": 3,
   "min_cost": {
-    "base": 25,
-    "per_level_above_first": 25
+    "base": 20,
+    "per_level_above_first": 8
   },
   "slots": [
     "legs"

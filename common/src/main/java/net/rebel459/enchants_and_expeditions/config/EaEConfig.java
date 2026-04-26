@@ -74,7 +74,8 @@ public class EaEConfig implements ConfigData {
         public boolean ordered_enchantment_tooltips = true;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
-        public boolean default_show_attributes = true;
+        @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        public AttributeVisibility attribute_visibility = AttributeVisibility.BOTH;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
         public boolean enchant_function_fallback = true;
@@ -121,5 +122,11 @@ public class EaEConfig implements ConfigData {
         ALWAYS,
         HOLD_KEY,
         NEVER
+    }
+
+    public enum AttributeVisibility {
+        LEFT,
+        BOTH,
+        NONE
     }
 }

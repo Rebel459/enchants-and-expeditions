@@ -47,6 +47,12 @@
   "container.enchants_and_expeditions.no_reroll": "All rerolls used for this item",
   "container.enchants_and_expeditions.rerolls_remaining": "Rerolls Remaining",
   "container.enchants_and_expeditions.reroll_remaining": "Reroll Remaining",
+  "container.enchants_and_expeditions.treasure": "Treasure",
+  "container.enchants_and_expeditions.treasure_desc": "Treasure enchantments can be added to chiseled bookshelves to appear in the table.",
+  "container.enchants_and_expeditions.powerful": "Powerful",
+  "container.enchants_and_expeditions.powerful_desc": "Powerful enchantments consume 2 slots, as opposed to 1.",
+  "container.enchants_and_expeditions.generic": "Generic",
+  "container.enchants_and_expeditions.generic_desc": "General enchantments which are available from all attributes.",
 
   "enchantment.enchants_and_expeditions.bounding_blessing": "Blessing of Bounding",
   "enchantment.enchants_and_expeditions.bounding_blessing.desc": "The blessed item is retained upon death",

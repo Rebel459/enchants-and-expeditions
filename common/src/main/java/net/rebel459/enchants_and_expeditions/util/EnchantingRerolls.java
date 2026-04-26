@@ -31,7 +31,10 @@ public record EnchantingRerolls(int rerolls, int randomAttempts, List<Integer> l
     );
 
     public boolean hasSameSetup(List<Integer> attributes, int bookshelves, int altars) {
-        return this.lastAttributes.equals(attributes) && this.lastBookshelves == bookshelves && this.lastAltars == altars && !this.lastAttributes.isEmpty() && this.lastBookshelves != 0 && this.lastAltars != 0;
+        return this.lastAttributes.equals(attributes)
+                && this.lastBookshelves == bookshelves
+                && this.lastAltars == altars
+                && (!this.lastAttributes.isEmpty() || this.lastBookshelves != 0 || this.lastAltars != 0);
     }
 
     public EnchantingRerolls setRerolls(int rerolls) {

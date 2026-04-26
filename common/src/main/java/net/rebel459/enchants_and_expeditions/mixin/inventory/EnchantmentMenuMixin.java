@@ -33,6 +33,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -104,6 +105,8 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     @Unique private int divinity = 0;
 
     @Unique private List<ItemStack> chiseledBookshelfItems = new ArrayList<>();
+    @Unique private boolean pendingPostRerollEnchant = false;
+    @Unique private boolean lastClickWasReroll = false;
 
     @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/inventory/ContainerLevelAccess;)V", at = @At("TAIL"))
     private void onInit(int syncId, Inventory playerInventory, ContainerLevelAccess access, CallbackInfo ci) {
@@ -150,6 +153,16 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         return enchantingTablePos.offset(altarPos);
     }
 
+    @Unique
+    private static List<Holder<net.minecraft.world.item.enchantment.Enchantment>> EaE$getBookshelfEnchantments(ItemStack stack) {
+        ItemEnchantments storedEnchantments = stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
+        if (!storedEnchantments.isEmpty()) {
+            return storedEnchantments.keySet().stream().toList();
+        }
+
+        return stack.getEnchantments().keySet().stream().toList();
+    }
+
     @Inject(method = "slotsChanged", at = @At(value = "HEAD"), cancellable = true)
     private void EaE$slotsChanged(Container container, CallbackInfo ci) {
         EnchantmentMenu enchantmentMenu = EnchantmentMenu.class.cast(this);
@@ -178,36 +191,10 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     this.stabilityAltars = 0;
                     this.powerAltars = 0;
 
+                    int total = 0;
                     this.chiseledBookshelfItems.clear();
 
                     for (BlockPos off : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
-                        if (this.totalBookshelves < 15) {
-                            if (EnchantingTableBlock.isValidBookShelf(level, blockPos, off)) {
-                                ix++;
-                            }
-                            if (enchantingBlockCheck(level, blockPos, off, Blocks.CHISELED_BOOKSHELF)) {
-                                this.totalBookshelves++;
-                                ix += (collectChiseledBookshelfItems(level, blockPos, off, this.chiseledBookshelfItems) / 6F);
-                            }
-                            if (enchantingBlockCheck(level, blockPos, off, Blocks.BOOKSHELF)) {
-                                this.bookshelves++;
-                                this.totalBookshelves++;
-                            }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.ARCANE_BOOKSHELF.get())) {
-                                this.arcaneBooksheves++;
-                                this.totalBookshelves++;
-
-                            }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.GLACIAL_BOOKSHELF.get())) {
-                                this.glacialBooksheves++;
-                                this.totalBookshelves++;
-
-                            }
-                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.INFERNAL_BOOKSHELF.get())) {
-                                this.infernalBooksheves++;
-                                this.totalBookshelves++;
-                            }
-                        }
                         if (this.totalAltars < 3 && enchantingBlockCheck(level, blockPos, off, EaEBlocks.ALTAR.get()) && level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) != AltarBlockType.EMPTY) {
                             if (level.getBlockState(getAltarPos(blockPos, off)).getValue(AltarBlock.TOME) == AltarBlockType.MANA_TOME) {
                                 this.manaAltars++;
@@ -246,6 +233,33 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                                 this.totalAltars++;
                             }
                         }
+                        if (this.totalBookshelves < 15 + 3 - this.totalAltars) {
+                            if (EnchantingTableBlock.isValidBookShelf(level, blockPos, off)) {
+                                ix++;
+                            }
+                            if (enchantingBlockCheck(level, blockPos, off, Blocks.CHISELED_BOOKSHELF)) {
+                                this.totalBookshelves++;
+                                ix += (collectChiseledBookshelfItems(level, blockPos, off, this.chiseledBookshelfItems) / 6F);
+                            }
+                            if (enchantingBlockCheck(level, blockPos, off, Blocks.BOOKSHELF)) {
+                                this.bookshelves++;
+                                this.totalBookshelves++;
+                            }
+                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.ARCANE_BOOKSHELF.get())) {
+                                this.arcaneBooksheves++;
+                                this.totalBookshelves++;
+
+                            }
+                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.GLACIAL_BOOKSHELF.get())) {
+                                this.glacialBooksheves++;
+                                this.totalBookshelves++;
+
+                            }
+                            if (enchantingBlockCheck(level, blockPos, off, EaEBlocks.INFERNAL_BOOKSHELF.get())) {
+                                this.infernalBooksheves++;
+                                this.totalBookshelves++;
+                            }
+                        }
                     }
 
                     this.random.setSeed(this.enchantmentSeed.get());
@@ -275,37 +289,43 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                         }
                     }
 
+                    boolean hasAnyEnchantment = false;
+
                     for (int jx = 0; jx < 3; jx++) {
                         if (this.costs[jx] > 0) {
-                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx] - rerollPower + this.powerAltars * 3);
+                            List<EnchantmentInstance> list = this.getEnchantmentList(level.registryAccess(), itemStack, jx, this.costs[jx] + this.powerAltars * 3);
 
                             if (list == null || list.isEmpty()) {
                                 this.costs[jx] = 0;
                                 this.enchantClue[jx] = -1;
                                 this.levelClue[jx] = -1;
-                                EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(itemStack);
-                                if (rerolls.randomAttempts() > 0) {
-                                    player.onEnchantmentPerformed(ItemStack.EMPTY, 0);
-                                    rerolls = rerolls.setRandomAttempts(rerolls.randomAttempts() - 1);
-                                    itemStack.set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
-                                    EaE$slotsChanged(container, ci);
-                                    return;
-                                }
                                 continue;
-                            } else {
-                                EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(itemStack);
-                                rerolls = rerolls.setLastSetup(List.of(), 0, 0);
-                                itemStack.set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
                             }
 
+                            hasAnyEnchantment = true;
                             EnchantmentInstance inst = list.get(this.random.nextInt(list.size()));
                             this.enchantClue[jx] = idMap.getId(inst.enchantment());
                             this.levelClue[jx] = inst.level();
                         }
                     }
 
-                    int rerollCost = EnchantingHelper.getRerollCost(itemStack);
                     EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(itemStack);
+                    if (!hasAnyEnchantment && rerolls.randomAttempts() > 0) {
+                        player.onEnchantmentPerformed(ItemStack.EMPTY, 0);
+                        this.enchantmentSeed.set(player.getEnchantmentSeed());
+                        rerolls = rerolls.setRandomAttempts(rerolls.randomAttempts() - 1);
+                        itemStack.set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
+                        EaE$slotsChanged(container, ci);
+                        return;
+                    }
+
+                    if (hasAnyEnchantment) {
+                        rerolls = rerolls.setLastSetup(List.of(), 0, 0);
+                        itemStack.set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
+                    }
+
+                    int rerollCost = EnchantingHelper.getRerollCost(itemStack);
+                    rerolls = EnchantingHelper.getEnchantingRerolls(itemStack);
                     Triple<List<Integer>, Integer, Integer> setup = Triple.of(List.of(this.mana, this.frost, this.scorch, this.flow, this.chaos, this.greed, this.might, this.corruption, this.divinity), this.totalBookshelves, this.totalAltars);
 
                     if (this.enchantClue[0] == -1 && this.enchantClue[1] == -1 &&
@@ -328,9 +348,6 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 }
             }
         }
-        EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(container.getItem(0));
-        rerolls = rerolls.setRandomAttempts(0);
-        container.getItem(0).set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
         ci.cancel();
     }
 
@@ -346,8 +363,10 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
     }
 
     @Unique
-    private int calculateEnchantingPower(Enchantable enchantable, ItemStack stack, EnchantmentInfo info, int basePower, int secondaryPower, int slot) {
-        int returnPower = (int) (basePower * 0.25 + secondaryPower * 1.25);
+    private int calculateEnchantingPower(Enchantable enchantable, ItemStack stack, EnchantmentInfo info, float basePowerFloat, float secondaryPowerFloat, int slot) {
+        int basePower = Math.round(basePowerFloat);
+        int secondaryPower = Math.round(secondaryPowerFloat);
+        int returnPower = (int) (basePower * 0.1 + secondaryPower);
         int enchantability = Math.max(0, enchantable.value() + this.powerAltars * 3 - this.stabilityAltars * 3);
         returnPower += 1 + random.nextInt(enchantability / 4 + 1) + random.nextInt(enchantability / 4 + 1);
         float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
@@ -421,16 +440,18 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
         EnchantmentInfo info = EnchantingHelper.getInfo(stack);
 
-        int basePower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, enchantingPower, slot);
-        int manaPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.mana * 2, slot);
-        int frostPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.frost * 2, slot);
-        int scorchPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.scorch * 2, slot);
-        int flowPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.flow * 2, slot);
-        int chaosPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.chaos * 2, slot);
-        int greedPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.greed * 2, slot);
-        int mightPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.might * 2, slot);
+        float multiplier = 1F / 3F * (slot + 1F);
 
-        this.chiseledBookshelfItems.forEach(book -> book.getEnchantments().keySet().forEach(enchantment -> {
+        int basePower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, enchantingPower * multiplier, slot);
+        int manaPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.mana * 1.5F * multiplier, slot);
+        int frostPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.frost * 1.5F * multiplier, slot);
+        int scorchPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.scorch * 1.5F * multiplier, slot);
+        int flowPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.flow * 3F * multiplier, slot);
+        int chaosPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.chaos * 3F * multiplier, slot);
+        int greedPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower, this.greed * 3F * multiplier, slot);
+        int mightPower = calculateEnchantingPower(enchantable, stack, info, enchantingPower * 2F, this.might * 3F * multiplier, slot);
+
+        this.chiseledBookshelfItems.forEach(book -> EaE$getBookshelfEnchantments(book).forEach(enchantment -> {
             if (enchantment.is(EaEEnchantmentTags.GENERIC_TREASURE) && !baseEnchantments.contains(enchantment)) baseEnchantments.add(enchantment);
             else if (enchantment.is(EaEEnchantmentTags.MANA_TREASURE) && !manaEnchantments.contains(enchantment)) manaEnchantments.add(enchantment);
             else if (enchantment.is(EaEEnchantmentTags.FROST_TREASURE) && !frostEnchantments.contains(enchantment)) frostEnchantments.add(enchantment);
@@ -599,8 +620,8 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             attempts += 1;
         }
 
-        if (EnchantingHelper.hasSlots(stack)) {
-            while (EnchantingHelper.combinedEnchantmentScore(stack, list) > stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(stack) && EaEConfig.get().general.enchantment_slots) {
+        if (EnchantingHelper.hasSlots(stack) && EaEConfig.get().general.enchantment_slots) {
+            while (EnchantingHelper.combinedEnchantmentScore(stack, list) > stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(stack)) {
                 if (list.size() == 1) {
                     list.removeFirst();
                     break;
@@ -624,6 +645,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
     @Inject(method = "clickMenuButton", at = @At(value = "HEAD"), cancellable = true)
     private void EaE$clickRerollButton(Player player, int buttonId, CallbackInfoReturnable<Boolean> cir) {
+        this.lastClickWasReroll = buttonId == 1 && (this.enchantClue[1] == REROLL_CLUE || this.enchantClue[1] == NO_REROLL_CLUE);
         if (buttonId == 1 && (this.enchantClue[1] == REROLL_CLUE || this.enchantClue[1] == NO_REROLL_CLUE)) {
             if (this.enchantClue[1] == NO_REROLL_CLUE || EnchantingHelper.getRerolls(this.enchantSlots.getItem(0)) >= 3) {
                 cir.setReturnValue(false);
@@ -653,11 +675,30 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 rerolls = rerolls.setLastSetup(List.of(this.mana, this.frost, this.scorch, this.flow, this.chaos, this.greed, this.might, this.corruption, this.divinity), this.totalBookshelves, this.totalAltars);
                 rerolls = rerolls.setRandomAttempts(10);
                 this.enchantSlots.getItem(0).set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
+                this.pendingPostRerollEnchant = true;
                 this.slotsChanged(this.enchantSlots);
                 level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
             });
             cir.setReturnValue(true);
         }
+    }
+
+    @Inject(method = "clickMenuButton", at = @At("RETURN"))
+    private void EaE$clearPostRerollState(Player player, int buttonId, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValue()) {
+            return;
+        }
+        if (this.lastClickWasReroll || !this.pendingPostRerollEnchant) {
+            return;
+        }
+
+        ItemStack stack = this.enchantSlots.getItem(0);
+        if (!stack.isEmpty()) {
+            EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(stack);
+            rerolls = rerolls.setRandomAttempts(0);
+            stack.set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
+        }
+        this.pendingPostRerollEnchant = false;
     }
 
     @ModifyVariable(method = "clickMenuButton", at = @At(value = "STORE"), name = "enchantmentCost")
@@ -675,16 +716,6 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
             // Count bookshelves and altars
             for (BlockPos off : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
-                if (tBooks < 15) {
-                    if (enchantingBlockCheck(level, tablePos, off, Blocks.CHISELED_BOOKSHELF)) {
-                        tBooks++;
-                        collectChiseledBookshelfItems(level, tablePos, off, chiseledBooks);
-                    }
-                    if (enchantingBlockCheck(level, tablePos, off, Blocks.BOOKSHELF)) { nBooks++; tBooks++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.ARCANE_BOOKSHELF.get())) { aBooks++; tBooks++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.GLACIAL_BOOKSHELF.get())) { gBooks++; tBooks++; }
-                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.INFERNAL_BOOKSHELF.get())) { iBooks++; tBooks++; }
-                }
                 if (tAltars < 3 && enchantingBlockCheck(level, tablePos, off, EaEBlocks.ALTAR.get()) && level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) != AltarBlockType.EMPTY) {
                     if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.MANA_TOME) { aMana++; tAltars++; }
                     if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.FROST_TOME) { aFrost++; tAltars++; }
@@ -695,6 +726,16 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.MIGHT_TOME) { aMight++; tAltars++; }
                     if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.STABILITY_TOME) { aStability++; tAltars++; }
                     if (level.getBlockState(getAltarPos(tablePos, off)).getValue(AltarBlock.TOME) == AltarBlockType.POWER_TOME) { aPower++; tAltars++; }
+                }
+                if (tBooks < 15 + 3 - tAltars) {
+                    if (enchantingBlockCheck(level, tablePos, off, Blocks.CHISELED_BOOKSHELF)) {
+                        tBooks++;
+                        collectChiseledBookshelfItems(level, tablePos, off, chiseledBooks);
+                    }
+                    if (enchantingBlockCheck(level, tablePos, off, Blocks.BOOKSHELF)) { nBooks++; tBooks++; }
+                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.ARCANE_BOOKSHELF.get())) { aBooks++; tBooks++; }
+                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.GLACIAL_BOOKSHELF.get())) { gBooks++; tBooks++; }
+                    if (enchantingBlockCheck(level, tablePos, off, EaEBlocks.INFERNAL_BOOKSHELF.get())) { iBooks++; tBooks++; }
                 }
             }
 

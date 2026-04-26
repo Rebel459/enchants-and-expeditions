@@ -234,7 +234,7 @@ public class EnchantingHelper {
 
             int maxLevel = instance.enchantment().value().getMaxLevel();
             int newLevel = stackLevel + 1;
-            if (stackLevel < maxLevel && (level >= instance.enchantment().value().definition().minCost().calculate(newLevel) || level >= 30)) {
+            if (stackLevel < maxLevel && (level >= instance.enchantment().value().definition().minCost().calculate(newLevel) || level >= 36)) {
                 normalized.add(new EnchantmentInstance(instance.enchantment(), newLevel));
             }
         }

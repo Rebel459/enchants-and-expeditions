@@ -52,13 +52,13 @@
   },
   "exclusive_set": "#enchants_and_expeditions:exclusive_set/thorns",
   "max_cost": {
-    "base": 60,
-    "per_level_above_first": 20
+    "base": 50,
+    "per_level_above_first": 10
   },
   "max_level": 3,
   "min_cost": {
     "base": 10,
-    "per_level_above_first": 20
+    "per_level_above_first": 10
   },
   "slots": [
     "any"

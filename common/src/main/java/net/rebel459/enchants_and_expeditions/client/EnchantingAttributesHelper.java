@@ -14,6 +14,7 @@ public class EnchantingAttributesHelper {
     public static final FontDescription ENCHANTING_ATTRIBUTE_FONT = new FontDescription.Resource(EnchantsAndExpeditions.id("enchanting_attributes"));
 
     public static final int ORANGE = 14639398;
+    public static final int LIGHT_GREEN = 11855977;
 
     public static boolean shouldShowAttributeSymbols() {
         EaEConfig.GeneralConfig general = EaEConfig.get().general;
@@ -35,7 +36,7 @@ public class EnchantingAttributesHelper {
             return component.append(Component.literal(" +").withStyle(ChatFormatting.BLUE));
         }
         if (Objects.equals(attribute, "generic")) {
-            return component.append(Component.literal(" ◇").withStyle(ChatFormatting.GRAY));
+            return component.append(Component.literal(" ◇").withStyle(ChatFormatting.WHITE));
         }
         int id = switch (attribute) {
             case "mana" -> 0;
