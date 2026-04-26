@@ -257,7 +257,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     for (int j = 0; j < 3; j++) {
                         this.costs[j] = EnchantmentHelper.getEnchantmentCost(this.random, j, bookshelfPower, itemStack);
                         if (this.costs[j] >= 1) {
-                            this.costs[j] += rerollPower + info.standardEnchantments() + info.powerfulEnchantments() * 2 + info.blessings() * 3 + this.totalAltars * 3 - this.stabilityAltars * 6 - this.powerAltars * 6;
+                            this.costs[j] += rerollPower + this.totalAltars * 3 - this.stabilityAltars * 6 - this.powerAltars * 6;
                         }
                         if (EnchantmentHelper.getEnchantmentCost(this.random, j, bookshelfPower, itemStack) >= 1) {
                             if (this.costs[0] < 1) {
