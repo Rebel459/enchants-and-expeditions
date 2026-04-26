@@ -148,7 +148,7 @@ public class EnchantingHelper {
         for (Holder<Enchantment> enchantment : enchantments.keySet()) {
             if (enchantment.is(EaEEnchantmentTags.GENERIC) || enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) {
                 double increase = 0.01;
-                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) increase = 0.02;
+                if (isPowerful(enchantment)) increase = 0.02;
                 else if (enchantment.is(EaEEnchantmentTags.BLESSING)) increase = 0.03;
                 locMana += increase;
                 locFrost += increase;
@@ -161,37 +161,37 @@ public class EnchantingHelper {
             }
             if (enchantment.is(EaEEnchantmentTags.MANA) || enchantment.is(EaEEnchantmentTags.MANA_BLESSING)) {
                 locMana += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locMana += 0.1;
+                if (isPowerful(enchantment)) locMana += 0.1;
                 else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locMana += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.FROST) || enchantment.is(EaEEnchantmentTags.FROST_BLESSING)) {
                 locFrost += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locFrost += 0.1;
+                if (isPowerful(enchantment)) locFrost += 0.1;
                 else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locFrost += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.SCORCH) || enchantment.is(EaEEnchantmentTags.SCORCH_BLESSING)) {
                 locScorch += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locScorch += 0.1;
+                if (isPowerful(enchantment)) locScorch += 0.1;
                 else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locScorch += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.FLOW) || enchantment.is(EaEEnchantmentTags.FLOW_BLESSING)) {
                 locFlow += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locFlow += 0.1;
+                if (isPowerful(enchantment)) locFlow += 0.1;
                 else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locFlow += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.CHAOS) || enchantment.is(EaEEnchantmentTags.CHAOS_BLESSING)) {
                 locChaos += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locChaos += 0.1;
+                if (isPowerful(enchantment)) locChaos += 0.1;
                 else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locChaos += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.GREED) || enchantment.is(EaEEnchantmentTags.GREED_BLESSING)) {
                 locGreed += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locGreed += 0.1;
+                if (isPowerful(enchantment)) locGreed += 0.1;
                 else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locGreed += 0.2;
             }
             if (enchantment.is(EaEEnchantmentTags.MIGHT) || enchantment.is(EaEEnchantmentTags.MIGHT_BLESSING)) {
                 locMight += 0.1;
-                if (enchantment.is(EaEEnchantmentTags.POWERFUL)) locMight += 0.1;
+                if (isPowerful(enchantment)) locMight += 0.1;
                 else if (enchantment.is(EaEEnchantmentTags.BLESSING)) locMight += 0.2;
             }
             if (enchantment.is(EnchantmentTags.CURSE)) {
@@ -212,7 +212,7 @@ public class EnchantingHelper {
 
         if (EnchantingHelper.hasSlots(stack) && stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(info) == 1) {
             list.removeIf(enchantmentInstance -> {
-                return enchantmentInstance.enchantment().is(EaEEnchantmentTags.POWERFUL);
+                return isPowerful(enchantmentInstance.enchantment());
             });
         }
 
@@ -336,7 +336,7 @@ public class EnchantingHelper {
         }
         return null;
     }
-
+    
     public static int getDuration(ItemStack stack, ResourceKey<Enchantment> enchantment, int durationPerLevel) {
         return getDuration(stack, enchantment, durationPerLevel, durationPerLevel);
     }
