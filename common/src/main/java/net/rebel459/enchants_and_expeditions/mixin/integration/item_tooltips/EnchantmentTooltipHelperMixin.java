@@ -10,6 +10,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.rebel459.enchants_and_expeditions.client.EnchantingAttributesHelper;
 import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
+import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.item_tooltips.util.EnchantmentTooltipHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,7 +27,7 @@ public abstract class EnchantmentTooltipHelperMixin {
         if (enchantment.is(EaEEnchantmentTags.BLESSING)) EnchantingAttributesHelper.addAttributeSymbol(component, "divinity");
         if (enchantment.is(EnchantmentTags.CURSE)) EnchantingAttributesHelper.addAttributeSymbol(component, "corruption");
         if (enchantment.is(EnchantmentTags.TREASURE)) EnchantingAttributesHelper.addAttributeSymbol(component, "treasure");
-        if (enchantment.is(EaEEnchantmentTags.POWERFUL)) EnchantingAttributesHelper.addAttributeSymbol(component, "powerful");
+        if (EnchantingHelper.isPowerful(enchantment)) EnchantingAttributesHelper.addAttributeSymbol(component, "powerful");
         if (enchantment.is(EaEEnchantmentTags.GENERIC) || enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) EnchantingAttributesHelper.addAttributeSymbol(component, "generic");
         if (!enchantment.is(EaEEnchantmentTags.GENERIC) && !enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING) && !enchantment.is(EaEEnchantmentTags.GENERIC_TREASURE)) {
             if (enchantment.is(EaEEnchantmentTags.MANA) || enchantment.is(EaEEnchantmentTags.MANA_BLESSING) || enchantment.is(EaEEnchantmentTags.MANA_TREASURE))
