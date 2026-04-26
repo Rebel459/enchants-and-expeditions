@@ -26,8 +26,8 @@ public abstract class EnchantmentTooltipHelperMixin {
         if (enchantment.is(EaEEnchantmentTags.BLESSING)) EnchantingAttributesHelper.addAttributeSymbol(component, "divinity");
         if (enchantment.is(EnchantmentTags.CURSE)) EnchantingAttributesHelper.addAttributeSymbol(component, "corruption");
         if (enchantment.is(EnchantmentTags.TREASURE)) EnchantingAttributesHelper.addAttributeSymbol(component, "treasure");
-        if (enchantment.is(EaEEnchantmentTags.POWERFUL)) component.append(Component.literal(" +").withStyle(ChatFormatting.BLUE));
-        if (enchantment.is(EaEEnchantmentTags.GENERIC) || enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) component.append(Component.literal(" ◇").withStyle(ChatFormatting.GRAY));
+        if (enchantment.is(EaEEnchantmentTags.POWERFUL)) EnchantingAttributesHelper.addAttributeSymbol(component, "powerful");
+        if (enchantment.is(EaEEnchantmentTags.GENERIC) || enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) EnchantingAttributesHelper.addAttributeSymbol(component, "generic");
         if (!enchantment.is(EaEEnchantmentTags.GENERIC) && !enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING) && !enchantment.is(EaEEnchantmentTags.GENERIC_TREASURE)) {
             if (enchantment.is(EaEEnchantmentTags.MANA) || enchantment.is(EaEEnchantmentTags.MANA_BLESSING) || enchantment.is(EaEEnchantmentTags.MANA_TREASURE))
                 EnchantingAttributesHelper.addAttributeSymbol(component, "mana");

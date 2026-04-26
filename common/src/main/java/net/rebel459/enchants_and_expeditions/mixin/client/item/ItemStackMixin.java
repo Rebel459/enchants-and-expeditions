@@ -30,7 +30,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -317,16 +320,16 @@ public abstract class ItemStackMixin {
     @Unique
     private MutableComponent attributeTooltip(String attribute, String amount) {
         if (attribute == "increases_blessing_chance") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.blessing").withStyle(ChatFormatting.GOLD)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(EnchantingAttributesHelper.addAttributeSymbol("divinity", true).append(" ")).append(Component.translatable("desc.enchants_and_expeditions.blessing").withStyle(ChatFormatting.GOLD)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
         }
         if (attribute == "decreases_blessing_chance") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.blessing").withStyle(ChatFormatting.GOLD)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(EnchantingAttributesHelper.addAttributeSymbol("divinity", true).append(" ")).append(Component.translatable("desc.enchants_and_expeditions.blessing").withStyle(ChatFormatting.GOLD)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
         }
         else if (attribute == "increases_curse_chance") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.curse").withStyle(ChatFormatting.RED)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(EnchantingAttributesHelper.addAttributeSymbol("corruption", true).append(" ")).append(Component.translatable("desc.enchants_and_expeditions.curse").withStyle(ChatFormatting.RED)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
         }
         else if (attribute == "decreases_curse_chance") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.curse").withStyle(ChatFormatting.RED)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(EnchantingAttributesHelper.addAttributeSymbol("corruption", true).append(" ")).append(Component.translatable("desc.enchants_and_expeditions.curse").withStyle(ChatFormatting.RED)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chance").withStyle(ChatFormatting.BLUE));
         }
         else if (attribute == "increases_enchanting_power") {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.enchanting").withStyle(ChatFormatting.GREEN)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.power").withStyle(ChatFormatting.BLUE));
@@ -341,64 +344,97 @@ public abstract class ItemStackMixin {
             return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.decreases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.experience").withStyle(ChatFormatting.GREEN)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.requirements").withStyle(ChatFormatting.BLUE));
         }
         else if (attribute == "mana") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.mana").withColor(ChatFormatting.DARK_BLUE.getColor()).append(": " + amount));
+            return EnchantingAttributesHelper.addAttributeSymbol("mana", true).append(" ").append(Component.translatable("desc.enchants_and_expeditions.mana").withColor(ChatFormatting.DARK_BLUE.getColor()).append(": " + amount));
         }
         else if (attribute == "frost") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.frost").withColor(ChatFormatting.DARK_AQUA.getColor()).append(": " + amount));
+            return EnchantingAttributesHelper.addAttributeSymbol("frost", true).append(" ").append(Component.translatable("desc.enchants_and_expeditions.frost").withColor(ChatFormatting.DARK_AQUA.getColor()).append(": " + amount));
         }
         else if (attribute == "scorch") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.scorch").withColor(EnchantingAttributesHelper.ORANGE).append(": " + amount));
+            return EnchantingAttributesHelper.addAttributeSymbol("scorch", true).append(" ").append(Component.translatable("desc.enchants_and_expeditions.scorch").withColor(EnchantingAttributesHelper.ORANGE).append(": " + amount));
         }
         else if (attribute == "increases_flow") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.flow").withStyle(ChatFormatting.AQUA)).append(" ");
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(EnchantingAttributesHelper.addAttributeSymbol("flow", true).append(" ")).append(Component.translatable("desc.enchants_and_expeditions.flow").withStyle(ChatFormatting.AQUA)).append(" ");
         }
         else if (attribute == "increases_chaos") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.chaos").withStyle(ChatFormatting.DARK_GRAY)).append(" ");
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(EnchantingAttributesHelper.addAttributeSymbol("chaos", true).append(" ")).append(Component.translatable("desc.enchants_and_expeditions.chaos").withStyle(ChatFormatting.DARK_GRAY)).append(" ");
         }
         else if (attribute == "increases_greed") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.greed").withStyle(ChatFormatting.YELLOW)).append(" ");
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(EnchantingAttributesHelper.addAttributeSymbol("greed", true).append(" ")).append(Component.translatable("desc.enchants_and_expeditions.greed").withStyle(ChatFormatting.YELLOW)).append(" ");
         }
         else if (attribute == "increases_might") {
-            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(" ").append(Component.translatable("desc.enchants_and_expeditions.might").withStyle(ChatFormatting.DARK_GREEN)).append(" ");
+            return Component.literal(" ").append(Component.translatable("desc.enchants_and_expeditions.increases").withStyle(ChatFormatting.BLUE)).append(EnchantingAttributesHelper.addAttributeSymbol("might", true).append(" ")).append(Component.translatable("desc.enchants_and_expeditions.might").withStyle(ChatFormatting.DARK_GREEN)).append(" ");
         }
         else return Component.literal("");
     }
 
     @Unique
     private MutableComponent statTooltip(String mana, String frost, String scorch, String flow, String chaos, String greed, String might, String corruption, String divinity) {
-        return statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity, false);
+        return statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity, true);
     }
 
     @Unique
     private MutableComponent statTooltip(String mana, String frost, String scorch, String flow, String chaos, String greed, String might, String corruption, String divinity, boolean skipZero) {
-        MutableComponent component = Component.literal(" ");
+        MutableComponent component = Component.literal("");
         boolean hasPrevious = false;
+        List<StatEntry> stats = List.of(
+                new StatEntry("mana", mana, ChatFormatting.DARK_BLUE.getColor()),
+                new StatEntry("frost", frost, ChatFormatting.DARK_AQUA.getColor()),
+                new StatEntry("scorch", scorch, EnchantingAttributesHelper.ORANGE),
+                new StatEntry("flow", flow, ChatFormatting.AQUA.getColor()),
+                new StatEntry("chaos", chaos, ChatFormatting.DARK_GRAY.getColor()),
+                new StatEntry("greed", greed, ChatFormatting.YELLOW.getColor()),
+                new StatEntry("might", might, ChatFormatting.DARK_GREEN.getColor()),
+                new StatEntry("corruption", corruption, ChatFormatting.RED.getColor()),
+                new StatEntry("divinity", divinity, ChatFormatting.GOLD.getColor())
+        );
 
-        hasPrevious = appendStat(component, hasPrevious, mana, ChatFormatting.DARK_BLUE.getColor(), skipZero);
-        hasPrevious = appendStat(component, hasPrevious, frost, ChatFormatting.DARK_AQUA.getColor(), skipZero);
-        hasPrevious = appendStat(component, hasPrevious, scorch, EnchantingAttributesHelper.ORANGE, skipZero);
-        hasPrevious = appendStat(component, hasPrevious, flow, ChatFormatting.AQUA.getColor(), skipZero);
-        hasPrevious = appendStat(component, hasPrevious, chaos, ChatFormatting.DARK_GRAY.getColor(), skipZero);
-        hasPrevious = appendStat(component, hasPrevious, greed, ChatFormatting.YELLOW.getColor(), skipZero);
-        hasPrevious = appendStat(component, hasPrevious, might, ChatFormatting.DARK_GREEN.getColor(), skipZero);
-        hasPrevious = appendStat(component, hasPrevious, corruption, ChatFormatting.RED.getColor(), skipZero);
-        appendStat(component, hasPrevious, divinity, ChatFormatting.GOLD.getColor(), skipZero);
+        Map<String, List<StatEntry>> groupedStats = new LinkedHashMap<>();
+        for (StatEntry stat : stats) {
+            if (skipZero && Objects.equals(stat.value(), "0")) {
+                continue;
+            }
+
+            groupedStats.computeIfAbsent(stat.value(), ignored -> new ArrayList<>()).add(stat);
+        }
+
+        for (List<StatEntry> group : groupedStats.values()) {
+            hasPrevious = appendStat(component, hasPrevious, group, false);
+        }
 
         return component;
     }
 
     @Unique
-    private boolean appendStat(MutableComponent component, boolean hasPrevious, String attribute, int color, boolean skipZero) {
-        if (!(!skipZero || !Objects.equals(attribute, "0"))) {
+    private boolean appendStat(MutableComponent component, boolean hasPrevious, List<StatEntry> stats, boolean skipZero) {
+        if (stats.isEmpty()) {
+            return hasPrevious;
+        }
+
+        StatEntry first = stats.getFirst();
+        if (skipZero && Objects.equals(first.value(), "0")) {
             return hasPrevious;
         }
 
         if (hasPrevious) {
-            component.append(Component.literal(", "));
+            component.append(Component.literal(","));
         }
 
-        component.append(Component.literal(attribute).withColor(color));
+        for (StatEntry stat : stats) {
+            component.append(EnchantingAttributesHelper.addAttributeSymbol(stat.attribute(), true));
+        }
+
+        component.append(Component.literal(" "));
+        if (stats.size() == 1) {
+            component.append(Component.literal(first.value()).withColor(first.color()));
+        }
+        else {
+            component.append(Component.literal(first.value()).withStyle(ChatFormatting.GRAY));
+        }
         return true;
+    }
+
+    @Unique
+    private record StatEntry(String attribute, String value, int color) {
     }
 
     @Unique

@@ -328,15 +328,15 @@ public abstract class EnchantmentScreenMixin {
         int symbolY = y + 1;
         x += 11;
 
-        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "mana"), symbolX, symbolY, 0xFF000000); symbolY += 10;
-        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "frost"), symbolX, symbolY, 0xFF000000); symbolY += 10;
-        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "scorch"), symbolX, symbolY, 0xFF000000); symbolY += 10;
-        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "flow"), symbolX, symbolY, 0xFF000000); symbolY += 10;
-        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "chaos"), symbolX, symbolY, 0xFF000000); symbolY += 10;
-        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "greed"), symbolX, symbolY, 0xFF000000); symbolY += 10;
-        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "might"), symbolX, symbolY, 0xFF000000); symbolY += 10;
-        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "corruption"), symbolX, symbolY, 0xFF000000); symbolY += 10;
-        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol(Component.literal(""), "divinity"), symbolX, symbolY, 0xFF000000);;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("mana"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("frost"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("scorch"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("flow"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("chaos"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("greed"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("might"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("corruption"), symbolX, symbolY, 0xFF000000); symbolY += 10;
+        graphics.text(screen.getFont(), EnchantingAttributesHelper.addAttributeSymbol("divinity"), symbolX, symbolY, 0xFF000000);;
 
         // Draw attribute text
         y += 1; // Center text in tooltip box
