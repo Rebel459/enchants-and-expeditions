@@ -85,16 +85,21 @@ public class EnchantingHelper {
     }
 
     public static void addReroll(ItemStack stack) {
-        stack.set(EaEDataComponents.REROLLS.get(), Math.min(getRerolls(stack) + 1, 3));
+        EnchantingRerolls rerolls = stack.get(EaEDataComponents.ENCHANTING_REROLLS.get());
+        stack.set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls.setRerolls(Math.min(getRerolls(stack) + 1, 3)));
     }
 
-    public static void resetRerolls(ItemStack stack) {
-        stack.set(EaEDataComponents.REROLLS.get(), 0);
+    public static void resetEnchantingRerolls(ItemStack stack) {
+        stack.set(EaEDataComponents.ENCHANTING_REROLLS.get(), EnchantingRerolls.create());
+    }
+
+    public static EnchantingRerolls getEnchantingRerolls(ItemStack stack) {
+        if (!stack.has(EaEDataComponents.ENCHANTING_REROLLS.get())) stack.set(EaEDataComponents.ENCHANTING_REROLLS.get(), EnchantingRerolls.create());
+        return stack.getOrDefault(EaEDataComponents.ENCHANTING_REROLLS.get(), EnchantingRerolls.create());
     }
 
     public static int getRerolls(ItemStack stack) {
-        if (!stack.has(EaEDataComponents.REROLLS.get())) stack.set(EaEDataComponents.REROLLS.get(), 0);
-        return stack.get(EaEDataComponents.REROLLS.get());
+        return getEnchantingRerolls(stack).rerolls();
     }
 
     public static int getRerollCost(ItemStack stack) {
@@ -204,6 +209,12 @@ public class EnchantingHelper {
         ItemEnchantments existingEnchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
 
         EnchantmentInfo info = getInfo(stack);
+
+        if (EnchantingHelper.hasSlots(stack) && stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(info) == 1) {
+            list.removeIf(enchantmentInstance -> {
+                return enchantmentInstance.enchantment().is(EaEEnchantmentTags.POWERFUL);
+            });
+        }
 
         list.removeIf(enchantmentInstance -> {
             return enchantmentInstance.enchantment().is(EaEEnchantments.BOUNDING_BLESSING) && stack.is(EaEItemTags.UNBOUNDABLE);

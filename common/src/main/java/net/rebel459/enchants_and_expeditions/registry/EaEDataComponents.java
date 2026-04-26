@@ -19,6 +19,7 @@ import net.minecraft.world.item.enchantment.Repairable;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
+import net.rebel459.enchants_and_expeditions.util.EnchantingRerolls;
 import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import net.rebel459.unified.platform.UnifiedEvents;
 import net.rebel459.unified.platform.UnifiedRegistries;
@@ -123,5 +124,5 @@ public class EaEDataComponents {
     static UnifiedRegistries.DataComponentTypes COMPONENTS = UnifiedRegistries.DataComponentTypes.create(EnchantsAndExpeditions.MOD_ID);
 
     public static final Supplier<DataComponentType<EnchantmentSlots>> ENCHANTMENT_SLOTS = COMPONENTS.register("enchantment_slots", (b) -> b.persistent(EnchantmentSlots.CODEC).networkSynchronized(EnchantmentSlots.STREAM_CODEC).cacheEncoding());
-    public static final Supplier<DataComponentType<Integer>> REROLLS = COMPONENTS.register("rerolls", (b) -> b.persistent(ExtraCodecs.NON_NEGATIVE_INT).ignoreSwapAnimation().networkSynchronized(ByteBufCodecs.VAR_INT));
+    public static final Supplier<DataComponentType<EnchantingRerolls>> ENCHANTING_REROLLS = COMPONENTS.register("enchanting_rerolls", (b) -> b.persistent(EnchantingRerolls.CODEC).networkSynchronized(EnchantingRerolls.STREAM_CODEC).cacheEncoding());
 }

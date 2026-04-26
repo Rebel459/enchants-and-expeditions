@@ -32,10 +32,10 @@ public class EnchantingAttributesHelper {
     public static MutableComponent addAttributeSymbol(MutableComponent component, String attribute, boolean alwaysShow) {
         if (!shouldShowAttributeSymbols() && !alwaysShow) return component;
         if (Objects.equals(attribute, "powerful")) {
-            return Component.literal(" +").withStyle(ChatFormatting.BLUE);
+            return component.append(Component.literal(" +").withStyle(ChatFormatting.BLUE));
         }
-        else if (Objects.equals(attribute, "generic")) {
-            return Component.literal(" ◇").withStyle(ChatFormatting.GRAY);
+        if (Objects.equals(attribute, "generic")) {
+            return component.append(Component.literal(" ◇").withStyle(ChatFormatting.GRAY));
         }
         int id = switch (attribute) {
             case "mana" -> 0;

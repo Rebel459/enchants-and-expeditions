@@ -38,7 +38,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EnchantingTableBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.rebel459.enchants_and_expeditions.util.EnchantingRerolls;
 import net.rebel459.enchants_and_expeditions.util.EnchantmentInfo;
+import org.apache.commons.lang3.tuple.Triple;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -281,7 +283,19 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                                 this.costs[jx] = 0;
                                 this.enchantClue[jx] = -1;
                                 this.levelClue[jx] = -1;
+                                EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(itemStack);
+                                if (rerolls.randomAttempts() > 0) {
+                                    player.onEnchantmentPerformed(ItemStack.EMPTY, 0);
+                                    rerolls = rerolls.setRandomAttempts(rerolls.randomAttempts() - 1);
+                                    itemStack.set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
+                                    EaE$slotsChanged(container, ci);
+                                    return;
+                                }
                                 continue;
+                            } else {
+                                EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(itemStack);
+                                rerolls = rerolls.setLastSetup(List.of(), 0, 0);
+                                itemStack.set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
                             }
 
                             EnchantmentInstance inst = list.get(this.random.nextInt(list.size()));
@@ -291,11 +305,14 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     }
 
                     int rerollCost = EnchantingHelper.getRerollCost(itemStack);
+                    EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(itemStack);
+                    Triple<List<Integer>, Integer, Integer> setup = Triple.of(List.of(this.mana, this.frost, this.scorch, this.flow, this.chaos, this.greed, this.might, this.corruption, this.divinity), this.totalBookshelves, this.totalAltars);
 
                     if (this.enchantClue[0] == -1 && this.enchantClue[1] == -1 &&
                             this.enchantClue[2] == -1 &&
-                            !(EnchantingHelper.allMaxLevel(itemStack) && this.totalAltars - this.powerAltars - this.stabilityAltars <= 0) &&
-                            bookshelfPower * 2 + this.totalAltars * 3 - this.stabilityAltars * 3 - this.powerAltars * 3 > rerollCost
+                            (!(EnchantingHelper.allMaxLevel(itemStack) && this.totalAltars - this.powerAltars - this.stabilityAltars <= 0) || (EnchantingHelper.hasSlots(itemStack) && itemStack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(info) > 0)) &&
+                            bookshelfPower * 2 + this.totalAltars * 3 - this.stabilityAltars * 3 - this.powerAltars * 3 > rerollCost &&
+                            !rerolls.hasSameSetup(setup.getLeft(), setup.getMiddle(), setup.getRight())
                     ) {
                         this.enchantClue[1] = EnchantingHelper.getRerolls(itemStack) < 3 ? REROLL_CLUE : NO_REROLL_CLUE;
                         this.levelClue[1] = rerollCost;
@@ -311,6 +328,9 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 }
             }
         }
+        EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(container.getItem(0));
+        rerolls = rerolls.setRandomAttempts(0);
+        container.getItem(0).set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
         ci.cancel();
     }
 
@@ -485,6 +505,8 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
         int totalWeight = this.mana + this.frost + this.scorch + this.flow + this.chaos + this.greed + this.might + curseWeight + manaBlessingWeight + frostBlessingWeight + scorchBlessingWeight + flowBlessingWeight + chaosBlessingWeight + greedBlessingWeight + mightBlessingWeight;
 
+        EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(stack);
+
         while ((random.nextInt(50) <= basePower || !firstEnchant || list.isEmpty()) && attempts < 10) {
             if (!list.isEmpty()) {
                 EnchantmentHelper.filterCompatibleEnchantments(baseList, list.getLast());
@@ -557,6 +579,23 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 basePower /= 2;
             }
 
+            if (list.isEmpty() && attempts == 9 && rerolls.randomAttempts() > 0) {
+                if (this.mana >= 1) WeightedRandom.getRandomItem(random, manaList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (this.frost >= 1) WeightedRandom.getRandomItem(random, frostList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (this.scorch >= 1) WeightedRandom.getRandomItem(random, scorchList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (this.flow >= 1) WeightedRandom.getRandomItem(random, flowList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (this.chaos >= 1) WeightedRandom.getRandomItem(random, chaosList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (this.greed >= 1) WeightedRandom.getRandomItem(random, greedList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (this.might >= 1) WeightedRandom.getRandomItem(random, mightList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (manaBlessingWeight >= 1) WeightedRandom.getRandomItem(random, manaBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (frostBlessingWeight >= 1) WeightedRandom.getRandomItem(random, frostBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (scorchBlessingWeight >= 1) WeightedRandom.getRandomItem(random, scorchBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (flowBlessingWeight >= 1) WeightedRandom.getRandomItem(random, flowBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (chaosBlessingWeight >= 1) WeightedRandom.getRandomItem(random, chaosBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (greedBlessingWeight >= 1) WeightedRandom.getRandomItem(random, greedBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+                if (mightBlessingWeight >= 1) WeightedRandom.getRandomItem(random, mightBlessingList, EnchantmentInstance::weight).ifPresent(list::add);
+            }
+
             attempts += 1;
         }
 
@@ -568,6 +607,10 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 }
                 list.remove(random.nextInt(1, list.size()));
             }
+        }
+
+        if (list.size() == 1 && list.getFirst().enchantment().is(EnchantmentTags.CURSE)) {
+            list.clear();
         }
 
         if (list.isEmpty() || !stack.isEnchantable()) {
@@ -606,6 +649,10 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                 EnchantingHelper.addReroll(this.enchantSlots.getItem(0));
                 this.enchantSlots.setChanged();
                 this.enchantmentSeed.set(player.getEnchantmentSeed());
+                EnchantingRerolls rerolls = EnchantingHelper.getEnchantingRerolls(this.enchantSlots.getItem(0));
+                rerolls = rerolls.setLastSetup(List.of(this.mana, this.frost, this.scorch, this.flow, this.chaos, this.greed, this.might, this.corruption, this.divinity), this.totalBookshelves, this.totalAltars);
+                rerolls = rerolls.setRandomAttempts(10);
+                this.enchantSlots.getItem(0).set(EaEDataComponents.ENCHANTING_REROLLS.get(), rerolls);
                 this.slotsChanged(this.enchantSlots);
                 level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
             });

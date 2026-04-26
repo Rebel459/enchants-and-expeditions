@@ -81,8 +81,11 @@ public abstract class EnchantmentHelperMixin {
         for (EnchantmentInstance instance : originalResults) {
             boolean isCompatible = true;
             for (var entry : existingEnchantments.entrySet()) {
-                Enchantment existingEnchant = entry.getKey().value();
-                if (existingEnchant.exclusiveSet() == instance.enchantment().value().exclusiveSet()) {
+                Holder<Enchantment> existingEnchant = entry.getKey();
+                if (existingEnchant.equals(instance.enchantment())) {
+                    continue;
+                }
+                if (!Enchantment.areCompatible(existingEnchant, instance.enchantment())) {
                     isCompatible = false;
                     break;
                 }

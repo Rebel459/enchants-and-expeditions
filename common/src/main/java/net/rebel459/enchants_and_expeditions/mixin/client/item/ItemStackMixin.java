@@ -369,11 +369,6 @@ public abstract class ItemStackMixin {
 
     @Unique
     private MutableComponent statTooltip(String mana, String frost, String scorch, String flow, String chaos, String greed, String might, String corruption, String divinity) {
-        return statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity, true);
-    }
-
-    @Unique
-    private MutableComponent statTooltip(String mana, String frost, String scorch, String flow, String chaos, String greed, String might, String corruption, String divinity, boolean skipZero) {
         MutableComponent component = Component.literal("");
         boolean hasPrevious = false;
         List<StatEntry> stats = List.of(
@@ -390,7 +385,7 @@ public abstract class ItemStackMixin {
 
         Map<String, List<StatEntry>> groupedStats = new LinkedHashMap<>();
         for (StatEntry stat : stats) {
-            if (skipZero && Objects.equals(stat.value(), "0")) {
+            if (Objects.equals(stat.value(), "0")) {
                 continue;
             }
 
@@ -398,20 +393,20 @@ public abstract class ItemStackMixin {
         }
 
         for (List<StatEntry> group : groupedStats.values()) {
-            hasPrevious = appendStat(component, hasPrevious, group, false);
+            hasPrevious = appendStat(component, hasPrevious, group);
         }
 
         return component;
     }
 
     @Unique
-    private boolean appendStat(MutableComponent component, boolean hasPrevious, List<StatEntry> stats, boolean skipZero) {
+    private boolean appendStat(MutableComponent component, boolean hasPrevious, List<StatEntry> stats) {
         if (stats.isEmpty()) {
             return hasPrevious;
         }
 
         StatEntry first = stats.getFirst();
-        if (skipZero && Objects.equals(first.value(), "0")) {
+        if (Objects.equals(first.value(), "0")) {
             return hasPrevious;
         }
 
@@ -434,8 +429,7 @@ public abstract class ItemStackMixin {
     }
 
     @Unique
-    private record StatEntry(String attribute, String value, int color) {
-    }
+    private record StatEntry(String attribute, String value, int color) { }
 
     @Unique
     private boolean is(Item item) {
