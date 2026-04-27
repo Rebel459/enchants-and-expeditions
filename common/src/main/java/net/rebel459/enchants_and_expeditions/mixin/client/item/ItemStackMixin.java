@@ -1,18 +1,7 @@
 package net.rebel459.enchants_and_expeditions.mixin.client.item;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.rebel459.enchants_and_expeditions.client.EnchantingAttributesHelper;
-import net.rebel459.enchants_and_expeditions.registry.EaEBlocks;
-import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
-import net.rebel459.enchants_and_expeditions.registry.EaEItems;
-import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
-import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
-import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
-import net.rebel459.item_tooltips.util.ScreenHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +11,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Blocks;
-import org.jspecify.annotations.Nullable;
+import net.rebel459.enchants_and_expeditions.client.EnchantingAttributesHelper;
+import net.rebel459.enchants_and_expeditions.registry.EaEBlocks;
+import net.rebel459.enchants_and_expeditions.registry.EaEItems;
+import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
+import net.rebel459.item_tooltips.util.ScreenHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -30,11 +23,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -47,49 +36,6 @@ public abstract class ItemStackMixin {
 
     @Shadow
     public abstract boolean is(Predicate<Holder<Item>> item);
-
-    @Inject(method = "addAttributeTooltips", at = @At("TAIL"))
-    private void addEnchantingSlots(Consumer<Component> consumer, TooltipDisplay display, @Nullable Player player, CallbackInfo ci) {
-        ItemStack stack = ItemStack.class.cast(this);
-        if (EnchantingHelper.hasSlots(stack) && !stack.has(DataComponents.STORED_ENCHANTMENTS) && stack.getItem() != Items.BOOK) {
-            EnchantmentSlots slots = stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get());
-            ChatFormatting formatting = ChatFormatting.GRAY;
-            if (slots.modifier() > 0) formatting = ChatFormatting.BLUE;
-            else if (slots.modifier() < 0) formatting = ChatFormatting.RED;
-            consumer.accept(
-                    Component.literal("")
-                            .append(Component.translatable("tooltip.enchants_and_expeditions.slots_used").withStyle(ChatFormatting.GRAY))
-                            .append(Component.literal(": " + (slots.getTotal() - slots.getRemaining(stack)) + " / ").withStyle(ChatFormatting.GRAY))
-                            .append(Component.literal(String.valueOf(slots.getTotal())).withStyle(formatting))
-            );
-        }
-    }
-
-    @Unique
-    private static String format(double value) {
-        return ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(value);
-    }
-
-/*    @Inject(method = "addDetailsToTooltip", at = @At("TAIL"))
-    private void addBookAttributes(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Player player, TooltipFlag tooltipFlag, Consumer<Component> consumer, CallbackInfo ci) {
-        ItemStack stack = ItemStack.class.cast(this);
-        if (stack.has(DataComponents.STORED_ENCHANTMENTS)) {
-            List<Double> bookAttributes = EnchantingHelper.getBookAttributes(stack.get(DataComponents.STORED_ENCHANTMENTS));
-            String mana = format(bookAttributes.getFirst());
-            String frost = format(bookAttributes.get(1));
-            String scorch = format(bookAttributes.get(2));
-            String flow = format(bookAttributes.get(3));
-            String chaos = format(bookAttributes.get(4));
-            String greed = format(bookAttributes.get(5));
-            String might = format(bookAttributes.get(6));
-            String corruption = format(bookAttributes.get(7));
-            String divinity = format(bookAttributes.getLast());
-            if (ScreenHelper.hasKeyDown()) {
-                consumer.accept(Component.literal(""));
-                consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity, true));
-            }
-        }
-    }*/
 
     @Inject(method = "addDetailsToTooltip", at = @At("HEAD"))
     private void addAttributes(Item.TooltipContext tooltipContext, TooltipDisplay tooltipDisplay, Player player, TooltipFlag tooltipFlag, Consumer<Component> consumer, CallbackInfo ci) {

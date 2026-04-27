@@ -27,7 +27,7 @@ public record EnchantmentSlots(int slots, int modifier) {
     }
 
     public EnchantmentSlots setModifier(int modifier) {
-        return new EnchantmentSlots(this.slots, 0);
+        return new EnchantmentSlots(this.slots, modifier);
     }
 
     public int getRemaining(ItemStack stack) {

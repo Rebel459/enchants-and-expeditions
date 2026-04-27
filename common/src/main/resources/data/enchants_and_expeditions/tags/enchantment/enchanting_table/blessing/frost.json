@@ -1,6 +1,7 @@
 {
   "values": [
     "#enchants_and_expeditions:enchanting_table/blessing/all",
-    "minecraft:frost_walker"
+    "minecraft:frost_walker",
+    "enchants_and_expeditions:winter_blessing"
   ]
 }

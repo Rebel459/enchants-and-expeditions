@@ -1,7 +1,5 @@
 package net.rebel459.enchants_and_expeditions.mixin.entity;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
@@ -28,7 +26,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -38,8 +35,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Random;
-
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
 
@@ -47,6 +42,12 @@ public abstract class LivingEntityMixin {
 
     @Shadow
     public abstract @org.jspecify.annotations.Nullable LivingEntity asLivingEntity();
+
+    @Shadow
+    public abstract ItemStack getMainHandItem();
+
+    @Shadow
+    public abstract ItemStack getOffhandItem();
 
     @Unique
     DamageSource damageSource;
@@ -66,7 +67,7 @@ public abstract class LivingEntityMixin {
             ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
             if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.INFERNO_BLESSING) && entity.isOnFire()) {
                 int setFireTicks = entity.getRemainingFireTicks() + 50;
-                if (setFireTicks > 200) setFireTicks = 200;
+                if (setFireTicks > 200) setFireTicks = Math.max(200, entity.getRemainingFireTicks());
                 entity.setRemainingFireTicks(setFireTicks);
             }
         }
@@ -80,6 +81,19 @@ public abstract class LivingEntityMixin {
             }
         }
         return value;
+    }
+
+    @Inject(method = "hurtServer", at = @At(value = "TAIL"))
+    private void winterBlessing(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = LivingEntity.class.cast(this);
+        if (source.getEntity() instanceof LivingEntity attacker) {
+            ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
+            if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.WINTER_BLESSING) && entity.isFreezing()) {
+                int setFreezeTicks = entity.getTicksFrozen() + 80;
+                if (setFreezeTicks > 400) setFreezeTicks = Math.max(400, entity.getTicksFrozen());
+                entity.setRemainingFireTicks(setFreezeTicks);
+            }
+        }
     }
 
     @Inject(method = "hurtServer", at = @At(value = "TAIL"))
@@ -100,20 +114,8 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
-    private float entropy(float value) {
-        if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
-            ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
-            if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.ENTROPY)) {
-                int entropy = EnchantingHelper.getLevel(attackerStack, EaEEnchantments.ENTROPY);
-                value += new Random().nextInt(-1, 3 + entropy);
-            }
-        }
-        return value;
-    }
-
     @Inject(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "TAIL"))
-    private void freezeAndFire(ServerLevel serverLevel, DamageSource damageSource, float f, CallbackInfoReturnable<Boolean> cir) {
+    private void freezeAndFire(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity attacked = LivingEntity.class.cast(this);
         if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
             boolean equilibriumTriggered = false;
@@ -121,7 +123,7 @@ public abstract class LivingEntityMixin {
             if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.EQUILIBRIUM)) {
                 float conversion = 2.5F;
                 if (attacked.isOnFire() && attacked.getTicksFrozen() == 0) {
-                    EnchantingHelper.applyFreezing(serverLevel, attacked, attacker, (int) (attacked.getRemainingFireTicks() * conversion));
+                    EnchantingHelper.applyFreezing(level, attacked, attacker, (int) (attacked.getRemainingFireTicks() * conversion));
                     attacked.clearFire();
                     equilibriumTriggered = true;
                 }
@@ -131,17 +133,23 @@ public abstract class LivingEntityMixin {
                     equilibriumTriggered = true;
                 }
             }
+            if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BLIZZARD)) {
+                if (attacked.isFullyFrozen()) {
+                    int enchantmentLevel = EnchantingHelper.getLevel(stack, EaEEnchantments.BLIZZARD);
+                    EnchantingHelper.applyAreaFreeze(level, attacker, attacked, 300, 2.5F * enchantmentLevel);
+                }
+            }
             if (!equilibriumTriggered) {
                 if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.CHILLED)) {
-                    if (serverLevel.getRandom().nextInt(1, 6) >= 6 - EnchantingHelper.getLevel(stack, EaEEnchantments.CHILLED)) {
-                        EnchantingHelper.applyFreezing(serverLevel, attacked, attacker, EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 300, 50));
+                    if (level.getRandom().nextInt(1, 6) >= 6 - EnchantingHelper.getLevel(stack, EaEEnchantments.CHILLED)) {
+                        EnchantingHelper.applyFreezing(level, attacked, attacker, EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 300, 50));
                     }
                 }
                 if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SMITING)) {
                     attacked.setRemainingFireTicks(Math.max(attacked.getRemainingFireTicks(), EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 80, 40)));
                 }
             }
-        }
+            }
     }
 
     @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
@@ -274,7 +282,7 @@ public abstract class LivingEntityMixin {
     @Unique
     private void second() {
         temperingBlessing();
-        fluidityBlessing();
+        fluidityAndNeptuneBlessings();
     }
 
     @Unique
@@ -283,26 +291,34 @@ public abstract class LivingEntityMixin {
         if (!(entity.getRemainingFireTicks() > 0)) return;
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (slot.isArmor()) {
-                ItemStack stack = this.getItemBySlot(slot);
-                if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.TEMPERING_BLESSING) && stack.getDamageValue() >= 1) {
-                    stack.setDamageValue(stack.getDamageValue() - 1);
-                    if (stack.getDamageValue() < 0) stack.setDamageValue(0);
-                }
+                EnchantingHelper.repairItem(this.getItemBySlot(slot), EaEEnchantments.TEMPERING_BLESSING);
             }
         }
+        EnchantingHelper.repairItem(this.getMainHandItem(), EaEEnchantments.TEMPERING_BLESSING);
+        EnchantingHelper.repairItem(this.getOffhandItem(), EaEEnchantments.TEMPERING_BLESSING);
     }
 
     @Unique
-    private void fluidityBlessing() {
+    private boolean secondTime = false;
+
+    @Unique
+    private void fluidityAndNeptuneBlessings() {
         Entity entity = Entity.class.cast(this);
-        if (!entity.isInWater()) return;
+        if (!entity.isInWaterOrRain()) return;
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (slot.isArmor()) {
                 ItemStack stack = this.getItemBySlot(slot);
                 if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.FLUIDITY_BLESSING)) {
                     if (entity instanceof LivingEntity livingEntity) livingEntity.heal(0.5F);
                 }
+                if (this.secondTime) EnchantingHelper.repairItem(stack, EaEEnchantments.NEPTUNE_BLESSING);
             }
+        }
+        if (this.secondTime) {
+            EnchantingHelper.repairItem(this.getMainHandItem(), EaEEnchantments.NEPTUNE_BLESSING);
+            EnchantingHelper.repairItem(this.getOffhandItem(), EaEEnchantments.NEPTUNE_BLESSING);
+        } else {
+            this.secondTime = true;
         }
     }
 

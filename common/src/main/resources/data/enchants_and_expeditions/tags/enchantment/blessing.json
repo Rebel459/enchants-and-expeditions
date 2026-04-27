@@ -10,6 +10,10 @@
     "enchants_and_expeditions:tempering_blessing",
     "enchants_and_expeditions:fluidity_blessing",
     "enchants_and_expeditions:conductivity_blessing",
+    "enchants_and_expeditions:arcana_blessing",
+    "enchants_and_expeditions:neptune_blessing",
+    "enchants_and_expeditions:winter_blessing",
+    "enchants_and_expeditions:celerity_blessing",
     {
       "id": "enchants_and_expeditions:justice_blessing",
       "required": false

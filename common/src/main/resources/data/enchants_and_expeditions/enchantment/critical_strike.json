@@ -1,7 +1,7 @@
 {
   "anvil_cost": 4,
   "description": {
-    "translate": "enchantment.enchants_and_expeditions.entropy"
+    "translate": "enchantment.enchants_and_expeditions.critical_strike"
   },
   "effects": {},
   "max_cost": {
@@ -16,7 +16,6 @@
   "slots": [
     "mainhand"
   ],
-  "exclusive_set": "#minecraft:exclusive_set/damage",
   "supported_items": "#minecraft:enchantable/sharp_weapon",
   "weight": 3
 }

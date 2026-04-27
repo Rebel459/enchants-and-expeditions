@@ -94,13 +94,13 @@
   },
   "exclusive_set": "#enchants_and_expeditions:blessing",
   "max_cost": {
-    "base": 90,
-    "per_level_above_first": 30
+    "base": 75,
+    "per_level_above_first": 25
   },
   "max_level": 1,
   "min_cost": {
     "base": 25,
-    "per_level_above_first": 30
+    "per_level_above_first": 25
   },
   "slots": [
     "armor"

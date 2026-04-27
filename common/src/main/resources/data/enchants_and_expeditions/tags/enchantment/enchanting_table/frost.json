@@ -3,6 +3,7 @@
     "#enchants_and_expeditions:enchanting_table/all",
     "enchants_and_expeditions:chilled",
     "enchants_and_expeditions:icebound",
+    "enchants_and_expeditions:blizzard",
     {
       "id": "enchants_and_expeditions:frostbite",
       "required": false

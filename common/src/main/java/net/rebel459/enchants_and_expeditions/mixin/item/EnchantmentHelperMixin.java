@@ -1,7 +1,14 @@
 package net.rebel459.enchants_and_expeditions.mixin.item;
 
 import com.google.common.collect.Lists;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
+import com.mojang.logging.LogUtils;
+import net.minecraft.world.inventory.AnvilMenu;
 import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
+import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
@@ -15,13 +22,16 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static net.minecraft.world.item.enchantment.EnchantmentHelper.selectEnchantment;
@@ -94,5 +104,25 @@ public abstract class EnchantmentHelperMixin {
         }
 
         cir.setReturnValue(filteredResults);
+    }
+
+    @Inject(method = "updateEnchantments", at = @At("HEAD"))
+    private static void EaE$captureArcana(ItemStack itemStack, Consumer<ItemEnchantments.Mutable> consumer, CallbackInfoReturnable<ItemEnchantments> cir, @Share("hadArcana") LocalBooleanRef hadArcana) {
+        hadArcana.set(EnchantingHelper.hasEnchantment(itemStack, EaEEnchantments.ARCANA_BLESSING));
+    }
+
+    @Inject(method = "updateEnchantments", at = @At("RETURN"))
+    private static void EaE$arcanaBlessing(ItemStack itemStack, Consumer<ItemEnchantments.Mutable> consumer, CallbackInfoReturnable<ItemEnchantments> cir, @Share("hadArcana") LocalBooleanRef hadArcana) {
+        if (cir.getReturnValue().isEmpty()) return;
+        boolean hasArcana = EnchantingHelper.hasEnchantment(itemStack, EaEEnchantments.ARCANA_BLESSING);
+        if (EnchantingHelper.hasSlots(itemStack)) {
+            EnchantmentSlots slots = itemStack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get());
+            if (!hadArcana.get() && hasArcana) {
+                slots = slots.setModifier(slots.modifier() + 1);
+            } else if (hadArcana.get() && !hasArcana) {
+                slots = slots.setModifier(slots.modifier() - 1);
+            }
+            itemStack.set(EaEDataComponents.ENCHANTMENT_SLOTS.get(), slots);
+        }
     }
 }

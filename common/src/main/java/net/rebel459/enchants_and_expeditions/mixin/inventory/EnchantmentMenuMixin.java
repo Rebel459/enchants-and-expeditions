@@ -191,7 +191,6 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
                     this.stabilityAltars = 0;
                     this.powerAltars = 0;
 
-                    int total = 0;
                     this.chiseledBookshelfItems.clear();
 
                     for (BlockPos off : EnchantingTableBlock.BOOKSHELF_OFFSETS) {

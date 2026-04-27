@@ -2,7 +2,6 @@
   "replace": false,
   "values": [
     "enchants_and_expeditions:chilled",
-    "enchants_and_expeditions:smiting",
-    "enchants_and_expeditions:entropy"
+    "enchants_and_expeditions:smiting"
   ]
 }

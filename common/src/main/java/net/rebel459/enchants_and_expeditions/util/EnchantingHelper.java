@@ -5,6 +5,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -30,6 +31,7 @@ import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
 import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
 import org.apache.commons.lang3.BooleanUtils;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -361,7 +363,7 @@ public class EnchantingHelper {
     }
 
     public static void applyFreezing(ServerLevel level, LivingEntity affected, LivingEntity affector, int duration) {
-        Optional<Holder.Reference<MobEffect>> freezing = BuiltInRegistries.MOB_EFFECT.get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
+        Optional<Holder.Reference<MobEffect>> freezing = level.registryAccess().lookup(Registries.MOB_EFFECT).get().get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
         if (freezing.isPresent() && EaEConfig.get().integrations.legacies_and_legends) affected.addEffect(new MobEffectInstance(freezing.get(), duration));
         level.sendParticles(ParticleTypes.SNOWFLAKE, affected.getX(), affected.getRandomY(), affected.getZ(), 10, 0, -1, 0, 0.5);
         level.playSound(affected, affected.blockPosition(), SoundEvents.SNOW_HIT, affector.getSoundSource());
@@ -396,20 +398,28 @@ public class EnchantingHelper {
         return entityCount;
     }
 
-    public static int applyAreaEffect(ServerLevel level, LivingEntity wielder, LivingEntity target, MobEffectInstance mobEffect) {
+    public static int applyAreaEffect(ServerLevel level, LivingEntity wielder, LivingEntity target, MobEffectInstance mobEffect, float power) {
         level.levelEvent(2013, target.getOnPos(), 750);
-        List<LivingEntity> entityList = level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(3.5F), MaceItem.knockbackPredicate(wielder, target));
+        List<LivingEntity> entityList = level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(power), MaceItem.knockbackPredicate(wielder, target));
 
         int entityCount = 0;
 
         for (LivingEntity livingEntity : entityList) {
-            Optional<Holder.Reference<MobEffect>> freezing = BuiltInRegistries.MOB_EFFECT.get(Identifier.fromNamespaceAndPath("legacies_and_legends", "freezing"));
-            if (freezing.isPresent() && mobEffect.getEffect() == freezing.get()) {
-                applyFreezing(level, target, wielder, mobEffect.getDuration());
-            }
-            else {
-                livingEntity.addEffect(mobEffect);
-            }
+            livingEntity.addEffect(mobEffect);
+            entityCount += 1;
+        }
+
+        return entityCount;
+    }
+
+    public static int applyAreaFreeze(ServerLevel level, LivingEntity wielder, LivingEntity target, int duration, float power) {
+        level.levelEvent(2013, target.getOnPos(), 750);
+        List<LivingEntity> entityList = level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(power), MaceItem.knockbackPredicate(wielder, target));
+
+        int entityCount = 0;
+
+        for (LivingEntity livingEntity : entityList) {
+            applyFreezing(level, livingEntity, wielder, Math.max(duration, livingEntity.getTicksFrozen()));
             entityCount += 1;
         }
 
@@ -420,5 +430,12 @@ public class EnchantingHelper {
         int cost = slot + 1;
         if (EaEConfig.get().general.new_table_costs) cost = Math.clamp(levels / 3, cost, 30);
         return cost;
+    }
+
+    public static void repairItem(ItemStack stack, ResourceKey<Enchantment> enchantment) {
+        if (EnchantingHelper.hasEnchantment(stack, enchantment) && stack.getDamageValue() >= 1) {
+            stack.setDamageValue(stack.getDamageValue() - 1);
+            if (stack.getDamageValue() < 0) stack.setDamageValue(0);
+        }
     }
 }

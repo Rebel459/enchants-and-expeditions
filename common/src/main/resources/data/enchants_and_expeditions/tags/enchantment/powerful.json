@@ -6,7 +6,6 @@
     "minecraft:fortune",
     "minecraft:looting",
     "minecraft:sharpness",
-    "minecraft:efficiency",
     "minecraft:power",
     "minecraft:density",
     "minecraft:wind_burst",
@@ -17,10 +16,7 @@
     "enchants_and_expeditions:arcane_protection",
     "enchants_and_expeditions:bloodlust",
     "enchants_and_expeditions:smiting",
-    {
-      "id": "combat_reborn:endurance",
-      "required": false
-    },
+    "enchants_and_expeditions:blizzard",
     {
       "id": "combat_reborn:cleaving",
       "required": false

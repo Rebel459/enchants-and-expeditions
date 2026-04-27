@@ -1,8 +1,11 @@
 package net.rebel459.enchants_and_expeditions.mixin.inventory;
 
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
+import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
@@ -24,6 +27,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.AnvilBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -36,6 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 @Mixin(AnvilMenu.class)
 public abstract class AnvilMenuMixin {
@@ -198,6 +203,7 @@ public abstract class AnvilMenuMixin {
 
             EaE$bookLimit();
             EaE$modifyPrice();
+            EaE$checkArcana(anvilMenu.inputSlots.getItem(0), anvilMenu.resultSlots.getItem(0));
 
             anvilMenu.broadcastChanges();
         } else {
@@ -363,5 +369,19 @@ public abstract class AnvilMenuMixin {
             value += enchantment.value().getAnvilCost() * enchantments.getLevel(enchantment);
         }
         return Math.clamp(value, 1, 99);
+    }
+
+    private static void EaE$checkArcana(ItemStack input, ItemStack output) {
+        boolean hadArcana = EnchantingHelper.hasEnchantment(input, EaEEnchantments.ARCANA_BLESSING);
+        boolean hasArcana = EnchantingHelper.hasEnchantment(output, EaEEnchantments.ARCANA_BLESSING);
+        if (EnchantingHelper.hasSlots(output)) {
+            EnchantmentSlots slots = output.get(EaEDataComponents.ENCHANTMENT_SLOTS.get());
+            if (!hadArcana && hasArcana) {
+                slots = slots.setModifier(slots.modifier() + 1);
+            } else if (hadArcana && !hasArcana) {
+                slots = slots.setModifier(slots.modifier() - 1);
+            }
+            output.set(EaEDataComponents.ENCHANTMENT_SLOTS.get(), slots);
+        }
     }
 }

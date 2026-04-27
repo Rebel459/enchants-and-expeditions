@@ -1,6 +1,7 @@
 {
   "values": [
     "#enchants_and_expeditions:enchanting_table/blessing/all",
-    "enchants_and_expeditions:bounding_blessing"
+    "enchants_and_expeditions:bounding_blessing",
+    "enchants_and_expeditions:celerity_blessing"
   ]
 }

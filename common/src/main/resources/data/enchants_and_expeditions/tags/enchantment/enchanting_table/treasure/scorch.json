@@ -1,3 +1,8 @@
 {
-  "values": []
+  "values": [
+    {
+      "id": "progression_reborn:reforge",
+      "required": false
+    }
+  ]
 }

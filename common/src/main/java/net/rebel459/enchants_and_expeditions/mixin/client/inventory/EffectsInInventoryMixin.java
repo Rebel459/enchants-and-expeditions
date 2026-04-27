@@ -1,0 +1,22 @@
+package net.rebel459.enchants_and_expeditions.mixin.client.inventory;
+
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.inventory.EffectsInInventory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.rebel459.enchants_and_expeditions.registry.EaEMobEffects;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+
+import java.util.Collection;
+
+@Mixin(EffectsInInventory.class)
+public abstract class EffectsInInventoryMixin {
+
+    @WrapOperation(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/EffectsInInventory;extractEffects(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Ljava/util/Collection;IIIII)V"))
+    private void hideEffects(EffectsInInventory effectsInInventory, GuiGraphicsExtractor graphics, Collection<MobEffectInstance> activeEffects, int x0, int yStep, int mouseX, int mouseY, int maxWidth, Operation<Void> original) {
+        activeEffects.removeIf(effect -> (effect.is(EaEMobEffects.LIGHTNING_IMMUNE) || effect.is(EaEMobEffects.CELERITY)) && !effect.showIcon() && !effect.isVisible());
+        original.call(effectsInInventory, graphics, activeEffects, x0, yStep, mouseX, mouseY, maxWidth);
+    }
+}

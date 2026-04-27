@@ -3,7 +3,6 @@ package net.rebel459.enchants_and_expeditions.registry;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,12 +21,16 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> VENGEANCE_BLESSING = key("vengeance_blessing");
 	public static final ResourceKey<Enchantment> TEMPERING_BLESSING = key("tempering_blessing");
     public static final ResourceKey<Enchantment> FLUIDITY_BLESSING = key("fluidity_blessing");
-    public static final ResourceKey<Enchantment> CONDUCTIVITY_BLESSING = key("conductivity_blessing");
+	public static final ResourceKey<Enchantment> CONDUCTIVITY_BLESSING = key("conductivity_blessing");
+	public static final ResourceKey<Enchantment> ARCANA_BLESSING = key("arcana_blessing");
+	public static final ResourceKey<Enchantment> NEPTUNE_BLESSING = key("neptune_blessing");
+	public static final ResourceKey<Enchantment> WINTER_BLESSING = key("winter_blessing");
+	public static final ResourceKey<Enchantment> CELERITY_BLESSING = key("celerity_blessing");
 
 	// Normal
 	public static final ResourceKey<Enchantment> EXTRACTION = key("extraction");
 	public static final ResourceKey<Enchantment> BLOODLUST = key("bloodlust");
-	public static final ResourceKey<Enchantment> ENTROPY = key("entropy");
+	public static final ResourceKey<Enchantment> CRITICAL_STRIKE = key("critical_strike");
 	public static final ResourceKey<Enchantment> EQUESTRIAN = key("equestrian");
 	public static final ResourceKey<Enchantment> RECOVERY = key("recovery");
 	public static final ResourceKey<Enchantment> ICEBOUND = key("icebound");
@@ -41,7 +44,8 @@ public class EaEEnchantments {
     public static final ResourceKey<Enchantment> SLIPSTREAM = key("slipstream");
     public static final ResourceKey<Enchantment> SOAR = key("soar");
     public static final ResourceKey<Enchantment> FEATHER_FLIGHT = key("feather_flight");
-    public static final ResourceKey<Enchantment> EQUILIBRIUM = key("equilibrium");
+	public static final ResourceKey<Enchantment> EQUILIBRIUM = key("equilibrium");
+	public static final ResourceKey<Enchantment> BLIZZARD = key("blizzard");
 
 	// Curse
 	public static final ResourceKey<Enchantment> FRAGILITY_CURSE = key("fragility_curse");

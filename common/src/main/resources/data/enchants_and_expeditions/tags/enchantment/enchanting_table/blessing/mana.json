@@ -1,6 +1,7 @@
 {
   "values": [
     "#enchants_and_expeditions:enchanting_table/blessing/all",
-    "minecraft:infinity"
+    "minecraft:infinity",
+    "enchants_and_expeditions:arcana_blessing"
   ]
 }

@@ -1,10 +1,6 @@
 {
   "values": [
     {
-      "id": "progression_reborn:reforge",
-      "required": false
-    },
-    {
       "id": "trailiertales:reaping",
       "required": false
     },

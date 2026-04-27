@@ -27,6 +27,13 @@ public class EaEMobEffects {
                     .addAttributeModifier(Attributes.MAX_ABSORPTION, EnchantsAndExpeditions.id("effect.overheal"), 1.0, AttributeModifier.Operation.ADD_VALUE)
     );
 
+    public static final Holder<MobEffect> CELERITY = EFFECTS.registerHolder(
+            "celerity",
+            () -> new OverhealMobEffect(MobEffectCategory.BENEFICIAL, 0)
+                    .addAttributeModifier(Attributes.MINING_EFFICIENCY, EnchantsAndExpeditions.id("effect.celerity"), 6.0, AttributeModifier.Operation.ADD_VALUE)
+                    .addAttributeModifier(Attributes.ATTACK_SPEED, EnchantsAndExpeditions.id("effect.celerity"), 0.4, AttributeModifier.Operation.ADD_VALUE)
+    );
+
     public static void init() {}
 
     public static class OverhealMobEffect extends AbsorptionMobEffect {

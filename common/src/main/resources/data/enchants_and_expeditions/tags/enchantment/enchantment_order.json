@@ -10,6 +10,7 @@
     "enchants_and_expeditions:recovery",
     "enchants_and_expeditions:velocity",
     "enchants_and_expeditions:icebound",
+    "enchants_and_expeditions:blizzard",
     {
       "id": "combat_reborn:endurance",
       "required": false
@@ -24,7 +25,7 @@
     "enchants_and_expeditions:equilibrium",
     "enchants_and_expeditions:smiting",
     "enchants_and_expeditions:chilled",
-    "enchants_and_expeditions:entropy",
+    "enchants_and_expeditions:critical_strike",
     "minecraft:smite",
     "minecraft:bane_of_arthropods",
     "minecraft:impaling",
