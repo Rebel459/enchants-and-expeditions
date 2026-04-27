@@ -322,7 +322,9 @@ public class EnchantingHelper {
     }
 
     public static int getLevel(ItemStack stack, ResourceKey<Enchantment> enchantment) {
-        return EnchantmentHelper.getItemEnchantmentLevel(getEnchantment(stack, enchantment), stack);
+        Holder<Enchantment> holder = getEnchantment(stack, enchantment);
+        if (holder == null) return 0;
+        return EnchantmentHelper.getItemEnchantmentLevel(holder, stack);
     }
 
     public static Holder<Enchantment> getEnchantment(ItemStack stack, ResourceKey<Enchantment> enchantment) {
