@@ -164,8 +164,14 @@
   "text.autoconfig.enchants_and_expeditions.option.general": "General",
   "text.autoconfig.enchants_and_expeditions.option.general.enchantment_slots": "Enchantment Slots",
   "text.autoconfig.enchants_and_expeditions.option.general.enchantment_slots.@Tooltip": "Whether enchantments should be limited by the slot system. Full slot values for each item / tag must be configured in the json file directly",
+  "text.autoconfig.enchants_and_expeditions.option.general.powerful_enchantments": "Powerful Enchantments",
+  "text.autoconfig.enchants_and_expeditions.option.general.powerful_enchantments.@Tooltip": "Whether certain enchantments should be deemed as powerful and consume 2 enchantment slots, as opposed to one",
   "text.autoconfig.enchants_and_expeditions.option.general.repeat_table_enchanting": "Repeat Table Enchanting",
-  "text.autoconfig.enchants_and_expeditions.option.general.repeat_table_enchanting.@Tooltip": "Whether already-enchanted items should be enchantable multiple times at the Enchanting Table",
+  "text.autoconfig.enchants_and_expeditions.option.general.repeat_table_enchanting.@Tooltip": "Whether already-enchanted items should further be able to receive enchantments at the Enchanting Table",
+  "text.autoconfig.enchants_and_expeditions.option.general.new_table_costs": "New Table Costs",
+  "text.autoconfig.enchants_and_expeditions.option.general.new_table_costs.@Tooltip": "Whether the cost of using the Enchanting Table should be rebalanced",
+  "text.autoconfig.enchants_and_expeditions.option.general.enchantment_symbols": "Enchantment Symbols",
+  "text.autoconfig.enchants_and_expeditions.option.general.enchantment_symbols.@Tooltip": "How symbols representing the element and status of enchantments should be shown next to their name. Can be either ALWAYS, HOLD_KEY or NEVER",
   "text.autoconfig.enchants_and_expeditions.option.general.experience_rebalance": "Experience Rebalance",
   "text.autoconfig.enchants_and_expeditions.option.general.experience_rebalance.@Tooltip": "Whether the rebalanced experience-per-level formula should be used, which includes more reasonable experience requirements beyond level 30",
   "text.autoconfig.enchants_and_expeditions.option.general.anvil_break_chance": "Anvil Break Chance",
@@ -176,6 +182,8 @@
   "text.autoconfig.enchants_and_expeditions.option.misc": "Miscellaneous",
   "text.autoconfig.enchants_and_expeditions.option.misc.ordered_enchantment_tooltips": "Ordered Enchantment Tooltips",
   "text.autoconfig.enchants_and_expeditions.option.misc.ordered_enchantment_tooltips.@Tooltip": "Whether an improved item enchantment tooltip ordering system should be used, where blessings are placed at the top, enchantments in the middle, and curses at the bottom",
+  "text.autoconfig.enchants_and_expeditions.option.misc.panel_visibility": "Panel Visibility",
+  "text.autoconfig.enchants_and_expeditions.option.misc.panel_visibility.@Tooltip": "Stores the visibility of Enchanting Table panels. Can be either LEFT, BOTH or NONE.",
   "text.autoconfig.enchants_and_expeditions.option.misc.enchant_function_fallback": "Enchant Function Fallback",
   "text.autoconfig.enchants_and_expeditions.option.misc.enchant_function_fallback.@Tooltip": "Whether loot tables which do not specify an enchantment pool should default to #on_random_loot. It is recommended to keep this enabled",
   "text.autoconfig.enchants_and_expeditions.option.misc.loot_table_injects": "Loot Table Injects",
@@ -189,6 +197,14 @@
   "text.autoconfig.enchants_and_expeditions.option.integrations.remnants": "Remnants",
   "text.autoconfig.enchants_and_expeditions.option.integrations.enderscape": "Enderscape",
 
-  "text.autoconfig.enchants_and_expeditions.option.disable_enchantments": "Disable Enchantments",
-  "text.autoconfig.enchants_and_expeditions.option.disable_enchantments.@Tooltip": "You can add enchantments to the #enchants_and_expeditions:disabled_enchantments tag in order to disable them"
+  "text.autoconfig.enchants_and_expeditions.option.disabled_enchantments": "Disabled Enchantments",
+  "text.autoconfig.enchants_and_expeditions.option.disabled_enchantments.@Tooltip": "A list of enchantments to be disabled. Accepts both ids (`minecraft:fire_aspect`), tags (`#minecraft:curse`) or even phrases (`*protection`).",
+
+  "text.autoconfig.enchants_and_expeditions.option.enchantment_slots": "Enchantment Slots",
+  "text.autoconfig.enchants_and_expeditions.option.enchantment_slots.@Tooltip": "A map to specify custom enchantment slot values. Anything not specified here falls back to the formula: `enchantability / 4 (min 3, max 5)`",
+  "text.autoconfig.enchants_and_expeditions.option.EnchantmentSlots": "Entry",
+  "text.autoconfig.enchants_and_expeditions.option.EnchantmentSlots.key": "Key",
+  "text.autoconfig.enchants_and_expeditions.option.EnchantmentSlots.key.@Tooltip": "Accepts both ids (`minecraft:iron_sword`), tags (`#minecraft:swords`) or even phrases (`*iron`)",
+  "text.autoconfig.enchants_and_expeditions.option.EnchantmentSlots.slots": "Slots",
+  "text.autoconfig.enchants_and_expeditions.option.EnchantmentSlots.slots.@Tooltip": "How many enchantment slots the associated key should have"
 }

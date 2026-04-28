@@ -18,7 +18,7 @@ public class EnchantingAttributesHelper {
 
     public static boolean shouldShowAttributeSymbols() {
         EaEConfig.GeneralConfig general = EaEConfig.get().general;
-        return general.enchanting_attribute_tooltip != EaEConfig.EnchantingAttributeTooltip.NEVER && (general.enchanting_attribute_tooltip != EaEConfig.EnchantingAttributeTooltip.HOLD_KEY || ScreenHelper.hasKeyDown());
+        return general.enchantment_symbols != EaEConfig.EnchantmentSymbols.NEVER && (general.enchantment_symbols != EaEConfig.EnchantmentSymbols.HOLD_KEY || ScreenHelper.hasKeyDown());
     }
 
     public static MutableComponent addAttributeSymbol(String attribute) {

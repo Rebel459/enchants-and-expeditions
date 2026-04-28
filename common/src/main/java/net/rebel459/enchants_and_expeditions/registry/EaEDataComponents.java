@@ -4,11 +4,9 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -22,9 +20,12 @@ import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
 import net.rebel459.enchants_and_expeditions.util.EnchantingRerolls;
 import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import net.rebel459.unified.platform.UnifiedEvents;
+import net.rebel459.unified.platform.UnifiedPlatform;
 import net.rebel459.unified.platform.UnifiedRegistries;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -93,17 +94,40 @@ public class EaEDataComponents {
                 }
             }
 
+            Map<String, Integer> enchantmentSlots = new HashMap<>();
+            for (EaEConfig.EnchantmentSlots entry : EaEConfig.get().enchantment_slots) {
+                enchantmentSlots.put(entry.key, entry.slots);
+            }
             HashMap<TagKey<Item>, Integer> itemTags = new HashMap<>();
             HashMap<Item, Integer> items = new HashMap<>();
+            HashMap<Item, Integer> phrasedItems = new HashMap<>();
             var itemLookup = provider.lookup(Registries.ITEM).get();
 
-            EaEConfig.get().enchantment_slots.forEach((key, value) -> {
+            enchantmentSlots.forEach((key, value) -> {
+                if (enchantmentSlots.containsKey("*end_reborn:netherite") && UnifiedPlatform.isModLoaded("end_reborn")) {
+                    if (Objects.equals(key, "*netherite")) {
+                        return;
+                    }
+                    else if (Objects.equals(key, "*end_reborn:netherite")) {
+                        key = "*netherite";
+                    }
+                }
                 if (key.startsWith("#")) {
                     key = key.substring(1);
-                    TagKey<Item> tag = TagKey.create(Registries.ITEM, Identifier.parse(key));
+                    TagKey<Item> tag = TagKey.create(Registries.ITEM, getId(key));
                     if (provider.get(tag).isPresent()) itemTags.put(tag, value);
-                } else {
-                    Optional<Holder.Reference<Item>> optional = itemLookup.get(ResourceKey.create(Registries.ITEM, Identifier.parse(key)));
+                }
+                else if (key.startsWith("*")) {
+                    key = key.substring(1);
+                    boolean checkNamespace = key.contains(":");
+                    Identifier id = getId(key);
+                    String itemName = item.builtInRegistryHolder().getRegisteredName();
+                    if (stack.isEnchantable() && ((!checkNamespace && itemName.contains(key)) || (checkNamespace && itemName.contains(id.getNamespace()) && itemName.contains(id.getPath())))) {
+                        phrasedItems.put(item, value);
+                    }
+                }
+                else {
+                    Optional<Holder.Reference<Item>> optional = itemLookup.get(ResourceKey.create(Registries.ITEM, getId(key)));
                     optional.ifPresent(reference -> items.put(reference.value(), value));
                 }
             });
@@ -114,11 +138,26 @@ public class EaEDataComponents {
                 }
             });
             items.forEach((key, value) -> {
+                phrasedItems.remove(key);
+                if (item == key) {
+                    builder.set(EaEDataComponents.ENCHANTMENT_SLOTS.get(), EnchantmentSlots.create(value));
+                }
+            });
+            phrasedItems.forEach((key, value) -> {
                 if (item == key) {
                     builder.set(EaEDataComponents.ENCHANTMENT_SLOTS.get(), EnchantmentSlots.create(value));
                 }
             });
         });
+    }
+
+    private static Identifier getId(String key) {
+        if (!key.contains(":")) {
+            return Identifier.withDefaultNamespace(key);
+        }
+        else {
+            return Identifier.parse(key);
+        }
     }
 
     static UnifiedRegistries.DataComponentTypes COMPONENTS = UnifiedRegistries.DataComponentTypes.create(EnchantsAndExpeditions.MOD_ID);

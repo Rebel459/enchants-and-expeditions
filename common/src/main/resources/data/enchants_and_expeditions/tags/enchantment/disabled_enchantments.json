@@ -6,6 +6,7 @@
     "minecraft:fire_aspect",
     "minecraft:protection",
     "minecraft:blast_protection",
-    "minecraft:fire_protection"
+    "minecraft:fire_protection",
+    "minecraft:projectile_protection"
   ]
 }

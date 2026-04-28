@@ -105,24 +105,4 @@ public abstract class EnchantmentHelperMixin {
 
         cir.setReturnValue(filteredResults);
     }
-
-    @Inject(method = "updateEnchantments", at = @At("HEAD"))
-    private static void EaE$captureArcana(ItemStack itemStack, Consumer<ItemEnchantments.Mutable> consumer, CallbackInfoReturnable<ItemEnchantments> cir, @Share("hadArcana") LocalBooleanRef hadArcana) {
-        hadArcana.set(EnchantingHelper.hasEnchantment(itemStack, EaEEnchantments.ARCANA_BLESSING));
-    }
-
-    @Inject(method = "updateEnchantments", at = @At("RETURN"))
-    private static void EaE$arcanaBlessing(ItemStack itemStack, Consumer<ItemEnchantments.Mutable> consumer, CallbackInfoReturnable<ItemEnchantments> cir, @Share("hadArcana") LocalBooleanRef hadArcana) {
-        if (cir.getReturnValue().isEmpty()) return;
-        boolean hasArcana = EnchantingHelper.hasEnchantment(itemStack, EaEEnchantments.ARCANA_BLESSING);
-        if (EnchantingHelper.hasSlots(itemStack)) {
-            EnchantmentSlots slots = itemStack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get());
-            if (!hadArcana.get() && hasArcana) {
-                slots = slots.setModifier(slots.modifier() + 1);
-            } else if (hadArcana.get() && !hasArcana) {
-                slots = slots.setModifier(slots.modifier() - 1);
-            }
-            itemStack.set(EaEDataComponents.ENCHANTMENT_SLOTS.get(), slots);
-        }
-    }
 }

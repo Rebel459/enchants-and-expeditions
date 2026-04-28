@@ -203,7 +203,6 @@ public abstract class AnvilMenuMixin {
 
             EaE$bookLimit();
             EaE$modifyPrice();
-            EaE$checkArcana(anvilMenu.inputSlots.getItem(0), anvilMenu.resultSlots.getItem(0));
 
             anvilMenu.broadcastChanges();
         } else {
@@ -369,19 +368,5 @@ public abstract class AnvilMenuMixin {
             value += enchantment.value().getAnvilCost() * enchantments.getLevel(enchantment);
         }
         return Math.clamp(value, 1, 99);
-    }
-
-    private static void EaE$checkArcana(ItemStack input, ItemStack output) {
-        boolean hadArcana = EnchantingHelper.hasEnchantment(input, EaEEnchantments.ARCANA_BLESSING);
-        boolean hasArcana = EnchantingHelper.hasEnchantment(output, EaEEnchantments.ARCANA_BLESSING);
-        if (EnchantingHelper.hasSlots(output)) {
-            EnchantmentSlots slots = output.get(EaEDataComponents.ENCHANTMENT_SLOTS.get());
-            if (!hadArcana && hasArcana) {
-                slots = slots.setModifier(slots.modifier() + 1);
-            } else if (hadArcana && !hasArcana) {
-                slots = slots.setModifier(slots.modifier() - 1);
-            }
-            output.set(EaEDataComponents.ENCHANTMENT_SLOTS.get(), slots);
-        }
     }
 }

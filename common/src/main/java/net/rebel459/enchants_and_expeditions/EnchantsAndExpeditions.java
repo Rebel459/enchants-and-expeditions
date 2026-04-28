@@ -8,6 +8,7 @@ import net.rebel459.enchants_and_expeditions.network.EnchantingAttributes;
 import net.rebel459.enchants_and_expeditions.registry.*;
 import net.rebel459.enchants_and_expeditions.sound.EaEBlockSounds;
 import net.rebel459.enchants_and_expeditions.sound.EaESounds;
+import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.unified.platform.UnifiedHelpers;
 import net.rebel459.unified.platform.UnifiedPlatform;
 import net.rebel459.unified.util.PackType;
@@ -38,6 +39,7 @@ public class EnchantsAndExpeditions {
 		EaEMobEffects.init();
 		EaESounds.init();
 		EaEDataComponents.init();
+		EnchantingHelper.init();
 	}
 
 	public static void init() {

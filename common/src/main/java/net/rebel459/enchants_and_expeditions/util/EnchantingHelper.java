@@ -2,6 +2,7 @@ package net.rebel459.enchants_and_expeditions.util;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -30,8 +32,8 @@ import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
 import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
 import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
+import net.rebel459.unified.platform.UnifiedEvents;
 import org.apache.commons.lang3.BooleanUtils;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -291,7 +293,19 @@ public class EnchantingHelper {
     }
 
     public static boolean configureEnchantments(Holder<Enchantment> enchantment) {
-        return enchantment.is(EaEEnchantmentTags.DISABLED_ENCHANTMENTS);
+        for (TagKey<Enchantment> tag : DISABLED_ENCHANTMENT_TAGS) {
+            if (enchantment.is(tag)) return true;
+        }
+        for (Holder<Enchantment> disabled : DISABLED_ENCHANTMENTS) {
+            if (disabled.unwrapKey().isPresent() && enchantment.is(disabled.unwrapKey().get())) return true;
+        }
+        for (String disabledPhrase : DISABLED_ENCHANTMENT_PHRASES) {
+            boolean checkNamespace = disabledPhrase.contains(":");
+            Identifier id = getId(disabledPhrase);
+            String enchantmentName = enchantment.getRegisteredName();
+            if ((!checkNamespace && enchantmentName.contains(disabledPhrase)) || (checkNamespace && enchantmentName.contains(id.getNamespace()) && enchantmentName.contains(id.getPath()))) return true;
+        }
+        return false;
     }
 
     public static boolean onRandomLoot(Holder<Enchantment> enchantment, RandomSource randomSource) {
@@ -436,6 +450,42 @@ public class EnchantingHelper {
         if (EnchantingHelper.hasEnchantment(stack, enchantment) && stack.getDamageValue() >= 1) {
             stack.setDamageValue(stack.getDamageValue() - 1);
             if (stack.getDamageValue() < 0) stack.setDamageValue(0);
+        }
+    }
+
+    private static final List<TagKey<Enchantment>> DISABLED_ENCHANTMENT_TAGS = new ArrayList<>();
+    private static final List<Holder<Enchantment>> DISABLED_ENCHANTMENTS = new ArrayList<>();
+    private static final List<String> DISABLED_ENCHANTMENT_PHRASES = new ArrayList<>();
+
+    public static void init() {
+        UnifiedEvents.Server.onStart(server -> {
+            RegistryAccess.Frozen provider = server.registryAccess();
+            var enchantmentLookup = provider.lookup(Registries.ENCHANTMENT).get();
+
+            EaEConfig.get().disabled_enchantments.forEach(key -> {
+                if (key.startsWith("#")) {
+                    key = key.substring(1);
+                    TagKey<Enchantment> tag = TagKey.create(Registries.ENCHANTMENT, getId(key));
+                    if (provider.get(tag).isPresent()) DISABLED_ENCHANTMENT_TAGS.add(tag);
+                }
+                else if (key.startsWith("*")) {
+                    key = key.substring(1);
+                    DISABLED_ENCHANTMENT_PHRASES.add(key);
+                }
+                else {
+                    Optional<Holder.Reference<Enchantment>> optional = enchantmentLookup.get(ResourceKey.create(Registries.ENCHANTMENT, getId(key)));
+                    optional.ifPresent(DISABLED_ENCHANTMENTS::add);
+                }
+            });
+        });
+    }
+
+    private static Identifier getId(String key) {
+        if (!key.contains(":")) {
+            return Identifier.withDefaultNamespace(key);
+        }
+        else {
+            return Identifier.parse(key);
         }
     }
 }

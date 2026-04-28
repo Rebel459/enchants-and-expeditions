@@ -10,9 +10,9 @@ import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Config(name = EnchantsAndExpeditions.MOD_ID)
 public class EaEConfig implements ConfigData {
@@ -27,7 +27,13 @@ public class EaEConfig implements ConfigData {
     };
 
     public static void initClient() {
+        boolean hasExistingConfig = Files.exists(configPath(true)) || Files.exists(configPath(false));
         AutoConfig.register(EaEConfig.class, JanksonConfigSerializer::new);
+        var holder = AutoConfig.getConfigHolder(EaEConfig.class);
+        EaEConfig config = holder.getConfig();
+        if (config.normalizeDefaults(!hasExistingConfig)) {
+            holder.save();
+        }
     }
 
     @ConfigEntry.Gui.CollapsibleObject
@@ -55,7 +61,7 @@ public class EaEConfig implements ConfigData {
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        public EnchantingAttributeTooltip enchanting_attribute_tooltip = EnchantingAttributeTooltip.ALWAYS;
+        public EnchantmentSymbols enchantment_symbols = EnchantmentSymbols.ALWAYS;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
         public boolean experience_rebalance = true;
@@ -75,7 +81,7 @@ public class EaEConfig implements ConfigData {
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        public AttributeVisibility attribute_visibility = AttributeVisibility.BOTH;
+        public PanelVisibility panel_visibility = PanelVisibility.BOTH;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
         public boolean enchant_function_fallback = true;
@@ -104,29 +110,115 @@ public class EaEConfig implements ConfigData {
         public boolean enderscape = true;
     }
 
+
     @ConfigEntry.Gui.Tooltip
-    @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-    public Notice disable_enchantments = Notice.INFO;
+    public List<String> disabled_enchantments = new ArrayList<>();
 
-    @ConfigEntry.Gui.Excluded
-    @Comment("A map to specify custom enchantment slot values. Accepts both item ids (`minecraft:iron_sword`) and item tags (`#minecraft:swords`)\nAnything not specified here falls back to the formula: `enchantability / 4 (min 3, max 5)`")
-    public Map<String, Integer> enchantment_slots = new HashMap<>(
-            Map.of()
-    );
+    @ConfigEntry.Gui.Tooltip
+    public List<EnchantmentSlots> enchantment_slots = new ArrayList<>();
 
-    public enum Notice {
-        INFO
+    private static List<String> defaultDisabledEnchantments() {
+        return List.of(
+                "#enchants_and_expeditions:disabled_enchantments"
+        );
     }
 
-    public enum EnchantingAttributeTooltip {
+    private static List<EnchantmentSlots> defaultEnchantmentSlots() {
+        return List.of(
+                new EnchantmentSlots("*wood", 3),
+                new EnchantmentSlots("*stone", 3),
+                new EnchantmentSlots("*copper", 3),
+                new EnchantmentSlots("*iron", 4),
+                new EnchantmentSlots("*golden", 5),
+                new EnchantmentSlots("*diamond", 4),
+                new EnchantmentSlots("*netherite", 4),
+                new EnchantmentSlots("*book", 5),
+                new EnchantmentSlots("*shield", 3),
+                new EnchantmentSlots("*fishing_rod", 4),
+                new EnchantmentSlots("minecraft:mace", 4),
+                new EnchantmentSlots("minecraft:trident", 4),
+                new EnchantmentSlots("*minecraft:bow", 4),
+                new EnchantmentSlots("*rose", 5),
+                new EnchantmentSlots("*remnant", 4),
+                new EnchantmentSlots("*end_reborn:netherite", 5),
+                new EnchantmentSlots("*featherzeal", 4)
+        );
+    }
+
+    private static boolean sameEnchantmentSlots(List<EnchantmentSlots> left, List<EnchantmentSlots> right) {
+        if (left.size() != right.size()) return false;
+
+        for (int i = 0; i < left.size(); i++) {
+            EnchantmentSlots leftEntry = left.get(i);
+            EnchantmentSlots rightEntry = right.get(i);
+            if (leftEntry == rightEntry) continue;
+            if (leftEntry == null || rightEntry == null) return false;
+            if (!Objects.equals(leftEntry.key, rightEntry.key) || leftEntry.slots != rightEntry.slots) return false;
+        }
+
+        return true;
+    }
+
+    public static class EnchantmentSlots {
+        @ConfigEntry.Gui.Tooltip
+        public String key;
+
+        @ConfigEntry.Gui.Tooltip
+        public int slots;
+
+        public EnchantmentSlots() {}
+
+        public EnchantmentSlots(String key, int slots) {
+            this.key = key;
+            this.slots = slots;
+        }
+    }
+
+    public enum EnchantmentSymbols {
         ALWAYS,
         HOLD_KEY,
         NEVER
     }
 
-    public enum AttributeVisibility {
+    public enum PanelVisibility {
         LEFT,
         BOTH,
         NONE
+    }
+
+    private boolean normalizeDefaults(boolean populateDefaults) {
+        boolean changed = false;
+
+        if (populateDefaults && this.disabled_enchantments.isEmpty()) {
+            this.disabled_enchantments.addAll(defaultDisabledEnchantments());
+            changed = true;
+        }
+
+        List<String> normalizedDisabledEnchantments = new ArrayList<>(new LinkedHashSet<>(this.disabled_enchantments));
+        if (!normalizedDisabledEnchantments.equals(this.disabled_enchantments)) {
+            this.disabled_enchantments = normalizedDisabledEnchantments;
+            changed = true;
+        }
+
+        if (populateDefaults && this.enchantment_slots.isEmpty()) {
+            this.enchantment_slots.addAll(defaultEnchantmentSlots());
+            changed = true;
+        }
+
+        LinkedHashMap<String, Integer> normalizedEnchantmentSlotsMap = new LinkedHashMap<>();
+        for (EnchantmentSlots entry : this.enchantment_slots) {
+            if (entry == null || entry.key == null || entry.key.isBlank()) continue;
+            normalizedEnchantmentSlotsMap.remove(entry.key);
+            normalizedEnchantmentSlotsMap.put(entry.key, entry.slots);
+        }
+
+        List<EnchantmentSlots> normalizedEnchantmentSlots = new ArrayList<>();
+        normalizedEnchantmentSlotsMap.forEach((key, slots) -> normalizedEnchantmentSlots.add(new EnchantmentSlots(key, slots)));
+        if (!sameEnchantmentSlots(normalizedEnchantmentSlots, this.enchantment_slots)) {
+            this.enchantment_slots = normalizedEnchantmentSlots;
+            changed = true;
+        }
+
+        return changed;
     }
 }

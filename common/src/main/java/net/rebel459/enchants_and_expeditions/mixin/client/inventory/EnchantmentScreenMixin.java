@@ -192,15 +192,15 @@ public abstract class EnchantmentScreenMixin {
     public int textureSize = 16;
 
     @Unique
-    private static EaEConfig.AttributeVisibility getAttributeVisibility() {
-        return EaEConfig.get().misc.attribute_visibility;
+    private static EaEConfig.PanelVisibility getPanelVisibility() {
+        return EaEConfig.get().misc.panel_visibility;
     }
 
     @Unique
-    private static void setAttributeVisibility(EaEConfig.AttributeVisibility visibility) {
+    private static void setPanelVisibility(EaEConfig.PanelVisibility visibility) {
         var holder = AutoConfig.getConfigHolder(EaEConfig.class);
         EaEConfig config = holder.getConfig();
-        config.misc.attribute_visibility = visibility;
+        config.misc.panel_visibility = visibility;
         holder.save();
     }
 
@@ -211,10 +211,10 @@ public abstract class EnchantmentScreenMixin {
         int mouseX = (int) event.x();
         int mouseY = (int) event.y();
         if (isOverButton(mouseX, mouseY)) {
-            switch (getAttributeVisibility()) {
-                case BOTH -> setAttributeVisibility(EaEConfig.AttributeVisibility.NONE);
-                case LEFT -> setAttributeVisibility(EaEConfig.AttributeVisibility.BOTH);
-                case NONE -> setAttributeVisibility(EaEConfig.AttributeVisibility.LEFT);
+            switch (getPanelVisibility()) {
+                case BOTH -> setPanelVisibility(EaEConfig.PanelVisibility.NONE);
+                case LEFT -> setPanelVisibility(EaEConfig.PanelVisibility.BOTH);
+                case NONE -> setPanelVisibility(EaEConfig.PanelVisibility.LEFT);
             }
             if (player != null) player.playSound(SoundEvents.UI_BUTTON_CLICK.value());
         }
@@ -277,7 +277,7 @@ public abstract class EnchantmentScreenMixin {
             graphics.blit(RenderPipelines.GUI_TEXTURED, EnchantsAndExpeditions.id("textures/gui/attributes.png"), leftPos(), topPos(), 0, 0, textureSize, textureSize, textureSize, textureSize);
         }
 
-        if (getAttributeVisibility() == EaEConfig.AttributeVisibility.NONE) return;
+        if (getPanelVisibility() == EaEConfig.PanelVisibility.NONE) return;
 
         EnchantingAttributes.Attributes enchantingAttributes = EnchantsAndExpeditionsClient.getClientEnchantingAttributes();
         if (enchantingAttributes == null) {
@@ -357,7 +357,7 @@ public abstract class EnchantmentScreenMixin {
         graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.corruption").append(": " + Math.max(0, corruption)), x, leftTextY, 0xFF000000 | ChatFormatting.RED.getColor()); leftTextY += 10;
         graphics.text(screen.getFont(), Component.translatable("desc.enchants_and_expeditions.divinity").append(": " + Math.max(0, divinity)), x, leftTextY, 0xFF000000 | ChatFormatting.GOLD.getColor());
 
-        if (getAttributeVisibility() != EaEConfig.AttributeVisibility.BOTH) return;
+        if (getPanelVisibility() != EaEConfig.PanelVisibility.BOTH) return;
 
         List<EaE$InfoEntry> entries = List.of(
                 new EaE$InfoEntry(
