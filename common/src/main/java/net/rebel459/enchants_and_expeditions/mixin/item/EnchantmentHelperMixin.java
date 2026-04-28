@@ -42,7 +42,7 @@ public abstract class EnchantmentHelperMixin {
     @Inject(method = "enchantItem(Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/item/ItemStack;ILjava/util/stream/Stream;)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"), cancellable = true)
     private static void EaE$enchantItem(RandomSource random, ItemStack stack, int level, Stream<Holder<Enchantment>> possibleEnchantments, CallbackInfoReturnable<ItemStack> cir) {
         List<EnchantmentInstance> list = selectEnchantment(random, stack, level, possibleEnchantments);
-        list = EnchantingHelper.evaluateEnchantments(stack, list, level);
+        list = EnchantingHelper.evaluateEnchantments(stack, list, level, random);
         if (stack.is(Items.BOOK)) {
             stack = new ItemStack(Items.ENCHANTED_BOOK);
         }

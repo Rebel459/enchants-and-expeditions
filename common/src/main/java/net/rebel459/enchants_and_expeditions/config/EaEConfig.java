@@ -5,7 +5,6 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
-import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -27,11 +26,16 @@ public class EaEConfig implements ConfigData {
     };
 
     public static void initClient() {
-        boolean hasExistingConfig = Files.exists(configPath(true)) || Files.exists(configPath(false));
+        Path json5Path = configPath(true);
+        Path jsonPath = configPath(false);
+        Path existingConfigPath = Files.exists(json5Path) ? json5Path : jsonPath;
+        boolean hasExistingConfig = Files.exists(existingConfigPath);
+        boolean hasDisabledEnchantmentsField = !hasExistingConfig || configContainsField(existingConfigPath, "disabled_enchantments");
+        boolean hasEnchantmentSlotsField = !hasExistingConfig || configContainsField(existingConfigPath, "item_enchantment_slots");
         AutoConfig.register(EaEConfig.class, JanksonConfigSerializer::new);
         var holder = AutoConfig.getConfigHolder(EaEConfig.class);
         EaEConfig config = holder.getConfig();
-        if (config.normalizeDefaults(!hasExistingConfig)) {
+        if (config.normalizeDefaults(!hasDisabledEnchantmentsField, !hasEnchantmentSlotsField)) {
             holder.save();
         }
     }
@@ -115,7 +119,7 @@ public class EaEConfig implements ConfigData {
     public List<String> disabled_enchantments = new ArrayList<>();
 
     @ConfigEntry.Gui.Tooltip
-    public List<EnchantmentSlots> enchantment_slots = new ArrayList<>();
+    public List<ItemEnchantmentSlots> item_enchantment_slots = new ArrayList<>();
 
     private static List<String> defaultDisabledEnchantments() {
         return List.of(
@@ -123,34 +127,34 @@ public class EaEConfig implements ConfigData {
         );
     }
 
-    private static List<EnchantmentSlots> defaultEnchantmentSlots() {
+    private static List<ItemEnchantmentSlots> defaultEnchantmentSlots() {
         return List.of(
-                new EnchantmentSlots("*wood", 3),
-                new EnchantmentSlots("*stone", 3),
-                new EnchantmentSlots("*copper", 3),
-                new EnchantmentSlots("*iron", 4),
-                new EnchantmentSlots("*golden", 5),
-                new EnchantmentSlots("*diamond", 4),
-                new EnchantmentSlots("*netherite", 4),
-                new EnchantmentSlots("*book", 5),
-                new EnchantmentSlots("*shield", 3),
-                new EnchantmentSlots("*fishing_rod", 4),
-                new EnchantmentSlots("minecraft:mace", 4),
-                new EnchantmentSlots("minecraft:trident", 4),
-                new EnchantmentSlots("*minecraft:bow", 4),
-                new EnchantmentSlots("*rose", 5),
-                new EnchantmentSlots("*remnant", 4),
-                new EnchantmentSlots("*end_reborn:netherite", 5),
-                new EnchantmentSlots("*featherzeal", 4)
+                new ItemEnchantmentSlots("*wood", 3),
+                new ItemEnchantmentSlots("*stone", 3),
+                new ItemEnchantmentSlots("*copper", 3),
+                new ItemEnchantmentSlots("*iron", 4),
+                new ItemEnchantmentSlots("*golden", 5),
+                new ItemEnchantmentSlots("*diamond", 4),
+                new ItemEnchantmentSlots("*netherite", 4),
+                new ItemEnchantmentSlots("*book", 5),
+                new ItemEnchantmentSlots("*shield", 3),
+                new ItemEnchantmentSlots("*fishing_rod", 4),
+                new ItemEnchantmentSlots("minecraft:mace", 4),
+                new ItemEnchantmentSlots("minecraft:trident", 4),
+                new ItemEnchantmentSlots("*minecraft:bow", 4),
+                new ItemEnchantmentSlots("*rose", 5),
+                new ItemEnchantmentSlots("*remnant", 4),
+                new ItemEnchantmentSlots("*end_reborn:netherite", 5),
+                new ItemEnchantmentSlots("*featherzeal", 4)
         );
     }
 
-    private static boolean sameEnchantmentSlots(List<EnchantmentSlots> left, List<EnchantmentSlots> right) {
+    private static boolean sameEnchantmentSlots(List<ItemEnchantmentSlots> left, List<ItemEnchantmentSlots> right) {
         if (left.size() != right.size()) return false;
 
         for (int i = 0; i < left.size(); i++) {
-            EnchantmentSlots leftEntry = left.get(i);
-            EnchantmentSlots rightEntry = right.get(i);
+            ItemEnchantmentSlots leftEntry = left.get(i);
+            ItemEnchantmentSlots rightEntry = right.get(i);
             if (leftEntry == rightEntry) continue;
             if (leftEntry == null || rightEntry == null) return false;
             if (!Objects.equals(leftEntry.key, rightEntry.key) || leftEntry.slots != rightEntry.slots) return false;
@@ -159,16 +163,16 @@ public class EaEConfig implements ConfigData {
         return true;
     }
 
-    public static class EnchantmentSlots {
+    public static class ItemEnchantmentSlots {
         @ConfigEntry.Gui.Tooltip
         public String key;
 
         @ConfigEntry.Gui.Tooltip
         public int slots;
 
-        public EnchantmentSlots() {}
+        public ItemEnchantmentSlots() {}
 
-        public EnchantmentSlots(String key, int slots) {
+        public ItemEnchantmentSlots(String key, int slots) {
             this.key = key;
             this.slots = slots;
         }
@@ -186,10 +190,18 @@ public class EaEConfig implements ConfigData {
         NONE
     }
 
-    private boolean normalizeDefaults(boolean populateDefaults) {
+    private static boolean configContainsField(Path path, String fieldName) {
+        try {
+            return Files.readString(path).contains("\"" + fieldName + "\"");
+        } catch (Exception ignored) {
+            return true;
+        }
+    }
+
+    private boolean normalizeDefaults(boolean restoreDisabledEnchantments, boolean restoreEnchantmentSlots) {
         boolean changed = false;
 
-        if (populateDefaults && this.disabled_enchantments.isEmpty()) {
+        if (restoreDisabledEnchantments && this.disabled_enchantments.isEmpty()) {
             this.disabled_enchantments.addAll(defaultDisabledEnchantments());
             changed = true;
         }
@@ -200,22 +212,22 @@ public class EaEConfig implements ConfigData {
             changed = true;
         }
 
-        if (populateDefaults && this.enchantment_slots.isEmpty()) {
-            this.enchantment_slots.addAll(defaultEnchantmentSlots());
+        if (restoreEnchantmentSlots && this.item_enchantment_slots.isEmpty()) {
+            this.item_enchantment_slots.addAll(defaultEnchantmentSlots());
             changed = true;
         }
 
         LinkedHashMap<String, Integer> normalizedEnchantmentSlotsMap = new LinkedHashMap<>();
-        for (EnchantmentSlots entry : this.enchantment_slots) {
+        for (ItemEnchantmentSlots entry : this.item_enchantment_slots) {
             if (entry == null || entry.key == null || entry.key.isBlank()) continue;
             normalizedEnchantmentSlotsMap.remove(entry.key);
             normalizedEnchantmentSlotsMap.put(entry.key, entry.slots);
         }
 
-        List<EnchantmentSlots> normalizedEnchantmentSlots = new ArrayList<>();
-        normalizedEnchantmentSlotsMap.forEach((key, slots) -> normalizedEnchantmentSlots.add(new EnchantmentSlots(key, slots)));
-        if (!sameEnchantmentSlots(normalizedEnchantmentSlots, this.enchantment_slots)) {
-            this.enchantment_slots = normalizedEnchantmentSlots;
+        List<ItemEnchantmentSlots> normalizedItemEnchantmentSlots = new ArrayList<>();
+        normalizedEnchantmentSlotsMap.forEach((key, slots) -> normalizedItemEnchantmentSlots.add(new ItemEnchantmentSlots(key, slots)));
+        if (!sameEnchantmentSlots(normalizedItemEnchantmentSlots, this.item_enchantment_slots)) {
+            this.item_enchantment_slots = normalizedItemEnchantmentSlots;
             changed = true;
         }
 

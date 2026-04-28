@@ -59,7 +59,7 @@
   "enchantment.enchants_and_expeditions.fluidity_blessing": "Blessing of Fluidity",
   "enchantment.enchants_and_expeditions.fluidity_blessing.desc": "Passively regenerates the wearer's health whilst wet",
   "enchantment.enchants_and_expeditions.inferno_blessing": "Blessing of Inferno",
-  "enchantment.enchants_and_expeditions.inferno_blessing.desc": "Striking a burning target increases damage dealt and burning time",
+  "enchantment.enchants_and_expeditions.inferno_blessing.desc": "Striking a burning target deals increased damage and extends burning time",
   "enchantment.enchants_and_expeditions.tempering_blessing": "Blessing of Tempering",
   "enchantment.enchants_and_expeditions.tempering_blessing.desc": "Equipment restores itself whilst on fire",
   "enchantment.enchants_and_expeditions.vengeance_blessing": "Blessing of Vengeance",
@@ -71,9 +71,9 @@
   "enchantment.enchants_and_expeditions.neptune_blessing": "Blessing of Neptune",
   "enchantment.enchants_and_expeditions.neptune_blessing.desc": "Equipment repairs itself whilst wet",
   "enchantment.enchants_and_expeditions.winter_blessing": "Blessing of Winter",
-  "enchantment.enchants_and_expeditions.winter_blessing.desc": "Striking freezing targets extends their freeze duration",
+  "enchantment.enchants_and_expeditions.winter_blessing.desc": "Striking a freezing target deals increased damage and extends their freeze duration",
   "enchantment.enchants_and_expeditions.celerity_blessing": "Blessing of Celerity",
-  "enchantment.enchants_and_expeditions.celerity_blessing.desc": "Increases mining and attack speed when collecting experience",
+  "enchantment.enchants_and_expeditions.celerity_blessing.desc": "Grants Haste for a short duration when collecting experience",
 
   "enchantment.enchants_and_expeditions.arcane_protection": "Arcane Protection",
   "enchantment.enchants_and_expeditions.arcane_protection.desc": "Protects from magical and blast damage sources",
@@ -200,11 +200,11 @@
   "text.autoconfig.enchants_and_expeditions.option.disabled_enchantments": "Disabled Enchantments",
   "text.autoconfig.enchants_and_expeditions.option.disabled_enchantments.@Tooltip": "A list of enchantments to be disabled. Accepts both ids (`minecraft:fire_aspect`), tags (`#minecraft:curse`) or even phrases (`*protection`).",
 
-  "text.autoconfig.enchants_and_expeditions.option.enchantment_slots": "Enchantment Slots",
-  "text.autoconfig.enchants_and_expeditions.option.enchantment_slots.@Tooltip": "A map to specify custom enchantment slot values. Anything not specified here falls back to the formula: `enchantability / 4 (min 3, max 5)`",
-  "text.autoconfig.enchants_and_expeditions.option.EnchantmentSlots": "Entry",
-  "text.autoconfig.enchants_and_expeditions.option.EnchantmentSlots.key": "Key",
-  "text.autoconfig.enchants_and_expeditions.option.EnchantmentSlots.key.@Tooltip": "Accepts both ids (`minecraft:iron_sword`), tags (`#minecraft:swords`) or even phrases (`*iron`)",
-  "text.autoconfig.enchants_and_expeditions.option.EnchantmentSlots.slots": "Slots",
-  "text.autoconfig.enchants_and_expeditions.option.EnchantmentSlots.slots.@Tooltip": "How many enchantment slots the associated key should have"
+  "text.autoconfig.enchants_and_expeditions.option.item_enchantment_slots": "Item Enchantment Slots",
+  "text.autoconfig.enchants_and_expeditions.option.item_enchantment_slots.@Tooltip": "A list used to specify custom item enchantment slot values. Anything not specified here falls back to the formula: `enchantability / 4 (min 3, max 5)`",
+  "text.autoconfig.enchants_and_expeditions.option.ItemEnchantmentSlots": "Entry",
+  "text.autoconfig.enchants_and_expeditions.option.ItemEnchantmentSlots.key": "Key",
+  "text.autoconfig.enchants_and_expeditions.option.ItemEnchantmentSlots.key.@Tooltip": "Accepts both ids (`minecraft:iron_sword`), tags (`#minecraft:swords`) or even phrases (`*iron`)",
+  "text.autoconfig.enchants_and_expeditions.option.ItemEnchantmentSlots.slots": "Slots",
+  "text.autoconfig.enchants_and_expeditions.option.ItemEnchantmentSlots.slots.@Tooltip": "How many enchantment slots the associated key should have"
 }

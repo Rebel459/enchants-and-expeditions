@@ -95,7 +95,7 @@ public class EaEDataComponents {
             }
 
             Map<String, Integer> enchantmentSlots = new HashMap<>();
-            for (EaEConfig.EnchantmentSlots entry : EaEConfig.get().enchantment_slots) {
+            for (EaEConfig.ItemEnchantmentSlots entry : EaEConfig.get().item_enchantment_slots) {
                 enchantmentSlots.put(entry.key, entry.slots);
             }
             HashMap<TagKey<Item>, Integer> itemTags = new HashMap<>();
@@ -162,6 +162,6 @@ public class EaEDataComponents {
 
     static UnifiedRegistries.DataComponentTypes COMPONENTS = UnifiedRegistries.DataComponentTypes.create(EnchantsAndExpeditions.MOD_ID);
 
-    public static final Supplier<DataComponentType<EnchantmentSlots>> ENCHANTMENT_SLOTS = COMPONENTS.register("enchantment_slots", (b) -> b.persistent(EnchantmentSlots.CODEC).networkSynchronized(EnchantmentSlots.STREAM_CODEC).cacheEncoding());
+    public static final Supplier<DataComponentType<EnchantmentSlots>> ENCHANTMENT_SLOTS = COMPONENTS.register("item_slots", (b) -> b.persistent(EnchantmentSlots.CODEC).networkSynchronized(EnchantmentSlots.STREAM_CODEC).cacheEncoding());
     public static final Supplier<DataComponentType<EnchantingRerolls>> ENCHANTING_REROLLS = COMPONENTS.register("enchanting_rerolls", (b) -> b.persistent(EnchantingRerolls.CODEC).networkSynchronized(EnchantingRerolls.STREAM_CODEC).cacheEncoding());
 }

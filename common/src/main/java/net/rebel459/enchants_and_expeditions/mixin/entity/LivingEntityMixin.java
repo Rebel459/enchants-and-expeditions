@@ -1,5 +1,8 @@
 package net.rebel459.enchants_and_expeditions.mixin.entity;
 
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
@@ -74,7 +77,8 @@ public abstract class LivingEntityMixin {
     }
     @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
     private float infernoBlessingDamage(float value) {
-        if (this.damageSource.getEntity() instanceof LivingEntity attacker) {
+        LivingEntity attacked = LivingEntity.class.cast(this);
+        if (this.damageSource.getEntity() instanceof LivingEntity attacker && attacked.isOnFire()) {
             ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
             if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.INFERNO_BLESSING)) {
                 value += 1;
@@ -84,16 +88,27 @@ public abstract class LivingEntityMixin {
     }
 
     @Inject(method = "hurtServer", at = @At(value = "TAIL"))
-    private void winterBlessing(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+    private void winterBlessingExtendFreezing(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = LivingEntity.class.cast(this);
         if (source.getEntity() instanceof LivingEntity attacker) {
             ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
             if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.WINTER_BLESSING) && entity.isFreezing()) {
-                int setFreezeTicks = entity.getTicksFrozen() + 80;
-                if (setFreezeTicks > 400) setFreezeTicks = Math.max(400, entity.getTicksFrozen());
-                entity.setRemainingFireTicks(setFreezeTicks);
+                int freezeTicks = entity.getTicksFrozen() + 80;
+                if (freezeTicks > 400) freezeTicks = Math.max(400, entity.getTicksFrozen());
+                EnchantingHelper.applyFreezing(level, entity, attacker, freezeTicks);
             }
         }
+    }
+    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
+    private float winterBlessingDamage(float value) {
+        LivingEntity attacked = LivingEntity.class.cast(this);
+        if (this.damageSource.getEntity() instanceof LivingEntity attacker && attacked.isFreezing()) {
+            ItemStack attackerStack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
+            if (EnchantingHelper.hasEnchantment(attackerStack, EaEEnchantments.WINTER_BLESSING)) {
+                value += 1;
+            }
+        }
+        return value;
     }
 
     @Inject(method = "hurtServer", at = @At(value = "TAIL"))
@@ -136,13 +151,14 @@ public abstract class LivingEntityMixin {
             if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.BLIZZARD)) {
                 if (attacked.isFullyFrozen()) {
                     int enchantmentLevel = EnchantingHelper.getLevel(stack, EaEEnchantments.BLIZZARD);
-                    EnchantingHelper.applyAreaFreeze(level, attacker, attacked, 300, 2.5F * enchantmentLevel);
+                    level.playSound(null, attacked.blockPosition(), SoundType.GLASS.getBreakSound(), attacker.getSoundSource());
+                    EnchantingHelper.applyAreaFreeze(level, attacker, attacked, EnchantingHelper.getDuration(stack, EaEEnchantments.BLIZZARD, 300, 50), 2.5F * enchantmentLevel);
                 }
             }
             if (!equilibriumTriggered) {
                 if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.CHILLED)) {
                     if (level.getRandom().nextInt(1, 6) >= 6 - EnchantingHelper.getLevel(stack, EaEEnchantments.CHILLED)) {
-                        EnchantingHelper.applyFreezing(level, attacked, attacker, EnchantingHelper.getDuration(stack, EaEEnchantments.SMITING, 300, 50));
+                        EnchantingHelper.applyFreezing(level, attacked, attacker, EnchantingHelper.getDuration(stack, EaEEnchantments.CHILLED, 300, 50));
                     }
                 }
                 if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SMITING)) {

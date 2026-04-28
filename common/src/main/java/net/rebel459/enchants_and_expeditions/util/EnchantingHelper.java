@@ -38,7 +38,6 @@ import org.apache.commons.lang3.BooleanUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class EnchantingHelper {
 
@@ -208,17 +207,11 @@ public class EnchantingHelper {
         return attributes;
     }
 
-    public static List<EnchantmentInstance> evaluateEnchantments(ItemStack stack, List<EnchantmentInstance> list, int level) {
+    public static List<EnchantmentInstance> evaluateEnchantments(ItemStack stack, List<EnchantmentInstance> list, int level, RandomSource random) {
         List<Holder<Enchantment>> stackEnchantments = stack.getEnchantments().keySet().stream().toList();
         ItemEnchantments existingEnchantments = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
 
         EnchantmentInfo info = getInfo(stack);
-
-        if (EnchantingHelper.hasSlots(stack) && stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(info) == 1) {
-            list.removeIf(enchantmentInstance -> {
-                return isPowerful(enchantmentInstance.enchantment());
-            });
-        }
 
         list.removeIf(enchantmentInstance -> {
             return enchantmentInstance.enchantment().is(EaEEnchantments.BOUNDING_BLESSING) && stack.is(EaEItemTags.UNBOUNDABLE);
@@ -277,12 +270,9 @@ public class EnchantingHelper {
         if (EaEConfig.get().general.enchantment_slots && hasSlots(stack)) {
             list.removeAll(enchantmentList);
             while (combinedEnchantmentScore(stack, enchantmentList) > stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(stack)) {
-                if (enchantmentList.size() == 1) {
-                    enchantmentList.removeFirst();
+                if (!removeExcessEnchantments(stack, enchantmentList, random)) {
                     break;
                 }
-                int x = new Random().nextInt(1, enchantmentList.size());
-                enchantmentList.remove(x);
             }
             list.addAll(enchantmentList);
         }
@@ -365,6 +355,48 @@ public class EnchantingHelper {
 
     public static boolean isEnchantment(Holder<Enchantment> enchantment) {
         return !enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EnchantmentTags.CURSE);
+    }
+
+    public static boolean removeExcessEnchantments(ItemStack stack, List<EnchantmentInstance> enchantments, RandomSource random) {
+        if (enchantments.isEmpty()) {
+            return false;
+        }
+
+        if (EnchantingHelper.hasSlots(stack) && stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(getInfo(stack)) == 1) {
+            enchantments.removeIf(enchantmentInstance -> {
+                if (stack.getEnchantments().getLevel(enchantmentInstance.enchantment()) > 0) return false;
+                return isPowerful(enchantmentInstance.enchantment());
+            });
+        }
+
+        if (enchantments.isEmpty()) {
+            return false;
+        }
+
+        if (enchantments.size() == 1) {
+            enchantments.removeFirst();
+            return true;
+        }
+
+        List<Integer> genericIndices = new ArrayList<>();
+        for (int i = 0; i < enchantments.size(); i++) {
+            if (enchantments.get(i).enchantment().is(EaEEnchantmentTags.GENERIC)) {
+                genericIndices.add(i);
+            }
+        }
+
+        if (!genericIndices.isEmpty()) {
+            enchantments.remove((int)genericIndices.get(random.nextInt(genericIndices.size())));
+            return true;
+        }
+
+        if (enchantments.size() == 1) {
+            enchantments.removeFirst();
+            return true;
+        }
+
+        enchantments.remove(random.nextInt(1, enchantments.size()));
+        return true;
     }
 
     public static boolean isPowerful(Holder<Enchantment> enchantment) {

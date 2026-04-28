@@ -1,6 +1,8 @@
 package net.rebel459.enchants_and_expeditions.mixin.inventory;
 
 import com.google.common.collect.Lists;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.logging.LogUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -404,21 +406,6 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> mightEnchantments = new ArrayList<>(registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EaEEnchantmentTags.MIGHT).map(HolderSet.Named::stream).orElse(Stream.empty()).toList());
 
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> manaTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.MANA_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> frostTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.FROST_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> scorchTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.SCORCH_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> flowTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.FLOW_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> chaosTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.CHAOS_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> greedTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.GREED_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-        List<Holder<net.minecraft.world.item.enchantment.Enchantment>> mightTreasure = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
-                .get(EaEEnchantmentTags.MIGHT_TREASURE).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
-
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> manaBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
                 .get(EaEEnchantmentTags.MANA_BLESSING).map(HolderSet.Named::stream).orElse(Stream.empty()).toList();
         List<Holder<net.minecraft.world.item.enchantment.Enchantment>> frostBlessings = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
@@ -481,25 +468,25 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
         List<EnchantmentInstance> curseList = EnchantmentHelper.getAvailableEnchantmentResults(basePower, stack, corruptionCurses.stream());
 
-        baseList = EnchantingHelper.evaluateEnchantments(stack, baseList, basePower);
+        baseList = EnchantingHelper.evaluateEnchantments(stack, baseList, basePower, random);
 
-        manaList = EnchantingHelper.evaluateEnchantments(stack, manaList, manaPower);
-        frostList = EnchantingHelper.evaluateEnchantments(stack, frostList, frostPower);
-        scorchList = EnchantingHelper.evaluateEnchantments(stack, scorchList, scorchPower);
-        flowList = EnchantingHelper.evaluateEnchantments(stack, flowList, flowPower);
-        chaosList = EnchantingHelper.evaluateEnchantments(stack, chaosList, chaosPower);
-        greedList = EnchantingHelper.evaluateEnchantments(stack, greedList, greedPower);
-        mightList = EnchantingHelper.evaluateEnchantments(stack, mightList, mightPower);
+        manaList = EnchantingHelper.evaluateEnchantments(stack, manaList, manaPower, random);
+        frostList = EnchantingHelper.evaluateEnchantments(stack, frostList, frostPower, random);
+        scorchList = EnchantingHelper.evaluateEnchantments(stack, scorchList, scorchPower, random);
+        flowList = EnchantingHelper.evaluateEnchantments(stack, flowList, flowPower, random);
+        chaosList = EnchantingHelper.evaluateEnchantments(stack, chaosList, chaosPower, random);
+        greedList = EnchantingHelper.evaluateEnchantments(stack, greedList, greedPower, random);
+        mightList = EnchantingHelper.evaluateEnchantments(stack, mightList, mightPower, random);
 
-        manaBlessingList = EnchantingHelper.evaluateEnchantments(stack, manaBlessingList, manaPower);
-        frostBlessingList = EnchantingHelper.evaluateEnchantments(stack, frostBlessingList, frostPower);
-        scorchBlessingList = EnchantingHelper.evaluateEnchantments(stack, scorchBlessingList, scorchPower);
-        flowBlessingList = EnchantingHelper.evaluateEnchantments(stack, flowBlessingList, flowPower);
-        chaosBlessingList = EnchantingHelper.evaluateEnchantments(stack, chaosBlessingList, chaosPower);
-        greedBlessingList = EnchantingHelper.evaluateEnchantments(stack, greedBlessingList, greedPower);
-        mightBlessingList = EnchantingHelper.evaluateEnchantments(stack, mightBlessingList, mightPower);
+        manaBlessingList = EnchantingHelper.evaluateEnchantments(stack, manaBlessingList, manaPower, random);
+        frostBlessingList = EnchantingHelper.evaluateEnchantments(stack, frostBlessingList, frostPower, random);
+        scorchBlessingList = EnchantingHelper.evaluateEnchantments(stack, scorchBlessingList, scorchPower, random);
+        flowBlessingList = EnchantingHelper.evaluateEnchantments(stack, flowBlessingList, flowPower, random);
+        chaosBlessingList = EnchantingHelper.evaluateEnchantments(stack, chaosBlessingList, chaosPower, random);
+        greedBlessingList = EnchantingHelper.evaluateEnchantments(stack, greedBlessingList, greedPower, random);
+        mightBlessingList = EnchantingHelper.evaluateEnchantments(stack, mightBlessingList, mightPower, random);
 
-        curseList = EnchantingHelper.evaluateEnchantments(stack, curseList, basePower);
+        curseList = EnchantingHelper.evaluateEnchantments(stack, curseList, basePower, random);
 
         if (baseList.isEmpty()
                         && manaList.isEmpty() && frostList.isEmpty() && scorchList.isEmpty() && flowList.isEmpty() && chaosList.isEmpty() && greedList.isEmpty() && mightList.isEmpty()
@@ -621,11 +608,9 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
         if (EnchantingHelper.hasSlots(stack) && EaEConfig.get().general.enchantment_slots) {
             while (EnchantingHelper.combinedEnchantmentScore(stack, list) > stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(stack)) {
-                if (list.size() == 1) {
-                    list.removeFirst();
+                if (!EnchantingHelper.removeExcessEnchantments(stack, list, random)) {
                     break;
                 }
-                list.remove(random.nextInt(1, list.size()));
             }
         }
 
@@ -680,6 +665,13 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             });
             cir.setReturnValue(true);
         }
+    }
+
+
+
+    @WrapOperation(method = "lambda$clickMenuButton$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/EnchantmentMenu;getEnchantmentList(Lnet/minecraft/core/RegistryAccess;Lnet/minecraft/world/item/ItemStack;II)Ljava/util/List;"))
+    private List<EnchantmentInstance> EaE$getEnchantListFromMenuClick(EnchantmentMenu instance, RegistryAccess access, ItemStack itemStack, int slot, int enchantmentCost, Operation<List<EnchantmentInstance>> original) {
+        return original.call(instance, access, itemStack, slot, enchantmentCost + this.powerAltars * 3);
     }
 
     @Inject(method = "clickMenuButton", at = @At("RETURN"))

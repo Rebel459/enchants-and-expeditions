@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.AbsorptionMobEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -25,13 +26,6 @@ public class EaEMobEffects {
             "overheal",
             () -> new OverhealMobEffect(MobEffectCategory.BENEFICIAL, 2445989)
                     .addAttributeModifier(Attributes.MAX_ABSORPTION, EnchantsAndExpeditions.id("effect.overheal"), 1.0, AttributeModifier.Operation.ADD_VALUE)
-    );
-
-    public static final Holder<MobEffect> CELERITY = EFFECTS.registerHolder(
-            "celerity",
-            () -> new OverhealMobEffect(MobEffectCategory.BENEFICIAL, 0)
-                    .addAttributeModifier(Attributes.MINING_EFFICIENCY, EnchantsAndExpeditions.id("effect.celerity"), 6.0, AttributeModifier.Operation.ADD_VALUE)
-                    .addAttributeModifier(Attributes.ATTACK_SPEED, EnchantsAndExpeditions.id("effect.celerity"), 0.4, AttributeModifier.Operation.ADD_VALUE)
     );
 
     public static void init() {}
