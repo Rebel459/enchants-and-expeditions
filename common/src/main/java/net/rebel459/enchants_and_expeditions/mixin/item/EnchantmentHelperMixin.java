@@ -1,14 +1,7 @@
 package net.rebel459.enchants_and_expeditions.mixin.item;
 
 import com.google.common.collect.Lists;
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
-import com.mojang.logging.LogUtils;
-import net.minecraft.world.inventory.AnvilMenu;
 import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
-import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
@@ -22,16 +15,13 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static net.minecraft.world.item.enchantment.EnchantmentHelper.selectEnchantment;
@@ -66,7 +56,7 @@ public abstract class EnchantmentHelperMixin {
 
             for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
                 if (level >= enchantment.getMinCost(j) && (level <= enchantment.getMaxCost(j) || (j == enchantment.getMaxLevel() && !holder.is(EaEEnchantmentTags.ENFORCE_MAXIMUM_LEVEL)))  // override max level check
-                        && !EnchantingHelper.configureEnchantments(holder)
+                        && !EnchantingHelper.disableEnchantment(holder, stack)
                         && !(stack.is(ItemTags.AXES) && holder.is(EaEEnchantmentTags.NOT_ON_AXES)) // handle axe enchantments
                         && !(stack.is(EaEItemTags.ANIMAL_ARMOR) && holder.is(EaEEnchantmentTags.NOT_ON_ANIMAL_ARMOR))) {
                     list.add(new EnchantmentInstance(holder, j));

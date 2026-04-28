@@ -1,6 +1,5 @@
 package net.rebel459.enchants_and_expeditions.util;
 
-import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -21,7 +20,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -37,6 +35,7 @@ import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
 import net.rebel459.unified.platform.UnifiedEvents;
 import org.apache.commons.lang3.BooleanUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -227,7 +226,7 @@ public class EnchantingHelper {
         });
 
         list.removeIf(enchantmentInstance -> {
-            return configureEnchantments(enchantmentInstance.enchantment());
+            return disableEnchantment(enchantmentInstance.enchantment(), stack);
         });
 
         List<EnchantmentInstance> normalized = new ArrayList<>();
@@ -291,7 +290,10 @@ public class EnchantingHelper {
         return list;
     }
 
-    public static boolean configureEnchantments(Holder<Enchantment> enchantment) {
+    public static boolean disableEnchantment(Holder<Enchantment> enchantment, @Nullable ItemStack stack) {
+        if (stack != null && EnchantmentSlotCaps.SLOT_CAPS.containsKey(stack.getItem()) && enchantment.is(EaEEnchantments.ARCANA_BLESSING)) {
+            return true;
+        }
         for (TagKey<Enchantment> tag : DISABLED_ENCHANTMENT_TAGS) {
             if (enchantment.is(tag)) return true;
         }
@@ -307,21 +309,21 @@ public class EnchantingHelper {
         return false;
     }
 
-    public static boolean onRandomLoot(Holder<Enchantment> enchantment, RandomSource randomSource) {
+    public static boolean onRandomLoot(Holder<Enchantment> enchantment, RandomSource randomSource, ItemStack stack) {
         if (randomSource.nextInt(1, 5) < 4) {
-            return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) || configureEnchantments(enchantment);
+            return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) || disableEnchantment(enchantment, stack);
         }
         if (randomSource.nextInt(1, 3) < 2) {
-            return !enchantment.is(EnchantmentTags.CURSE) || configureEnchantments(enchantment);
+            return !enchantment.is(EnchantmentTags.CURSE) || disableEnchantment(enchantment, stack);
         }
-        else return configureEnchantments(enchantment);
+        else return disableEnchantment(enchantment, stack);
     }
 
-    public static boolean onRandomlyEnchantedLoot(Holder<Enchantment> enchantment, RandomSource randomSource) {
+    public static boolean onRandomlyEnchantedLoot(Holder<Enchantment> enchantment, RandomSource randomSource, ItemStack stack) {
         if (randomSource.nextInt(1, 3) < 2) {
-            return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) || enchantment.is(EnchantmentTags.CURSE) || configureEnchantments(enchantment);
+            return (enchantment.is(EaEEnchantmentTags.BLESSING) && !enchantment.is(EaEEnchantmentTags.GENERIC_BLESSING)) || enchantment.is(EnchantmentTags.CURSE) || disableEnchantment(enchantment, stack);
         }
-        return onRandomLoot(enchantment, randomSource.fork());
+        return onRandomLoot(enchantment, randomSource.fork(), stack);
     }
 
     public static int getBlessings(ItemStack stack) {

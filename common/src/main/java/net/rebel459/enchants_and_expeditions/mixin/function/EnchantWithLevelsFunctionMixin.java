@@ -69,7 +69,7 @@ public class EnchantWithLevelsFunctionMixin {
     @Unique
     private static ItemStack enchantItem(RandomSource random, ItemStack stack, int level, Stream<Holder<Enchantment>> possibleEnchantments) {
         possibleEnchantments = possibleEnchantments.filter(enchantment -> {
-            return !EnchantingHelper.onRandomLoot(enchantment, random);
+            return !EnchantingHelper.onRandomLoot(enchantment, random, stack);
         });
 
         return EnchantmentHelper.enchantItem(random, stack, level, possibleEnchantments);

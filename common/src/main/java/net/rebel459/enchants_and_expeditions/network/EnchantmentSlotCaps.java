@@ -82,7 +82,9 @@ public final class EnchantmentSlotCaps {
         List<Holder<Enchantment>> enchantments = new ArrayList<>();
         List<Item> items = provider.lookup(Registries.ITEM).get().stream().toList();
         for (Identifier id : enchantmentIds) {
-            enchantmentLookup.get(id).ifPresent(enchantments::add);
+            enchantmentLookup.get(id).ifPresent(enchantment -> {
+                if (!EnchantingHelper.disableEnchantment(enchantment, null)) enchantments.add(enchantment);
+            });
         }
         for (Item item : items) {
             ItemStack stack = item.getDefaultInstance();

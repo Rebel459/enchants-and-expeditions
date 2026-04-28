@@ -21,13 +21,14 @@ public abstract class CreativeModeTabsMixin {
     @WrapOperation(method = "generateEnchantmentBookTypesOnlyMaxLevel", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;map(Ljava/util/function/Function;)Ljava/util/stream/Stream;"))
     private static Stream<ItemStack> hideDisabledMaxEnchantmentBooks(Stream<Holder.Reference<Enchantment>> instance, Function<? super Holder.Reference<Enchantment>, ? extends ItemStack> function, Operation<Stream<ItemStack>> original) {
         List<Holder.Reference<Enchantment>> enchantments = new ArrayList<>(instance.toList());
-        enchantments.removeIf(EnchantingHelper::configureEnchantments);
+        enchantments.removeIf(enchantment -> EnchantingHelper.disableEnchantment(enchantment, null));
         return original.call(enchantments.stream(), function);
     }
 
     @WrapOperation(method = "generateEnchantmentBookTypesAllLevels", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;flatMap(Ljava/util/function/Function;)Ljava/util/stream/Stream;"))
-    private static Stream<ItemStack> hideDisabledEnchantmentBooks(Stream<Holder.Reference<Enchantment>> instance, Function<? super Holder.Reference<Enchantment>, ? extends Stream<? extends ItemStack>> function, Operation<Stream<ItemStack>> original) {        List<Holder.Reference<Enchantment>> enchantments = new ArrayList<>(instance.toList());
-        enchantments.removeIf(EnchantingHelper::configureEnchantments);
+    private static Stream<ItemStack> hideDisabledEnchantmentBooks(Stream<Holder.Reference<Enchantment>> instance, Function<? super Holder.Reference<Enchantment>, ? extends Stream<? extends ItemStack>> function, Operation<Stream<ItemStack>> original) {
+        List<Holder.Reference<Enchantment>> enchantments = new ArrayList<>(instance.toList());
+        enchantments.removeIf(enchantment -> EnchantingHelper.disableEnchantment(enchantment, null));
         return original.call(enchantments.stream(), function);
     }
 }

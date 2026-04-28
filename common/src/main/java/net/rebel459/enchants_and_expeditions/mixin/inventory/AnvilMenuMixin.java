@@ -202,6 +202,7 @@ public abstract class AnvilMenuMixin {
             }
 
             EaE$bookLimit();
+            EaE$filterEnchantments();
             EaE$modifyPrice();
 
             anvilMenu.broadcastChanges();
@@ -256,6 +257,28 @@ public abstract class AnvilMenuMixin {
             this.cost.set(0);
             return;
         }
+    }
+
+    @Unique
+    public void EaE$filterEnchantments() {
+        AnvilMenu anvilMenu = AnvilMenu.class.cast(this);
+        ItemStack inputStack = anvilMenu.slots.getFirst().getItem();
+        ItemStack additionStack = anvilMenu.slots.get(1).getItem();
+        ItemStack outputStack = anvilMenu.resultSlots.getItem(0);
+        ItemEnchantments inputEnchantments;
+        if (inputStack.is(Items.ENCHANTED_BOOK)) inputEnchantments = inputStack.get(DataComponents.STORED_ENCHANTMENTS);
+        else inputEnchantments = inputStack.getEnchantments();
+        ItemEnchantments additionEnchantments;
+        if (additionStack.is(Items.ENCHANTED_BOOK)) additionEnchantments = additionStack.get(DataComponents.STORED_ENCHANTMENTS);
+        else additionEnchantments = additionStack.getEnchantments();
+        ItemEnchantments.Mutable newEnchantments = new ItemEnchantments.Mutable(outputStack.getEnchantments());
+        newEnchantments.removeIf(enchantment -> {
+            if (inputEnchantments.getLevel(enchantment) == 0 && (additionEnchantments.getLevel(enchantment) == 0 || (!inputStack.is(Items.ENCHANTED_BOOK) && additionStack.is(Items.ENCHANTED_BOOK)))) return EnchantingHelper.disableEnchantment(enchantment, outputStack);
+            else return false;
+        });
+        ItemEnchantments finalEnchantments = newEnchantments.toImmutable();
+        if (outputStack.is(Items.ENCHANTED_BOOK)) outputStack.set(DataComponents.STORED_ENCHANTMENTS, finalEnchantments);
+        else outputStack.set(DataComponents.ENCHANTMENTS, finalEnchantments);
     }
 
     @Unique

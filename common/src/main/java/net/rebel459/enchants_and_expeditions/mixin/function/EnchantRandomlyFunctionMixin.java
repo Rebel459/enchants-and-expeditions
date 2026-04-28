@@ -38,8 +38,8 @@ public class EnchantRandomlyFunctionMixin {
     RandomSource randomSource;
 
     @Inject(method = "run", at = @At(value = "HEAD"))
-    protected void EaE$run(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir) {
-        this.itemStack = stack;
+    protected void EaE$run(ItemStack itemStack, LootContext context, CallbackInfoReturnable<ItemStack> cir) {
+        this.itemStack = itemStack;
         this.randomSource = context.getRandom();
     }
 
@@ -55,7 +55,7 @@ public class EnchantRandomlyFunctionMixin {
         boolean bl = stack.is(Items.BOOK);
         boolean bl2 = !bl && this.onlyCompatible;
         return stream.filter(holder -> {
-            return (!bl2 || holder.value().canEnchant(stack)) && !EnchantingHelper.onRandomlyEnchantedLoot(holder, random) && enchantFallback(holder);
+            return (!bl2 || holder.value().canEnchant(stack)) && !EnchantingHelper.onRandomlyEnchantedLoot(holder, random, stack) && enchantFallback(holder);
         });
     }
 
