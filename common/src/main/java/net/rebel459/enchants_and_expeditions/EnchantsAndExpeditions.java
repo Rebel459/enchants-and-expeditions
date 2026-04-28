@@ -2,13 +2,16 @@ package net.rebel459.enchants_and_expeditions;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.network.EnchantingAttributes;
+import net.rebel459.enchants_and_expeditions.network.EnchantmentSlotCaps;
 import net.rebel459.enchants_and_expeditions.registry.*;
 import net.rebel459.enchants_and_expeditions.sound.EaEBlockSounds;
 import net.rebel459.enchants_and_expeditions.sound.EaESounds;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
+import net.rebel459.unified.platform.UnifiedEvents;
 import net.rebel459.unified.platform.UnifiedHelpers;
 import net.rebel459.unified.platform.UnifiedPlatform;
 import net.rebel459.unified.util.PackType;
@@ -25,11 +28,15 @@ public class EnchantsAndExpeditions {
 
 	public static boolean debug = false;
 
-    public static boolean isLegaciesAndLegendsLoaded = false;
-	public static boolean isProgressionRebornLoaded = false;
-    public static boolean isCombatRebornLoaded = false;
-	public static boolean isTrailierTalesLoaded = false;
-	public static boolean isEnderscapeLoaded = false;
+	public static boolean isLegaciesAndLegendsLoaded() {
+		return UnifiedPlatform.isModLoaded("legacies_and_legends") && EaEConfig.get().integrations.legacies_and_legends;
+	}
+	public static boolean isEnderscapeLoaded() {
+		return UnifiedPlatform.isModLoaded("enderscape") && EaEConfig.get().integrations.enderscape;
+	}
+	public static boolean isCombatRebornLoaded() {
+		return UnifiedPlatform.isModLoaded("combat_reborn") && EaEConfig.get().integrations.combat_reborn;
+	}
 
 	static EnchantingAttributes.Attributes clientEnchantingAttributes;
 
@@ -40,6 +47,7 @@ public class EnchantsAndExpeditions {
 		EaESounds.init();
 		EaEDataComponents.init();
 		EnchantingHelper.init();
+		EnchantmentSlotCaps.init();
 	}
 
 	public static void init() {
@@ -71,6 +79,21 @@ public class EnchantsAndExpeditions {
 			if (EnchantsAndExpeditions.debug) LOGGER.info("[EaE] S2C Attributes received on client thread: {}", attributes);
 		});
 
+		UnifiedHelpers.NETWORKING.registerPlayToClient(EnchantmentSlotCaps.Sync.ID, EnchantmentSlotCaps.Sync.CODEC, (sync, player) -> {
+			EnchantmentSlotCaps.applySyncedSlotCaps(sync.slotCaps());
+		});
+		UnifiedEvents.Players.onJoin(player -> {
+			if (player instanceof ServerPlayer serverPlayer) {
+				UnifiedHelpers.NETWORKING.send(new EnchantmentSlotCaps.Sync(EnchantmentSlotCaps.getSlotCapsForSync()), serverPlayer);
+			}
+		});
+		UnifiedEvents.Server.onDatapackLoad(server -> {
+			EnchantmentSlotCaps.Sync sync = new EnchantmentSlotCaps.Sync(EnchantmentSlotCaps.getSlotCapsForSync());
+			for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+				UnifiedHelpers.NETWORKING.send(sync, player);
+			}
+		});
+
         loadResources();
 		
 		EaECreativeInventorySorting.init();
@@ -85,23 +108,11 @@ public class EnchantsAndExpeditions {
         if (UnifiedPlatform.get().isModLoaded("combat_reborn") && EaEConfig.get().integrations.combat_reborn) {
 			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("combat_reborn_integration"), PackType.REQUIRED_DATA);
         }
-
-        if (UnifiedPlatform.get().isModLoaded("legacies_and_legends") && EaEConfig.get().integrations.legacies_and_legends) {
-            isLegaciesAndLegendsLoaded = true;
+        if (isLegaciesAndLegendsLoaded()) {
 			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("legacies_and_legends_integration"), PackType.REQUIRED_DATA);
         }
-        if (UnifiedPlatform.get().isModLoaded("progression_reborn")) {
-            isProgressionRebornLoaded = true;
-        }
-        if (UnifiedPlatform.get().isModLoaded("combat_reborn")) {
-            isCombatRebornLoaded = true;
-        }
         if (UnifiedPlatform.get().isModLoaded("trailiertales") && EaEConfig.get().integrations.trailier_tales) {
-            isTrailierTalesLoaded = true;
 			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("trailier_tales_integration"), PackType.REQUIRED_DATA);
-        }
-        if (UnifiedPlatform.get().isModLoaded("enderscape") && EaEConfig.get().integrations.enderscape) {
-            isEnderscapeLoaded = true;
         }
     }
 }

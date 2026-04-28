@@ -331,7 +331,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
 
                     if (this.enchantClue[0] == -1 && this.enchantClue[1] == -1 &&
                             this.enchantClue[2] == -1 &&
-                            (!(EnchantingHelper.allMaxLevel(itemStack) && this.totalAltars - this.powerAltars - this.stabilityAltars <= 0) || (EnchantingHelper.hasSlots(itemStack) && itemStack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(info) > 0)) &&
+                            (!(EnchantingHelper.allMaxLevel(itemStack) && this.totalAltars - this.powerAltars - this.stabilityAltars <= 0) || (EnchantingHelper.hasSlots(itemStack) && EnchantingHelper.getImmutableSlots(itemStack).getRemaining(info) > 0)) &&
                             bookshelfPower * 2 + this.totalAltars * 3 - this.stabilityAltars * 3 - this.powerAltars * 3 > rerollCost &&
                             !rerolls.hasSameSetup(setup.getLeft(), setup.getMiddle(), setup.getRight())
                     ) {

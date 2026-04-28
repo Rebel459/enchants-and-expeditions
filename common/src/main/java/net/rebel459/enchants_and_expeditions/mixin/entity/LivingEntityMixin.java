@@ -134,10 +134,10 @@ public abstract class LivingEntityMixin {
     }
 
     @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
-    private float sacrificeCurse(float value) {
+    private float tormentCurse(float value) {
         if (this.damageSource.getEntity() instanceof LivingEntity attacker && attacker.level() instanceof ServerLevel level) {
             ItemStack stack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
-            if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SACRIFICE_CURSE)) {
+            if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.TORMENT_CURSE)) {
                 if (attacker.getHealth() >= 1F) {
                     float hurtAmount = Math.clamp(attacker.getHealth() - 1F, 1F, 2F);
                     attacker.hurtServer(level, attacker.damageSources().generic(), hurtAmount);

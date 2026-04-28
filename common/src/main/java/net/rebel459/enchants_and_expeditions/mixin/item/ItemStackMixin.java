@@ -1,7 +1,5 @@
 package net.rebel459.enchants_and_expeditions.mixin.item;
 
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -21,8 +19,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.function.Consumer;
-
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
@@ -34,7 +30,7 @@ public abstract class ItemStackMixin {
     private void canEnchant(CallbackInfoReturnable<Boolean> cir) {
         if (!EaEConfig.get().general.repeat_table_enchanting) return;
         ItemStack stack = ItemStack.class.cast(this);
-        if (!cir.getReturnValue() && stack.isEnchanted() && EnchantingHelper.hasSlots(stack) && (stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).getRemaining(stack) > 0) || EnchantingHelper.getBlessings(stack) == 0 || !EnchantingHelper.allMaxLevel(stack)) {
+        if (!cir.getReturnValue() && stack.isEnchanted() && EnchantingHelper.hasSlots(stack) && (EnchantingHelper.getImmutableSlots(stack).getRemaining(stack) > 0) || EnchantingHelper.getBlessings(stack) == 0 || !EnchantingHelper.allMaxLevel(stack)) {
             cir.setReturnValue(true);
         }
     }

@@ -1,7 +1,7 @@
 {
   "anvil_cost": 1,
   "description": {
-    "translate": "enchantment.enchants_and_expeditions.sacrifice_curse"
+    "translate": "enchantment.enchants_and_expeditions.torment_curse"
   },
   "effects": {},
   "exclusive_set": "#minecraft:curse",

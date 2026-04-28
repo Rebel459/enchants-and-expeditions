@@ -1,5 +1,6 @@
 package net.rebel459.enchants_and_expeditions.util;
 
+import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -20,6 +21,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -28,6 +30,7 @@ import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.phys.Vec3;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
+import net.rebel459.enchants_and_expeditions.network.EnchantmentSlotCaps;
 import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
 import net.rebel459.enchants_and_expeditions.registry.EaEEnchantments;
 import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
@@ -35,9 +38,7 @@ import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
 import net.rebel459.unified.platform.UnifiedEvents;
 import org.apache.commons.lang3.BooleanUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class EnchantingHelper {
 
@@ -85,6 +86,14 @@ public class EnchantingHelper {
             }
             return stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get()).slots() != 0;
         }
+    }
+
+    public static EnchantmentSlots getImmutableSlots(ItemStack stack) {
+        EnchantmentSlots slots = stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get());
+        if (EnchantmentSlotCaps.SLOT_CAPS.containsKey(stack.getItem())) {
+            return new EnchantmentSlots(Math.min(slots.slots(), EnchantmentSlotCaps.SLOT_CAPS.get(stack.getItem())), slots.modifier());
+        }
+        return slots;
     }
 
     public static void addReroll(ItemStack stack) {
@@ -493,6 +502,10 @@ public class EnchantingHelper {
         UnifiedEvents.Server.onStart(server -> {
             RegistryAccess.Frozen provider = server.registryAccess();
             var enchantmentLookup = provider.lookup(Registries.ENCHANTMENT).get();
+
+            DISABLED_ENCHANTMENT_TAGS.clear();
+            DISABLED_ENCHANTMENTS.clear();
+            DISABLED_ENCHANTMENT_PHRASES.clear();
 
             EaEConfig.get().disabled_enchantments.forEach(key -> {
                 if (key.startsWith("#")) {

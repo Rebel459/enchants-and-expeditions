@@ -168,6 +168,10 @@ public class EaEConfig implements ConfigData {
                 new ItemEnchantmentSlots("legacies_and_legends:molten_pickaxe", 5),
                 new ItemEnchantmentSlots("legacies_and_legends:prospector_shovel", 3),
                 new ItemEnchantmentSlots("legacies_and_legends:withered_hoe", 4),
+                new ItemEnchantmentSlots("legacies_and_legends:boomerang", 5),
+                new ItemEnchantmentSlots("legacies_and_legends:knife", 4),
+                new ItemEnchantmentSlots("legacies_and_legends:hook", 4),
+                new ItemEnchantmentSlots("remnants:katana", 4),
                 new ItemEnchantmentSlots("enderscape:drift_leggings", 3),
                 new ItemEnchantmentSlots("*shadoline", 4)
         );

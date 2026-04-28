@@ -270,7 +270,7 @@ public abstract class AnvilMenuMixin {
             float multiplier = 1;
 
             enchantCost = EaE$evaluateEnchantCost(outputStack);
-            if (outputStack.has(DataComponents.ENCHANTABLE)) multiplier -= Math.min(25, outputStack.get(DataComponents.ENCHANTABLE).value()) * 0.01F;
+            if (outputStack.has(DataComponents.ENCHANTABLE)) multiplier -= Math.min(50, outputStack.get(DataComponents.ENCHANTABLE).value()) * 0.01F;
             float finalCost = enchantCost * multiplier;
             cost.set((int) finalCost);
         }

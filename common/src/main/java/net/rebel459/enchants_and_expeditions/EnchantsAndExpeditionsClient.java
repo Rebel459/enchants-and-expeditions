@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.network.EnchantingAttributes;
-import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import net.rebel459.item_tooltips.util.ScreenHelper;
@@ -26,7 +25,7 @@ public final class EnchantsAndExpeditionsClient {
             EaEConfig.TooltipConfig tooltips = EaEConfig.get().tooltips;
             if (tooltips.slot_tooltip == EaEConfig.TooltipType.NEVER || (tooltips.slot_tooltip == EaEConfig.TooltipType.HOLD_KEY && !ScreenHelper.hasKeyDown())) return;
             if (EnchantingHelper.hasSlots(stack) && !stack.has(DataComponents.STORED_ENCHANTMENTS) && stack.getItem() != Items.BOOK) {
-                EnchantmentSlots slots = stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get());
+                EnchantmentSlots slots = EnchantingHelper.getImmutableSlots(stack);
                 ChatFormatting formatting = ChatFormatting.GRAY;
                 if (slots.modifier() > 0) formatting = ChatFormatting.BLUE;
                 else if (slots.modifier() < 0) formatting = ChatFormatting.RED;

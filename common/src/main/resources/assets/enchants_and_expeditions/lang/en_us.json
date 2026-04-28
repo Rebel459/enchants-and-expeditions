@@ -134,8 +134,8 @@
   "enchantment.enchants_and_expeditions.displacement_curse.desc": "Taking damage displaces the wearer's active affects to the attacker",
   "enchantment.enchants_and_expeditions.sliding_curse": "Curse of Sliding",
   "enchantment.enchants_and_expeditions.sliding_curse.desc": "Makes most blocks slippery",
-  "enchantment.enchants_and_expeditions.sacrifice_curse": "Curse of Sacrifice",
-  "enchantment.enchants_and_expeditions.sacrifice_curse.desc": "Increases damage dealt... at the cost of the wielder's health",
+  "enchantment.enchants_and_expeditions.torment_curse": "Curse of Torment",
+  "enchantment.enchants_and_expeditions.torment_curse.desc": "Increases damage dealt... at the cost of the wielder's health",
 
   "enchantment.enchants_and_expeditions.justice_blessing": "Blessing of Justice",
   "enchantment.enchants_and_expeditions.justice_blessing.desc": "When a Shield's blocking strength is overpowered, unleash a defensive shockwave",
@@ -184,8 +184,8 @@
   "text.autoconfig.enchants_and_expeditions.option.tooltips.slot_tooltip.@Tooltip": "Determines when the enchantment slot tooltip on enchantable items should be shown. Can be either ALWAYS, HOLD_KEY or NEVER",
   "text.autoconfig.enchants_and_expeditions.option.tooltips.enchantment_symbols": "Enchantment Symbols",
   "text.autoconfig.enchants_and_expeditions.option.tooltips.enchantment_symbols.@Tooltip": "How symbols representing the element and status of enchantments should be shown next to their name. Can be either ALWAYS, HOLD_KEY or NEVER",
-  "text.autoconfig.enchants_and_expeditions.option.tooltips.ordered_enchantment_tooltips": "Ordered Enchantments",
-  "text.autoconfig.enchants_and_expeditions.option.tooltips.ordered_enchantment_tooltips.@Tooltip": "Whether an improved item enchantment tooltip ordering system should be used, where blessings are placed at the top, enchantments in the middle, and curses at the bottom",
+  "text.autoconfig.enchants_and_expeditions.option.tooltips.ordered_enchantments": "Ordered Enchantments",
+  "text.autoconfig.enchants_and_expeditions.option.tooltips.ordered_enchantments.@Tooltip": "Whether an improved item enchantment tooltip ordering system should be used, where blessings are placed at the top, enchantments in the middle, and curses at the bottom",
 
   "text.autoconfig.enchants_and_expeditions.option.misc": "Miscellaneous",
   "text.autoconfig.enchants_and_expeditions.option.misc.panel_visibility": "Panel Visibility",

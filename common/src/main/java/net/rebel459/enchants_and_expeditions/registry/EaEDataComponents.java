@@ -42,7 +42,7 @@ public class EaEDataComponents {
             if (item == Items.CRAFTING_TABLE) {
                 builder.set(DataComponents.REPAIRABLE, new Repairable(provider.getOrThrow(EaEItemTags.CROSSBOW_REPAIR_MATERIALS)));
             }
-            if (!EnchantsAndExpeditions.isLegaciesAndLegendsLoaded) {
+            if (!EnchantsAndExpeditions.isLegaciesAndLegendsLoaded() && !EnchantsAndExpeditions.isCombatRebornLoaded()) {
                 if (item == Items.TRIDENT) {
                     builder.set(DataComponents.ATTRIBUTE_MODIFIERS, TridentItem.createAttributes());
                     builder.set(DataComponents.REPAIRABLE, new Repairable(provider.getOrThrow(EaEItemTags.TRIDENT_REPAIR_MATERIALS)));
