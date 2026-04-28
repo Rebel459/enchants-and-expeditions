@@ -9,6 +9,7 @@ import net.rebel459.enchants_and_expeditions.network.EnchantingAttributes;
 import net.rebel459.enchants_and_expeditions.registry.EaEDataComponents;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
+import net.rebel459.item_tooltips.util.ScreenHelper;
 import net.rebel459.unified.platform.UnifiedHelpers;
 import net.rebel459.unified.platform.client.UnifiedClientEvents;
 import net.rebel459.unified.util.EventType;
@@ -22,6 +23,8 @@ public final class EnchantsAndExpeditionsClient {
         }
 
         UnifiedClientEvents.ItemTooltips.addAttributes(EventType.POST, ((stack, consumer, tooltipDisplay, localPlayer) -> {
+            EaEConfig.TooltipConfig tooltips = EaEConfig.get().tooltips;
+            if (tooltips.slot_tooltip == EaEConfig.TooltipType.NEVER || (tooltips.slot_tooltip == EaEConfig.TooltipType.HOLD_KEY && !ScreenHelper.hasKeyDown())) return;
             if (EnchantingHelper.hasSlots(stack) && !stack.has(DataComponents.STORED_ENCHANTMENTS) && stack.getItem() != Items.BOOK) {
                 EnchantmentSlots slots = stack.get(EaEDataComponents.ENCHANTMENT_SLOTS.get());
                 ChatFormatting formatting = ChatFormatting.GRAY;

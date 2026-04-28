@@ -1,5 +1,6 @@
 package net.rebel459.enchants_and_expeditions.mixin.entity;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -41,7 +42,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
 
-    @Shadow public abstract ItemStack getItemBySlot(EquipmentSlot slot);
+    @Shadow
+    public abstract ItemStack getItemBySlot(EquipmentSlot slot);
 
     @Shadow
     public abstract @org.jspecify.annotations.Nullable LivingEntity asLivingEntity();
@@ -75,6 +77,7 @@ public abstract class LivingEntityMixin {
             }
         }
     }
+
     @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
     private float infernoBlessingDamage(float value) {
         LivingEntity attacked = LivingEntity.class.cast(this);
@@ -99,6 +102,7 @@ public abstract class LivingEntityMixin {
             }
         }
     }
+
     @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
     private float winterBlessingDamage(float value) {
         LivingEntity attacked = LivingEntity.class.cast(this);
@@ -127,6 +131,21 @@ public abstract class LivingEntityMixin {
                 entity.addEffect(new MobEffectInstance(effect, duration / 2));
             }
         }
+    }
+
+    @ModifyVariable(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "HEAD"), index = 3, argsOnly = true)
+    private float sacrificeCurse(float value) {
+        if (this.damageSource.getEntity() instanceof LivingEntity attacker && attacker.level() instanceof ServerLevel level) {
+            ItemStack stack = attacker.getItemInHand(InteractionHand.MAIN_HAND);
+            if (EnchantingHelper.hasEnchantment(stack, EaEEnchantments.SACRIFICE_CURSE)) {
+                if (attacker.getHealth() >= 1F) {
+                    float hurtAmount = Math.clamp(attacker.getHealth() - 1F, 1F, 2F);
+                    attacker.hurtServer(level, attacker.damageSources().generic(), hurtAmount);
+                    value += hurtAmount;
+                }
+            }
+        }
+        return value;
     }
 
     @Inject(method = "hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "TAIL"))

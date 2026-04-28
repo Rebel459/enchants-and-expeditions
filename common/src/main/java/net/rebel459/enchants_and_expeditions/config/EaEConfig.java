@@ -44,6 +44,9 @@ public class EaEConfig implements ConfigData {
     public GeneralConfig general = new GeneralConfig();
 
     @ConfigEntry.Gui.CollapsibleObject
+    public TooltipConfig tooltips = new TooltipConfig();
+
+    @ConfigEntry.Gui.CollapsibleObject
     public MiscConfig misc = new MiscConfig();
 
     @ConfigEntry.Gui.CollapsibleObject
@@ -64,10 +67,6 @@ public class EaEConfig implements ConfigData {
         public boolean new_table_costs = true;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
-        @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        public EnchantmentSymbols enchantment_symbols = EnchantmentSymbols.ALWAYS;
-        @ConfigEntry.Category("config")
-        @ConfigEntry.Gui.Tooltip
         public boolean experience_rebalance = true;
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
@@ -78,10 +77,21 @@ public class EaEConfig implements ConfigData {
         public boolean craftable_experience_bottles = true;
     }
 
-    public static class MiscConfig {
+    public static class TooltipConfig {
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
-        public boolean ordered_enchantment_tooltips = true;
+        @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        public TooltipType slot_tooltip = TooltipType.ALWAYS;
+        @ConfigEntry.Category("config")
+        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        public TooltipType enchantment_symbols = TooltipType.ALWAYS;
+        @ConfigEntry.Category("config")
+        @ConfigEntry.Gui.Tooltip
+        public boolean ordered_enchantments = true;
+    }
+
+    public static class MiscConfig {
         @ConfigEntry.Category("config")
         @ConfigEntry.Gui.Tooltip
         @ConfigEntry.Gui.EnumHandler(option=ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
@@ -130,22 +140,36 @@ public class EaEConfig implements ConfigData {
     private static List<ItemEnchantmentSlots> defaultEnchantmentSlots() {
         return List.of(
                 new ItemEnchantmentSlots("*wood", 3),
+                new ItemEnchantmentSlots("*leather", 3),
                 new ItemEnchantmentSlots("*stone", 3),
                 new ItemEnchantmentSlots("*copper", 3),
+                new ItemEnchantmentSlots("*chain", 4),
                 new ItemEnchantmentSlots("*iron", 4),
                 new ItemEnchantmentSlots("*golden", 5),
                 new ItemEnchantmentSlots("*diamond", 4),
                 new ItemEnchantmentSlots("*netherite", 4),
+                new ItemEnchantmentSlots("*turtle", 4),
                 new ItemEnchantmentSlots("*book", 5),
                 new ItemEnchantmentSlots("*shield", 3),
-                new ItemEnchantmentSlots("*fishing_rod", 4),
+                new ItemEnchantmentSlots("minecraft:fishing_rod", 3),
                 new ItemEnchantmentSlots("minecraft:mace", 4),
                 new ItemEnchantmentSlots("minecraft:trident", 4),
                 new ItemEnchantmentSlots("*minecraft:bow", 4),
                 new ItemEnchantmentSlots("*rose", 5),
                 new ItemEnchantmentSlots("*remnant", 4),
                 new ItemEnchantmentSlots("*end_reborn:netherite", 5),
-                new ItemEnchantmentSlots("*featherzeal", 4)
+                new ItemEnchantmentSlots("*featherzeal", 4),
+                new ItemEnchantmentSlots("legacies_and_legends:reinforced_chestplate", 4),
+                new ItemEnchantmentSlots("legacies_and_legends:travelling_strides", 3),
+                new ItemEnchantmentSlots("legacies_and_legends:wanderer_boots", 4),
+                new ItemEnchantmentSlots("legacies_and_legends:verdant_sword", 4),
+                new ItemEnchantmentSlots("legacies_and_legends:frosted_spear", 4),
+                new ItemEnchantmentSlots("legacies_and_legends:cleaving_battleaxe", 4),
+                new ItemEnchantmentSlots("legacies_and_legends:molten_pickaxe", 5),
+                new ItemEnchantmentSlots("legacies_and_legends:prospector_shovel", 3),
+                new ItemEnchantmentSlots("legacies_and_legends:withered_hoe", 4),
+                new ItemEnchantmentSlots("enderscape:drift_leggings", 3),
+                new ItemEnchantmentSlots("*shadoline", 4)
         );
     }
 
@@ -178,7 +202,7 @@ public class EaEConfig implements ConfigData {
         }
     }
 
-    public enum EnchantmentSymbols {
+    public enum TooltipType {
         ALWAYS,
         HOLD_KEY,
         NEVER

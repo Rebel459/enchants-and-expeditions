@@ -14,15 +14,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Random;
-
 @Mixin(Block.class)
 public abstract class BlockMixin {
 
     @Inject(method = "dropResources(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/item/ItemStack;)V", at = @At(value = "HEAD"), cancellable = true)
-    private static void shatteringCurse(BlockState state, Level level, BlockPos pos, BlockEntity blockEntity, Entity entity, ItemStack tool, CallbackInfo ci) {
+    private static void shatteringCurse(BlockState state, Level level, BlockPos pos, BlockEntity blockEntity, Entity breaker, ItemStack tool, CallbackInfo ci) {
         if (EnchantingHelper.hasEnchantment(tool, EaEEnchantments.SHATTERING_CURSE)) {
-            if (new Random().nextInt(0, 6) == 5) ci.cancel();
+            if (breaker.getRandom().nextInt(0, 6) == 5) ci.cancel();
         }
     }
 }

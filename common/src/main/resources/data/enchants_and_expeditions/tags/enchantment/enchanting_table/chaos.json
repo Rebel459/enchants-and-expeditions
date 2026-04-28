@@ -3,7 +3,7 @@
     "#enchants_and_expeditions:enchanting_table/all",
     "minecraft:thorns",
     "enchants_and_expeditions:elemental_protection",
-    "enchants_and_expeditions:critical_strike",
-    "enchants_and_expeditions:equilibrium"
+    "enchants_and_expeditions:equilibrium",
+    "enchants_and_expeditions:bloodlust"
   ]
 }

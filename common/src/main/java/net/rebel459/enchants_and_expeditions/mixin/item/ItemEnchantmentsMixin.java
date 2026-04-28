@@ -30,7 +30,7 @@ public abstract class ItemEnchantmentsMixin {
 
     @Inject(method = "addToTooltip", at = @At("HEAD"), cancellable = true)
     private void EaE$enchantmentTooltipOrder(Item.TooltipContext context, Consumer<Component> tooltipAdder, TooltipFlag flag, DataComponentGetter componentGetter, CallbackInfo ci) {
-        if (!EaEConfig.get().misc.ordered_enchantment_tooltips) return;
+        if (!EaEConfig.get().tooltips.ordered_enchantments) return;
 
         HolderLookup.Provider provider = context.registries();
 

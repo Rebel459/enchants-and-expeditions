@@ -53,6 +53,7 @@ public class EaEEnchantments {
 	public static final ResourceKey<Enchantment> SHATTERING_CURSE = key("shattering_curse");
 	public static final ResourceKey<Enchantment> DISPLACEMENT_CURSE = key("displacement_curse");
 	public static final ResourceKey<Enchantment> SLIDING_CURSE = key("sliding_curse");
+	public static final ResourceKey<Enchantment> SACRIFICE_CURSE = key("sacrifice_curse");
 
     // Combat Reborn
     public static final ResourceKey<Enchantment> JUSTICE_BLESSING = key("justice_blessing");
