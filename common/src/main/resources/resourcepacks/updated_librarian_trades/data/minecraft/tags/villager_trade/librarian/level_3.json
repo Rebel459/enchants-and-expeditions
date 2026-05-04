@@ -1,0 +1,10 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:librarian/3/emerald_and_book_enchanted_book",
+    "enchants_and_expeditions:librarian/3/emerald_arcane_bookshelf",
+    "enchants_and_expeditions:librarian/3/emerald_glacial_bookshelf",
+    "enchants_and_expeditions:librarian/3/emerald_infernal_bookshelf",
+    "enchants_and_expeditions:librarian/3/emerald_lantern"
+  ]
+}

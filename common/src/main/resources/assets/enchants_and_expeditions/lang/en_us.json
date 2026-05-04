@@ -155,6 +155,7 @@
   "subtitles.enchantment.slipstream.deflect": "Slipstream deflects",
 
   "pack.enchants_and_expeditions.vanilla_tag_replacements": "Vanilla Tag Replacements",
+  "pack.enchants_and_expeditions.updated_librarian_trades": "Updated Librarian Trades",
   "pack.enchants_and_expeditions.item_tooltips_overrides": "Item Tooltips Overrides",
   "pack.enchants_and_expeditions.combat_reborn_integration": "Combat Reborn Integration",
   "pack.enchants_and_expeditions.legacies_and_legends_integration": "Legacies and Legends Integration",
@@ -174,6 +175,8 @@
   "text.autoconfig.enchants_and_expeditions.option.general.new_table_costs.@Tooltip": "Whether the cost of using the Enchanting Table should be rebalanced",
   "text.autoconfig.enchants_and_expeditions.option.general.experience_rebalance": "Experience Rebalance",
   "text.autoconfig.enchants_and_expeditions.option.general.experience_rebalance.@Tooltip": "Whether the rebalanced experience-per-level formula should be used, which includes more reasonable experience requirements beyond level 30",
+  "text.autoconfig.enchants_and_expeditions.option.general.updated_librarian_trades": "Updated Librarian Trades",
+  "text.autoconfig.enchants_and_expeditions.option.general.updated_librarian_trades.@Tooltip": "Whether Librarian trades should be rebalanced and offer bookshelf variants, Altars and uncommon tomes",
   "text.autoconfig.enchants_and_expeditions.option.general.anvil_break_chance": "Anvil Break Chance",
   "text.autoconfig.enchants_and_expeditions.option.general.anvil_break_chance.@Tooltip": "The chance of an anvil being damaged after use. The vanilla chance is 0.12",
   "text.autoconfig.enchants_and_expeditions.option.general.craftable_experience_bottles": "Craftable Experience Bottles",

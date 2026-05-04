@@ -94,25 +94,24 @@ public class EnchantsAndExpeditions {
 			}
 		});
 
-        loadResources();
-		
+		UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("vanilla_tag_replacements"), PackType.REQUIRED_DATA);
+
+		if (EaEConfig.get().general.updated_librarian_trades) {
+			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("updated_librarian_trades"), PackType.REQUIRED_DATA);
+		}
+		if (UnifiedPlatform.isModLoaded("combat_reborn") && EaEConfig.get().integrations.combat_reborn) {
+			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("combat_reborn_integration"), PackType.REQUIRED_DATA);
+		}
+		if (isLegaciesAndLegendsLoaded()) {
+			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("legacies_and_legends_integration"), PackType.REQUIRED_DATA);
+		}
+		if (UnifiedPlatform.isModLoaded("trailiertales") && EaEConfig.get().integrations.trailier_tales) {
+			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("trailier_tales_integration"), PackType.REQUIRED_DATA);
+		}
+
 		EaECreativeInventorySorting.init();
 		EaEBlockSounds.init();
 		EaELootTables.init();
 		EaEEnchantments.init();
 	}
-
-    public static void loadResources() {
-        UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("vanilla_tag_replacements"), PackType.REQUIRED_DATA);
-
-        if (UnifiedPlatform.get().isModLoaded("combat_reborn") && EaEConfig.get().integrations.combat_reborn) {
-			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("combat_reborn_integration"), PackType.REQUIRED_DATA);
-        }
-        if (isLegaciesAndLegendsLoaded()) {
-			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("legacies_and_legends_integration"), PackType.REQUIRED_DATA);
-        }
-        if (UnifiedPlatform.get().isModLoaded("trailiertales") && EaEConfig.get().integrations.trailier_tales) {
-			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("trailier_tales_integration"), PackType.REQUIRED_DATA);
-        }
-    }
 }

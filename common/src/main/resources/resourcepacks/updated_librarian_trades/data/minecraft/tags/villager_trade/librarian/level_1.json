@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:librarian/1/paper_emerald",
+    "minecraft:librarian/1/emerald_bookshelf",
+    "enchants_and_expeditions:librarian/1/ink_sac_emerald"
+  ]
+}

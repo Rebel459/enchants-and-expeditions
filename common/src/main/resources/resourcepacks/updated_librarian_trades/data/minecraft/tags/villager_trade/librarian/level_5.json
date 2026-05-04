@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "enchants_and_expeditions:librarian/5/emerald_altar",
+    "enchants_and_expeditions:librarian/5/emerald_tome_of_stability",
+    "enchants_and_expeditions:librarian/5/emerald_tome_of_power"
+  ]
+}
