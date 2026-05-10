@@ -35,7 +35,7 @@ public enum AltarBlockType implements StringRepresentable {
 			case MIGHT_TOME -> EaEItems.TOME_OF_MIGHT.get();
 			case STABILITY_TOME -> EaEItems.TOME_OF_STABILITY.get();
 			case POWER_TOME -> EaEItems.TOME_OF_POWER.get();
-        };
+		};
 	}
 
 	public ItemStack getStack() {

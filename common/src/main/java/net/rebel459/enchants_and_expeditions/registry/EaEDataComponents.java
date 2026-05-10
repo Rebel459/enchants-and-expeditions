@@ -22,12 +22,12 @@ import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import net.rebel459.unified.platform.UnifiedEvents;
 import net.rebel459.unified.platform.UnifiedPlatform;
 import net.rebel459.unified.platform.UnifiedRegistries;
+import net.rebel459.unified.util.registry.Supplied;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class EaEDataComponents {
 
@@ -162,6 +162,6 @@ public class EaEDataComponents {
 
     static UnifiedRegistries.DataComponentTypes COMPONENTS = UnifiedRegistries.DataComponentTypes.create(EnchantsAndExpeditions.MOD_ID);
 
-    public static final Supplier<DataComponentType<EnchantmentSlots>> ENCHANTMENT_SLOTS = COMPONENTS.register("item_slots", (b) -> b.persistent(EnchantmentSlots.CODEC).networkSynchronized(EnchantmentSlots.STREAM_CODEC).cacheEncoding());
-    public static final Supplier<DataComponentType<EnchantingRerolls>> ENCHANTING_REROLLS = COMPONENTS.register("enchanting_rerolls", (b) -> b.persistent(EnchantingRerolls.CODEC).networkSynchronized(EnchantingRerolls.STREAM_CODEC).cacheEncoding());
+    public static final Supplied<DataComponentType<EnchantmentSlots>> ENCHANTMENT_SLOTS = COMPONENTS.register("item_slots", (b) -> b.persistent(EnchantmentSlots.CODEC).networkSynchronized(EnchantmentSlots.STREAM_CODEC).cacheEncoding());
+    public static final Supplied<DataComponentType<EnchantingRerolls>> ENCHANTING_REROLLS = COMPONENTS.register("enchanting_rerolls", (b) -> b.persistent(EnchantingRerolls.CODEC).networkSynchronized(EnchantingRerolls.STREAM_CODEC).cacheEncoding());
 }

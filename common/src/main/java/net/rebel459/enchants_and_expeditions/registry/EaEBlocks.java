@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.rebel459.unified.platform.UnifiedRegistries;
-import net.rebel459.unified.util.SuppliedBlock;
+import net.rebel459.unified.util.registry.SuppliedBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;

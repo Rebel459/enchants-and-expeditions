@@ -17,6 +17,6 @@
   "slots": [
     "armor"
   ],
-  "supported_items": "#enchants_and_expeditions:enchantable/horse_and_foot_armor",
+  "supported_items": "#enchants_and_expeditions:enchantable/animal_and_foot_armor",
   "weight": 2
 }

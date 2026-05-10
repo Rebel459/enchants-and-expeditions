@@ -23,6 +23,10 @@
       "required": false
     },
     {
+      "id": "legacies_and_legends:pull",
+      "required": false
+    },
+    {
       "id": "remnants:steadfast",
       "required": false
     }

@@ -7,7 +7,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.rebel459.unified.platform.UnifiedRegistries;
-import net.rebel459.unified.util.SuppliedItem;
+import net.rebel459.unified.util.registry.SuppliedItem;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;

@@ -26,6 +26,7 @@ public final class EnchantsAndExpeditionsClient {
             if (tooltips.slot_tooltip == EaEConfig.TooltipType.NEVER || (tooltips.slot_tooltip == EaEConfig.TooltipType.HOLD_KEY && !ScreenHelper.hasKeyDown())) return;
             if (EnchantingHelper.hasSlots(stack) && !stack.has(DataComponents.STORED_ENCHANTMENTS) && stack.getItem() != Items.BOOK) {
                 EnchantmentSlots slots = EnchantingHelper.getImmutableSlots(stack);
+                if (slots.getTotal() == 0) return;
                 ChatFormatting formatting = ChatFormatting.GRAY;
                 if (slots.modifier() > 0) formatting = ChatFormatting.BLUE;
                 else if (slots.modifier() < 0) formatting = ChatFormatting.RED;

@@ -63,7 +63,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("mana", mana));
                 consumer.accept(attributeTooltip("frost", frost));
                 consumer.accept(attributeTooltip("scorch", scorch));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -75,7 +75,7 @@ public abstract class ItemStackMixin {
                 might = "0.25";
                 consumer.accept(placedTooltip());
                 consumer.accept(attributeTooltip("mana", mana));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -87,7 +87,7 @@ public abstract class ItemStackMixin {
                 might = "0.25";
                 consumer.accept(placedTooltip());
                 consumer.accept(attributeTooltip("frost", frost));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -99,7 +99,7 @@ public abstract class ItemStackMixin {
                 might = "0.25";
                 consumer.accept(placedTooltip());
                 consumer.accept(attributeTooltip("scorch", scorch));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -114,7 +114,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("mana", mana));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -130,7 +130,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("frost", frost));
                 consumer.accept(attributeTooltip("scorch", scorch));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -146,7 +146,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("scorch", scorch));
                 consumer.accept(attributeTooltip("frost", frost));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -161,7 +161,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_flow", flow));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -176,7 +176,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_chaos", chaos));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -191,7 +191,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("increases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("increases_experience_requirements", String.valueOf(3)));
                 consumer.accept(attributeTooltip("increases_greed", greed));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -214,7 +214,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("mana", mana));
                 consumer.accept(attributeTooltip("frost", frost));
                 consumer.accept(attributeTooltip("scorch", scorch));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -226,7 +226,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("decreases_curse_chance", corruption));
                 consumer.accept(attributeTooltip("decreases_enchanting_power", String.valueOf(3)));
                 consumer.accept(attributeTooltip("decreases_experience_requirements", String.valueOf(3)));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }
@@ -245,7 +245,7 @@ public abstract class ItemStackMixin {
                 consumer.accept(attributeTooltip("mana", mana));
                 consumer.accept(attributeTooltip("frost", frost));
                 consumer.accept(attributeTooltip("scorch", scorch));
-                if (ScreenHelper.Tooltip.hasKeyDown()) {
+                if (ScreenHelper.hasKeyDown()) {
                     consumer.accept(Component.literal(""));
                     consumer.accept(statTooltip(mana, frost, scorch, flow, chaos, greed, might, corruption, divinity));
                 }

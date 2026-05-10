@@ -15,14 +15,14 @@ import net.rebel459.unified.platform.UnifiedRegistries;
 
 public class EaEMobEffects {
 
-    static UnifiedRegistries.DeferredRegistry EFFECTS = UnifiedRegistries.DeferredRegistry.create(EnchantsAndExpeditions.MOD_ID, BuiltInRegistries.MOB_EFFECT);
+    static UnifiedRegistries.DeferredRegistry<MobEffect> EFFECTS = UnifiedRegistries.DeferredRegistry.create(EnchantsAndExpeditions.MOD_ID, BuiltInRegistries.MOB_EFFECT);
 
-    public static final Holder<MobEffect> LIGHTNING_IMMUNE = EFFECTS.registerHolder(
+    public static final Holder<MobEffect> LIGHTNING_IMMUNE = EFFECTS.registerForHolder(
             "lightning_immune",
             () -> new MobEffect(MobEffectCategory.BENEFICIAL, 0)
     );
 
-    public static final Holder<MobEffect> OVERHEAL = EFFECTS.registerHolder(
+    public static final Holder<MobEffect> OVERHEAL = EFFECTS.registerForHolder(
             "overheal",
             () -> new OverhealMobEffect(MobEffectCategory.BENEFICIAL, 2445989)
                     .addAttributeModifier(Attributes.MAX_ABSORPTION, EnchantsAndExpeditions.id("effect.overheal"), 1.0, AttributeModifier.Operation.ADD_VALUE)

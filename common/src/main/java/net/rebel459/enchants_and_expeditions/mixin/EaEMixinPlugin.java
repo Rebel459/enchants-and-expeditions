@@ -24,8 +24,8 @@ public final class EaEMixinPlugin implements IMixinConfigPlugin {
             EaEConfig.initClient();
             registeredConfig = true;
         }
-        this.hasCombatReborn = UnifiedPlatform.get().isModLoaded("combat_reborn") && EaEConfig.get().integrations.combat_reborn;
-        this.hasItemTooltips = UnifiedPlatform.get().isModLoaded("item_tooltips");
+        this.hasCombatReborn = UnifiedPlatform.isModLoaded("combat_reborn") && EaEConfig.get().integrations.combat_reborn;
+        this.hasItemTooltips = UnifiedPlatform.isModLoaded("item_tooltips");
     }
 
     @Override
