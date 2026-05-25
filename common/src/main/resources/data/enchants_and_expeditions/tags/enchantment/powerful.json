@@ -38,6 +38,10 @@
     {
       "id": "enderscape:transdimensional",
       "required": false
+    },
+    {
+      "id": "farmersdelight:backstabbing",
+      "required": false
     }
   ]
 }

@@ -22,20 +22,32 @@ public class EaEConfig implements ConfigData {
     }
 
     public static EaEConfig get() {
+        if (!EnchantsAndExpeditions.registeredConfig) {
+            init();
+            EnchantsAndExpeditions.registeredConfig = true;
+        }
         return AutoConfig.getConfigHolder(EaEConfig.class).getConfig();
-    };
+    }
 
-    public static void initClient() {
+    public static void init() {
         Path json5Path = configPath(true);
         Path jsonPath = configPath(false);
+
         Path existingConfigPath = Files.exists(json5Path) ? json5Path : jsonPath;
         boolean hasExistingConfig = Files.exists(existingConfigPath);
-        boolean hasDisabledEnchantmentsField = !hasExistingConfig || configContainsField(existingConfigPath, "disabled_enchantments");
-        boolean hasEnchantmentSlotsField = !hasExistingConfig || configContainsField(existingConfigPath, "item_enchantment_slots");
+
+        boolean restoreDisabledEnchantments =
+                !hasExistingConfig || !configContainsField(existingConfigPath, "disabled_enchantments");
+
+        boolean restoreEnchantmentSlots =
+                !hasExistingConfig || !configContainsField(existingConfigPath, "item_enchantment_slots");
+
         AutoConfig.register(EaEConfig.class, JanksonConfigSerializer::new);
+
         var holder = AutoConfig.getConfigHolder(EaEConfig.class);
         EaEConfig config = holder.getConfig();
-        if (config.normalizeDefaults(!hasDisabledEnchantmentsField, !hasEnchantmentSlotsField)) {
+
+        if (config.normalizeDefaults(restoreDisabledEnchantments, restoreEnchantmentSlots)) {
             holder.save();
         }
     }

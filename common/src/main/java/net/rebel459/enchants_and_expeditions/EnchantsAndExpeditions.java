@@ -22,6 +22,8 @@ public class EnchantsAndExpeditions {
 	public static final String MOD_ID = "enchants_and_expeditions";
 	private static final Logger LOGGER = LogUtils.getLogger();
 
+	public static boolean registeredConfig = false;
+
     public static Identifier id(String path) {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }

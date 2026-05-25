@@ -23,6 +23,10 @@
     {
       "id": "enderscape:resonance",
       "required": false
+    },
+    {
+      "id": "farmersdelight:backstabbing",
+      "required": false
     }
   ]
 }

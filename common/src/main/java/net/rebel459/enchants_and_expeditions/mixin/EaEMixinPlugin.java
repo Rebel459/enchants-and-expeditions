@@ -13,17 +13,11 @@ import java.util.Set;
 
 public final class EaEMixinPlugin implements IMixinConfigPlugin {
 
-    private static boolean registeredConfig = false;
-
     private boolean hasCombatReborn;
     private boolean hasItemTooltips;
 
     @Override
     public void onLoad(String mixinPackage) {
-        if (!registeredConfig) {
-            EaEConfig.initClient();
-            registeredConfig = true;
-        }
         this.hasCombatReborn = UnifiedPlatform.isModLoaded("combat_reborn") && EaEConfig.get().integrations.combat_reborn;
         this.hasItemTooltips = UnifiedPlatform.isModLoaded("item_tooltips");
     }
