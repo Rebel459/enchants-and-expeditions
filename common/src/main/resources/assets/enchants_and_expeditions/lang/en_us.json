@@ -92,7 +92,7 @@
   "enchantment.enchants_and_expeditions.bloodlust": "Bloodlust",
   "enchantment.enchants_and_expeditions.bloodlust.desc": "The wielder regenerates health when dealing the final blow to a target",
   "enchantment.enchants_and_expeditions.critical_strike": "Critical Strike",
-  "enchantment.enchants_and_expeditions.critical_strike.desc": "Adds a chance for a regular attack to become a critical attack",
+  "enchantment.enchants_and_expeditions.critical_strike.desc": "Provides a chance for regular attacks to count as critical attacks",
   "enchantment.enchants_and_expeditions.equestrian": "Equestrian",
   "enchantment.enchants_and_expeditions.equestrian.desc": "Prevents horse bucking",
   "enchantment.enchants_and_expeditions.extraction": "Extraction",
