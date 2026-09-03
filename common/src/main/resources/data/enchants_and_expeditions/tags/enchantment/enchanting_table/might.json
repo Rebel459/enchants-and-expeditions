@@ -29,6 +29,10 @@
     {
       "id": "remnants:steadfast",
       "required": false
+    },
+    {
+      "id": "enderscape:stun_burst",
+      "required": false
     }
   ]
 }

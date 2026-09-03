@@ -24,6 +24,7 @@ dependencies {
     compileOnly("maven.modrinth:item-tooltips:$tooltips_version-fabric")
 
     compileOnly("maven.modrinth:combat-reborn:$combat_version-fabric")
+    compileOnly("maven.modrinth:jei:$jei_fabric")
 }
 
 configurations {

@@ -9,6 +9,7 @@ dependencies {
     implementation("maven.modrinth:item-tooltips:$tooltips_version-neoforge")
 
     compileOnly("maven.modrinth:combat-reborn:$combat_version-neoforge")
+    compileOnly("maven.modrinth:jei:$jei_neoforge")
 }
 
 neoForge {

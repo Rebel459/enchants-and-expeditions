@@ -41,6 +41,7 @@
     "client.inventory.EffectsInInventoryMixin",
     "client.inventory.EnchantmentScreenMixin",
     "client.item.ItemStackMixin",
-    "integration.combat_reborn.ShieldHelperMixin"
+    "integration.combat_reborn.ShieldHelperMixin",
+    "integration.jei.AbstractContainerScreenHandlerMixin"
   ]
 }

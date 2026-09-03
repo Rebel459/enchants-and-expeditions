@@ -40,6 +40,10 @@
       "required": false
     },
     {
+      "id": "enderscape:stun_burst",
+      "required": false
+    },
+    {
       "id": "farmersdelight:backstabbing",
       "required": false
     }
