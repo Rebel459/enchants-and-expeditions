@@ -9,19 +9,18 @@ import net.rebel459.enchants_and_expeditions.network.EnchantingAttributes;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
 import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
 import net.rebel459.item_tooltips.util.ScreenHelper;
-import net.rebel459.unified.platform.UnifiedHelpers;
-import net.rebel459.unified.platform.client.UnifiedClientEvents;
-import net.rebel459.unified.util.EventType;
-import net.rebel459.unified.util.PackType;
+import net.rebel459.unified.api.client.core.UnifiedClientEvents;
+import net.rebel459.unified.api.client.core.UnifiedClientHelpers;
+import net.rebel459.unified.api.event.EventTiming;
 
 public final class EnchantsAndExpeditionsClient {
 
     public static void init() {
         if (EaEConfig.get().integrations.item_tooltips_overrides) {
-            UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("item_tooltips_overrides"), PackType.REQUIRED_RESOURCES);
+            UnifiedClientHelpers.RESOURCE_PACKS.addRequired(EnchantsAndExpeditions.id("item_tooltips_overrides"));
         }
 
-        UnifiedClientEvents.ItemTooltips.addAttributes(EventType.POST, ((stack, consumer, tooltipDisplay, localPlayer) -> {
+        UnifiedClientEvents.ItemTooltips.addAttributes(EventTiming.POST, ((stack, consumer, _, _) -> {
             EaEConfig.TooltipConfig tooltips = EaEConfig.get().tooltips;
             if (tooltips.slot_tooltip == EaEConfig.TooltipType.NEVER || (tooltips.slot_tooltip == EaEConfig.TooltipType.HOLD_KEY && !ScreenHelper.hasKeyDown())) return;
             if (EnchantingHelper.hasSlots(stack) && !stack.has(DataComponents.STORED_ENCHANTMENTS) && stack.getItem() != Items.BOOK) {

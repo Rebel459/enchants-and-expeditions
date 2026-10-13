@@ -795,7 +795,7 @@ public abstract class EnchantmentMenuMixin implements EnchantingAttributes {
             locMana -= aMight;
             locDivinity += aMight;
 
-            locCorruption -= aStability;
+            locCorruption -= aStability * 2;
             locMight -= aStability * 5;
 
             locMight += aPower;

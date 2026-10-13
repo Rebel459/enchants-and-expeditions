@@ -1,16 +1,10 @@
 package net.rebel459.enchants_and_expeditions.registry;
 
-import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
-import net.rebel459.unified.platform.UnifiedRegistries;
-import net.rebel459.unified.util.registry.SuppliedItem;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Function;
+import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
+import net.rebel459.unified.api.core.SuppliedItem;
+import net.rebel459.unified.api.core.UnifiedRegistries;
 
 public final class EaEItems {
     

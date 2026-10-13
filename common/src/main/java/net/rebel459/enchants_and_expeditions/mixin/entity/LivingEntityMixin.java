@@ -1,8 +1,5 @@
 package net.rebel459.enchants_and_expeditions.mixin.entity;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
@@ -38,6 +35,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
@@ -116,15 +115,15 @@ public abstract class LivingEntityMixin {
     }
 
     @Inject(method = "hurtServer", at = @At(value = "TAIL"))
-    private void displacementCurse(ServerLevel level, DamageSource damageSource, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void displacementCurse(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = LivingEntity.class.cast(this);
         ItemStack stack = entity.getItemBySlot(EquipmentSlot.CHEST);
-        if (damageSource.getEntity() instanceof LivingEntity attacker && EnchantingHelper.hasEnchantment(stack, EaEEnchantments.DISPLACEMENT_CURSE)) {
-            for (MobEffectInstance instance : entity.getActiveEffectsMap().values()) {
-                if (!entity.hasEffect(instance.getEffect())) return;
-
+        if (source.getEntity() instanceof LivingEntity attacker && EnchantingHelper.hasEnchantment(stack, EaEEnchantments.DISPLACEMENT_CURSE)) {
+            for (MobEffectInstance instance : List.copyOf(entity.getActiveEffectsMap().values())) {
                 Holder<MobEffect> effect = instance.getEffect();
-                int duration = entity.getEffect(effect).getDuration();
+                MobEffectInstance currentInstance = entity.getEffect(effect);
+                if (currentInstance == null) continue;
+                int duration = currentInstance.getDuration();
 
                 entity.removeEffect(effect);
                 if (!attacker.hasEffect(effect)) attacker.addEffect(new MobEffectInstance(effect, duration / 2));

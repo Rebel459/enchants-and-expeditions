@@ -15,7 +15,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.tag.EaEEnchantmentTags;
-import net.rebel459.unified.platform.UnifiedEvents;
+import net.rebel459.unified.api.core.UnifiedEvents;
 import org.jetbrains.annotations.NotNull;
 
 public final class EaELootTables {

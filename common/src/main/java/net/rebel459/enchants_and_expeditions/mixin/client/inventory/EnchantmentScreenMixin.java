@@ -29,7 +29,7 @@ import net.rebel459.enchants_and_expeditions.client.EnchantingAttributesHelper;
 import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.network.EnchantingAttributes;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
-import net.rebel459.unified.platform.client.UnifiedClientHelpers;
+import net.rebel459.unified.api.client.core.UnifiedClientHelpers;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

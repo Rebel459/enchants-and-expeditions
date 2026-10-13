@@ -220,7 +220,7 @@ public abstract class ItemStackMixin {
                 }
             }
             else if (this.is(EaEItems.TOME_OF_STABILITY.get())) {
-                corruption = "-1.0";
+                corruption = "-2.0";
                 might = "-5.0";
                 consumer.accept(altarTooltip());
                 consumer.accept(attributeTooltip("decreases_curse_chance", corruption));

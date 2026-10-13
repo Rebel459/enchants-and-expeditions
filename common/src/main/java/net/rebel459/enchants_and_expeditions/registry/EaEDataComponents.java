@@ -19,10 +19,10 @@ import net.rebel459.enchants_and_expeditions.config.EaEConfig;
 import net.rebel459.enchants_and_expeditions.tag.EaEItemTags;
 import net.rebel459.enchants_and_expeditions.util.EnchantingRerolls;
 import net.rebel459.enchants_and_expeditions.util.EnchantmentSlots;
-import net.rebel459.unified.platform.UnifiedEvents;
-import net.rebel459.unified.platform.UnifiedPlatform;
-import net.rebel459.unified.platform.UnifiedRegistries;
-import net.rebel459.unified.util.registry.Supplied;
+import net.rebel459.unified.api.core.Supplied;
+import net.rebel459.unified.api.core.UnifiedEvents;
+import net.rebel459.unified.api.core.UnifiedPlatform;
+import net.rebel459.unified.api.core.UnifiedRegistries;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -104,11 +104,11 @@ public class EaEDataComponents {
             var itemLookup = provider.lookup(Registries.ITEM).get();
 
             enchantmentSlots.forEach((key, value) -> {
-                if (enchantmentSlots.containsKey("*end_reborn:netherite") && UnifiedPlatform.isModLoaded("end_reborn")) {
+                if (enchantmentSlots.containsKey("^end_reborn_netherite_tools") && UnifiedPlatform.isModLoaded("end_reborn") && !item.getDefaultInstance().has(DataComponents.EQUIPPABLE)) {
                     if (Objects.equals(key, "*netherite")) {
                         return;
                     }
-                    else if (Objects.equals(key, "*end_reborn:netherite")) {
+                    else if (Objects.equals(key, "^end_reborn_netherite_tools")) {
                         key = "*netherite";
                     }
                 }

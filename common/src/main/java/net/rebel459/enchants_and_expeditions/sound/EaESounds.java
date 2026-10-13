@@ -2,8 +2,8 @@ package net.rebel459.enchants_and_expeditions.sound;
 
 import net.minecraft.sounds.SoundEvent;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
-import net.rebel459.unified.platform.UnifiedRegistries;
-import net.rebel459.unified.util.registry.Supplied;
+import net.rebel459.unified.api.core.Supplied;
+import net.rebel459.unified.api.core.UnifiedRegistries;
 
 public class EaESounds {
 

@@ -6,27 +6,26 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.AbsorptionMobEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
-import net.rebel459.unified.platform.UnifiedRegistries;
+import net.rebel459.unified.api.core.UnifiedRegistries;
 
 public class EaEMobEffects {
 
     static UnifiedRegistries.DeferredRegistry<MobEffect> EFFECTS = UnifiedRegistries.DeferredRegistry.create(EnchantsAndExpeditions.MOD_ID, BuiltInRegistries.MOB_EFFECT);
 
-    public static final Holder<MobEffect> LIGHTNING_IMMUNE = EFFECTS.registerForHolder(
+    public static final Holder<MobEffect> LIGHTNING_IMMUNE = EFFECTS.register(
             "lightning_immune",
             () -> new MobEffect(MobEffectCategory.BENEFICIAL, 0)
-    );
+    ).holder();
 
-    public static final Holder<MobEffect> OVERHEAL = EFFECTS.registerForHolder(
+    public static final Holder<MobEffect> OVERHEAL = EFFECTS.register(
             "overheal",
             () -> new OverhealMobEffect(MobEffectCategory.BENEFICIAL, 2445989)
                     .addAttributeModifier(Attributes.MAX_ABSORPTION, EnchantsAndExpeditions.id("effect.overheal"), 1.0, AttributeModifier.Operation.ADD_VALUE)
-    );
+    ).holder();
 
     public static void init() {}
 

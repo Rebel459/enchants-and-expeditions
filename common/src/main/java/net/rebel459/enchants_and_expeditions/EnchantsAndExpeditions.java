@@ -11,10 +11,9 @@ import net.rebel459.enchants_and_expeditions.registry.*;
 import net.rebel459.enchants_and_expeditions.sound.EaEBlockSounds;
 import net.rebel459.enchants_and_expeditions.sound.EaESounds;
 import net.rebel459.enchants_and_expeditions.util.EnchantingHelper;
-import net.rebel459.unified.platform.UnifiedEvents;
-import net.rebel459.unified.platform.UnifiedHelpers;
-import net.rebel459.unified.platform.UnifiedPlatform;
-import net.rebel459.unified.util.PackType;
+import net.rebel459.unified.api.core.UnifiedEvents;
+import net.rebel459.unified.api.core.UnifiedHelpers;
+import net.rebel459.unified.api.core.UnifiedPlatform;
 import org.slf4j.Logger;
 
 public class EnchantsAndExpeditions {
@@ -96,19 +95,19 @@ public class EnchantsAndExpeditions {
 			}
 		});
 
-		UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("vanilla_tag_replacements"), PackType.REQUIRED_DATA);
+		UnifiedHelpers.DATA_PACKS.addRequired(EnchantsAndExpeditions.id("vanilla_tag_replacements"));
 
 		if (EaEConfig.get().general.updated_librarian_trades) {
-			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("updated_librarian_trades"), PackType.REQUIRED_DATA);
+			UnifiedHelpers.DATA_PACKS.addRequired(EnchantsAndExpeditions.id("updated_librarian_trades"));
 		}
 		if (UnifiedPlatform.isModLoaded("combat_reborn") && EaEConfig.get().integrations.combat_reborn) {
-			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("combat_reborn_integration"), PackType.REQUIRED_DATA);
+			UnifiedHelpers.DATA_PACKS.addRequired(EnchantsAndExpeditions.id("combat_reborn_integration"));
 		}
 		if (isLegaciesAndLegendsLoaded()) {
-			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("legacies_and_legends_integration"), PackType.REQUIRED_DATA);
+			UnifiedHelpers.DATA_PACKS.addRequired(EnchantsAndExpeditions.id("legacies_and_legends_integration"));
 		}
 		if (UnifiedPlatform.isModLoaded("trailiertales") && EaEConfig.get().integrations.trailier_tales) {
-			UnifiedHelpers.PACKS.add(EnchantsAndExpeditions.id("trailier_tales_integration"), PackType.REQUIRED_DATA);
+			UnifiedHelpers.DATA_PACKS.addRequired(EnchantsAndExpeditions.id("trailier_tales_integration"));
 		}
 
 		EaECreativeInventorySorting.init();

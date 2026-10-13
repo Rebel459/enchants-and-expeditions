@@ -16,6 +16,6 @@
   "slots": [
     "mainhand"
   ],
-  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "supported_items": "#enchants_and_expeditions:enchantable/critical_strike",
   "weight": 3
 }

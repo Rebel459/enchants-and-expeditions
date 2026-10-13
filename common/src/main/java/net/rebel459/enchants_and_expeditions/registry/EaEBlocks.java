@@ -1,26 +1,15 @@
 package net.rebel459.enchants_and_expeditions.registry;
 
-import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
-import net.rebel459.enchants_and_expeditions.block.AltarBlock;
-import net.rebel459.enchants_and_expeditions.sound.EaEBlockSounds;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
-import net.rebel459.unified.platform.UnifiedRegistries;
-import net.rebel459.unified.util.registry.SuppliedBlock;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Function;
+import net.rebel459.enchants_and_expeditions.EnchantsAndExpeditions;
+import net.rebel459.enchants_and_expeditions.block.AltarBlock;
+import net.rebel459.enchants_and_expeditions.sound.EaEBlockSounds;
+import net.rebel459.unified.api.core.SuppliedBlock;
+import net.rebel459.unified.api.core.UnifiedRegistries;
 
 public class EaEBlocks {
 

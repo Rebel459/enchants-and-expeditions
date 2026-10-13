@@ -175,7 +175,7 @@ public class EaEConfig implements ConfigData {
                 new ItemEnchantmentSlots("#minecraft:harnesses", 4),
                 new ItemEnchantmentSlots("*rose", 5),
                 new ItemEnchantmentSlots("*remnant", 4),
-                new ItemEnchantmentSlots("*end_reborn:netherite", 5),
+                new ItemEnchantmentSlots("^end_reborn_netherite_tools", 5),
                 new ItemEnchantmentSlots("*featherzeal", 4),
                 new ItemEnchantmentSlots("legacies_and_legends:reinforced_chestplate", 4),
                 new ItemEnchantmentSlots("legacies_and_legends:travelling_strides", 3),
